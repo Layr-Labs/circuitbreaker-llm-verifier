@@ -11,6 +11,10 @@
       "semantics": "The exact coefficient or superlinear endpoint of the accepted theorem under rules.md.",
       "score_source": {
         "claim": 0
+      },
+      "score_minimum": {
+        "numerator": "0",
+        "denominator": "1"
       }
     }
   ],
