@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "title": "auxiliary-lemma",
-  "claims": [
-    "Only the scoped auxiliary LP inequality in proof.md is claimed."
-  ],
-  "experiments": [],
-  "checks": []
-}

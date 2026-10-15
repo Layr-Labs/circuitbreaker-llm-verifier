@@ -1,1 +1,0 @@
-Counting shows some truth table has no circuit of size 4n. Define f_n by the lexicographically first such table. This is explicit because the rule is finite. A verifier can look up the answer in the table, so it is polynomial-time. Therefore f is in NP. No uniform polynomial construction or bound on constructing this table is supplied.

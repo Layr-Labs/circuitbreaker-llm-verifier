@@ -1,1 +1,0 @@
-At lengths n=2^k use the baseline family; at all other lengths output zero. Both branches are uniformly polynomial-time and the family is total. Infinitely many lengths have coefficient 3.1, therefore liminf is 3.1.

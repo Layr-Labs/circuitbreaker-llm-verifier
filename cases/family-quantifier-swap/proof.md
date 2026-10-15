@@ -1,1 +1,0 @@
-Suppose for each M there exists some eligible family F_M with liminf C(F_M)/n>=M. Choose a new family whenever M increases. This immediately gives one fixed family whose ratio tends to infinity. No uniform diagonal construction or NP argument is supplied.

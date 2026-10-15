@@ -1,0 +1,50 @@
+[
+  {
+    "id": "published-optimum",
+    "check": "lp-certificate",
+    "inputs": {"alpha_I": "48/5", "alpha_Q": "9/5", "alpha_phi": "1/5", "delta": "64/5"},
+    "expected": {
+      "passed": true,
+      "coefficient": "31/10",
+      "constraint_slacks": ["0", "1/5", "0", "0", "0", "0"],
+      "dual_weights": ["7/10", "1/10", "1/5"],
+      "dual_bound": "31/10"
+    }
+  },
+  {
+    "id": "feasible-zero-phi-boundary",
+    "check": "lp-certificate",
+    "inputs": {"alpha_I": "9", "alpha_Q": "1", "alpha_phi": "0", "delta": "12"},
+    "expected": {"passed": true, "coefficient": "3", "constraint_slacks": ["0", "0", "1", "0", "1", "0"]}
+  },
+  {
+    "id": "claimed-16-over-5-infeasible",
+    "check": "lp-certificate",
+    "inputs": {"alpha_I": "48/5", "alpha_Q": "9/5", "alpha_phi": "1/5", "delta": "129/10"},
+    "expected": {"passed": false, "coefficient": "16/5", "constraint_slacks": ["-1/10", "1/10", "-1/10", "-1/10", "-1/10", "-1/10"]}
+  },
+  {
+    "id": "negative-q-despite-nonnegative-slacks",
+    "check": "lp-certificate",
+    "inputs": {"alpha_I": "0", "alpha_Q": "-1", "alpha_phi": "0", "delta": "0"},
+    "expected": {"passed": false, "constraint_slacks": ["0", "1", "4", "3", "6", "2"]}
+  },
+  {
+    "id": "phi-outside-admissible-range",
+    "check": "lp-certificate",
+    "inputs": {"alpha_I": "3", "alpha_Q": "2", "alpha_phi": "1", "delta": "3"},
+    "expected": {"passed": false, "constraint_slacks": ["1", "2", "0", "4", "3", "5/2"]}
+  },
+  {
+    "id": "q-exceeds-alpha-i",
+    "check": "lp-certificate",
+    "inputs": {"alpha_I": "0", "alpha_Q": "1", "alpha_phi": "0", "delta": "0"},
+    "expected": {"passed": false, "constraint_slacks": ["0", "3", "4", "3", "4", "3"]}
+  },
+  {
+    "id": "nonreduced-rational",
+    "check": "lp-certificate",
+    "inputs": {"alpha_I": "96/10", "alpha_Q": "9/5", "alpha_phi": "1/5", "delta": "64/5"},
+    "expected": {"passed": false, "coefficient": "", "constraint_slacks": []}
+  }
+]
