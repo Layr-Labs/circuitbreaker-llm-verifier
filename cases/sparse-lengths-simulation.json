@@ -1,0 +1,33 @@
+{
+  "initial_results": [
+    {
+      "passed": true,
+      "score_record": {
+        "kind": "finite",
+        "claim_id": "claim:bcc8e743efd4d4150c44dbb6169b0053d438bd00fd6093dbe6372bee94044675",
+        "numerator": "31",
+        "denominator": "10"
+      },
+      "message": "canonical encoding and exact rational only; theorem requires review"
+    }
+  ],
+  "initial_decision": {
+    "kind": "judgment",
+    "requests": [],
+    "judgment": {
+      "valid": false,
+      "scores": null,
+      "reason": "The infinitely many nonpower lengths have constant output; liminf is zero.",
+      "accepted_claims": [],
+      "assumptions": [],
+      "unresolved_obligations": [],
+      "evidence_refs": [
+        "source:proof.md",
+        "run:initial:0"
+      ],
+      "review_standard": "circuitbreaker-scoped-review-v1"
+    }
+  },
+  "followup_results": [],
+  "final_decision": null
+}

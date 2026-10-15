@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "kind": "finite",
+  "family": {
+    "id": "or-all-lengths-v1",
+    "definition": "f_0=0 and f_n(x)=x_1 OR ... OR x_n for n>=1.",
+    "np_verifier": "Accept iff w is empty and a linear scan of x finds one.",
+    "witness_bound": "0",
+    "np_equivalence": "The deterministic scan computes OR exactly; the sole allowed witness is empty."
+  },
+  "model": "li-yang-b2-v1",
+  "length_parameter": "n=|x|",
+  "quantifier": "all-sufficiently-large-integer-lengths",
+  "coefficient": {
+    "numerator": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
+    "denominator": "1"
+  },
+  "theorem": "SYNTHETIC PROTOCOL FIXTURE: huge but finite coefficient.",
+  "proof": "SYNTHETIC PROTOCOL FIXTURE ONLY. The decimal integer is finite, not a superlinear theorem. Scripted acceptance tests finite value handling.",
+  "sources": [],
+  "assumptions": []
+}

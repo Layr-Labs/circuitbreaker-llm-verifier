@@ -1,0 +1,1 @@
+Parity is nonmonotone for n>=2. Monotone AND/OR circuits cannot compute it at all. Therefore their gate requirement is infinite, so full B2 circuits require at least 100n gates. This transfers the monotone lower bound without any further argument.

@@ -1,0 +1,32 @@
+{
+  "initial_results": [
+    {
+      "passed": true,
+      "score_record": {
+        "kind": "terminal",
+        "claim_id": "claim:c6ed18d4b835c9d795385910cffec3a574e91ad945be3b5ddfda594ee24d6f82",
+        "terminal": "positive_infinity"
+      },
+      "message": "canonical encoding and exact rational only; theorem requires review"
+    }
+  ],
+  "initial_decision": {
+    "kind": "judgment",
+    "requests": [],
+    "judgment": {
+      "valid": false,
+      "scores": null,
+      "reason": "OR has n-1 gates, so its ratio tends to one. Neither extrapolation nor finite overflow is a proof of divergence.",
+      "accepted_claims": [],
+      "assumptions": [],
+      "unresolved_obligations": [],
+      "evidence_refs": [
+        "source:proof.md",
+        "run:initial:0"
+      ],
+      "review_standard": "circuitbreaker-scoped-review-v1"
+    }
+  },
+  "followup_results": [],
+  "final_decision": null
+}

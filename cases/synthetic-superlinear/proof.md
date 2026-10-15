@@ -1,0 +1,1 @@
+SYNTHETIC PROTOCOL FIXTURE ONLY. A scripted accepted one-family superlinear theorem tests the terminal dossier and scores:null. No actual proof exists in this fixture.

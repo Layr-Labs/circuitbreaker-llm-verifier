@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "superlinear",
+  "family": {
+    "id": "or-all-lengths-v1",
+    "definition": "f_0=0 and f_n(x)=x_1 OR ... OR x_n for n>=1.",
+    "np_verifier": "Accept iff w is empty and a linear scan of x finds one.",
+    "witness_bound": "0",
+    "np_equivalence": "The deterministic scan computes OR exactly; the sole allowed witness is empty."
+  },
+  "model": "li-yang-b2-v1",
+  "length_parameter": "n=|x|",
+  "quantifier": "all-sufficiently-large-integer-lengths",
+  "coefficient": null,
+  "theorem": "SYNTHETIC PROTOCOL FIXTURE: one fixed NP family has C>=n*log(n).",
+  "proof": "SYNTHETIC PROTOCOL FIXTURE ONLY. A scripted accepted one-family superlinear theorem tests the terminal dossier and scores:null. No actual proof exists in this fixture.",
+  "sources": [],
+  "assumptions": []
+}

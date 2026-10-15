@@ -1,0 +1,35 @@
+{
+  "initial_results": [
+    {
+      "passed": true,
+      "score_record": {
+        "kind": "finite",
+        "claim_id": "claim:5cf64de93cb77d2eb2003b29d01627e7c6a85ed6564016ff5c1dea8227fc040f",
+        "numerator": "16",
+        "denominator": "5"
+      },
+      "message": "canonical encoding and exact rational only; theorem requires review"
+    }
+  ],
+  "initial_decision": {
+    "kind": "judgment",
+    "requests": [],
+    "judgment": {
+      "valid": true,
+      "scores": null,
+      "reason": "Acceptance of a useful separate lemma must not unlock the declared main coefficient.",
+      "accepted_claims": [
+        "The weighted LP inequality, not the main claim."
+      ],
+      "assumptions": [],
+      "unresolved_obligations": [],
+      "evidence_refs": [
+        "source:proof.md",
+        "run:initial:0"
+      ],
+      "review_standard": "circuitbreaker-scoped-review-v1"
+    }
+  },
+  "followup_results": [],
+  "final_decision": null
+}

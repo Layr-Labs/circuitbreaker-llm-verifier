@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "title": "zero-coefficient",
+  "claims": [
+    "C_B2(OR_n)>=0*n-o(n)."
+  ],
+  "experiments": [],
+  "checks": [
+    {
+      "check": "main-claim",
+      "inputs": {
+        "claim_json": "{\"assumptions\":[],\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"family\":{\"definition\":\"f_0=0 and f_n(x)=x_1 OR ... OR x_n for n>=1.\",\"id\":\"or-all-lengths-v1\",\"np_equivalence\":\"The deterministic scan computes OR exactly; the sole allowed witness is empty.\",\"np_verifier\":\"Accept iff w is empty and a linear scan of x finds one.\",\"witness_bound\":\"0\"},\"kind\":\"finite\",\"length_parameter\":\"n=|x|\",\"model\":\"li-yang-b2-v1\",\"quantifier\":\"all-sufficiently-large-integer-lengths\",\"sources\":[],\"theorem\":\"C_B2(OR_n)>=0*n-o(n).\",\"version\":1}",
+        "proof_chunks": [
+          "# A self-contained coefficient-one theorem\nFor n>=1 define f_n(x)=OR of the n input bits and f_0(empty)=0. Evaluate it by\nscanning the input once. The fixed NP verifier accepts iff the witness is empty and\nthe scan finds a one; the witness bound is zero, proving both membership directions.\n\nEvery variable is essential: toggling its bit while all others are zero changes the\noutput. In any full B2 circuit for f_n, each of the n variables is consequently an\nancestor of the output. Restrict to all ancestors of that output. Let g be the number\nof gates and h the number of constant nodes in this subgraph. Its underlying\nundirected graph is connected, even with shared wires and repeated pins. It has\nn+g+h vertices and at most 2g edges, because each gate has two input pins and inputs\nand constants have none. A connected graph needs at least n+g+h-1 edges, hence\ng>=n+h-1>=n-1. Collapsing parallel edges only decreases the edge count. Including\nunused original gates cannot weaken the lower bound. For n=1 the output may be the\ninput itself and the same inequality is zero. n=0 is irrelevant to the eventual\nclaim and is explicitly defined. Thus at every n>=1, C_B2(f_n)>=n-1, and 1/n tends\nto zero, establishing coefficient 1. There is also an n-1 gate OR tree for n>=1.\nThe proof allows arbitrary truth tables, unrestricted depth and fan-out; it is not\nrestricted to OR circuits. n is exactly the number of original input bits.\n"
+        ]
+      }
+    }
+  ]
+}

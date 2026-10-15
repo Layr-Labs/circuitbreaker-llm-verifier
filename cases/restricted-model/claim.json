@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "kind": "finite",
+  "family": {
+    "id": "parity-v1",
+    "definition": "Parity of all n bits, with empty parity zero.",
+    "np_verifier": "Accept iff w is empty and the linear-time XOR scan returns one.",
+    "witness_bound": "0",
+    "np_equivalence": "The XOR scan computes parity exactly."
+  },
+  "model": "li-yang-b2-v1",
+  "length_parameter": "n=|x|",
+  "quantifier": "all-sufficiently-large-integer-lengths",
+  "coefficient": {
+    "numerator": "100",
+    "denominator": "1"
+  },
+  "theorem": "Every full B2 circuit for parity_n has at least 100n-o(n) gates.",
+  "proof": "Parity is nonmonotone for n>=2. Monotone AND/OR circuits cannot compute it at all. Therefore their gate requirement is infinite, so full B2 circuits require at least 100n gates. This transfers the monotone lower bound without any further argument.",
+  "sources": [],
+  "assumptions": []
+}

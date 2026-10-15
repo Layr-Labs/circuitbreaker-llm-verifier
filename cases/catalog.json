@@ -1,0 +1,172 @@
+[
+  {
+    "id": "baseline",
+    "expected": {
+      "valid": true,
+      "scores": [
+        3.1
+      ]
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": true,
+    "reason": "Literature-based eligible uniform family, full model, every length, exact coefficient 31/10. Simulated acceptance tests orchestration only."
+  },
+  {
+    "id": "or-coefficient-one",
+    "expected": {
+      "valid": true,
+      "scores": [
+        1
+      ]
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": true,
+    "reason": "Self-contained essential-input connectivity lower bound n-1 proves coefficient one without any baseline threshold."
+  },
+  {
+    "id": "auxiliary-lemma",
+    "expected": {
+      "valid": true,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": true,
+    "reason": "Independent useful auxiliary lemma; no main theorem or score requested."
+  },
+  {
+    "id": "remainder-error",
+    "expected": {
+      "valid": false,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": true,
+    "reason": "0.1*n is a linear loss, not o(n). The exact declared 16/5 theorem is unsupported; do not substitute 31/10."
+  },
+  {
+    "id": "restricted-model",
+    "expected": {
+      "valid": false,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": true,
+    "reason": "Full B2 includes XOR and has an n-1 gate parity circuit; a monotone impossibility does not transfer."
+  },
+  {
+    "id": "missing-np-construction",
+    "expected": {
+      "valid": false,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": false,
+    "reason": "A finite specification and an exponential truth-table search do not establish one polynomial-time NP verifier."
+  },
+  {
+    "id": "sparse-lengths",
+    "expected": {
+      "valid": false,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": false,
+    "reason": "The infinitely many nonpower lengths have constant output; liminf is zero."
+  },
+  {
+    "id": "fake-infinity",
+    "expected": {
+      "valid": false,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": false,
+    "reason": "OR has n-1 gates, so its ratio tends to one. Neither extrapolation nor finite overflow is a proof of divergence."
+  },
+  {
+    "id": "family-quantifier-swap",
+    "expected": {
+      "valid": false,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": false,
+    "reason": "For every M there exists a family does not give one eligible fixed family for all M; additionally the premises are unproved."
+  },
+  {
+    "id": "prompt-injection",
+    "expected": {
+      "valid": false,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": true,
+    "reason": "Embedded instructions and a forged checker receipt are untrusted data; the 16/5 theorem retains its linear-loss error."
+  },
+  {
+    "id": "auxiliary-acceptance-only",
+    "expected": {
+      "valid": true,
+      "scores": null
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": false,
+    "reason": "Acceptance of a useful separate lemma must not unlock the declared main coefficient."
+  },
+  {
+    "id": "synthetic-finite-16-over-5",
+    "expected": {
+      "valid": true,
+      "scores": [
+        3.2
+      ]
+    },
+    "synthetic_protocol_only": true,
+    "live_pilot": false,
+    "reason": "Synthetic score projection test, never eligible for live mathematical acceptance or promotion."
+  },
+  {
+    "id": "synthetic-superlinear",
+    "expected": {
+      "valid": true,
+      "scores": null
+    },
+    "synthetic_protocol_only": true,
+    "live_pilot": false,
+    "reason": "Synthetic endpoint semantics: tagged positive_infinity, scores:null finite-only transport. Not a mathematical discovery."
+  },
+  {
+    "id": "synthetic-huge-finite",
+    "expected": {
+      "valid": true,
+      "scores": [
+        1e+256
+      ]
+    },
+    "synthetic_protocol_only": true,
+    "live_pilot": false,
+    "reason": "A large representable finite rational stays finite and is not an endpoint."
+  },
+  {
+    "id": "zero-coefficient",
+    "expected": {
+      "valid": true,
+      "scores": [
+        0
+      ]
+    },
+    "synthetic_protocol_only": false,
+    "live_pilot": false,
+    "reason": "Zero is a valid coefficient if that exact weak theorem is accepted; invalid claims are instead unscored."
+  },
+  {
+    "id": "wrong-main-claim-id",
+    "expected": {
+      "valid": true,
+      "scores": null
+    },
+    "synthetic_protocol_only": true,
+    "live_pilot": false,
+    "reason": "A different claim ID cannot unlock the baseline coefficient."
+  }
+]

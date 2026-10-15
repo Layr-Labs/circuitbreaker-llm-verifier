@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "title": "synthetic-finite-16-over-5",
+  "claims": [
+    "SYNTHETIC PROTOCOL FIXTURE: eligible coefficient 16/5 assumed by scripted referee."
+  ],
+  "experiments": [],
+  "checks": [
+    {
+      "check": "main-claim",
+      "inputs": {
+        "claim_json": "{\"assumptions\":[],\"coefficient\":{\"denominator\":\"5\",\"numerator\":\"16\"},\"family\":{\"definition\":\"f_0=0 and f_n(x)=x_1 OR ... OR x_n for n>=1.\",\"id\":\"or-all-lengths-v1\",\"np_equivalence\":\"The deterministic scan computes OR exactly; the sole allowed witness is empty.\",\"np_verifier\":\"Accept iff w is empty and a linear scan of x finds one.\",\"witness_bound\":\"0\"},\"kind\":\"finite\",\"length_parameter\":\"n=|x|\",\"model\":\"li-yang-b2-v1\",\"quantifier\":\"all-sufficiently-large-integer-lengths\",\"sources\":[],\"theorem\":\"SYNTHETIC PROTOCOL FIXTURE: eligible coefficient 16/5 assumed by scripted referee.\",\"version\":1}",
+        "proof_chunks": [
+          "SYNTHETIC PROTOCOL FIXTURE ONLY. No proof or discovery is supplied. This marked test exercises exact 16/5 score transport under a simulated accepted ID."
+        ]
+      }
+    }
+  ]
+}

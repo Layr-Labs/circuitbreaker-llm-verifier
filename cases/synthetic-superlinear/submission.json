@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "title": "synthetic-superlinear",
+  "claims": [
+    "SYNTHETIC PROTOCOL FIXTURE: one fixed NP family has C>=n*log(n)."
+  ],
+  "experiments": [],
+  "checks": [
+    {
+      "check": "main-claim",
+      "inputs": {
+        "claim_json": "{\"assumptions\":[],\"coefficient\":null,\"family\":{\"definition\":\"f_0=0 and f_n(x)=x_1 OR ... OR x_n for n>=1.\",\"id\":\"or-all-lengths-v1\",\"np_equivalence\":\"The deterministic scan computes OR exactly; the sole allowed witness is empty.\",\"np_verifier\":\"Accept iff w is empty and a linear scan of x finds one.\",\"witness_bound\":\"0\"},\"kind\":\"superlinear\",\"length_parameter\":\"n=|x|\",\"model\":\"li-yang-b2-v1\",\"quantifier\":\"all-sufficiently-large-integer-lengths\",\"sources\":[],\"theorem\":\"SYNTHETIC PROTOCOL FIXTURE: one fixed NP family has C>=n*log(n).\",\"version\":1}",
+        "proof_chunks": [
+          "SYNTHETIC PROTOCOL FIXTURE ONLY. A scripted accepted one-family superlinear theorem tests the terminal dossier and scores:null. No actual proof exists in this fixture."
+        ]
+      }
+    }
+  ]
+}

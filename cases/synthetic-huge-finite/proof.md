@@ -1,0 +1,1 @@
+SYNTHETIC PROTOCOL FIXTURE ONLY. The decimal integer is finite, not a superlinear theorem. Scripted acceptance tests finite value handling.

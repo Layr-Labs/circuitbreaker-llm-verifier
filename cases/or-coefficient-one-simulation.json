@@ -1,0 +1,37 @@
+{
+  "initial_results": [
+    {
+      "passed": true,
+      "score_record": {
+        "kind": "finite",
+        "claim_id": "claim:b431261bae4f8eca935e8af34621c98db4ccbd34ea94c0fb05acb46a1ccfd3ac",
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "message": "canonical encoding and exact rational only; theorem requires review"
+    }
+  ],
+  "initial_decision": {
+    "kind": "judgment",
+    "requests": [],
+    "judgment": {
+      "valid": true,
+      "scores": [
+        1
+      ],
+      "reason": "Self-contained essential-input connectivity lower bound n-1 proves coefficient one without any baseline threshold.",
+      "accepted_claims": [
+        "claim:b431261bae4f8eca935e8af34621c98db4ccbd34ea94c0fb05acb46a1ccfd3ac"
+      ],
+      "assumptions": [],
+      "unresolved_obligations": [],
+      "evidence_refs": [
+        "source:proof.md",
+        "run:initial:0"
+      ],
+      "review_standard": "circuitbreaker-scoped-review-v1"
+    }
+  },
+  "followup_results": [],
+  "final_decision": null
+}
