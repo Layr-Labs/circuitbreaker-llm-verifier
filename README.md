@@ -31,3 +31,5 @@ scores:null, with exact bound records retained in the dossier. The main-claim ch
 uses typed inputs; lp-certificate is optional arithmetic support. Only explicit exact
 main-claim ID acceptance permits numeric projection. Partial lemmas remain unscored.
 Credentials, hidden qualification and live-run receipts are kept outside this export.
+
+Validation evidence, published source and upstream PR links are in [the pilot report](docs/dogfood.md). The report separates offline and hosted checker passes, credential-free production preflight, expected mathematical answers and the pending live model review.
