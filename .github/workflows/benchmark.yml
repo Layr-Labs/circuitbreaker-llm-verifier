@@ -1,4 +1,3 @@
-# Access and read-only checkout credentials must be configured separately.
 name: Benchmark
 on:
   workflow_dispatch:
@@ -11,10 +10,10 @@ permissions:
   contents: read
 jobs:
   verify:
-    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@e6952b76b1057b026f408f88c3e8c55b419f7344
+    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@8fbf3b30895ea83c0996e460176e3f154c2b4c85
     with:
       verifier_repository: Layr-Labs/llm-verifier
-      verifier_revision: e6952b76b1057b026f408f88c3e8c55b419f7344
+      verifier_revision: 8fbf3b30895ea83c0996e460176e3f154c2b4c85
       root_dir: '.'
       config_path: verifier.json
       submission_path: submission

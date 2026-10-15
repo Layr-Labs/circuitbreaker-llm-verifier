@@ -1,1 +1,0 @@
-SYNTHETIC PROTOCOL FIXTURE ONLY. No proof or discovery is supplied. This marked test exercises exact 16/5 score transport under a simulated accepted ID.

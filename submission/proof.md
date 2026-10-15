@@ -1,6 +1,6 @@
 # Published coefficient 31/10: construction and proof
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are in the canonical sources field.
+This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
 
 ## Fixed total family
 
@@ -54,9 +54,8 @@ assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3
 ## Conservative remainder, with source discrepancy retained
 
 LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The old package records that the conference version
-uses n/2+5*d/2. Do not silently equate these formulas. The following direct derivation
-uses the larger loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
+loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
 
     delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
 
@@ -75,7 +74,7 @@ The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
 
 At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
 conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. Arithmetic is tested using fractions, not floats.
+c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
 
 Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
 u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
@@ -83,3 +82,9 @@ u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
 it. Retuning this LP alone cannot advance the record; the certificate is not a
 barrier to another proof. Passing the LP checker certifies only these arithmetic
 claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+
+## Sources
+
+- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
+- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
+- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
