@@ -9,6 +9,8 @@ Edit `submission/`: state your theorem and exact coefficient in the first
 claim of [submission.json](submission/submission.json), and reference your
 proof file in its `evidence` list. Define the family and establish its NP
 membership, every theorem hypothesis and the claimed asymptotic bound.
+Every original declared claim must be established exactly as written for
+acceptance. A narrower lemma needs a separate submission.
 
 Check the submission structure with the pinned llm-verifier installation:
 
