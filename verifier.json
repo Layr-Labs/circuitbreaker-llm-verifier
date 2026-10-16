@@ -49,7 +49,8 @@
     "max_attempts": 1,
     "max_response_bytes": 262144,
     "max_completion_tokens": 8192,
-    "model": "gpt-5.4",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
     "response_format": "json_schema",
     "timeout_seconds": 120
   },
