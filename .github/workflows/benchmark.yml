@@ -10,10 +10,10 @@ permissions:
   contents: read
 jobs:
   verify:
-    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@63530cff8266939c4383599ffd8bb2c7ffbc97e0
+    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@330939ca2118c69a778c44cb16e4cabc38962854
     with:
       verifier_repository: Layr-Labs/llm-verifier
-      verifier_revision: 63530cff8266939c4383599ffd8bb2c7ffbc97e0
+      verifier_revision: 330939ca2118c69a778c44cb16e4cabc38962854
       root_dir: '.'
       config_path: verifier.json
       submission_path: submission
