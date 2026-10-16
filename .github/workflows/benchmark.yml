@@ -10,15 +10,15 @@ permissions:
   contents: read
 jobs:
   verify:
-    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@8fbf3b30895ea83c0996e460176e3f154c2b4c85
+    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@63530cff8266939c4383599ffd8bb2c7ffbc97e0
     with:
       verifier_repository: Layr-Labs/llm-verifier
-      verifier_revision: 8fbf3b30895ea83c0996e460176e3f154c2b4c85
+      verifier_revision: 63530cff8266939c4383599ffd8bb2c7ffbc97e0
       root_dir: '.'
       config_path: verifier.json
       submission_path: submission
       score_path: .yukon/score.json
       yukon_evaluation: ${{ inputs.yukon_evaluation }}
     secrets:
-      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       VERIFIER_CHECKOUT_TOKEN: ${{ secrets.VERIFIER_CHECKOUT_TOKEN }}
