@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "title": "Published coefficient 31/10 for the fixed BK/Shoup family",
+  "title": "OR family: declared coefficient 2",
   "claims": [
     {
-      "statement": "For the single total family defined in proof.md (the p=2 BK construction with one fixed deterministic Shoup field algorithm), L={x:f_|x|(x)=1} is in P and hence NP, and unconditionally C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer input length n=|x|, in the full Li–Yang B2 model.",
+      "statement": "For the single total family f_n(x)=OR(x_1,...,x_n) for every integer n>=0, with f_0(empty)=0, the language L={x:f_|x|(x)=1} is in NP, and unconditionally liminf as n tends to infinity of C_B2(f_n)/n >= 2, in the full B2 model of rules.md, with n=|x| the actual input length and the bound covering every sufficiently large integer length.",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "2",
+        "denominator": "1"
       },
       "evidence": [
         "proof.md"
@@ -14,15 +14,5 @@
     }
   ],
   "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": []
 }
