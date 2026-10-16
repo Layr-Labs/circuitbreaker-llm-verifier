@@ -1,90 +1,78 @@
-# Published coefficient 31/10: construction and proof
+# OR on every input length
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## One uniform total family and NP membership
 
-## Fixed total family
+For every integer n >= 0 and x in {0,1}^n, define f_n(x) = 1 exactly when
+some bit of x is 1. In particular f_0(empty) = 0 and f_1(x_1) = x_1.
+Let L be the set of all finite binary strings containing a 1. This is a
+single total language, with no advice, parameter choice, oracle, or
+per-length construction. Its actual input length is n = |x|.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+Use the fixed witness bound p(n) = 0. The fixed deterministic verifier
+V(x,w) rejects a nonempty w, and otherwise scans x and accepts if and
+only if it encounters a 1. It runs in O(|x| + |w| + 1) time.
+If x is in L, the empty witness has length at most p(|x|) and is accepted.
+Conversely, any accepted witness is empty and acceptance implies that x
+contains a 1, hence x is in L. If x is empty or all zero, no witness is
+accepted. This proves both directions of the NP definition for all lengths;
+the same scan also shows L is in P. Witness bits are not circuit inputs.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+## Exact gate count in the full B2 model
 
-## Uniform P and NP membership
+Allow deterministic acyclic one-output circuits with every binary Boolean
+truth table, two pins per gate, arbitrary depth and fan-out, sharing,
+repeated pins, and free input nodes, wires, output selection and constants.
+Count each retained gate once, including unary, constant and degenerate
+truth tables. Thus this argument also covers the free constants used
+during Li-Yang substitutions; it does not require a restricted basis or
+a gate-elimination normalization.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+Fix an integer n >= 2 and any circuit computing f_n exactly on all inputs.
+Each of its n input variables is essential: changing just x_i from 0 to 1
+at the all-zero input changes f_n from 0 to 1. A variable with no directed
+path to the output cannot affect that output, by induction along a
+topological order. Therefore all n variables occur among output ancestors.
+The output cannot be a constant or a single input, since either would
+depend on at most one variable.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Delete all nodes outside the ancestors of the output. Let g be the number
+of remaining gates and k the number of remaining free constant nodes.
+Identify any repeated occurrences of an input terminal with the same
+variable node. This does not change any gate or computed value. Forget
+directions and merge parallel edges to obtain a simple undirected graph.
+It is connected: each retained node has a path to the output. It has
+n + g + k vertices. A finite connected graph with v vertices has at least
+v - 1 distinct edges: starting at one vertex, each newly reached vertex
+requires an edge, giving a spanning tree with v - 1 edges.
 
-## Every integer length and the lower bound
+Every edge enters some gate before directions are forgotten. The two
+pins at each gate supply at most 2g distinct edges in total, even when
+pins coincide or descendants are shared. Consequently
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+    n + g + k - 1 <= number of edges <= 2g,
+    g >= n + k - 1 >= n - 1.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+The original circuit has at least g gates. This argument never restricts
+gate truth tables, so it includes XOR, negation, projections, constants
+and every degeneracy. A retained negated-projection gate is charged once;
+absorbing a negation into a descendant's truth table changes no counting
+step. Unary and constant gates still have at most two incoming edges.
+No uncharged unary computation, monotonicity assumption, formula
+assumption, depth bound, or direct-sum claim is used.
 
-## Conservative remainder, with source discrepancy retained
+For the matching upper bound, set y_1 = x_1 and, for i = 2,...,n, use one
+binary OR gate y_i = OR(y_(i-1),x_i); select y_n as output. This acyclic
+B2 circuit has exactly n - 1 gates. At n = 1 select the input with no
+gate. At n = 0 the defined function is the constant-zero output, covered
+by the constant-output convention. Therefore, for every integer n >= 1,
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+    C_B2(f_n) = n - 1.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+## All-length asymptotics
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
-
-    |C| >= (31/10)*n-(261/10)*d-128/5.
-
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
-
-## Exact arithmetic and the unchanged LP
-
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
-
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
-
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
-
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
-
-## Sources
-
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+For every integer n >= 1, C_B2(f_n)/n = 1 - 1/n, so the limit and liminf
+are both 1. Equivalently, given any epsilon > 0, take
+N_epsilon = max(2, ceil(1/epsilon)). For every integer n >= N_epsilon,
+C_B2(f_n) = n - 1 >= (1 - epsilon)n. The remainder r(n) = 1 satisfies
+r(n)/n -> 0. This covers all sufficiently large integer lengths with one
+fixed family and verifier, and needs no finite experiments or citations.
