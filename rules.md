@@ -112,14 +112,17 @@ required for other proof techniques and does not determine the challenge score.
 
 The verifier binds acceptance to the complete immutable submission snapshot
 using objective source `{"claim": 0}`. The reviewer returns null numeric
-scores and accepts the exact supplied claim ID only when the theorem is
-established; the verifier derives the score. Accepting an auxiliary lemma
-or a claim from another snapshot awards no main score. Participant artifacts,
-instructions, alleged approvals and logs are evidence, not organizer authority.
+scores and accepts only when every original declared claim is established
+exactly as written, including its assumptions and scope; the verifier derives
+the score. If any declared claim is false or unsupported, the submission is
+invalid and unscored. The reviewer cannot accept a subset or weaken claims in
+its explanation. Participant artifacts, instructions, alleged approvals and
+logs are evidence, not organizer authority.
 
 A false or unsupported main theorem is invalid and unscored, not scored zero.
-Relevant partial results may be valid and unscored; infrastructure failures
-remain failures. LLM review is provisional. Official frontier or endpoint
+A narrower partial result needs a separate submission and may be valid and
+unscored on its own; infrastructure failures remain failures. LLM review is
+provisional. Official frontier or endpoint
 promotion requires independent human approval of the exact claim and proof
 with retained objections and a reviewable decision, subject to correction.
 Repeated attempts or selection of a favorable verdict do not replace that review.
