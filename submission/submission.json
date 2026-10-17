@@ -1,12 +1,12 @@
 {
   "version": 1,
-  "title": "Published coefficient 31/10 for the fixed BK/Shoup family",
+  "title": "OR positive control: exact B2 complexity n-1 and coefficient 1",
   "claims": [
     {
-      "statement": "For the single total family defined in proof.md (the p=2 BK construction with one fixed deterministic Shoup field algorithm), L={x:f_|x|(x)=1} is in P and hence NP, and unconditionally C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer input length n=|x|, in the full Li–Yang B2 model.",
+      "statement": "Let L be the set of finite binary strings containing at least one 1, with f_n its characteristic function on length n and f_0(empty)=0. This single total language is in P and hence NP via the fixed empty-witness verifier in proof.md. In the full Li–Yang B2 model specified in rules.md, C_B2(f_n)=n-1 for every integer n>=1. Consequently liminf_{n->infinity} C_B2(f_n)/n=1, establishing the declared coefficient 1.",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "1",
+        "denominator": "1"
       },
       "evidence": [
         "proof.md"
@@ -14,15 +14,5 @@
     }
   ],
   "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": []
 }
