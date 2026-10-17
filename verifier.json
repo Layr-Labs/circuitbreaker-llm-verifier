@@ -52,7 +52,8 @@
     "model": "gpt-6-astra",
     "reasoning_effort": "high",
     "response_format": "json_schema",
-    "timeout_seconds": 600
+    "timeout_seconds": 600,
+    "stream": true
   },
   "limits": {
     "cpus": 1,
