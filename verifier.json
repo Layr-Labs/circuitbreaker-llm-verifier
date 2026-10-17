@@ -52,8 +52,8 @@
     "model": "gpt-6-astra",
     "reasoning_effort": "high",
     "response_format": "json_schema",
-    "timeout_seconds": 600,
-    "stream": true
+    "timeout_seconds": 1200,
+    "background": true
   },
   "limits": {
     "cpus": 1,
@@ -73,7 +73,7 @@
     "tmpfs_mb": 16,
     "total_output_bytes": 393216,
     "total_provider_requests": 2,
-    "total_review_seconds": 1200,
+    "total_review_seconds": 2400,
     "total_seconds": 40
   },
   "runtime": {
