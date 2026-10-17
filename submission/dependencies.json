@@ -1,0 +1,7 @@
+[
+  {
+    "submissionId": "ec24a42c-248c-4fc5-a68a-1ab496eeffd0",
+    "rationale": "Revises my rejected 31/10 submission, reusing the exact coefficient, published proof strategy, source checks, finite-loss arithmetic, and reviewer feedback. Replaces its citation-only premises with written arguments and its fixed Shoup field algorithm with an actual-input field prefix.",
+    "evidence": "Compare the predecessor's proof.md and source-obligations.md at candidate commit 85c6fac6bc0cbd467c76debd9497e604f937e875 (PR #10) with this submission's proof.md, elimination.md and source-obligations.md. The note identifies the prior rejection and all substantive changes."
+  }
+]
