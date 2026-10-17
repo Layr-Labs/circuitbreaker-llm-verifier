@@ -1,6 +1,6 @@
 # Published coefficient 31/10: construction and proof
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+This reproduces the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below. The companion source-obligations.md records the source statements checked for this submission and the correspondence of their hypotheses. The main coefficient remains 31/10.
 
 ## Fixed total family
 
@@ -88,3 +88,69 @@ claims, not the full circuit theorem, NP construction or exhaustive case analysi
 - LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
 - BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
 - Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+
+## Additional uniformity, model and quantifier details
+
+Choose one deterministic implementation of the algorithm proved by Shoup-preprint
+Theorem 3.2 once, before receiving inputs. Fix its representations, loop orders and
+any deterministic tie-breaking once for all degrees. Its input is (2,k); its output
+is an irreducible polynomial of exact degree k over F_2. Divide by its nonzero
+leading coefficient if necessary to make it monic. Shoup's fixed-prime consequence
+is unconditional and polynomial in k. This algorithmic choice is uniform and is
+not a table of polynomials supplied separately for each input length.
+
+All other parameters can be obtained with integer arithmetic. In particular the
+prime threshold is the strict comparison k^5 > 32*n^3; primality can be decided
+by trial division. Ceiling square roots are computed by integer search. Bertrand's
+postulate bounds the prime search by O(n^(3/5)); no real-number approximation or
+unproved assumption is used. There are r=O(n^(2/5)+1) field inputs, t<=r, and the
+largest exponent has O(r) bits. Thus the uniform evaluator has polynomial bit
+complexity in n, including construction of the field, powering and the descending
+symmetric-polynomial recurrence. A witness bound of zero has polynomial size and
+the same verifier works at every input length, including zero.
+
+In BK-preprint notation its input dimension m is our actual input length n and
+its extension degree n is our k. The theorem explicitly accepts an injective
+linear map from F_2^n into K^r. Zero padding supplies that injection: its kernel is
+zero, so it preserves the dimension of every affine subspace of the original
+input space. The projection pi is nontrivial because pi(1)=1. The exponent in
+block i is 1+2+...+2^i=2^(i+1)-1, as in equation (4), rather than an interchangeable
+power sequence. No loss factor k*r/n is applied to a bound on the original n-bit
+space. The construction, fixed field algorithm, and choices of coordinates do
+not depend on epsilon or on a proposed circuit.
+
+The lower-bound theorem already concerns the full B2 basis, not formulas or
+monotone circuits. All 16 truth tables, including trivial and degenerate tables,
+are counted as gates when retained. The cited normalization is part of its proof:
+Rule 2 treats constants and trivialized gates, Rule 3 treats degeneracies and
+explicitly discusses the output gate, and Rule 5 treats coincident input pins.
+Footnote 4 of Section 2.4 implements an input complementation by changing the
+truth table of each affected descendant. This adds no external free inverter.
+Fan-out can remain arbitrary because each affected truth table is changed in
+place; gates are never copied to turn a circuit into a formula.
+
+For a terminal output that is itself a primary input, its negation, or a constant,
+the computed function depends on at most one variable. When d(n)<=n-1 such a
+function is constant on an affine subspace of dimension at least d(n), contradicting
+our disperser property. These terminal cases therefore cannot occur for the hard
+large-length family. During the published induction the stopping loss is already
+included in n-2*d-2; we do not claim an additional gate saving after reaching its
+terminal cases. Witnesses are never added as circuit inputs.
+
+For completeness, the conservative finite estimate gives explicit epsilon
+quantifiers. Since d(n)<=6*n^(4/5)+1, the displayed bound implies
+
+    C_B2(f_n) >= (31/10)*n - (783/5)*n^(4/5) - 517/10.
+
+Let N_0 be large enough for the cited hypotheses and d(n)<=n-1. For any epsilon>0
+choose an integer N_epsilon at least
+
+    max(N_0, (1566/(5*epsilon))^5, 517/(5*epsilon)).
+
+For every integer n>=N_epsilon each of the two remainder terms divided by n is
+at most epsilon/2. Thus C_B2(f_n)>=(31/10-epsilon)*n at every such integer length.
+The same fixed family and verifier occur on both sides of this quantifier.
+This establishes the declared liminf coefficient and no superlinear endpoint.
+The source discrepancy described above is retained; no use is made of the smaller
+finite loss written in Theorem 3.9. The long published case analysis is invoked
+as a cited theorem, rather than represented as a new finite computation.

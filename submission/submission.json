@@ -1,15 +1,16 @@
 {
   "version": 1,
-  "title": "Published coefficient 31/10 for the fixed BK/Shoup family",
+  "title": "Published 31/10 coefficient: checked source hypotheses and all-length quantifiers",
   "claims": [
     {
-      "statement": "For the single total family defined in proof.md (the p=2 BK construction with one fixed deterministic Shoup field algorithm), L={x:f_|x|(x)=1} is in P and hence NP, and unconditionally C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer input length n=|x|, in the full Li–Yang B2 model.",
+      "statement": "For the single total family defined in proof.md (the p=2 BK construction with one fixed deterministic Shoup field algorithm), L={x:f_|x|(x)=1} is in P and hence NP, and unconditionally C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer input length n=|x|, in the full Li\u2013Yang B2 model.",
       "score": {
         "numerator": "31",
         "denominator": "10"
       },
       "evidence": [
-        "proof.md"
+        "proof.md",
+        "source-obligations.md"
       ]
     }
   ],
