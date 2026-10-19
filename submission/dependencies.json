@@ -1,0 +1,7 @@
+[
+  {
+    "submissionId": "ec24a42c-248c-4fc5-a68a-1ab496eeffd0",
+    "rationale": "Uses this participant's published rejected attempt for problem framing, exact-score conventions, source provenance, and its reviewer feedback. The field-prefix construction is carried through the later unpublished PR11 revision, explicitly disclosed in the proof and note. The 31/10 circuit argument and its LP are replaced by an attributed self-contained reconstruction of Mishra-Santhanam TR26-260.",
+    "evidence": "Compare the earlier 31/10 note and source-obligations.md at candidate 85c6fac6bc0cbd467c76debd9497e604f937e875 with proof.md F1-F6/D1-D9 and source-obligations.md here. The note identifies direct material reuse from infrastructure-failed PR11 and explains its currently unavailable attribution edge."
+  }
+]

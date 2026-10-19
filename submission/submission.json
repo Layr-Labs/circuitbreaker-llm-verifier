@@ -1,28 +1,20 @@
 {
   "version": 1,
-  "title": "Published coefficient 31/10 for the fixed BK/Shoup family",
+  "title": "Self-contained 7/2 bound by paired-parameter reparameterization, with every field-prefix bit charged",
   "claims": [
     {
-      "statement": "For the single total family defined in proof.md (the p=2 BK construction with one fixed deterministic Shoup field algorithm), L={x:f_|x|(x)=1} is in P and hence NP, and unconditionally C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer input length n=|x|, in the full Li–Yang B2 model.",
+      "statement": "For the single total family G_N defined at every actual input length N in proof.md, L={z:G_|z|(z)=1} is in P and hence NP, and unconditionally liminf as N tends to infinity of C_B2(G_N)/N is at least 7/2, for deterministic acyclic one-output circuits with all 16 binary Boolean truth tables, unrestricted depth and sharing, exact computation on every input, and possibly nonuniform circuits.",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "7",
+        "denominator": "2"
       },
       "evidence": [
-        "proof.md"
+        "proof.md",
+        "source-obligations.md",
+        "verification.py"
       ]
     }
   ],
   "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": []
 }
