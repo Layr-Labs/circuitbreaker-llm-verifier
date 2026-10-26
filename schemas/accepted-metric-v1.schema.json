@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "circuitbreaker-expression-v1"
+    },
+    "convention": {
+      "const": "uniform-np-full-b2-actual-length-all-lengths-v1"
+    },
+    "status": {
+      "const": "accepted_provisional"
+    },
+    "bound": {
+      "$ref": "bound-v1.schema.json"
+    },
+    "intake_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "dossier_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "selected_review_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "submission_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "verifier_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "statements": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "string"
+      }
+    },
+    "score_records": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "objective": {
+            "enum": [
+              "gate_coefficient",
+              "gate_exponent"
+            ]
+          },
+          "source_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "record": {
+            "oneOf": [
+              {
+                "$ref": "bound-v1.schema.json#/$defs/rational"
+              },
+              {
+                "const": "positive_infinity"
+              }
+            ]
+          },
+          "projection": {
+            "enum": [
+              "finite",
+              "unsupported_positive_infinity"
+            ]
+          }
+        },
+        "required": [
+          "objective",
+          "source_sha256",
+          "record",
+          "projection"
+        ]
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    }
+  },
+  "required": [
+    "version",
+    "convention",
+    "status",
+    "bound",
+    "intake_sha256",
+    "dossier_sha256",
+    "selected_review_sha256",
+    "submission_sha256",
+    "verifier_sha256",
+    "statements",
+    "score_records",
+    "evidence"
+  ]
+}

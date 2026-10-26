@@ -1,0 +1,40 @@
+
+  metrics:
+    name: Export accepted CircuitBreaker expressions
+    needs: [verify]
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          submodules: false
+          lfs: false
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
+        with:
+          name: llmv-package
+          path: ${{ runner.temp }}/wheel/
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
+        with:
+          name: llmv-intake
+          path: ${{ runner.temp }}/intake/
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
+        with:
+          name: verifier-dossier
+          path: ${{ runner.temp }}/dossier/
+      - name: Export from the same-run wheel, intake and dossier
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/llmv-env"
+          "$RUNNER_TEMP/llmv-env/bin/python" -m pip install --no-index --no-deps "$RUNNER_TEMP"/wheel/*.whl
+          "$RUNNER_TEMP/llmv-env/bin/python" export_metrics.py --intake "$RUNNER_TEMP/intake/intake.json" --dossier "$RUNNER_TEMP/dossier/dossier.json" --out "$RUNNER_TEMP/circuitbreaker-score/.yukon/score.json"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: circuitbreaker-score
+          path: ${{ runner.temp }}/circuitbreaker-score/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
