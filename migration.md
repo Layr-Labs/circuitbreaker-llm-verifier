@@ -1,12 +1,16 @@
-# Source-only migration to coefficient/exponent objectives
+# Coefficient/exponent registration and legacy retirement
 
-This change prepares a **new registration**. Do not reimport or reorg the live
-single-objective `circuitbreaker` registration (`main` track) using this manifest: the existing benchmark cannot
-change its objectives through a normal reorg. No live registration, benchmark,
-remote setting, UI, merge or deployment is part of this source change.
+This repository declares only the current two-objective `main` track. The legacy
+single-objective registration is not part of its manifest or current page. Retire
+that legacy registration through the supported close and soft-archive lifecycle,
+retaining historical submissions, judgments and policy versions. Remove its page
+bindings and selectors; do not recreate a legacy UI track during page preparation.
 
-After independent exact-source review and authorization to register, the new
-registration must use the frozen source containing:
+Do not reimport or reorg the legacy registration with this manifest: a normal
+reorg cannot change its objectives. These source instructions do not execute
+registration, archival or page changes.
+
+For a new registration, independently review and use the frozen source containing:
 
 - Objectives `gate_coefficient` and `gate_exponent`, both maximized, in that order.
 - The new scoring/review versions, current fixed-family validity policy,
@@ -17,12 +21,11 @@ registration must use the frozen source containing:
   reviewed under the current supplied-source policy. Passing structural tests
   or accepting an older baseline does not guarantee scientific acceptance.
 
-Choose the new registration's name/slug and archival/cross-link treatment for
-the existing benchmark at that later authorized step. Preserve historical
-records and their policy versions. Do not rewrite old single-coordinate
-results into accepted two-coordinate results without review of the exact joint
-theorem and source. Results tied under full-expression comparison retain both
-proofs; a weaker projection of an existing expression is not fresh progress.
+Keep the closed, soft-archived legacy history outside the current page and
+repository track list. Do not rewrite old single-coordinate results into accepted
+two-coordinate results without review of the exact joint theorem and source.
+Results tied under full-expression comparison retain both proofs; a weaker
+projection of an existing expression is not fresh progress.
 
 ## Prepared page and source inputs
 
@@ -53,11 +56,10 @@ Prepare activation with these explicit inputs:
   `33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad` and artifact `circuitbreaker-score`.
 - A separately selected replacement registration name/source branch, actual
   replacement UUID, access/publication choices and any existing page revision
-  used by the authorized rebind. Preserve the legacy UUID
-  `015f2bee-4f6d-4db6-8e51-8616071c0454` and its history as a separate real page track,
-  using its own one-objective presentation rather than the new two-objective one.
-  Source-branch uniqueness and name conflicts must be resolved without archiving
-  it implicitly.
+  used by the authorized rebind. Legacy UUID
+  `015f2bee-4f6d-4db6-8e51-8616071c0454` belongs only to closed, soft-archived history;
+  exclude it from current page bindings and track selectors. Preserve the current
+  two-objective registration when resolving source-branch or name conflicts.
 - The replacement benchmark JSON read from that API and the exact reviewed
   source SHA. Retain its baseline job, workflow run, selected evaluation and
   dossier identities for audit. Do not fabricate a replacement UUID or relabel
