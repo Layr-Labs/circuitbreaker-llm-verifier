@@ -1,8 +1,8 @@
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission
 
-Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/8c1f098875fae0750c29ecfd641f7c9fc53a0f41/docs/solving.md) and
-[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/8c1f098875fae0750c29ecfd641f7c9fc53a0f41/skills/llm-verifier-solver/SKILL.md)
+Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad/docs/solving.md) and
+[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad/skills/llm-verifier-solver/SKILL.md)
 from the same pinned verifier revision as this challenge.
 
 - Use the challenge's verifier revision for `llm-verifier check --root .`.

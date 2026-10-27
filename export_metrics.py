@@ -24,6 +24,7 @@ def validate_contract(config):
             or config["policies"] != POLICIES
             or config.get("acceptance_policy", "atomic-claims-v1") != "atomic-claims-v1"
             or config.get("manifest_preprocessor") is not None
+            or "structured_claims" in config
             or not config["allow_unscored"]
             or [o["name"] for o in objectives] != ["gate_coefficient", "gate_exponent"]
             or [o["direction"] for o in objectives] != ["+", "+"]
@@ -109,6 +110,21 @@ def projection(record, *, expected_intake=None):
         "score_records": expected_records,
         "evidence": {p: files[p]["sha256"] for p in manifest["claims"][0]["evidence"]},
     }}
+    result["metrics"]["circuitbreaker_frontier"] = {
+        "version": "circuitbreaker-frontier-v1",
+        "comparator": "circuitbreaker-v1",
+        "scope": CONVENTION,
+        "model": "full-b2-v1",
+        "notation": "lower-bound",
+        "intake_sha256": intake["sha256"],
+        "dossier_sha256": record["sha256"],
+        "resources": {"circuit_size": {
+            "statement": manifest["claims"][0]["statement"],
+            "bound": bound["guarantee"],
+            "source_sha256": expected_records[0]["source_sha256"],
+            "evidence": result["metrics"]["circuitbreaker"]["evidence"],
+        }},
+    }
     return result
 
 

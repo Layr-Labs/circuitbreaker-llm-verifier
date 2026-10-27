@@ -16,10 +16,10 @@ permissions:
   id-token: write
 jobs:
   verify:
-    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@8c1f098875fae0750c29ecfd641f7c9fc53a0f41
+    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad
     with:
       verifier_repository: Layr-Labs/llm-verifier
-      verifier_revision: 8c1f098875fae0750c29ecfd641f7c9fc53a0f41
+      verifier_revision: 33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad
       root_dir: '.'
       config_path: verifier.json
       submission_path: submission

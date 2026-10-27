@@ -1,7 +1,9 @@
 # Accepted expression interface, version 1
 
 `export_metrics.py` rebuilds a trusted shared-verifier dossier and appends
-`metrics.circuitbreaker` to its unchanged native projection. This record follows
+`metrics.circuitbreaker` plus the additive table envelope
+`metrics.circuitbreaker_frontier` to its unchanged native projection. The rich
+`circuitbreaker` record keeps its original fields and meaning and follows
 [the metric schema](schemas/accepted-metric-v1.schema.json); its `bound` follows
 [the declaration schema](schemas/bound-v1.schema.json). `expressions.py` supplies
 additional exact rational, domain and implication validation. Both schema shape
@@ -27,6 +29,59 @@ For explicit endpoints, score fields containing `positive_infinity` are
 transport conventions only. In particular the two such fields for a global
 endpoint are not an infinite exponent and coefficient. No JSON numeric Infinity
 is emitted. Exact scientific ordering never reads native floats.
+
+## Registered Complexity table
+
+The generic metrics-frontier table can select the registered `circuitbreaker-v1`
+comparator. [The presentation fragment](examples/complexity-result-tab.json)
+adds `resultTabs` at the chosen page or track presentation level. It selects
+`circuitbreaker_frontier`, version `circuitbreaker-frontier-v1`, scope
+`uniform-np-full-b2-actual-length-all-lengths-v1`, model `full-b2-v1`, and notation
+`lower-bound`. The single `circuit_size` column is maximized and initially
+sorted descending. The fragment requires that registered comparator extension;
+it does not itself publish source, update a page, or register a benchmark.
+
+The [table schema](schemas/frontier-v1.schema.json) describes the exact envelope:
+`version`, `comparator`, `scope`, `model`, `notation`, `intake_sha256`,
+`dossier_sha256`, and `resources`. Its sole resource `circuit_size` contains:
+
+- `statement`: the complete unchanged accepted joint claim statement.
+- `bound`: the exact canonical `bound.guarantee` AST, including theorem kind.
+- `source_sha256`: the first accepted score-source identity, which binds the
+  coefficient claim asserting the ENTIRE joint theorem and source snapshot.
+- `evidence`: the same validated common proof-file hashes as the rich metric.
+
+The table wire has exactly one resource, `circuit_size`; it does not inherit
+the DCP comparator's open resource set. Statement length stays at 8,000
+characters. Evidence includes `bound.json` and `proof.md`, with at most 32
+entries and the pinned verifier's safe relative path limits: 512 characters,
+12 components, 128 ASCII characters per component, and no `.`, `..` or `.git`
+components. Files named `constructor`, `prototype` and `__proto__` remain
+valid evidence basenames and are treated as inert own data properties; this
+does not allow those names as metric/configuration keys. These consistency checks do not authenticate provenance or prove
+the mathematics.
+
+The second score record and joint claim are still verified by the existing
+acceptance gate before either metric is emitted. The table namespace adds no
+independent acceptance path or candidate-supplied comparison hint. The original
+rich namespace retains both source records, full declaration/projection and
+selected review identity for audit.
+
+Read n as actual input bit length; all logarithms are base 2. A
+`polynomial_log` bound represents a liminf guarantee with its exact rational
+coefficient, not equality to actual circuit complexity. A lane endpoint is
+omega(n^p): its ratio to n^p diverges without asserting a particular logarithmic
+rate. `superpolynomial` means all fixed powers for the SAME family and all
+sufficiently large lengths, not exponential growth or n^infinity. The numeric
+graph remains the declared [coefficient, exponent] projection. Endpoints retain
+null native scores while participating in the Complexity table.
+
+Only current, access-authorized, valid results from one compatible track enter
+the table. Unreviewed, revoked and stale results are filtered by the platform's
+current-result policy; malformed or incompatible envelopes are omitted. These
+are separate from mathematical comparison. Unsupported bounds compare as
+unknown, never as equivalent. Equal full guarantees retain ties even if their
+weaker graph projections differ.
 
 ## Comparison without a UI dependency
 
@@ -99,3 +154,31 @@ in a job with no supplied credentials. Benchmark execution does not run test
 fixtures or synthesize acceptance. Production synthetic-test examples are not
 accepted results: tests build explicitly labelled unsigned records solely to
 exercise exporter validation. No provider request or credential is used.
+
+
+## Cross-language conformance corpus
+
+`tests/fixtures/circuitbreaker-frontier-v1.json` contains 58 eligible synthetic
+exporter outputs, 3,364 independently assigned pairwise expectations, selected
+frontier/tie scenarios and labelled omitted cases. Every eligible envelope is
+produced by the actual exporter after a fresh deterministic synthetic phase
+chain; there are no copied live results or relabelled old-runtime dossiers.
+Expected strength tiers are explicitly arranged from weaker to stronger without
+calling `expressions.compare`; tests compare the authoritative Python algebra
+against those expectations and the platform uses the same corpus.
+
+Only the table namespace is retained in the corpus to avoid duplicating rich
+records. Separate regressions compare the rich namespace with the published
+PR15 exporter under the same new verifier. `mutated-exporter` cases deliberately
+corrupt a copy for consumer validation; `consumer-state` cases retain valid
+metric bytes while requiring the current-result policy to omit them. A valid
+platform result awaiting manual promotion is distinct from an unreviewed claim.
+Simulation is rejected by the exporter and has no output.
+
+Regenerate with `python tools/generate_frontier_fixtures.py`, or use `--check`
+for reproducibility. CI runs schema/wire/parity regressions and the fixture drift
+check with the same pinned verifier wheel. The current pin is
+`33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad`; its optional `structured_claims`
+protocol remains disabled. Existing joint statements and file binding are
+unchanged. Neither these tests nor this table integration requalifies the
+baseline proof mathematically.

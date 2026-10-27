@@ -5,7 +5,10 @@ defined total Boolean family in NP. The [rules](rules.md) define scientific
 eligibility, joint coefficient/exponent scoring and explicit endpoints.
 Native finite scores are `[c,p]`, both maximized. The full accepted expression
 is authoritative; the graph is only a projection. Endpoint scores are null
-and their typed expression metrics remain available.
+and their typed expression metrics remain available. The additive
+`circuitbreaker_frontier` envelope supports the registered Complexity table;
+[the presentation fragment](examples/complexity-result-tab.json) selects it
+when the `circuitbreaker-v1` extension is available.
 
 The [starting proof](submission/proof.md) is the unchanged published 31/10
 baseline, represented as (31/10,1). It is a literature seed, not a guarantee of
@@ -24,6 +27,7 @@ Use the pinned llm-verifier installation for credential-free validation:
 python check_submission.py
 python -m unittest -v
 python tools/generate_hosted.py --check
+python tools/generate_frontier_fixtures.py --check
 llm-verifier test-checkers --root .
 ```
 
@@ -37,14 +41,16 @@ After source edits, run `python tools/generate_hosted.py` to apply the upstream
 generator plus the protected metrics/test overlays. The hosted runner selects
 the metrics-bearing `circuitbreaker-score` artifact; local `finalize_score.py`
 wraps shared finalization with the same export. See [migration.md](migration.md)
-for the required new registration and later table integration. This source
-change does not alter the existing live benchmark.
+for the required new registration and separately authorized table selection.
+The verifier pin is `33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad`; the optional
+structured-claims protocol remains disabled. This source change does not alter
+the existing live benchmark or page.
 
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission
 
-Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/8c1f098875fae0750c29ecfd641f7c9fc53a0f41/docs/solving.md) and
-[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/8c1f098875fae0750c29ecfd641f7c9fc53a0f41/skills/llm-verifier-solver/SKILL.md)
+Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad/docs/solving.md) and
+[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad/skills/llm-verifier-solver/SKILL.md)
 from the same pinned verifier revision as this challenge.
 
 - Use the challenge's verifier revision for `llm-verifier check --root .`.

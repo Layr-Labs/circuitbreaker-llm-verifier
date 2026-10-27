@@ -14,21 +14,19 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
-import uuid
 
 from llm_verifier import pipeline
-from llm_verifier.artifacts import intake_snapshot, seal
-from llm_verifier.config import load_config
+from llm_verifier.artifacts import seal
 from llm_verifier.errors import VerifierError
 from llm_verifier.files import write_json
 from llm_verifier.jsonutil import canonical, digest
-from llm_verifier.provider import provider_endpoint
 from llm_verifier.runner import DockerRunner, output_record
 
 from export_metrics import export, projection
 from finalize_score import main as finalize_main
 from expressions import (CONVENTION, VERSION, claims_for, compare, polynomial,
                          ratio)
+from tests.synthetic import synthetic_dossier
 from tests.test_expressions import GLOBAL, GLOBAL_PROJECTION, finite, lane
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,31 +57,8 @@ class ExportTests(unittest.TestCase):
         self.manifest = {"version": 1, "title": "Synthetic test only", "claims": claims_for(self.bound),
                          "experiments": [], "checks": []}
 
-    def dossier(self, *, valid=True, simulation=False, reference="source:proof.md"):
-        write_json(self.root / "submission/submission.json", self.manifest)
-        write_json(self.root / "submission/bound.json", self.bound)
-        (self.root / "submission/proof.md").write_text("Synthetic transport fixture; no circuit theorem.\n")
-        effective = load_config(self.root, "verifier.json", "submission")
-        # Freeze identity and time to make complete fixture chains deterministic.
-        with patch("time.time_ns", return_value=1700000000000000000), patch("uuid.uuid4", return_value=uuid.UUID(int=1)), patch("time.monotonic", return_value=1.0):
-            intake = intake_snapshot(effective, self.root / "submission", simulation=simulation)
-            initial = pipeline.execute(intake)  # No declared runs, no Docker calls.
-            messages, schema, _ = pipeline.review_material(intake, initial)
-            config = effective["config"]
-            decision = {"kind": "judgment", "requests": [], "judgment": {
-                "valid": valid, "scores": None, "reason": "SYNTHETIC fixture; not a scientific verdict.",
-                "evidence_refs": [reference], "review_standard": config["review_standard"],
-            }}
-            provenance = {
-                "provider": "openai", "endpoint": provider_endpoint(config["provider"]),
-                "configured_model": config["provider"]["model"], "returned_model": config["provider"]["model"],
-                "request_id": "synthetic-no-provider-request", "usage": {},
-                "prompt_sha256": digest(messages), "schema_sha256": digest(schema),
-                "provider_config_sha256": digest(config["provider"]), "attempts": 1, "elapsed_seconds": 0,
-            }
-            review = seal("initial_review", intake["bindings"], {"decision": decision, "provenance": provenance},
-                          [intake["sha256"], initial["sha256"]], simulation)
-            return pipeline.dossier(intake, initial, review)
+    def dossier(self, **options):
+        return synthetic_dossier(self.root, self.bound, self.manifest, **options)
 
     def test_finite_full_record_and_source_binding(self):
         d = self.dossier()
@@ -275,7 +250,7 @@ class ExportTests(unittest.TestCase):
         out, dossier = self.root / "score.json", self.root / "final.json"
         subprocess.run([sys.executable, str(ROOT / "finalize_score.py"), *args,
                         "--score", str(out), "--dossier", str(dossier)], check=True)
-        self.assertIn("metrics", json.loads(out.read_text()))
+        self.assertIn("circuitbreaker_frontier", json.loads(out.read_text())["metrics"])
 
 
 def ratio_to_fraction(n, d):

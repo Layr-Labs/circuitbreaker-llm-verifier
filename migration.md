@@ -24,14 +24,22 @@ results into accepted two-coordinate results without review of the exact joint
 theorem and source. Results tied under full-expression comparison retain both
 proofs; a weaker projection of an existing expression is not fresh progress.
 
-The future DCP-style full-expression table should consume the versioned metric
-and trusted provenance documented in [metrics.md](metrics.md), including
-accepted null-score endpoints and the entire relevant accepted history. Its
-feature and comparator-registration interface have not landed; this source
-adds no imagined registration key and makes no UI changes. Integration will
-need a separately reviewed adapter for supported versions, current acceptance,
-ties, unknown comparisons and endpoint rows. The numeric graph remains a
-projection, so a table absence today must not be interpreted as no endpoint.
+The generic full-expression table is available; the coordinated platform
+extension registers `circuitbreaker-v1` for these lower-bound guarantees. Once
+that extension is available in the target environment, the reviewed
+[Complexity tab fragment](examples/complexity-result-tab.json) can be selected
+in page or track `presentation.resultTabs`. It reads the additive table envelope
+specified in [metrics.md](metrics.md), including accepted null-score endpoints
+and complete relevant current accepted history. The original rich metric stays
+available for audit. The numeric graph remains a [coefficient, exponent]
+projection, while full expressions determine table ordering and ties.
+
+This source only prepares the producer and presentation fragment. Publishing
+the source, releasing the registered extension, selecting the page fragment and
+creating the two-objective registration are separate authorized actions. Do not
+apply the fragment to historical one-objective data as a substitute for its
+missing joint review, and do not change the live registration or page as part
+of source preparation.
 
 No model qualification was performed for this restructure. Before launching a
 new registration, separately authorize and run the required reviewer/scientific

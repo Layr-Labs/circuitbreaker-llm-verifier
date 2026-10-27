@@ -21,3 +21,4 @@
           env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" check_submission.py
           env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" -m unittest -v
           env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" tools/generate_hosted.py --check
+          env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" tools/generate_frontier_fixtures.py --check
