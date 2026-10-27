@@ -6,9 +6,11 @@ eligibility, joint coefficient/exponent scoring and explicit endpoints.
 Native finite scores are `[c,p]`, both maximized. The full accepted expression
 is authoritative; the graph is only a projection. Endpoint scores are null
 and their typed expression metrics remain available. The additive
-`circuitbreaker_frontier` envelope supports the registered Complexity table;
-[the presentation fragment](examples/complexity-result-tab.json) selects it
-when the `circuitbreaker-v1` extension is available.
+`circuitbreaker_frontier` envelope supports the registered Complexity table.
+[The complete presentation template](examples/circuitbreaker-presentation.json)
+combines that table with coefficient history grouped by the selected power of n.
+It uses the merged Yukon contract from `f340c97dad9f170941e03c233a8a263ae76b8998`;
+compatible API and UI releases must be running before it is selected.
 
 The [starting proof](submission/proof.md) is the unchanged published 31/10
 baseline, represented as (31/10,1). It is a literature seed, not a guarantee of
@@ -38,10 +40,14 @@ new circuit result. The proof budget, provider configuration, LP checker and
 scientific family/model conventions are preserved.
 
 After source edits, run `python tools/generate_hosted.py` to apply the upstream
-generator plus the protected metrics/test overlays. The hosted runner selects
+generator plus the protected metrics/test overlays and validate the companion
+presentation against the generated objectives and metric contract. Page settings
+remain in the separate template, not in `benchmark.json`. The hosted runner selects
 the metrics-bearing `circuitbreaker-score` artifact; local `finalize_score.py`
 wraps shared finalization with the same export. See [migration.md](migration.md)
-for the required new registration and separately authorized table selection.
+for replacement-registration inputs, the configured review budget, and binding
+both views with Yukon's existing page-preparation helper. Registration queues
+baseline review immediately; there is no model-free create-paused mode.
 The verifier pin is `33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad`; the optional
 structured-claims protocol remains disabled. This source change does not alter
 the existing live benchmark or page.

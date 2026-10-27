@@ -33,8 +33,19 @@ is emitted. Exact scientific ordering never reads native floats.
 ## Registered Complexity table
 
 The generic metrics-frontier table can select the registered `circuitbreaker-v1`
-comparator. [The presentation fragment](examples/complexity-result-tab.json)
-adds `resultTabs` at the chosen page or track presentation level. It selects
+comparator. [The complete presentation](examples/circuitbreaker-presentation.json)
+combines the table with coefficient history grouped by exponent using the merged
+Yukon `results.scoreTracks` contract. It selects `gate_exponent`, numeric descending
+order and the highest eligible finite group by default; `results.defaultView`
+selects coefficient over time. Each group retains its complete eligible history,
+including results dominated on the global Pareto frontier. These are display
+groups, not new benchmark tracks or different scoring rules. Group keys use native
+binary64 exponent values; exact rational distinctions remain in full expressions.
+Null-score endpoints never create numeric groups.
+
+[The table-only fragment](examples/complexity-result-tab.json) remains available
+for existing integrations. Both templates add `resultTabs` at the chosen page or
+track presentation level. The tab selects
 `circuitbreaker_frontier`, version `circuitbreaker-frontier-v1`, scope
 `uniform-np-full-b2-actual-length-all-lengths-v1`, model `full-b2-v1`, and notation
 `lower-bound`. The single `circuit_size` column is maximized and initially
@@ -143,8 +154,12 @@ python export_metrics.py --intake intake.json --dossier dossier.json --out score
 
 Regenerate hosted files with `python tools/generate_hosted.py`. The script runs
 the pinned upstream generator and applies only the checked-in metric and test
-job overlays plus the artifact/CLI selection in `benchmark.json`. Run with
-`--check` for a read-only drift check. Running upstream `github` alone removes
+job overlays plus the artifact/CLI selection in `benchmark.json`. It also checks
+that the separate complete presentation still binds the generated objective
+names/order/directions, coefficient chart, exponent grouping and table contract.
+The template is a checked-in companion; the generator does not import a page or
+insert presentation fields into the benchmark manifest. Run with `--check` for a
+read-only drift check. Running upstream `github` alone removes
 the overlays; CI detects that drift. No unsupported platform comparator setting
 or native endpoint type is configured.
 
