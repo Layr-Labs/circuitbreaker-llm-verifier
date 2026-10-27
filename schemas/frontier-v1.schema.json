@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Trusted organizer output only. Consumers also enforce current accepted provenance, exact reduced rational domains and the registered comparator contract. The statement is the complete unchanged joint claim; source_sha256 is its first score-source identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "circuitbreaker-frontier-v1"
+    },
+    "comparator": {
+      "const": "circuitbreaker-v1"
+    },
+    "scope": {
+      "const": "uniform-np-full-b2-actual-length-all-lengths-v1"
+    },
+    "model": {
+      "const": "full-b2-v1"
+    },
+    "notation": {
+      "const": "lower-bound"
+    },
+    "intake_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "dossier_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "circuit_size": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "statement": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 8000
+            },
+            "bound": {
+              "$ref": "bound-v1.schema.json#/properties/guarantee"
+            },
+            "source_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "evidence": {
+              "type": "object",
+              "minProperties": 2,
+              "maxProperties": 32,
+              "required": [
+                "bound.json",
+                "proof.md"
+              ],
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^(?!(?:[A-Za-z0-9_.-]+/)*(?:\\.{1,2}|\\.git)(?:/|$))[A-Za-z0-9_.-]{1,128}(?:/[A-Za-z0-9_.-]{1,128}){0,11}(?![\\s\\S])",
+                "maxLength": 512
+              },
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          },
+          "required": [
+            "statement",
+            "bound",
+            "source_sha256",
+            "evidence"
+          ]
+        }
+      },
+      "required": [
+        "circuit_size"
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "comparator",
+    "scope",
+    "model",
+    "notation",
+    "intake_sha256",
+    "dossier_sha256",
+    "resources"
+  ]
+}

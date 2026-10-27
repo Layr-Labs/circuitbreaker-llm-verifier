@@ -13,11 +13,15 @@
         {
           "name": "gate_coefficient",
           "direction": "+"
+        },
+        {
+          "name": "gate_exponent",
+          "direction": "+"
         }
       ],
       "paretoPolicies": {
         "scoring": {
-          "version": "snapshot-gate-coefficient-v1"
+          "version": "coefficient-exponent-expression-v1"
         },
         "validity": {
           "version": "fixed-family-full-b2-v1"
@@ -26,6 +30,10 @@
       "editablePaths": [
         "submission"
       ],
+      "submissionAdmission": {
+        "version": 1,
+        "submissionReferencesEnabled": false
+      },
       "setupCommand": [
         "llm-verifier",
         "intake",
@@ -35,8 +43,8 @@
         ".yukon/work/intake.json"
       ],
       "benchmarkCommand": [
-        "llm-verifier",
-        "finalize",
+        "python3",
+        "finalize_score.py",
         "--intake",
         ".yukon/work/intake.json",
         "--initial",
@@ -53,7 +61,7 @@
       "runner": {
         "provider": "github-actions",
         "workflow": "benchmark.yml",
-        "scoreArtifactName": "benchmark-score",
+        "scoreArtifactName": "circuitbreaker-score",
         "maxConcurrentWorkflows": 2
       }
     }

@@ -1,0 +1,28 @@
+{
+  "resultTabs": [
+    {
+      "id": "complexity",
+      "label": "Complexity",
+      "kind": "metrics-frontier",
+      "description": "Established circuit-size lower bounds for one fixed uniform NP family in full B2. n is actual input bit length; logarithms are base 2. Exact coefficients and full guarantees determine this frontier; the numeric graph shows only the declared [coefficient, exponent] projection.",
+      "comparator": "circuitbreaker-v1",
+      "metricsPath": "circuitbreaker_frontier",
+      "metricsVersion": "circuitbreaker-frontier-v1",
+      "scope": "uniform-np-full-b2-actual-length-all-lengths-v1",
+      "model": "full-b2-v1",
+      "notation": "lower-bound",
+      "columns": [
+        {
+          "key": "circuit_size",
+          "label": "Circuit size lower bound",
+          "direction": "+"
+        }
+      ],
+      "defaultSort": {
+        "by": "metric",
+        "key": "circuit_size",
+        "direction": "desc"
+      }
+    }
+  ]
+}

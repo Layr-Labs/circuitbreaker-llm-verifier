@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": "circuitbreaker-expression-v1"
+    },
+    "convention": {
+      "const": "uniform-np-full-b2-actual-length-all-lengths-v1"
+    },
+    "family": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "theorem": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "guarantee": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "polynomial_log"
+            },
+            "coefficient": {
+              "$ref": "#/$defs/rational"
+            },
+            "exponent": {
+              "$ref": "#/$defs/rational"
+            },
+            "log_exponent": {
+              "$ref": "#/$defs/rational"
+            },
+            "loglog_exponent": {
+              "$ref": "#/$defs/rational"
+            }
+          },
+          "required": [
+            "kind",
+            "coefficient",
+            "exponent",
+            "log_exponent",
+            "loglog_exponent"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "lane_endpoint"
+            },
+            "exponent": {
+              "$ref": "#/$defs/rational"
+            }
+          },
+          "required": [
+            "kind",
+            "exponent"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "superpolynomial"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    },
+    "projection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "finite"
+            },
+            "coefficient": {
+              "$ref": "#/$defs/rational"
+            },
+            "exponent": {
+              "$ref": "#/$defs/rational"
+            }
+          },
+          "required": [
+            "kind",
+            "coefficient",
+            "exponent"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "lane_endpoint"
+            },
+            "exponent": {
+              "$ref": "#/$defs/rational"
+            }
+          },
+          "required": [
+            "kind",
+            "exponent"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "global_endpoint"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "version",
+    "convention",
+    "family",
+    "theorem",
+    "guarantee",
+    "projection"
+  ],
+  "$defs": {
+    "rational": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "numerator": {
+          "type": "string",
+          "pattern": "^(0|-?[1-9][0-9]*)$",
+          "maxLength": 256
+        },
+        "denominator": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*$",
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ]
+    }
+  },
+  "$comment": "Runtime additionally checks reduced rationals, c>0, p>=1, and implication. Canonical normalization never rounds or repairs a theorem."
+}

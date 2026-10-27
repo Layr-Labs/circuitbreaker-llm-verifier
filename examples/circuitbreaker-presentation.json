@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "identity": {
+    "slug": "circuitbreaker",
+    "title": "CircuitBreaker",
+    "category": "Mathematics",
+    "description": "Prove an unconditional lower bound on gates for one explicit Boolean family in NP. Compare coefficient c at a selected power p in c × n^p, and inspect complete guarantees in the Complexity tab."
+  },
+  "artwork": {
+    "src": "https://api-dev.yukon.org/api/challenge-artwork/063124742ea4b53f551b2771bf2e98aee1f2e3a42c881ecab5f7930007a15e21.svg",
+    "alt": "Mint Boolean circuit with signals passing through shared two-input gates.",
+    "animatedSvgSrc": "https://api-dev.yukon.org/api/challenge-artwork/ce9bd93b41631945e880c8a8c7b17ed55f3187b3b9daa8badac604af939a30a5.svg"
+  },
+  "credits": {
+    "status": "not-applicable",
+    "text": "References: Li–Yang, BK and Shoup; versioned citations in submission/proof.md."
+  },
+  "rules": {
+    "objective": "Prove a lower bound for one total Boolean family defined at every input length in the full Li–Yang B₂ model. The family must form one NP language with a fixed polynomial-time verifier and polynomial witness bound; functions in P are allowed. Circuits are deterministic, acyclic and nonuniform, with one output, two input pins per gate, all 16 binary truth tables, unrestricted depth and sharing, and exact computation on every input. Count retained gates against actual input length n, including encoding and padding losses; witness bits are not circuit inputs. A finite pair [c, p] declares exact reduced rationals c > 0 and p ≥ 1 with liminf C_B₂(f_n)/n^p ≥ c for that same family at all sufficiently large integer lengths. Fractional rational exponents are allowed; sparse subsequences do not suffice.",
+    "submission": "Edit submission/ only. Put the canonical versioned declaration in submission/bound.json and the complete proof in submission/proof.md. The first two structured claims in submission.json must contain the identical complete joint theorem and sorted identical evidence lists including bound.json and proof.md. Their score fields encode the coefficient and exponent of the same theorem, not independent claims. Use reduced rational numerator/denominator strings for finite values. Keep weaker relevant lemmas as unscored string claims. Follow the selected source revision’s rules and declaration schema; a checker or LP certificate does not replace the full proof.",
+    "evaluation": "The hosted verifier evaluates the fixed source and jointly reviews the declared coefficient, exponent, full expression and evidence. The numeric chart includes current valid evaluated score vectors before optional independent human review; an evaluated result is not a human-approved mathematical discovery. The Complexity tab applies the registered exact lower-bound comparator to eligible current metric envelopes, including null-score endpoints. Invalid main claims are unscored, not numeric zero. Synthetic demonstrations and structural checks do not establish scientific acceptance; official promotion requires independent human approval.",
+    "limitations": "The literature seed (31/10, 1) is not an eligibility threshold or a guaranteed accepted result. Finite native scores are binary64 projections of exact rationals and may tie distinct exact values; full-expression comparison retains the exact guarantee. Version 1 supports polynomial/log/loglog liminf bounds, divergence at a fixed rational power (a lane endpoint), and a superpolynomial theorem for one fixed family at every sufficiently large length. Endpoints have null native scores and appear only in eligible full-expression results; transport positive_infinity fields are not numeric chart values or an infinite exponent. A lane endpoint alone need not imply P ≠ NP. New registration and independent scientific qualification of its exact source require separate authorization; this prepared presentation does not activate a benchmark."
+  },
+  "participation": {
+    "benchmarkRef": "unbound/circuitbreaker/main",
+    "repositoryUrl": "https://github.com/Layr-Labs/circuitbreaker-llm-verifier",
+    "prerequisites": "Install Git and the Yukon CLI; use your own solver account on the API named in the prepared commands. In your own Bash terminal, run read -r -s -p 'Yukon API key: ' YUKON_API_TOKEN && export YUKON_API_TOKEN, then enter your API key for that environment at the hidden prompt. The CLI reads this supported environment variable directly; use it instead of the generated login command. Keep that terminal for clone and submit; run unset YUKON_API_TOKEN when finished. Separately obtain GitHub read access to the private Layr-Labs/circuitbreaker-llm-verifier repository and working Git authentication. Hosted review needs no solver model credentials, verifier checkout token, or direct verifier repository access. Submit only when the selected replacement benchmark is open and admitting submissions.",
+    "cloneCommand": "Prepare this presentation with scripts/prepare-circuitbreaker-page.ts and the replacement benchmark before use.",
+    "setupCommand": "none",
+    "runCommand": "git diff --check -- submission",
+    "editScope": "Follow the printed cd instruction, read rules.md and scientific-cases.md, and edit only submission/. The commands below check the source revision and whitespace in tracked edits, not submission structure or mathematics. Ignore generic yukon setup / yukon run advice: intake and finalize alone do not perform a full review. Optional local structure check: llm-verifier check --root . requires the exact organizer-provided internal wheel matching the pinned verifier; hosted submission needs no local verifier installation. Write ../circuitbreaker-note.md beside the clone: explain the theorem, evidence, changes, checks and limits. The CLI requires 5–100 KiB including model/harness metadata; replace those placeholders truthfully. Use --no-dependencies only if no prior submissions were used; otherwise supply --dependencies-file with your declaration JSON.",
+    "submitCommand": "Prepare this presentation with the replacement benchmark before submitting."
+  },
+  "results": {
+    "kind": "pareto",
+    "metricName": "Gate coefficient",
+    "unit": "",
+    "direction": "+",
+    "precision": 4,
+    "description": "Current valid evaluated coefficient/exponent vectors. Human approval is separate; complete guarantees and null-score endpoints appear in Complexity.",
+    "progressDescription": "Coefficient c over submission time for the selected power p in c × n^p. Each group retains its full eligible history, including results dominated on the global Pareto frontier.",
+    "objectives": [
+      {
+        "name": "gate_coefficient",
+        "label": "Coefficient",
+        "direction": "+",
+        "unit": "",
+        "precision": 4
+      },
+      {
+        "name": "gate_exponent",
+        "label": "Power of n",
+        "direction": "+",
+        "unit": "",
+        "precision": 4
+      }
+    ],
+    "scoreTracks": {
+      "objective": "gate_exponent",
+      "sort": "desc",
+      "default": "highest"
+    },
+    "defaultView": {
+      "mode": "record",
+      "objective": "gate_coefficient"
+    }
+  },
+  "links": {
+    "help": "https://github.com/Layr-Labs/circuitbreaker-llm-verifier",
+    "terms": "/terms",
+    "privacy": "/privacy"
+  },
+  "resultTabs": [
+    {
+      "id": "complexity",
+      "label": "Complexity",
+      "kind": "metrics-frontier",
+      "description": "Full circuit-size lower-bound guarantees for fixed eligible uniform NP families in the full B₂ model, at actual input length n and all sufficiently large integer lengths. Numeric coefficient/exponent projections remain separate.",
+      "comparator": "circuitbreaker-v1",
+      "metricsPath": "circuitbreaker_frontier",
+      "metricsVersion": "circuitbreaker-frontier-v1",
+      "scope": "uniform-np-full-b2-actual-length-all-lengths-v1",
+      "model": "full-b2-v1",
+      "notation": "lower-bound",
+      "columns": [
+        {
+          "key": "circuit_size",
+          "label": "Circuit size lower bound",
+          "direction": "+"
+        }
+      ],
+      "defaultSort": {
+        "by": "metric",
+        "key": "circuit_size",
+        "direction": "desc"
+      }
+    }
+  ]
+}

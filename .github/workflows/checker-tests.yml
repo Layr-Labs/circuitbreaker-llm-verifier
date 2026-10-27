@@ -4,10 +4,34 @@ permissions:
   contents: read
 jobs:
   checkers:
-    uses: Layr-Labs/llm-verifier/.github/workflows/test-checkers.yml@50c61e5de514b6d27eab63af943aeca8c8992838
+    uses: Layr-Labs/llm-verifier/.github/workflows/test-checkers.yml@33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad
     with:
       verifier_repository: Layr-Labs/llm-verifier
-      verifier_revision: 50c61e5de514b6d27eab63af943aeca8c8992838
+      verifier_revision: 33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad
       root_dir: '.'
     secrets:
       VERIFIER_CHECKOUT_TOKEN: ${{ secrets.VERIFIER_CHECKOUT_TOKEN }}
+
+  expressions:
+    name: Test expressions, exporter and generated integration
+    needs: [checkers]
+    permissions: {}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
+        with:
+          name: llmv-checker-package
+          path: ${{ runner.temp }}/checker-package/
+      - name: Run challenge tests without supplied credentials
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/llmv-env"
+          "$RUNNER_TEMP/llmv-env/bin/python" -m pip install --no-index --no-deps "$RUNNER_TEMP"/checker-package/wheel/*.whl
+          mkdir "$RUNNER_TEMP/challenge"
+          tar -xf "$RUNNER_TEMP/checker-package/challenge.tar" -C "$RUNNER_TEMP/challenge"
+          cd "$RUNNER_TEMP/challenge"
+          env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" check_submission.py
+          env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" -m unittest -v
+          env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" tools/generate_hosted.py --check
+          env -i PATH="$PATH" "$RUNNER_TEMP/llmv-env/bin/python" tools/generate_frontier_fixtures.py --check
