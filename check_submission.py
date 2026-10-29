@@ -17,7 +17,7 @@ def check_submission(root):
     config = effective["config"]
     validate_contract(config)
     files = snapshot(root / "submission", config["limits"])
-    manifest, _ = preflight_manifest(files, config)
+    manifest, _ = preflight_manifest(files, config, committee=effective.get("judging", {}).get("committee"))
     accepted_bound(manifest, files)
     return result
 

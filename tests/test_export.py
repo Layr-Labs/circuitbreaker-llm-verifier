@@ -15,12 +15,9 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-from llm_verifier import pipeline
 from llm_verifier.artifacts import seal
 from llm_verifier.errors import VerifierError
 from llm_verifier.files import write_json
-from llm_verifier.jsonutil import canonical, digest
-from llm_verifier.runner import DockerRunner, output_record
 
 from export_metrics import export, projection
 from finalize_score import main as finalize_main
@@ -166,24 +163,11 @@ class ExportTests(unittest.TestCase):
         self.assertFalse(output.exists())
 
     def test_selected_final_review_controls_five_phase_export(self):
-        base = self.dossier()
-        intake, initial, first = copy.deepcopy(base["data"]["phases"])
-        fixture = json.loads((ROOT / "checker-tests.json").read_text())[0]
-        first["data"]["decision"] = {"kind": "followup", "judgment": None, "requests": [{
-            "check": "lp-certificate", "inputs": fixture["inputs"], "reason": "Synthetic LP request.",
-        }]}
-        first = reseal(first)
-        output = output_record("completed", 0, canonical({**fixture["expected"], "message": "Synthetic fixture"}), b"")
-        with patch.object(DockerRunner, "run", return_value=output):
-            followup = pipeline.execute(intake, first, initial)
-        messages, schema, _ = pipeline.review_material(intake, initial, first, followup)
         for valid in (True, False):
-            decision = copy.deepcopy(base["data"]["phases"][2]["data"]["decision"])
-            decision["judgment"]["valid"] = valid
-            provenance = {**first["data"]["provenance"], "prompt_sha256": digest(messages), "schema_sha256": digest(schema)}
-            final = seal("final_review", intake["bindings"], {"decision": decision, "provenance": provenance},
-                         [p["sha256"] for p in [intake, initial, first, followup]])
-            record = pipeline.dossier(intake, initial, first, followup, final)
+            record = self.dossier(valid=valid, followup=True, blocking=True)
+            intake, initial, first, followup, final = record["data"]["phases"]
+            self.assertEqual(first["data"]["region_plan"], final["data"]["region_plan"])
+            self.assertNotIn("planner", [r["member_id"] for r in final["data"]["reviews"]])
             result = projection(record)
             self.assertEqual(result["valid"], valid)
             self.assertEqual("metrics" in result, valid)
@@ -192,6 +176,78 @@ class ExportTests(unittest.TestCase):
             altered = copy.deepcopy(record)
             altered["data"]["selected_review_sha256"] = first["sha256"]
             with self.assertRaises(VerifierError): projection(reseal(altered))
+
+    def test_maximum_region_followup_fits_shared_budget_and_retains_provider_settings(self):
+        # Eight files force eight regions. A blocking finding exercises the
+        # conditional defender as well as both full review rounds.
+        for i in range(5):
+            (self.root / "submission" / f"support-{i}.md").write_text("Synthetic supporting source.\n")
+        requests = []
+        record = self.dossier(followup=True, blocking=True, requests=requests)
+        first, final = record["data"]["phases"][2], record["data"]["phases"][4]
+        self.assertEqual(len(first["data"]["region_coverage"]), 8)
+        self.assertEqual(len(final["data"]["region_coverage"]), 8)
+        self.assertEqual(first["data"]["provenance"]["attempts"], 10)
+        self.assertEqual(final["data"]["provenance"]["attempts"], 11)
+        self.assertEqual(sum(phase["data"]["provenance"]["allotted_completion_tokens"]
+                             for phase in (first, final)), 688128)
+        self.assertEqual(len(requests), 21)
+        for wire in requests:
+            self.assertEqual(wire["model"], "gpt-6-astra")
+            self.assertEqual(wire["reasoning"], {"effort": "high"})
+            self.assertIs(wire["background"], True)
+            self.assertEqual(wire["max_output_tokens"], 32768)
+        self.assertEqual(projection(record)["scores"], [1, 1])
+
+    def test_profile_file_cap_fails_before_review(self):
+        from llm_verifier.provider import HttpTransport
+        for i in range(6):
+            (self.root / "submission" / f"support-{i}.md").write_text("Synthetic supporting source.\n")
+        with patch.object(HttpTransport, "request") as http:
+            with self.assertRaisesRegex(VerifierError, "region_source_count_exceeds_max_regions"):
+                self.dossier()
+            http.assert_not_called()
+
+    def test_resealed_region_coverage_tampering_cannot_export(self):
+        record = self.dossier()
+        changed = copy.deepcopy(record)
+        review = changed["data"]["phases"][2]
+        review["data"]["region_coverage"][0]["complete"] = False
+        changed["data"]["phases"][2] = reseal(review)
+        changed["data"]["selected_review_sha256"] = changed["data"]["phases"][2]["sha256"]
+        changed["parents"][2] = changed["data"]["phases"][2]["sha256"]
+        with self.assertRaises(VerifierError):
+            projection(reseal(changed))
+
+    def test_followup_simulation_cannot_export(self):
+        from llm_verifier.config import load_config
+        from llm_verifier.provider import HttpTransport
+        from llm_verifier.simulation import simulate
+        source = self.dossier(followup=True, blocking=True)
+        def member_reports(phase):
+            reports = {"region": []}
+            for review in phase["data"]["reviews"]:
+                if review["member_id"] == "region":
+                    reports["region"].append(review["report"])
+                else:
+                    reports[review["member_id"]] = review["report"]
+            return reports
+        fixture = json.loads((ROOT / "checker-tests.json").read_text())[0]
+        script = {"initial_results": [], "followup_results": [{**fixture["expected"], "message": "Synthetic fixture"}],
+                  "initial_reviews": member_reports(source["data"]["phases"][2]),
+                  "final_reviews": member_reports(source["data"]["phases"][4])}
+        output = self.root / "simulation.json"
+        with patch.object(HttpTransport, "request") as http:
+            record = simulate(load_config(self.root, "verifier.json", "submission"),
+                              self.root / "submission", script, output)
+            http.assert_not_called()
+        envelope = json.loads(output.read_text())
+        self.assertIs(envelope["simulation_only"], True)
+        self.assertIs(envelope["publishable"], False)
+        self.assertIs(record["simulation"], True)
+        self.assertTrue(all(phase["simulation"] for phase in record["data"]["phases"]))
+        with self.assertRaisesRegex(VerifierError, "simulation"):
+            projection(record)
 
     def test_adversarial_configurations_fail_closed(self):
         original = json.loads((ROOT / "verifier.json").read_text())

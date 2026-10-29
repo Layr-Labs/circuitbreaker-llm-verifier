@@ -36,8 +36,18 @@ llm-verifier test-checkers --root .
 Prepare the digest-pinned Python Docker image before the last command. These
 checks do not perform a mathematical review. [Scientific cases](scientific-cases.md)
 explain known valid and invalid reasoning; synthetic exporter tests assert no
-new circuit result. The proof budget, provider configuration, LP checker and
-scientific family/model conventions are preserved.
+new circuit result. The proof byte budget, per-call provider configuration, LP
+checker and scientific family/model conventions are preserved.
+
+Review uses `builtin:math-decomposed-v1`: a planner partitions all submitted
+source into at most eight regions, a whole-proof reviewer and independent region
+workers assess the original claims, and a defender/adjudicator handles findings.
+This profile adapts the offline review pattern from the UCLA Moonshot Math
+Verifier; it does not add external retrieval or change atomic claim acceptance.
+Every file needs at least one region, so **submit at most eight files**, including
+`submission.json`, `bound.json`, proof files and any experiment code. This profile
+limit applies even though the generic `max_files` ceiling remains 32. The baseline
+uses three files. Keep supporting material together without dropping evidence.
 
 After source edits, run `python tools/generate_hosted.py` to apply the upstream
 generator plus the protected metrics/test overlays and validate the companion
@@ -48,15 +58,15 @@ wraps shared finalization with the same export. See [migration.md](migration.md)
 for replacement-registration inputs, the configured review budget, and binding
 both views with Yukon's existing page-preparation helper. Registration queues
 baseline review immediately; there is no model-free create-paused mode.
-The verifier pin is `33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad`; the optional
+The verifier pin is `5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf` (version 0.7.0); the optional
 structured-claims protocol remains disabled. This source change does not alter
 the existing live benchmark or page.
 
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission
 
-Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad/docs/solving.md) and
-[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad/skills/llm-verifier-solver/SKILL.md)
+Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf/docs/solving.md) and
+[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf/skills/llm-verifier-solver/SKILL.md)
 from the same pinned verifier revision as this challenge.
 
 - Use the challenge's verifier revision for `llm-verifier check --root .`.
