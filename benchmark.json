@@ -62,7 +62,18 @@
         "provider": "github-actions",
         "workflow": "benchmark.yml",
         "scoreArtifactName": "circuitbreaker-score",
-        "maxConcurrentWorkflows": 2
+        "maxConcurrentWorkflows": 2,
+        "baselineRecovery": {
+          "version": 1,
+          "deliveryJob": "Export accepted CircuitBreaker expressions",
+          "lineageArtifactName": "circuitbreaker-export-lineage",
+          "lineagePath": "recovery.json",
+          "artifactNames": [
+            "llmv-package",
+            "llmv-intake",
+            "verifier-dossier"
+          ]
+        }
       }
     }
   ]

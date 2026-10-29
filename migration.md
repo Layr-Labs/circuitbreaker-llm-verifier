@@ -53,7 +53,7 @@ Prepare activation with these explicit inputs:
 - The approved published challenge source SHA, repository
   `Layr-Labs/circuitbreaker-llm-verifier`, root directory `null`, `main` track,
   exact two-objective manifest and policy versions above. Keep verifier pin
-  `5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf` and artifact `circuitbreaker-score`.
+  `1f61aa60c420e65c28786b56500b4e9276b5f53b` and artifact `circuitbreaker-score`.
 - A separately selected replacement registration name/source branch, actual
   replacement UUID, access/publication choices and any existing page revision
   used by the authorized rebind. Legacy UUID
@@ -122,12 +122,17 @@ source, schema, synthetic or CI tests.
 
 ## Configured review budget
 
-`verifier.json` selects `builtin:math-decomposed-v1` at verifier version 0.7.0.
+`verifier.json` selects `builtin:math-decomposed-v1` at verifier version 0.7.1.
 All members inherit the unchanged `gpt-6-astra`, high reasoning, JSON-schema
 responses and background mode, with one attempt, at most 32,768 completion
 tokens and a 1,200-second request timeout. The profile permits at most eight
 source regions. A planner, whole-proof reviewer, one worker call per region,
 conditional defender and adjudicator share the pipeline budget.
+The pinned planner schema now enforces the configured one-to-eight range before
+semantic validation. Separate failure artifacts preserve bounded, redacted
+response diagnostics and available usage; they cannot substitute for a successful
+review or authorize score publication. This does not recover the unsaved response
+from the historical failed planner call.
 
 The shared limits are **21 provider requests, 688,128 reserved completion tokens,
 and 2,400 review seconds**. The largest follow-up path uses ten initial calls
@@ -165,3 +170,43 @@ billing is additional. Registration retries or further evaluations start
 additional pipelines. This source repin does not activate a registration, run a
 model, change credentials, or establish scientific qualification. Approve the
 exact activation/evaluation scope separately.
+
+
+## Deterministic delivery recovery
+
+The generated runner's optional `baselineRecovery` declaration identifies
+`Export accepted CircuitBreaker expressions` as the only delivery job and names
+`circuitbreaker-export-lineage/recovery.json` as its lineage record. Recovery
+requires compatible Yukon support and an explicit recovery operation; a workflow
+rerun alone does not revive a failed evaluation pass. No paid review is started
+by the source change or by the deterministic metrics job.
+
+The shared downloader uses the producer's immutable package, intake and dossier
+artifact IDs and archive SHA-256 digests. It retries transient transport errors
+up to four attempts per operation, sharing a 180-second deadline, and verifies
+safe extraction plus each file's hash. Permanent authorization, identity, digest
+and archive errors fail closed. The metrics job installs the same-run wheel and
+replays the ordinary exporter without provider or Docker calls.
+
+The lineage records the original review attempt separately from the current
+delivery attempt, the source SHA, effective-config/submission/verifier digests,
+intake/dossier envelope digests, input archive IDs/hashes, exact input-file hashes
+and exported score-file hash. Accepted expression metrics remain part of the
+ordinary exported score; equality with the upstream native score is not required.
+The platform verifies original producer job windows and requires all subsequent
+attempts to contain only the declared delivery job. Version 1 recovery requires
+original inputs/review from attempt 1; other successful runs retain their actual
+attempts in provenance without claiming eligibility for this recovery path.
+
+A failed lineage upload can follow a successful score upload. Retrying replaces
+only those two derived delivery artifacts (`overwrite: true`), leaving original
+package/intake/dossier artifacts intact. Recovery stores the actual final output
+artifact IDs and archive hashes; an existing checkpoint must not be retargeted to
+later replacement artifacts. Workflow job history is retained, but replaced
+derived archives are not an archive of every delivery attempt.
+
+This contract applies to runs created from the declared workflow. Historical runs
+without the declaration, including the earlier metrics-only failure, are not
+silently upgraded to mixed-attempt recovery. An already successful complete
+baseline at the exact frozen source can instead be considered through the
+platform's separate checkpoint recovery path.

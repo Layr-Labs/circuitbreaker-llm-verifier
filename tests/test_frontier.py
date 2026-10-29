@@ -20,9 +20,9 @@ from tools.generate_hosted import VERIFIER_REVISION
 
 ROOT = Path(__file__).resolve().parents[1]
 PINNED_RICH_HASHES = {
-    "finite": "e2b7b8744ec183a734d23bb7deaa0c5dbfb7b42b70e1d0976e000aa98e546617",
-    "lane": "c51d5e806f3523df27f4060a28f07ca2333db99c534d2582a93466f3934d0eb9",
-    "global": "8fa4b88bebb11aab65b66dd3700fa68051ccf054aa85fbdbb967a8a263c651e6",
+    "finite": "e57711ebc369aef29c457e541570facb66facffc06e20044e6df23c047c51fe2",
+    "lane": "28789df50dc41d96ecfee52c482935356aed65b3cfda231a590d8a4a257126a6",
+    "global": "002dfdc148466569e273391b9af6639b90e79c927a5e53dc7888ccad26acbaa1",
 }
 
 
@@ -56,7 +56,7 @@ class FrontierTests(unittest.TestCase):
         return synthetic_dossier(self.root, bound, manifest, valid=valid, simulation=simulation)
 
     def test_additive_wire_preserves_legacy_metric_and_exact_joint_binding(self):
-        # Fresh prompt-budget fixture hashes, including new intake/review
+        # Fresh verifier-revision fixture hashes, including new intake/review
         # provenance. The scientific/exporter implementation is unchanged.
         for kind in PINNED_RICH_HASHES:
             with self.subTest(kind=kind):

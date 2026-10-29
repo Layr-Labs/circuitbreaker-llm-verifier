@@ -48,6 +48,10 @@ Every file needs at least one region, so **submit at most eight files**, includi
 `submission.json`, `bound.json`, proof files and any experiment code. This profile
 limit applies even though the generic `max_files` ceiling remains 32. The baseline
 uses three files. Keep supporting material together without dropping evidence.
+The planner response schema enforces the same one-to-eight region bound as
+runtime validation. Failed reviews retain separate bounded diagnostics in
+`llmv-initial-review-failure` or `llmv-final-review-failure`; those artifacts are
+not judgments and cannot produce a score.
 
 Each review prompt has a 2 MiB (2,097,152-byte) ceiling, matching the pinned
 verifier's default. Planning includes the original evidence and numbered source;
@@ -66,15 +70,29 @@ wraps shared finalization with the same export. See [migration.md](migration.md)
 for replacement-registration inputs, the configured review budget, and binding
 both views with Yukon's existing page-preparation helper. Registration queues
 baseline review immediately; there is no model-free create-paused mode.
-The verifier pin is `5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf` (version 0.7.0); the optional
+Hosted artifact downloads retry transient network/HTTP failures at most four
+attempts per operation within a shared three-minute transfer deadline. Inputs
+are selected by immutable artifact ID and verified archive/file hashes. The
+metrics job uses the original review's wheel, intake and dossier and emits a
+separate `circuitbreaker-export-lineage` artifact binding those inputs, the source
+and config, the score bytes, and distinct review/delivery attempts.
+
+The runner declares deterministic baseline recovery for this metrics job. A
+compatible Yukon deployment can validate a later metrics-only delivery without
+repeating the review. Only the two derived score/lineage artifacts use replacement
+uploads after a partial delivery; original review inputs remain immutable.
+Recovery checkpoints freeze the actual delivered artifact IDs and hashes. Older
+runs without this declaration are not eligible for mixed-attempt recovery.
+
+The verifier pin is `1f61aa60c420e65c28786b56500b4e9276b5f53b` (version 0.7.1); the optional
 structured-claims protocol remains disabled. This source change does not alter
 the existing live benchmark or page.
 
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission
 
-Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf/docs/solving.md) and
-[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf/skills/llm-verifier-solver/SKILL.md)
+Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/1f61aa60c420e65c28786b56500b4e9276b5f53b/docs/solving.md) and
+[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/1f61aa60c420e65c28786b56500b4e9276b5f53b/skills/llm-verifier-solver/SKILL.md)
 from the same pinned verifier revision as this challenge.
 
 - Use the challenge's verifier revision for `llm-verifier check --root .`.

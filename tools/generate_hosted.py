@@ -8,8 +8,15 @@ from pathlib import Path
 import subprocess
 import sys
 
-VERIFIER_REVISION = "5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf"
+VERIFIER_REVISION = "1f61aa60c420e65c28786b56500b4e9276b5f53b"
 ROOT = Path(__file__).resolve().parents[1]
+BASELINE_RECOVERY = {
+    "version": 1,
+    "deliveryJob": "Export accepted CircuitBreaker expressions",
+    "lineageArtifactName": "circuitbreaker-export-lineage",
+    "lineagePath": "recovery.json",
+    "artifactNames": ["llmv-package", "llmv-intake", "verifier-dossier"],
+}
 
 
 def validate_presentation(root, track):
@@ -46,6 +53,7 @@ def generate(root=ROOT):
     track = benchmark["tracks"][0]
     validate_presentation(root, track)
     track["runner"]["scoreArtifactName"] = "circuitbreaker-score"
+    track["runner"]["baselineRecovery"] = BASELINE_RECOVERY
     track["benchmarkCommand"][:2] = ["python3", "finalize_score.py"]
     path.write_text(json.dumps(benchmark, indent=2, ensure_ascii=False) + "\n")
     workflow = root / ".github/workflows/benchmark.yml"
