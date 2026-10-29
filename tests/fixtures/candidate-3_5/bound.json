@@ -1,0 +1,36 @@
+{
+  "version": "circuitbreaker-expression-v1",
+  "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+  "family": "The single total certificate-prefix language specified in proof.md and family.py. For actual length N, choose k as the least prime at least the least positive B with B^5>32*N^3; read k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2, reject invalid Q by the exact Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial on the remaining N-k bits with zero padding, r=ceil((N-k)/k), t=ceil(sqrt(r)). Output 0 for N=0 or the explicit failed guards in proof.md. The output is the constant coefficient in F_2[Z]/Q. All k prefix bits are included in N; Q is input, not advice.",
+  "theorem": "This fixed total language is in P, hence in NP with empty witnesses, and in the full pinned B2 model C_B2(F_N)>=(7/2)*N-O(N^(4/5)) for every sufficiently large integer N=|x|. In particular liminf over all integer N of C_B2(F_N)/N is at least 7/2.",
+  "guarantee": {
+    "kind": "polynomial_log",
+    "coefficient": {
+      "numerator": "7",
+      "denominator": "2"
+    },
+    "exponent": {
+      "numerator": "1",
+      "denominator": "1"
+    },
+    "log_exponent": {
+      "numerator": "0",
+      "denominator": "1"
+    },
+    "loglog_exponent": {
+      "numerator": "0",
+      "denominator": "1"
+    }
+  },
+  "projection": {
+    "kind": "finite",
+    "coefficient": {
+      "numerator": "7",
+      "denominator": "2"
+    },
+    "exponent": {
+      "numerator": "1",
+      "denominator": "1"
+    }
+  }
+}

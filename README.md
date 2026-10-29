@@ -36,22 +36,37 @@ llm-verifier test-checkers --root .
 Prepare the digest-pinned Python Docker image before the last command. These
 checks do not perform a mathematical review. [Scientific cases](scientific-cases.md)
 explain known valid and invalid reasoning; synthetic exporter tests assert no
-new circuit result. The proof byte budget, per-call provider configuration, LP
+new circuit result. The exact seven-file candidate fixture under `tests/fixtures`
+is retained only for transport regression and is not an accepted proof. The proof byte budget, per-call provider configuration, LP
 checker and scientific family/model conventions are preserved.
 
-Review uses `builtin:math-decomposed-v1`: a planner partitions all submitted
-source into at most eight regions, a whole-proof reviewer and independent region
-workers assess the original claims, and a defender/adjudicator handles findings.
-This profile adapts the offline review pattern from the UCLA Moonshot Math
-Verifier; it does not add external retrieval or change atomic claim acceptance.
-Every file needs at least one region, so **submit at most eight files**, including
-`submission.json`, `bound.json`, proof files and any experiment code. This profile
-limit applies even though the generic `max_files` ceiling remains 32. The baseline
-uses three files. Keep supporting material together without dropping evidence.
-The planner response schema enforces the same one-to-eight region bound as
-runtime validation. Failed reviews retain separate bounded diagnostics in
-`llmv-initial-review-failure` or `llmv-final-review-failure`; those artifacts are
-not judgments and cannot produce a score.
+Review uses `builtin:probabilistic-escalation-v1` with probability **1 (100%)**
+and `record-only` mode. Its explicit children are `builtin:single-v1` (primary)
+and `builtin:math-decomposed-v1` (audit), with no child provider overrides. Both
+run for every submission. **The primary decision controls acceptance and scores**;
+a completed audit records its own decision and any disagreement. An audit failure
+retains diagnostics and marks the comparison unavailable; it does not replace a
+completed primary decision. A failed primary does not yield a judgment.
+
+The audit adapts the offline UCLA Moonshot Math Verifier pattern: a planner
+partitions all source into at most eight regions, a whole-proof reviewer and
+region workers assess the claims, and a defender/adjudicator handles findings.
+No external retrieval is added. Both children inherit the same atomic claim and
+scientific policies. They run concurrently, sharing at most four provider workers,
+23 requests and 753,664 reserved completion tokens across at most one experiment
+follow-up. Identical checker requests are deduplicated; distinct requests must fit
+the existing one-follow-up limit. Each phase retains a 1,200-second wall deadline
+and the pipeline retains 2,400 review seconds. These ceilings do not guarantee
+completion; see [the budget derivation](migration.md#configured-review-budget).
+
+Every file needs an audit region, so **submit at most eight files**, including
+`submission.json`, `bound.json`, proof files and experiment code. This effective
+limit applies despite the generic `max_files` ceiling of 32. The baseline uses
+three files; the existing candidate uses seven. The planner schema enforces the
+same one-to-eight range as runtime validation. Separate failure artifacts
+(`llmv-initial-review-failure` or `llmv-final-review-failure`) are diagnostics,
+not judgments. A record-only dossier can retain failed-audit evidence alongside
+a successful primary; its score is derived only from the primary decision.
 
 Each review prompt has a 2 MiB (2,097,152-byte) ceiling, matching the pinned
 verifier's default. Planning includes the original evidence and numbered source;
@@ -84,15 +99,15 @@ uploads after a partial delivery; original review inputs remain immutable.
 Recovery checkpoints freeze the actual delivered artifact IDs and hashes. Older
 runs without this declaration are not eligible for mixed-attempt recovery.
 
-The verifier pin is `1f61aa60c420e65c28786b56500b4e9276b5f53b` (version 0.7.1); the optional
+The verifier pin is `8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` (version 0.8.0); the optional
 structured-claims protocol remains disabled. This source change does not alter
 the existing live benchmark or page.
 
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission
 
-Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/1f61aa60c420e65c28786b56500b4e9276b5f53b/docs/solving.md) and
-[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/1f61aa60c420e65c28786b56500b4e9276b5f53b/skills/llm-verifier-solver/SKILL.md)
+Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce/docs/solving.md) and
+[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce/skills/llm-verifier-solver/SKILL.md)
 from the same pinned verifier revision as this challenge.
 
 - Use the challenge's verifier revision for `llm-verifier check --root .`.

@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 
 from llm_verifier.artifacts import intake_snapshot
-from llm_verifier.errors import VerifierError
+from llm_verifier.errors import InfrastructureError, VerifierError
 from llm_verifier.files import write_json
 from llm_verifier.provider import HttpTransport
 from llm_verifier.runner import DockerRunner
@@ -42,7 +42,7 @@ class HostedExportTests(unittest.TestCase):
         self.lineage = self.root / "recovery.json"
         self.receipt = self.root / "transfer.json"
 
-    def fixture(self, *, valid=True, simulation=False, original_attempt=1):
+    def fixture(self, *, valid=True, simulation=False, original_attempt=1, audit_valid=None, audit_failure=None):
         bound = {"version": VERSION, "convention": CONVENTION,
                  "family": "Synthetic delivery fixture, not a circuit theorem.",
                  "theorem": "SYNTHETIC transport test only.",
@@ -56,7 +56,8 @@ class HostedExportTests(unittest.TestCase):
             return intake_snapshot(*args, context=context, **kwargs)
 
         with patch("tests.synthetic.intake_snapshot", side_effect=hosted_intake):
-            record = synthetic_dossier(self.root, bound, manifest, valid=valid, simulation=simulation)
+            record = synthetic_dossier(self.root, bound, manifest, valid=valid, simulation=simulation,
+                                       audit_valid=audit_valid, audit_failure=audit_failure)
         write_json(self.dossier, record)
         write_json(self.intake, record["data"]["phases"][0])
         self.descriptors = [{"id": str(100 + i), "name": name, "sha256": str(i + 1) * 64,
@@ -105,6 +106,37 @@ class HostedExportTests(unittest.TestCase):
                 self.assertEqual(lineage["inputFiles"], [
                     {"artifactName": name, "path": path.name, "sha256": file_hash(path)}
                     for name, path in zip(ARTIFACT_NAMES, (self.wheel, self.intake, self.dossier))])
+
+    def test_record_only_disagreement_exports_primary_and_retains_both_decisions(self):
+        record = self.fixture(valid=True, audit_valid=False)
+        phase = record["data"]["phases"][2]["data"]
+        self.assertTrue(phase["selection"]["selected"])
+        self.assertEqual(phase["authority"]["judge"], "primary")
+        self.assertTrue(phase["primary"]["review"]["decision"]["judgment"]["valid"])
+        self.assertFalse(phase["escalation"]["review"]["decision"]["judgment"]["valid"])
+        self.assertTrue(phase["comparison"]["available"])
+        self.assertTrue(phase["comparison"]["valid_disagreement"])
+        original = self.dossier.read_bytes()
+        self.run_export()
+        score = json.loads(self.score.read_text())
+        self.assertTrue(score["valid"])
+        self.assertEqual(score["scores"], [1, 1])
+        self.assertEqual(self.dossier.read_bytes(), original)
+
+    def test_record_only_failed_audit_exports_primary_without_completed_comparison(self):
+        record = self.fixture(valid=True, audit_failure=InfrastructureError("provider_timeout"))
+        phase = record["data"]["phases"][2]["data"]
+        self.assertEqual(phase["authority"]["judge"], "primary")
+        self.assertEqual(phase["escalation"]["status"], "failed")
+        failure = phase["escalation"]["failure"]
+        self.assertEqual(failure["state"]["error"], "provider_timeout")
+        self.assertEqual(len(failure["calls"]), 1)
+        self.assertEqual(phase["comparison"], {"available": False,
+                         "valid_disagreement": None, "scores_disagreement": None})
+        original = self.dossier.read_bytes()
+        self.run_export()
+        self.assertEqual(json.loads(self.score.read_text())["scores"], [1, 1])
+        self.assertEqual(self.dossier.read_bytes(), original)
 
     def test_full_rerun_preserves_actual_attempt_without_claiming_recovery_eligibility(self):
         self.fixture(original_attempt=2)

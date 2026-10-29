@@ -23,7 +23,7 @@ from export_metrics import export, projection
 from finalize_score import main as finalize_main
 from expressions import (CONVENTION, VERSION, claims_for, compare, polynomial,
                          ratio)
-from tests.synthetic import synthetic_dossier
+from tests.synthetic import audit_review, synthetic_dossier
 from tests.test_expressions import GLOBAL, GLOBAL_PROJECTION, finite, lane
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -166,8 +166,8 @@ class ExportTests(unittest.TestCase):
         for valid in (True, False):
             record = self.dossier(valid=valid, followup=True, blocking=True)
             intake, initial, first, followup, final = record["data"]["phases"]
-            self.assertEqual(first["data"]["region_plan"], final["data"]["region_plan"])
-            self.assertNotIn("planner", [r["member_id"] for r in final["data"]["reviews"]])
+            self.assertEqual(audit_review(first)["region_plan"], audit_review(final)["region_plan"])
+            self.assertNotIn("planner", [r["member_id"] for r in audit_review(final)["reviews"]])
             result = projection(record)
             self.assertEqual(result["valid"], valid)
             self.assertEqual("metrics" in result, valid)
@@ -185,13 +185,13 @@ class ExportTests(unittest.TestCase):
         requests = []
         record = self.dossier(followup=True, blocking=True, requests=requests)
         first, final = record["data"]["phases"][2], record["data"]["phases"][4]
-        self.assertEqual(len(first["data"]["region_coverage"]), 8)
-        self.assertEqual(len(final["data"]["region_coverage"]), 8)
-        self.assertEqual(first["data"]["provenance"]["attempts"], 10)
-        self.assertEqual(final["data"]["provenance"]["attempts"], 11)
+        self.assertEqual(len(audit_review(first)["region_coverage"]), 8)
+        self.assertEqual(len(audit_review(final)["region_coverage"]), 8)
+        self.assertEqual(first["data"]["provenance"]["attempts"], 11)
+        self.assertEqual(final["data"]["provenance"]["attempts"], 12)
         self.assertEqual(sum(phase["data"]["provenance"]["allotted_completion_tokens"]
-                             for phase in (first, final)), 688128)
-        self.assertEqual(len(requests), 21)
+                             for phase in (first, final)), 753664)
+        self.assertEqual(len(requests), 23)
         for wire in requests:
             self.assertEqual(wire["model"], "gpt-6-astra")
             self.assertEqual(wire["reasoning"], {"effort": "high"})
@@ -212,7 +212,7 @@ class ExportTests(unittest.TestCase):
         record = self.dossier()
         changed = copy.deepcopy(record)
         review = changed["data"]["phases"][2]
-        review["data"]["region_coverage"][0]["complete"] = False
+        audit_review(review)["region_coverage"][0]["complete"] = False
         changed["data"]["phases"][2] = reseal(review)
         changed["data"]["selected_review_sha256"] = changed["data"]["phases"][2]["sha256"]
         changed["parents"][2] = changed["data"]["phases"][2]["sha256"]
@@ -225,13 +225,19 @@ class ExportTests(unittest.TestCase):
         from llm_verifier.simulation import simulate
         source = self.dossier(followup=True, blocking=True)
         def member_reports(phase):
-            reports = {"region": []}
-            for review in phase["data"]["reviews"]:
-                if review["member_id"] == "region":
-                    reports["region"].append(review["report"])
-                else:
-                    reports[review["member_id"]] = review["report"]
-            return reports
+            children = {}
+            for name in ("primary", "escalation"):
+                child = phase["data"][name]
+                if child["carried"]:
+                    continue
+                reports = {}
+                for review in child["review"]["reviews"]:
+                    if review["member_id"] == "region":
+                        reports.setdefault("region", []).append(review["report"])
+                    else:
+                        reports[review["member_id"]] = review["report"]
+                children[name] = reports
+            return children
         fixture = json.loads((ROOT / "checker-tests.json").read_text())[0]
         script = {"initial_results": [], "followup_results": [{**fixture["expected"], "message": "Synthetic fixture"}],
                   "initial_reviews": member_reports(source["data"]["phases"][2]),
