@@ -16,7 +16,7 @@ from llm_verifier.provider import HttpTransport
 from llm_verifier.runner import DockerRunner, output_record
 
 from export_metrics import projection
-from tests.synthetic import scripted_http, source_plan, synthetic_review
+from tests.synthetic import audit_review, judgment, request_parts, scripted_http, source_plan, synthetic_review
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -51,9 +51,10 @@ class PromptBudgetTests(unittest.TestCase):
         initial = pipeline.execute(intake)
         review = synthetic_review(intake, initial, valid=False, requests=requests)
         self.assertEqual(len(intake["data"]["files"]), 7)
-        self.assertEqual(set(review["data"]["region_plan"]["sources"]),
+        self.assertEqual(set(audit_review(review)["region_plan"]["sources"]),
                          set(intake["data"]["files"]))
-        size = len(canonical(requests[0]["input"]))
+        planner = next(w for w in requests if request_parts(w)[0]["id"] == "planner")
+        size = len(canonical(planner["input"]))
         self.assertGreater(size, 131072)
         self.assertLessEqual(size, intake["data"]["effective"]["config"]["limits"]["max_prompt_bytes"])
 
@@ -63,9 +64,15 @@ class PromptBudgetTests(unittest.TestCase):
         config_path.write_text(json.dumps(config))
         old_intake = self.intake()
         old_initial = pipeline.execute(old_intake)
+        # Test the planner material directly: record-only may legitimately
+        # preserve a successful primary when the audit cannot fit its prompt.
+        committee = old_intake["data"]["effective"]["judging"]["committee"]["escalation"]
+        _, context = request_parts(planner)
+        member = next(m for m in committee["members"] if m["id"] == "planner")
+        material = pipeline._committee_material(old_intake, old_initial, None, None, committee=committee, independent=True)
         with patch.object(HttpTransport, "request") as http:
             with self.assertRaisesRegex(InfrastructureError, "full_evidence_context_budget"):
-                pipeline.review(old_intake, old_initial)
+                material(member, {}, context)
             http.assert_not_called()
 
     def test_eight_region_aggregated_reports_fit_without_expanding_other_budgets(self):
@@ -83,7 +90,7 @@ class PromptBudgetTests(unittest.TestCase):
         plan = source_plan(intake)
         findings = [{"id": f"f{i}", "kind": "blocking", "reason": "R" * 4000,
                      "evidence_refs": ["source:proof.md"]} for i in range(16)]
-        reports = [{"assessment": "A" * 8000, "findings": findings, "requests": []}]
+        reports = [judgment(intake, False), {"assessment": "A" * 8000, "findings": findings, "requests": []}]
         names = [f"proof/f{i}" for i in range(16)]
         for region in plan["regions"]:
             reports.append({"assessment": "A" * 8000, "findings": findings, "requests": [],
@@ -101,10 +108,10 @@ class PromptBudgetTests(unittest.TestCase):
         with scripted_http(reports, requests):
             final = pipeline.review(intake, initial, first, followup)
         record = pipeline.dossier(intake, initial, first, followup, final)
-        self.assertEqual(first["data"]["region_plan"], final["data"]["region_plan"])
-        self.assertEqual(len(requests), 21)
+        self.assertEqual(audit_review(first)["region_plan"], audit_review(final)["region_plan"])
+        self.assertEqual(len(requests), 23)
         self.assertEqual(sum(phase["data"]["provenance"]["allotted_completion_tokens"]
-                             for phase in (first, final)), 688128)
+                             for phase in (first, final)), 753664)
         largest = max(len(canonical(wire["input"])) for wire in requests)
         self.assertGreater(largest, 1048576)
         self.assertLessEqual(largest, 2097152)

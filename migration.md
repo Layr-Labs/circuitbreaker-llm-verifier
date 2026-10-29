@@ -14,7 +14,7 @@ For a new registration, independently review and use the frozen source containin
 
 - Objectives `gate_coefficient` and `gate_exponent`, both maximized, in that order.
 - The new scoring/review versions, current fixed-family validity policy,
-  atomic acceptance, and the decomposed review profile/budget below.
+  atomic acceptance, and the primary/audit review profile/budget below.
 - The pinned shared verifier and regenerated hosted caller with the bounded
   metrics overlay. The runner must select `circuitbreaker-score`.
 - The published (31/10,1) seed declaration and its unchanged proof evidence,
@@ -53,7 +53,7 @@ Prepare activation with these explicit inputs:
 - The approved published challenge source SHA, repository
   `Layr-Labs/circuitbreaker-llm-verifier`, root directory `null`, `main` track,
   exact two-objective manifest and policy versions above. Keep verifier pin
-  `1f61aa60c420e65c28786b56500b4e9276b5f53b` and artifact `circuitbreaker-score`.
+  `8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` and artifact `circuitbreaker-score`.
 - A separately selected replacement registration name/source branch, actual
   replacement UUID, access/publication choices and any existing page revision
   used by the authorized rebind. Legacy UUID
@@ -122,31 +122,47 @@ source, schema, synthetic or CI tests.
 
 ## Configured review budget
 
-`verifier.json` selects `builtin:math-decomposed-v1` at verifier version 0.7.1.
-All members inherit the unchanged `gpt-6-astra`, high reasoning, JSON-schema
-responses and background mode, with one attempt, at most 32,768 completion
-tokens and a 1,200-second request timeout. The profile permits at most eight
-source regions. A planner, whole-proof reviewer, one worker call per region,
-conditional defender and adjudicator share the pipeline budget.
-The pinned planner schema now enforces the configured one-to-eight range before
-semantic validation. Separate failure artifacts preserve bounded, redacted
-response diagnostics and available usage; they cannot substitute for a successful
-review or authorize score publication. This does not recover the unsaved response
-from the historical failed planner call.
+`verifier.json` pins version 0.8.0 at
+`8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` and selects
+`builtin:probabilistic-escalation-v1` with `probability: 1` and `mode: record-only`.
+The explicit primary is `builtin:single-v1`; the audit is
+`builtin:math-decomposed-v1`. Neither child overrides its provider. Every role
+inherits `gpt-6-astra`, high reasoning, JSON-schema responses, background mode,
+one attempt, 32,768 completion tokens and a 1,200-second request timeout.
+The audit keeps its default maximum of eight source regions. No generic default
+probability or scientific policy is changed.
 
-The shared limits are **21 provider requests, 688,128 reserved completion tokens,
-and 2,400 review seconds**. The largest follow-up path uses ten initial calls
-(planner, whole-proof reviewer, eight region workers) and eleven final calls
-(whole-proof reviewer, eight region workers, defender, adjudicator). The initial
-round returns its experiment request before defense/adjudication, and the final
-round reuses the frozen plan. A round without a follow-up uses at most twelve
-calls. Each round also has a hard 1,200-second wall deadline; these limits do not
-guarantee every permitted call will finish.
+The primary controls the canonical judgment and score. Both completed child
+decisions and their disagreement remain in the dossier. A failed audit retains
+its diagnostic evidence and makes comparison unavailable; record-only mode can
+still export a completed primary judgment. A failed primary cannot produce a
+judgment. Diagnostic artifacts alone never authorize a score. Local mocked
+transport tests exercise these cases through the unchanged hosted exporter;
+they establish compatibility, not mathematical acceptance. Independent review
+coverage of the exact final upstream implementation is incomplete.
+
+Shared limits are **23 provider requests, 753,664 reserved completion tokens,
+and 2,400 review seconds**. The largest both-follow-up path has eleven initial
+calls (one primary plus audit planner, whole-proof reviewer and eight regions)
+and twelve final calls (one primary plus whole-proof reviewer, eight regions,
+defender and adjudicator). The audit reuses its frozen plan in the final round.
+Thus primary 2 + audit 21 = 23 calls, each reserving 32,768 tokens. Without a
+follow-up the maximum is thirteen calls; a terminal child is carried forward
+when only its peer requests follow-up and consumes no second-round calls.
+Requests from both children share the single experiment follow-up and identical
+checker requests are deduplicated. A union of distinct requests that exceeds the
+configured limit fails closed.
+
+Both children run concurrently, with at most four provider workers shared by
+the pipeline. Each phase has a hard 1,200-second wall deadline and consumes wall
+time rather than the sum of overlapping calls. Per-call deadlines are capped
+by remaining phase time. These limits do not guarantee that every permitted
+call finishes. The 23-call allowance funds the full path, not extra retries.
 
 There is at most one experiment follow-up; initial and follow-up computation
 each allow 20 seconds, with 40 computation seconds total. Generic source limits
 remain 32 files, 65,536 bytes per file and 262,144 submission bytes. Each prompt
-permits 2,097,152 bytes (2 MiB), matching the pinned verifier's default. The selected
+permits 2,097,152 bytes (2 MiB), matching the pinned verifier's default. The audit
 profile requires at least one region per submitted file, so its **effective file
 limit is eight**, including `submission.json` and `bound.json`; excess files fail
 preflight before model calls.

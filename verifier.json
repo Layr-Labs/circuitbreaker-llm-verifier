@@ -85,10 +85,10 @@
     "stdout_bytes": 65536,
     "tmpfs_mb": 16,
     "total_output_bytes": 393216,
-    "total_provider_requests": 21,
+    "total_provider_requests": 23,
     "total_review_seconds": 2400,
     "total_seconds": 40,
-    "total_review_tokens": 688128
+    "total_review_tokens": 753664
   },
   "runtime": {
     "image": "python:3.12.12-slim-bookworm@sha256:2986c55feb36e6cae00fa1fefb454283e4b33f35e75ff8bdd123b134130be301",
@@ -184,6 +184,14 @@
   ],
   "acceptance_policy": "atomic-claims-v1",
   "judging": {
-    "profile": "builtin:math-decomposed-v1"
+    "profile": "builtin:probabilistic-escalation-v1",
+    "probability": 1,
+    "mode": "record-only",
+    "primary": {
+      "profile": "builtin:single-v1"
+    },
+    "escalation": {
+      "profile": "builtin:math-decomposed-v1"
+    }
   }
 }

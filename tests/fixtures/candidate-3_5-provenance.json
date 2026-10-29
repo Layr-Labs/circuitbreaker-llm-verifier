@@ -1,0 +1,83 @@
+{
+  "repository": "Layr-Labs/circuitbreaker-llm-verifier",
+  "revision": "db42cf21bf350b7d962eb04e657007bdc1fc9bc5",
+  "purpose": "Exact candidate source for synthetic transport regression only; no acceptance is asserted.",
+  "files": {
+    "audit.py": {
+      "bytes": 6944,
+      "sha256": "cb2d6f698eaf9547b27051115219e4b1626d47c30a92570616a300d65acf4bef"
+    },
+    "bound.json": {
+      "bytes": 1574,
+      "sha256": "1a9ea745225a27a228aff4e4183fc9824e7724ac97997a228a6ea84200d5e48c"
+    },
+    "disperser.md": {
+      "bytes": 13809,
+      "sha256": "5a82a17623db98cdf44730eaafa4bc5d02096d340702ff86d7ba16a39ae9ef2d"
+    },
+    "elimination.md": {
+      "bytes": 16086,
+      "sha256": "6b14cf339736d34aa934c8135444233b3da5e1c681e26cabec4c391c681ec24c"
+    },
+    "family.py": {
+      "bytes": 3002,
+      "sha256": "b51fc1ce74a62147e1e253f2b682d713d081197a7c18ae8c72332368fe2bceb4"
+    },
+    "proof.md": {
+      "bytes": 8372,
+      "sha256": "9b188eebcaa0d8dde054588eaa91fac10e9e526231f7df08fdf28fa67fb4806d"
+    },
+    "submission.json": {
+      "bytes": 5581,
+      "sha256": "59b8b179abffb36ab43af429145e8d2b369caf7360d6700fc94d0f62be17d6eb"
+    }
+  },
+  "initial_result": {
+    "all_passed": true,
+    "checks": {
+      "block_capacity_pairs": 17560,
+      "common_child_affine_line_cases": 128,
+      "composed_B2_tables": 128,
+      "family_evaluation_cases": 19,
+      "family_parameters_tested": [
+        {
+          "N": 128,
+          "k": 37,
+          "m": 91,
+          "r": 3,
+          "t": 2
+        },
+        {
+          "N": 192,
+          "k": 47,
+          "m": 145,
+          "r": 4,
+          "t": 2
+        },
+        {
+          "N": 256,
+          "k": 59,
+          "m": 197,
+          "r": 4,
+          "t": 2
+        }
+      ],
+      "irreducible_counts": {
+        "2": 1,
+        "3": 2,
+        "5": 6,
+        "7": 18
+      },
+      "potential_grid_cases": 990,
+      "prefix_polynomials_checked": 172,
+      "quadratic_pivot_assignments": 128
+    },
+    "scope": "Exact finite audit only. Universal coverage, uniformity, and asymptotics are proved in the supplied Markdown files."
+  },
+  "initial_result_origin": {
+    "github_run_id": "40965504251",
+    "attempt": 1,
+    "initial_envelope_sha256": "892409375af1b77eff1b7fd6cfbaa703109a714682582d621818251a730eb2fc",
+    "note": "Recorded finite computation output, replayed by a mocked Docker boundary; not a mathematical judgment."
+  }
+}

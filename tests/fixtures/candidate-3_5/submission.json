@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "title": "Coefficient 7/2, exponent 1: explicit certificate-prefix BK family and parameter gate elimination",
+  "claims": [
+    {
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total certificate-prefix language specified in proof.md and family.py. For actual length N, choose k as the least prime at least the least positive B with B^5>32*N^3; read k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2, reject invalid Q by the exact Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial on the remaining N-k bits with zero padding, r=ceil((N-k)/k), t=ceil(sqrt(r)). Output 0 for N=0 or the explicit failed guards in proof.md. The output is the constant coefficient in F_2[Z]/Q. All k prefix bits are included in N; Q is input, not advice.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P, hence in NP with empty witnesses, and in the full pinned B2 model C_B2(F_N)>=(7/2)*N-O(N^(4/5)) for every sufficiently large integer N=|x|. In particular liminf over all integer N of C_B2(F_N)/N is at least 7/2.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "score": {
+        "numerator": "7",
+        "denominator": "2"
+      },
+      "evidence": [
+        "audit.py",
+        "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "proof.md"
+      ]
+    },
+    {
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total certificate-prefix language specified in proof.md and family.py. For actual length N, choose k as the least prime at least the least positive B with B^5>32*N^3; read k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2, reject invalid Q by the exact Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial on the remaining N-k bits with zero padding, r=ceil((N-k)/k), t=ceil(sqrt(r)). Output 0 for N=0 or the explicit failed guards in proof.md. The output is the constant coefficient in F_2[Z]/Q. All k prefix bits are included in N; Q is input, not advice.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P, hence in NP with empty witnesses, and in the full pinned B2 model C_B2(F_N)>=(7/2)*N-O(N^(4/5)) for every sufficiently large integer N=|x|. In particular liminf over all integer N of C_B2(F_N)/N is at least 7/2.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "score": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "evidence": [
+        "audit.py",
+        "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "proof.md"
+      ]
+    }
+  ],
+  "experiments": [
+    {
+      "id": "finite-audit",
+      "source": "audit.py",
+      "purpose": "Supplementary exact checks of local B2 identities, quadratic bijection, potential arithmetic, prime-degree irreducibility, weighted block isolation and executable family evaluation. These bounded checks do not establish universal coverage or the asymptotic theorem.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
+    }
+  ],
+  "checks": []
+}
