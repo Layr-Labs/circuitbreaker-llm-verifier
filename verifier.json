@@ -76,7 +76,7 @@
     "max_files": 32,
     "max_followups": 1,
     "max_initial_runs": 1,
-    "max_prompt_bytes": 131072,
+    "max_prompt_bytes": 2097152,
     "max_submission_bytes": 262144,
     "memory_mb": 256,
     "pids": 32,
