@@ -49,6 +49,14 @@ Every file needs at least one region, so **submit at most eight files**, includi
 limit applies even though the generic `max_files` ceiling remains 32. The baseline
 uses three files. Keep supporting material together without dropping evidence.
 
+Each review prompt has a 2 MiB (2,097,152-byte) ceiling, matching the pinned
+verifier's default. Planning includes the original evidence and numbered source;
+defense and adjudication also include accumulated reports. The former 128 KiB
+ceiling rejected an existing seven-file submission before its first model call.
+The ceiling remains enforced without truncation. It does not guarantee that every
+possible combination of source text, reports and responses fits; the separate
+response, request, token and time limits still apply.
+
 After source edits, run `python tools/generate_hosted.py` to apply the upstream
 generator plus the protected metrics/test overlays and validate the companion
 presentation against the generated objectives and metric contract. Page settings

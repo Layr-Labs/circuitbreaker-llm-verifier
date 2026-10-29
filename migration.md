@@ -140,10 +140,24 @@ guarantee every permitted call will finish.
 
 There is at most one experiment follow-up; initial and follow-up computation
 each allow 20 seconds, with 40 computation seconds total. Generic source limits
-remain 32 files, 65,536 bytes per file, 262,144 submission bytes and 131,072 prompt
-bytes per call. The selected profile requires at least one region per submitted
-file, so its **effective file limit is eight**, including `submission.json` and
-`bound.json`; excess files fail preflight before model calls.
+remain 32 files, 65,536 bytes per file and 262,144 submission bytes. Each prompt
+permits 2,097,152 bytes (2 MiB), matching the pinned verifier's default. The selected
+profile requires at least one region per submitted file, so its **effective file
+limit is eight**, including `submission.json` and `bound.json`; excess files fail
+preflight before model calls.
+
+The 2 MiB ceiling replaces a 128 KiB holdover that rejected the existing seven-file
+candidate's 156,665-byte planner prompt. Planning includes both original evidence
+and numbered source; defense and adjudication include accumulated reports.
+Offline, explicitly synthetic eight-region follow-up chains over the unchanged
+candidate and real Docker evidence reached about 1.51 MB with sixteen findings
+per reviewer, 4,000-character finding reasons, 8,000-character assessments and
+1,000-character defenses. Seven findings per reviewer with 4,000-character
+defenses also fit. These are transport tests, not mathematical judgments.
+The ceiling still fails closed without truncating evidence. It does not guarantee
+all possible Unicode or schema-maximum combinations fit. The separate
+262,144-byte response limit is unchanged: sixteen findings from each of nine
+review calls with 4,000-character defenses exceed that response limit.
 
 Those are request/token/time limits, **not a dollar-spend ceiling**. Completion
 tokens are reserved at the full per-call cap even for short responses; input
