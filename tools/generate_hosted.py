@@ -8,7 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 
-VERIFIER_REVISION = "33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad"
+VERIFIER_REVISION = "5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf"
 ROOT = Path(__file__).resolve().parents[1]
 
 

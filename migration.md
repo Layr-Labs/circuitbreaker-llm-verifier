@@ -14,7 +14,7 @@ For a new registration, independently review and use the frozen source containin
 
 - Objectives `gate_coefficient` and `gate_exponent`, both maximized, in that order.
 - The new scoring/review versions, current fixed-family validity policy,
-  atomic acceptance, and unchanged provider/resource configuration.
+  atomic acceptance, and the decomposed review profile/budget below.
 - The pinned shared verifier and regenerated hosted caller with the bounded
   metrics overlay. The runner must select `circuitbreaker-score`.
 - The published (31/10,1) seed declaration and its unchanged proof evidence,
@@ -53,7 +53,7 @@ Prepare activation with these explicit inputs:
 - The approved published challenge source SHA, repository
   `Layr-Labs/circuitbreaker-llm-verifier`, root directory `null`, `main` track,
   exact two-objective manifest and policy versions above. Keep verifier pin
-  `33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad` and artifact `circuitbreaker-score`.
+  `5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf` and artifact `circuitbreaker-score`.
 - A separately selected replacement registration name/source branch, actual
   replacement UUID, access/publication choices and any existing page revision
   used by the authorized rebind. Legacy UUID
@@ -122,17 +122,32 @@ source, schema, synthetic or CI tests.
 
 ## Configured review budget
 
-The unchanged `verifier.json` configures `gpt-6-astra`, high reasoning,
-JSON-schema responses and background mode. Per pipeline it permits at most two
-provider requests in total (one attempt per request), at most 32,768 completion
-tokens per request, a 1,200-second request timeout and 2,400 total review seconds.
-There is at most one follow-up; initial and follow-up computation each allow
-20 seconds, with 40 computation seconds total. Source limits are 32 files,
-65,536 bytes per file, 262,144 submission bytes and 131,072 prompt bytes.
+`verifier.json` selects `builtin:math-decomposed-v1` at verifier version 0.7.0.
+All members inherit the unchanged `gpt-6-astra`, high reasoning, JSON-schema
+responses and background mode, with one attempt, at most 32,768 completion
+tokens and a 1,200-second request timeout. The profile permits at most eight
+source regions. A planner, whole-proof reviewer, one worker call per region,
+conditional defender and adjudicator share the pipeline budget.
 
-Those are request/token/time limits, **not a dollar-spend ceiling**. At most
-65,536 requested completion tokens across two requests does not account for input
-billing or establish a currency cost. Registration retries or further evaluations
-start additional pipelines. No model call, credential change, paid-budget change
-or scientific qualification is authorized or performed by this presentation
-update; approve the exact activation/evaluation scope separately.
+The shared limits are **21 provider requests, 688,128 reserved completion tokens,
+and 2,400 review seconds**. The largest follow-up path uses ten initial calls
+(planner, whole-proof reviewer, eight region workers) and eleven final calls
+(whole-proof reviewer, eight region workers, defender, adjudicator). The initial
+round returns its experiment request before defense/adjudication, and the final
+round reuses the frozen plan. A round without a follow-up uses at most twelve
+calls. Each round also has a hard 1,200-second wall deadline; these limits do not
+guarantee every permitted call will finish.
+
+There is at most one experiment follow-up; initial and follow-up computation
+each allow 20 seconds, with 40 computation seconds total. Generic source limits
+remain 32 files, 65,536 bytes per file, 262,144 submission bytes and 131,072 prompt
+bytes per call. The selected profile requires at least one region per submitted
+file, so its **effective file limit is eight**, including `submission.json` and
+`bound.json`; excess files fail preflight before model calls.
+
+Those are request/token/time limits, **not a dollar-spend ceiling**. Completion
+tokens are reserved at the full per-call cap even for short responses; input
+billing is additional. Registration retries or further evaluations start
+additional pipelines. This source repin does not activate a registration, run a
+model, change credentials, or establish scientific qualification. Approve the
+exact activation/evaluation scope separately.

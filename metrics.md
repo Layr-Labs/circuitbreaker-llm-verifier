@@ -183,8 +183,8 @@ calling `expressions.compare`; tests compare the authoritative Python algebra
 against those expectations and the platform uses the same corpus.
 
 Only the table namespace is retained in the corpus to avoid duplicating rich
-records. Separate regressions compare the rich namespace with the published
-PR15 exporter under the same new verifier. `mutated-exporter` cases deliberately
+records. Separate regressions freeze the rich namespace under the current
+verifier and validate its exact joint binding with the unchanged exporter. `mutated-exporter` cases deliberately
 corrupt a copy for consumer validation; `consumer-state` cases retain valid
 metric bytes while requiring the current-result policy to omit them. A valid
 platform result awaiting manual promotion is distinct from an unreviewed claim.
@@ -193,7 +193,7 @@ Simulation is rejected by the exporter and has no output.
 Regenerate with `python tools/generate_frontier_fixtures.py`, or use `--check`
 for reproducibility. CI runs schema/wire/parity regressions and the fixture drift
 check with the same pinned verifier wheel. The current pin is
-`33a63fc55a4cfd2613f0d5cc77d533fb2ec3e8ad`; its optional `structured_claims`
+`5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf`; its optional `structured_claims`
 protocol remains disabled. Existing joint statements and file binding are
 unchanged. Neither these tests nor this table integration requalifies the
 baseline proof mathematically.

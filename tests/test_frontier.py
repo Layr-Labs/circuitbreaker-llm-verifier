@@ -19,10 +19,10 @@ from tests.synthetic import synthetic_dossier
 from tools.generate_hosted import VERIFIER_REVISION
 
 ROOT = Path(__file__).resolve().parents[1]
-LEGACY_RICH_HASHES = {
-    "finite": "73e4204b7ff7f5d8056b3b1fa6ec1a1cbe5181ee7e8ec75652f135de5e8def2d",
-    "lane": "373e96c33418dada59a8cedb7ecb0057ba6624e36b0026a5ad0464504e4a24c9",
-    "global": "b503d3d50b9d4dacc77f1e91829de19c8cb1e795fc7292993628522bb4e9e101",
+PINNED_RICH_HASHES = {
+    "finite": "11e16fd33b777c9ac19ee7a87a08249638d46d70cbb21d27d39e6417e6c4e60f",
+    "lane": "7e587db45a9e1199123219b4cb6d06f5adbac56c07859e294420faa7a5787fbd",
+    "global": "a2de938c1ffc13e5174343321ab64ebf8559d2a744d81017da09ef6012dc1d4a",
 }
 
 
@@ -56,14 +56,14 @@ class FrontierTests(unittest.TestCase):
         return synthetic_dossier(self.root, bound, manifest, valid=valid, simulation=simulation)
 
     def test_additive_wire_preserves_legacy_metric_and_exact_joint_binding(self):
-        # Hashes captured from published PR15 exporter running under the new pin.
-        # Dossiers are fresh; no old-runtime dossier is relabelled or accepted.
-        for kind in LEGACY_RICH_HASHES:
+        # Fresh decomposed-profile fixture hashes, including new intake/review
+        # provenance. The scientific/exporter implementation is unchanged.
+        for kind in PINNED_RICH_HASHES:
             with self.subTest(kind=kind):
                 dossier = self.dossier(kind)
                 result = projection(dossier)
                 rich, table = result["metrics"]["circuitbreaker"], result["metrics"]["circuitbreaker_frontier"]
-                self.assertEqual(hashlib.sha256(canonical(rich)).hexdigest(), LEGACY_RICH_HASHES[kind])
+                self.assertEqual(hashlib.sha256(canonical(rich)).hexdigest(), PINNED_RICH_HASHES[kind])
                 self.assertEqual(set(table), {"version", "comparator", "scope", "model", "notation", "intake_sha256", "dossier_sha256", "resources"})
                 self.assertEqual(set(table["resources"]), {"circuit_size"})
                 resource = table["resources"]["circuit_size"]
