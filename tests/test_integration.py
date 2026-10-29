@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 from check_submission import check_submission
-from tools.generate_hosted import VERIFIER_REVISION, check_generated
+from tools.generate_hosted import BASELINE_RECOVERY, VERIFIER_REVISION, check_generated
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -35,11 +35,16 @@ class IntegrationTests(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/benchmark.yml").read_text()
         self.assertIn("needs: [verify]", workflow)
         self.assertIn("name: circuitbreaker-score", workflow)
-        self.assertIn("name: llmv-intake", workflow)
-        self.assertIn("name: llmv-package", workflow)
-        self.assertIn("name: verifier-dossier", workflow)
+        self.assertEqual(track["runner"]["baselineRecovery"], BASELINE_RECOVERY)
+        for output in ("intake_artifact", "package_artifact", "dossier_artifact",
+                       "helper_base64", "helper_sha256", "review_run_id", "review_run_attempt"):
+            self.assertIn("needs.verify.outputs." + output, workflow)
+        self.assertNotIn("actions/download-artifact@", workflow)
+        self.assertEqual(workflow.count("overwrite: true"), 2)
+        self.assertIn("name: circuitbreaker-export-lineage", workflow)
+        self.assertIn("--transfer-receipt", workflow)
         self.assertIn("--intake", workflow)
-        self.assertIn("export_metrics.py", workflow)
+        self.assertIn("export_hosted.py", workflow)
         self.assertIn("include-hidden-files: true", workflow)
         self.assertIn("yukon_accepted_results", workflow)
         self.assertIn("@" + VERIFIER_REVISION, workflow)

@@ -16,10 +16,10 @@ permissions:
   id-token: write
 jobs:
   verify:
-    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf
+    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@1f61aa60c420e65c28786b56500b4e9276b5f53b
     with:
       verifier_repository: Layr-Labs/llm-verifier
-      verifier_revision: 5c3e66acffc95aa5a9cfc31183dbefc7ed24b9bf
+      verifier_revision: 1f61aa60c420e65c28786b56500b4e9276b5f53b
       root_dir: '.'
       config_path: verifier.json
       submission_path: submission
@@ -44,24 +44,50 @@ jobs:
           persist-credentials: false
           submodules: false
           lfs: false
-      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
-        with:
-          name: llmv-package
-          path: ${{ runner.temp }}/wheel/
-      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
-        with:
-          name: llmv-intake
-          path: ${{ runner.temp }}/intake/
-      - uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
-        with:
-          name: verifier-dossier
-          path: ${{ runner.temp }}/dossier/
-      - name: Export from the same-run wheel, intake and dossier
+      - name: Bootstrap trusted artifact transfer before wheel download
+        env:
+          LLMV_TRANSFER_HELPER: ${{ needs.verify.outputs.helper_base64 }}
+          LLMV_TRANSFER_SHA256: ${{ needs.verify.outputs.helper_sha256 }}
+        shell: bash
+        run: |
+          python3 -I - <<'PY'
+          import base64, hashlib, os
+          from pathlib import Path
+          encoded = os.environ["LLMV_TRANSFER_HELPER"]
+          if not encoded or len(encoded) > 87384:
+              raise SystemExit("Invalid transfer helper size")
+          data = base64.b64decode(encoded, validate=True)
+          if len(data) > 65536 or hashlib.sha256(data).hexdigest() != os.environ["LLMV_TRANSFER_SHA256"]:
+              raise SystemExit("Invalid transfer helper digest")
+          root = Path(os.environ["GITHUB_WORKSPACE"]) / ".llmv-artifact-transfer"
+          root.mkdir()
+          with (root / "transfer.py").open("xb") as target:
+              target.write(data)
+          PY
+          python3 -I "$GITHUB_WORKSPACE/.llmv-artifact-transfer/transfer.py" install-action
+      - name: Download and verify immutable export inputs
+        uses: ./.llmv-artifact-transfer
+        timeout-minutes: 4
+        env:
+          LLMV_ARTIFACTS: >-
+            [
+              {"artifact":${{ needs.verify.outputs.package_artifact }},"path":"wheel"},
+              {"artifact":${{ needs.verify.outputs.intake_artifact }},"path":"intake"},
+              {"artifact":${{ needs.verify.outputs.dossier_artifact }},"path":"dossier"}
+            ]
+      - name: Export from the original wheel, intake and dossier
+        env:
+          LLMV_PACKAGE_ARTIFACT: ${{ needs.verify.outputs.package_artifact }}
+          LLMV_INTAKE_ARTIFACT: ${{ needs.verify.outputs.intake_artifact }}
+          LLMV_DOSSIER_ARTIFACT: ${{ needs.verify.outputs.dossier_artifact }}
+          LLMV_EXPECTED_INTAKE: ${{ needs.verify.outputs.intake_sha256 }}
+          LLMV_REVIEW_RUN_ID: ${{ needs.verify.outputs.review_run_id }}
+          LLMV_REVIEW_RUN_ATTEMPT: ${{ needs.verify.outputs.review_run_attempt }}
         shell: bash
         run: |
           python3 -m venv "$RUNNER_TEMP/llmv-env"
           "$RUNNER_TEMP/llmv-env/bin/python" -m pip install --no-index --no-deps "$RUNNER_TEMP"/wheel/*.whl
-          "$RUNNER_TEMP/llmv-env/bin/python" export_metrics.py --intake "$RUNNER_TEMP/intake/intake.json" --dossier "$RUNNER_TEMP/dossier/dossier.json" --out "$RUNNER_TEMP/circuitbreaker-score/.yukon/score.json"
+          "$RUNNER_TEMP/llmv-env/bin/python" export_hosted.py --intake "$RUNNER_TEMP/intake/intake.json" --dossier "$RUNNER_TEMP/dossier/dossier.json" --wheel "$RUNNER_TEMP"/wheel/*.whl --transfer-receipt "$RUNNER_TEMP/llmv-transfer-receipt.json" --out "$RUNNER_TEMP/circuitbreaker-score/.yukon/score.json" --lineage "$RUNNER_TEMP/export-lineage/recovery.json"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: circuitbreaker-score
@@ -69,3 +95,11 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 30
+          overwrite: true
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: circuitbreaker-export-lineage
+          path: ${{ runner.temp }}/export-lineage/
+          if-no-files-found: error
+          retention-days: 30
+          overwrite: true
