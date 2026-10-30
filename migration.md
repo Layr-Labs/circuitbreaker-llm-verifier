@@ -53,7 +53,7 @@ Prepare activation with these explicit inputs:
 - The approved published challenge source SHA, repository
   `Layr-Labs/circuitbreaker-llm-verifier`, root directory `null`, `main` track,
   exact two-objective manifest and policy versions above. Keep verifier pin
-  `8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` and artifact `circuitbreaker-score`.
+  `c3196332cbd0ea75a8f478673e04a78ae03e581d` and artifact `circuitbreaker-score`.
 - A separately selected replacement registration name/source branch, actual
   replacement UUID, access/publication choices and any existing page revision
   used by the authorized rebind. Legacy UUID
@@ -122,9 +122,9 @@ source, schema, synthetic or CI tests.
 
 ## Configured review budget
 
-`verifier.json` pins version 0.8.0 at
-`8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` and selects
-`builtin:probabilistic-escalation-v1` with `probability: 1` and `mode: record-only`.
+The hosted integration pins version 0.8.2 at
+`c3196332cbd0ea75a8f478673e04a78ae03e581d`; `verifier.json` selects
+`builtin:probabilistic-escalation-v1` with `probability: 1` and `mode: override`.
 The explicit primary is `builtin:single-v1`; the audit is
 `builtin:math-decomposed-v1`. Neither child overrides its provider. Every role
 inherits `gpt-6-astra`, high reasoning, JSON-schema responses, background mode,
@@ -132,14 +132,16 @@ one attempt, 32,768 completion tokens and a 1,200-second request timeout.
 The audit keeps its default maximum of eight source regions. No generic default
 probability or scientific policy is changed.
 
-The primary controls the canonical judgment and score. Both completed child
-decisions and their disagreement remain in the dossier. A failed audit retains
-its diagnostic evidence and makes comparison unavailable; record-only mode can
-still export a completed primary judgment. A failed primary cannot produce a
-judgment. Diagnostic artifacts alone never authorize a score. Local mocked
-transport tests exercise these cases through the unchanged hosted exporter;
-they establish compatibility, not mathematical acceptance. Independent review
-coverage of the exact final upstream implementation is incomplete.
+The Moonshot audit controls the canonical judgment and score, even when the
+primary disagrees. Both completed child decisions remain in the dossier. An audit
+failure retains diagnostics and makes comparison unavailable; it cannot export
+a primary-only score in override mode. A failed primary also prevents a judgment.
+The selected review hash remains the selected wrapper phase envelope, whose
+canonical decision and authority are the audit's; it is not a child-report hash.
+Diagnostic artifacts alone never authorize a score. Local mocked transport tests
+cover override behavior and explicit record-only compatibility through the
+unchanged exporters; they establish transport behavior, not mathematical acceptance.
+Independent review coverage of the exact final upstream implementation is incomplete.
 
 Shared limits are **23 provider requests, 753,664 reserved completion tokens,
 and 2,400 review seconds**. The largest both-follow-up path has eleven initial
@@ -153,11 +155,35 @@ Requests from both children share the single experiment follow-up and identical
 checker requests are deduplicated. A union of distinct requests that exceeds the
 configured limit fails closed.
 
-Both children run concurrently, with at most four provider workers shared by
-the pipeline. Each phase has a hard 1,200-second wall deadline and consumes wall
-time rather than the sum of overlapping calls. Per-call deadlines are capped
-by remaining phase time. These limits do not guarantee that every permitted
-call finishes. The 23-call allowance funds the full path, not extra retries.
+All dependency-ready calls run concurrently by default. The primary, audit
+planner and whole-proof reviewer can overlap; region reviews start when the
+plan is ready, without waiting for the whole-proof reviewer. The optional
+`limits.max_concurrent_calls` is omitted from this challenge. If set upstream,
+it is a global cap of 1–64 calls with continuous slot refill, not fixed waves.
+This changes scheduling, not the 23-call allowance or scientific authority.
+
+New child traces use `dependency-ready-v1`, recording logical group queue times
+and per-call start/finish times; the wrapper remains `parallel-children-v1`.
+An already admitted whole-proof call is drained and retained if planning fails.
+Current review and resume require current wrapper and child trace versions;
+checkpoint metadata cannot select historical replay rules. Historical
+`independent-waves-v1` records retain fixed-four replay only through an explicitly
+selected low-level API. Replay old intake/dossier pairs with their original wheel:
+implementation identity remains strict, so old intake must not be rebound to the
+new wheel.
+
+Malformed parsed output that lacks structural room inside review artifacts fails
+with `review_output_structure_limit`. Its bounded raw text and charged attempts
+remain diagnostic evidence. The configured override produces no score on audit
+failure; explicit record-only compatibility tests retain a completed primary.
+Snapshot-write errors drain and retain both admitted child outcomes before raising
+the original error. An in-progress snapshot remains diagnostic-only and cannot
+be resumed, even when its drained children completed.
+
+Each phase has a hard 1,200-second wall deadline and consumes wall time rather
+than the sum of overlapping calls. Per-call deadlines are capped by remaining
+phase time. These limits do not guarantee that every permitted call finishes.
+The 23-call allowance funds the full path, not extra retries.
 
 There is at most one experiment follow-up; initial and follow-up computation
 each allow 20 seconds, with 40 computation seconds total. Generic source limits
@@ -226,3 +252,29 @@ without the declaration, including the earlier metrics-only failure, are not
 silently upgraded to mixed-attempt recovery. An already successful complete
 baseline at the exact frozen source can instead be considered through the
 platform's separate checkpoint recovery path.
+
+## Accepted-submission admission
+
+The source manifest now enables `main.submissionAdmission` with version 1 and
+`submissionReferencesEnabled: true`; `tools/generate_hosted.py` preserves this
+field through the pinned generator. No verifier pin, provider, scientific policy,
+`structured_claims` setting or attribution-DAG setting changes for reuse.
+
+Existing imported benchmarks need a separate owner-authenticated
+`PATCH /api/benchmarks/CONSUMER_BENCHMARK_ID` using
+`examples/submission-admission-update.json`. Source publication/reimport does not
+replace stored live admission. The owner update creates no evaluation or reorg
+and changes admission for new candidates only. Original snapshots remain binding
+for retries and all rejudgments, including score-only or validity-only reorgs.
+Missing/null/false original admission rejects nonempty `prior_results` before
+resolution with `submission_references_disabled`; later enablement cannot upgrade
+that original candidate. Submit a new candidate after enabling references.
+
+References identify immutable submission IDs and reuse only their original atomic
+claim sets. Intake obtains trusted accepted-result snapshots, and later phases
+never refetch authorization. Access, accepted dependencies and required human
+review still gate reuse. Prior scores or checker witnesses cannot substitute for
+the current candidate's score or checks. The enabled-source fixture tests this
+through native mocked review, current checker execution, finalization and export;
+source manifests, selected wrapper provenance and accepted-only ancestry remain
+bound. No live admission update or reorg is performed by this source change.

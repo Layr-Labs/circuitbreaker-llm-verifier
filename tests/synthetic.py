@@ -47,7 +47,7 @@ def report_key(report):
 
 
 @contextmanager
-def scripted_http(reports, requests=None):
+def scripted_http(reports, requests=None, on_request=None):
     """Replace the complete HTTP boundary, routing each parallel role exactly."""
     pending = dict(reports) if isinstance(reports, dict) else {report_key(r): r for r in reports}
     if len(pending) != len(reports):
@@ -64,6 +64,8 @@ def scripted_http(reports, requests=None):
             if key not in pending:
                 raise AssertionError(f'Unexpected synthetic provider role: {key}')
             report = pending.pop(key)
+        if on_request is not None:
+            on_request(member, context)
         if isinstance(report, Exception):
             raise report
         # Native background calls return this normalized chat envelope too.
@@ -113,7 +115,7 @@ def synthetic_review(intake, initial, first=None, followup=None, *, valid=True,
                      reference='source:proof.md', request_followup=False,
                      blocking=False, requests=None, audit_valid=None, audit_failure=None,
                      primary_followup=None, audit_followup=None, region_count=None,
-                     failure_out=None):
+                     failure_out=None, on_request=None):
     """Run both installed child protocols with deterministic native HTTP replies."""
     audit_valid = valid if audit_valid is None else audit_valid
     primary_followup = request_followup if primary_followup is None else primary_followup
@@ -132,9 +134,11 @@ def synthetic_review(intake, initial, first=None, followup=None, *, valid=True,
         plan = source_plan(intake, region_count)
         if first is None:
             reports[('planner', None)] = audit_failure or plan
+        # Whole-proof review is independent of planning and is retained even if
+        # the planner fails. No region/decision is fabricated after that failure.
+        reports[('proof', None)] = {'assessment': 'Synthetic whole-proof report.', 'findings': [],
+                                   'requests': requested if audit_followup else []}
         if audit_failure is None:
-            reports[('proof', None)] = {'assessment': 'Synthetic whole-proof report.', 'findings': [],
-                                       'requests': requested if audit_followup else []}
             for index, region in enumerate(plan['regions']):
                 findings = [{'id': 'gap', 'kind': 'blocking', 'reason': 'Synthetic concern.',
                              'evidence_refs': [reference]}] if blocking and index == 0 else []
@@ -150,7 +154,7 @@ def synthetic_review(intake, initial, first=None, followup=None, *, valid=True,
                     resolutions = [{**response, 'outcome': 'dismissed' if audit_valid else 'confirmed'}]
                 reports[('adjudicator', None)] = {'decision': judgment(intake, audit_valid, reference),
                                                 'resolutions': resolutions}
-    with scripted_http(reports, requests):
+    with scripted_http(reports, requests, on_request):
         return pipeline.review(intake, initial, first, followup, failure_out=failure_out)
 
 

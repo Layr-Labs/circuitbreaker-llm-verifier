@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import shutil
 import tempfile
+from threading import Barrier, Event
 import unittest
 from unittest.mock import patch
 
@@ -79,7 +80,18 @@ class EscalationTests(unittest.TestCase):
         for wire in requests:
             self.assertEqual((wire['model'], wire['reasoning'], wire['background'], wire['max_output_tokens']),
                              ('gpt-6-astra', {'effort': 'high'}, True, 32768))
-        receipt = {'synthetic_transport_only': True, 'verifier_revision': VERIFIER_REVISION,
+        executions = []
+        for phase in phases:
+            self.assertEqual(phase['data']['execution']['version'], 'parallel-children-v1')
+            for child in ('primary', 'escalation'):
+                value = phase['data'][child]
+                if value['status'] != 'completed' or value.get('carried'):
+                    continue
+                trace = value['review']['execution']
+                self.assertEqual(trace['version'], 'dependency-ready-v1')
+                self.assertIsNone(trace['max_concurrent_calls'])
+                executions.append({'phase': phase['stage'], 'child': child, 'trace': trace})
+        receipt = {'executions': executions, 'synthetic_transport_only': True, 'verifier_revision': VERIFIER_REVISION,
                    'input_hashes': {p: r['sha256'] for p, r in intake['data']['files'].items()},
                    'calls': len(requests), 'prompts': sizes,
                    'reserved_completion_tokens': sum(p['data']['provenance']['allotted_completion_tokens'] for p in phases),
@@ -96,10 +108,13 @@ class EscalationTests(unittest.TestCase):
     def test_exact_profile_and_shared_resource_contract(self):
         configured = json.loads((ROOT / 'verifier.json').read_text())
         self.assertEqual(configured['judging'], {
-            'profile': 'builtin:probabilistic-escalation-v1', 'probability': 1, 'mode': 'record-only',
+            'profile': 'builtin:probabilistic-escalation-v1', 'probability': 1, 'mode': 'override',
             'primary': {'profile': 'builtin:single-v1'},
             'escalation': {'profile': 'builtin:math-decomposed-v1'}})
-        resolved = load_config(ROOT, 'verifier.json', 'submission')['judging']['committee']
+        effective = load_config(ROOT, 'verifier.json', 'submission')
+        self.assertNotIn('max_concurrent_calls', configured['limits'])
+        self.assertNotIn('max_concurrent_calls', effective['config']['limits'])
+        resolved = effective['judging']['committee']
         self.assertEqual(resolved['escalation']['max_regions'], 8)
         for child in ('primary', 'escalation'):
             for member in resolved[child]['members']:
@@ -116,7 +131,9 @@ class EscalationTests(unittest.TestCase):
         requests = []
         first = synthetic_review(intake, initial, valid=True, audit_valid=False, blocking=True, requests=requests)
         record = pipeline.dossier(intake, initial, first)
-        self.assertEqual(projection(record)['scores'], [3.1, 1])
+        self.assertIsNone(projection(record)['scores'])
+        self.assertFalse(projection(record)['valid'])
+        self.assertEqual(first['data']['authority']['judge'], 'escalation')
         self.assertTrue(first['data']['comparison']['valid_disagreement'])
         self.assertEqual(set(audit_review(first)['region_plan']['sources']), set(intake['data']['files']))
         self.measure('baseline', record, requests)
@@ -130,7 +147,7 @@ class EscalationTests(unittest.TestCase):
         self.assertEqual(first['data']['primary']['review']['decision']['kind'], 'followup')
         self.assertEqual(audit_review(first)['decision']['kind'], 'followup')
         followup = self.followup(intake, initial, first)
-        final = synthetic_review(intake, initial, first, followup, valid=True, audit_valid=False,
+        final = synthetic_review(intake, initial, first, followup, valid=False, audit_valid=True,
                                  blocking=True, region_count=8, requests=requests)
         record = pipeline.dossier(intake, initial, first, followup, final)
         self.assertEqual(audit_review(first)['region_plan'], audit_review(final)['region_plan'])
@@ -141,6 +158,35 @@ class EscalationTests(unittest.TestCase):
         self.assertEqual((result['calls'], result['reserved_completion_tokens'], result['score']),
                          (23, 753664, [3.5, 1]))
 
+    def test_actual_candidate_starts_all_ready_calls_without_four_worker_waves(self):
+        intake, initial = self.prepare(candidate=True)
+        primary = Event()
+        proof = Event()
+        # Primary + proof + all eight regions must be admitted concurrently.
+        # A hidden four-worker limit or a proof-before-plan wait cannot pass.
+        ready = Barrier(10, timeout=10)
+        def observe(member, context):
+            role = member['id']
+            if role == 'reviewer':
+                primary.set()
+            elif role == 'proof':
+                proof.set()
+            elif role == 'planner':
+                self.assertTrue(primary.wait(10))
+                self.assertTrue(proof.wait(10))
+            if role in ('reviewer', 'proof', 'region'):
+                ready.wait()
+        requests = []
+        first = synthetic_review(intake, initial, region_count=8,
+                                 requests=requests, on_request=observe)
+        trace = audit_review(first)['execution']
+        self.assertEqual([[call['member_id'] for call in group['calls']]
+                          for group in trace['groups']],
+                         [['proof'], ['planner'], ['region'] * 8, ['adjudicator']])
+        record = pipeline.dossier(intake, initial, first)
+        result = self.measure('candidate-all-ready', record, requests)
+        self.assertEqual((result['calls'], result['score']), (12, [3.5, 1]))
+
     def test_only_audit_followup_carries_primary_without_another_primary_call(self):
         intake, initial = self.prepare()
         requests = []
@@ -149,7 +195,7 @@ class EscalationTests(unittest.TestCase):
         final = synthetic_review(intake, initial, first, followup, audit_valid=False, requests=requests)
         self.assertTrue(final['data']['primary']['carried'])
         self.assertEqual(sum(request_parts(w)[0]['id'] == 'reviewer' for w in requests), 1)
-        self.assertEqual(projection(pipeline.dossier(intake, initial, first, followup, final))['scores'], [3.1, 1])
+        self.assertIsNone(projection(pipeline.dossier(intake, initial, first, followup, final))['scores'])
 
     def test_only_primary_followup_carries_audit_without_repeating_region_work(self):
         intake, initial = self.prepare()

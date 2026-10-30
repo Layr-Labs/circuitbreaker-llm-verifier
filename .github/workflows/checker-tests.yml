@@ -4,10 +4,10 @@ permissions:
   contents: read
 jobs:
   checkers:
-    uses: Layr-Labs/llm-verifier/.github/workflows/test-checkers.yml@8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce
+    uses: Layr-Labs/llm-verifier/.github/workflows/test-checkers.yml@c3196332cbd0ea75a8f478673e04a78ae03e581d
     with:
       verifier_repository: Layr-Labs/llm-verifier
-      verifier_revision: 8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce
+      verifier_revision: c3196332cbd0ea75a8f478673e04a78ae03e581d
       root_dir: '.'
     secrets:
       VERIFIER_CHECKOUT_TOKEN: ${{ secrets.VERIFIER_CHECKOUT_TOKEN }}

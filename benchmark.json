@@ -32,7 +32,7 @@
       ],
       "submissionAdmission": {
         "version": 1,
-        "submissionReferencesEnabled": false
+        "submissionReferencesEnabled": true
       },
       "setupCommand": [
         "llm-verifier",
