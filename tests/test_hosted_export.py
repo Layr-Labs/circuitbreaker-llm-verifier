@@ -9,8 +9,10 @@ import unittest
 from unittest.mock import patch
 
 from llm_verifier.artifacts import intake_snapshot
+from llm_verifier.diagnostics import MAX_TEXT
 from llm_verifier.errors import InfrastructureError, VerifierError
 from llm_verifier.files import write_json
+from llm_verifier.jsonutil import canonical, loads
 from llm_verifier.provider import HttpTransport
 from llm_verifier.runner import DockerRunner
 
@@ -42,7 +44,8 @@ class HostedExportTests(unittest.TestCase):
         self.lineage = self.root / "recovery.json"
         self.receipt = self.root / "transfer.json"
 
-    def fixture(self, *, valid=True, simulation=False, original_attempt=1, audit_valid=None, audit_failure=None):
+    def fixture(self, *, valid=True, simulation=False, original_attempt=1, audit_valid=None,
+                audit_failure=None, failure_out=None):
         bound = {"version": VERSION, "convention": CONVENTION,
                  "family": "Synthetic delivery fixture, not a circuit theorem.",
                  "theorem": "SYNTHETIC transport test only.",
@@ -57,7 +60,8 @@ class HostedExportTests(unittest.TestCase):
 
         with patch("tests.synthetic.intake_snapshot", side_effect=hosted_intake):
             record = synthetic_dossier(self.root, bound, manifest, valid=valid, simulation=simulation,
-                                       audit_valid=audit_valid, audit_failure=audit_failure)
+                                       audit_valid=audit_valid, audit_failure=audit_failure,
+                                       failure_out=failure_out)
         write_json(self.dossier, record)
         write_json(self.intake, record["data"]["phases"][0])
         self.descriptors = [{"id": str(100 + i), "name": name, "sha256": str(i + 1) * 64,
@@ -143,6 +147,66 @@ class HostedExportTests(unittest.TestCase):
         self.run_export()
         self.assertEqual(json.loads(self.score.read_text())["scores"], [1, 1])
         self.assertEqual(self.dossier.read_bytes(), original)
+
+    def test_overdeep_malformed_audit_preserves_primary_export_raw_text_and_charges(self):
+        malformed = {"unexpected": "SYNTHETIC invalid report"}
+        for _ in range(24):
+            malformed = {"nested": malformed}
+        # Standalone JSON parses, but nesting it inside review artifacts would
+        # exceed their structural budget. The native provider boundary must fail.
+        self.assertEqual(loads(canonical(malformed)), malformed)
+        raw = json.dumps(malformed)
+        for save in (False, True):
+            with self.subTest(failure_out=save):
+                failure_path = self.root / "review-failure.json" if save else None
+                record = self.fixture(valid=True, audit_failure=malformed, failure_out=failure_path)
+                phase = record["data"]["phases"][2]["data"]
+                self.assertEqual(phase["authority"]["judge"], "primary")
+                self.assertEqual(phase["primary"]["status"], "completed")
+                self.assertTrue(phase["primary"]["review"]["decision"]["judgment"]["valid"])
+                self.assertEqual(phase["escalation"]["status"], "failed")
+                self.assertEqual(phase["comparison"], {"available": False,
+                                 "valid_disagreement": None, "scores_disagreement": None})
+                audit = phase["escalation"]["failure"]
+                self.assertEqual(audit["state"]["error"], "review_output_structure_limit")
+                self.assertEqual([r["member_id"] for r in audit["state"]["reviews"]], ["proof"])
+                self.assertEqual((audit["state"]["provenance"]["attempts"],
+                                  audit["state"]["provenance"]["allotted_completion_tokens"]), (2, 65536))
+                self.assertEqual((phase["provenance"]["attempts"],
+                                  phase["provenance"]["allotted_completion_tokens"]), (3, 98304))
+                calls = {call["member_id"]: call for call in audit["calls"]}
+                self.assertEqual(set(calls), {"planner", "proof"})
+                for call in calls.values():
+                    self.assertEqual(call["grants"], [{"attempt": 1, "completion_tokens": 32768}])
+                planner = calls["planner"]
+                self.assertEqual(planner["outcome"], {"attempts": 1,
+                                 "error": "review_output_structure_limit", "record_sha256": None})
+                outputs = [text for event in planner["events"]
+                           for text in event.get("response", {}).get("outputs", [])]
+                self.assertEqual(outputs, [raw])
+                self.assertLessEqual(len(outputs[0].encode()), MAX_TEXT)
+                originals = {p: p.read_bytes() for p in (self.intake, self.dossier)}
+                if save:
+                    failure = json.loads(failure_path.read_text())
+                    self.assertFalse(failure["data"]["publishable"])
+                    entries = failure["data"]["escalation_checkpoint"]["rounds"][-1]["entries"]
+                    self.assertEqual(entries["primary"], phase["primary"])
+                    self.assertEqual(entries["escalation"], phase["escalation"])
+                    self.assertEqual(len(failure["data"]["calls"]), 3)
+                    self.assertEqual(sum(g["completion_tokens"] for call in failure["data"]["calls"]
+                                         for g in call["grants"]), 98304)
+                    originals[failure_path] = failure_path.read_bytes()
+                expected = self.root / "normal-score.json"
+                with patch.object(HttpTransport, "request", side_effect=AssertionError("No model calls")), \
+                        patch.object(DockerRunner, "run", side_effect=AssertionError("No Docker calls")):
+                    export(self.dossier, expected, intake_path=self.intake)
+                self.run_export()
+                self.assertEqual(self.score.read_bytes(), expected.read_bytes())
+                self.assertEqual(json.loads(self.score.read_text())["scores"], [1, 1])
+                self.assertTrue(json.loads(self.score.read_text())["valid"])
+                self.assertEqual(originals, {p: p.read_bytes() for p in originals})
+                self.assertEqual((self.root / "verifier.json").read_bytes(),
+                                 (ROOT / "verifier.json").read_bytes())
 
     def test_full_rerun_preserves_actual_attempt_without_claiming_recovery_eligibility(self):
         self.fixture(original_attempt=2)

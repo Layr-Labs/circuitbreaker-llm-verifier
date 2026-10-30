@@ -53,7 +53,7 @@ Prepare activation with these explicit inputs:
 - The approved published challenge source SHA, repository
   `Layr-Labs/circuitbreaker-llm-verifier`, root directory `null`, `main` track,
   exact two-objective manifest and policy versions above. Keep verifier pin
-  `87f9420a491ad6c16e76f3df6d4562226cfdb799` and artifact `circuitbreaker-score`.
+  `c3196332cbd0ea75a8f478673e04a78ae03e581d` and artifact `circuitbreaker-score`.
 - A separately selected replacement registration name/source branch, actual
   replacement UUID, access/publication choices and any existing page revision
   used by the authorized rebind. Legacy UUID
@@ -122,8 +122,8 @@ source, schema, synthetic or CI tests.
 
 ## Configured review budget
 
-The hosted integration pins version 0.8.1 at
-`87f9420a491ad6c16e76f3df6d4562226cfdb799`; `verifier.json` selects
+The hosted integration pins version 0.8.2 at
+`c3196332cbd0ea75a8f478673e04a78ae03e581d`; `verifier.json` selects
 `builtin:probabilistic-escalation-v1` with `probability: 1` and `mode: record-only`.
 The explicit primary is `builtin:single-v1`; the audit is
 `builtin:math-decomposed-v1`. Neither child overrides its provider. Every role
@@ -163,9 +163,19 @@ This changes scheduling, not the 23-call allowance or scientific authority.
 New child traces use `dependency-ready-v1`, recording logical group queue times
 and per-call start/finish times; the wrapper remains `parallel-children-v1`.
 An already admitted whole-proof call is drained and retained if planning fails.
-Historical `independent-waves-v1` records keep their fixed-four replay semantics.
-Replay old intake/dossier pairs with their original wheel: implementation identity
-remains strict, so old intake must not be rebound to the new wheel.
+Current review and resume require current wrapper and child trace versions;
+checkpoint metadata cannot select historical replay rules. Historical
+`independent-waves-v1` records retain fixed-four replay only through an explicitly
+selected low-level API. Replay old intake/dossier pairs with their original wheel:
+implementation identity remains strict, so old intake must not be rebound to the
+new wheel.
+
+Malformed parsed output that lacks structural room inside review artifacts fails
+with `review_output_structure_limit`. Its bounded raw text and charged attempts
+remain diagnostic evidence; record-only export retains a completed primary.
+Snapshot-write errors drain and retain both admitted child outcomes before raising
+the original error. An in-progress snapshot remains diagnostic-only and cannot
+be resumed, even when its drained children completed.
 
 Each phase has a hard 1,200-second wall deadline and consumes wall time rather
 than the sum of overlapping calls. Per-call deadlines are capped by remaining

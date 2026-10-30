@@ -70,6 +70,8 @@ same one-to-eight range as runtime validation. Separate failure artifacts
 (`llmv-initial-review-failure` or `llmv-final-review-failure`) are diagnostics,
 not judgments. A record-only dossier can retain failed-audit evidence alongside
 a successful primary; its score is derived only from the primary decision.
+Overdeep malformed audit output is retained as bounded diagnostic text, with its
+attempts charged, rather than embedded as a parsed report that could prevent export.
 
 Each review prompt has a 2 MiB (2,097,152-byte) ceiling, matching the pinned
 verifier's default. Planning includes the original evidence and numbered source;
@@ -102,15 +104,15 @@ uploads after a partial delivery; original review inputs remain immutable.
 Recovery checkpoints freeze the actual delivered artifact IDs and hashes. Older
 runs without this declaration are not eligible for mixed-attempt recovery.
 
-The verifier pin is `87f9420a491ad6c16e76f3df6d4562226cfdb799` (version 0.8.1); the optional
+The verifier pin is `c3196332cbd0ea75a8f478673e04a78ae03e581d` (version 0.8.2); the optional
 structured-claims protocol remains disabled. This source change does not alter
 the existing live benchmark or page.
 
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission
 
-Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/87f9420a491ad6c16e76f3df6d4562226cfdb799/docs/solving.md) and
-[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/87f9420a491ad6c16e76f3df6d4562226cfdb799/skills/llm-verifier-solver/SKILL.md)
+Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/c3196332cbd0ea75a8f478673e04a78ae03e581d/docs/solving.md) and
+[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/c3196332cbd0ea75a8f478673e04a78ae03e581d/skills/llm-verifier-solver/SKILL.md)
 from the same pinned verifier revision as this challenge.
 
 - Use the challenge's verifier revision for `llm-verifier check --root .`.

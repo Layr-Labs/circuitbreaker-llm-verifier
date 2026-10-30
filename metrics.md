@@ -193,7 +193,7 @@ Simulation is rejected by the exporter and has no output.
 Regenerate with `python tools/generate_frontier_fixtures.py`, or use `--check`
 for reproducibility. CI runs schema/wire/parity regressions and the fixture drift
 check with the same pinned verifier wheel. The current pin is
-`87f9420a491ad6c16e76f3df6d4562226cfdb799`; its optional `structured_claims`
+`c3196332cbd0ea75a8f478673e04a78ae03e581d`; its optional `structured_claims`
 protocol remains disabled. Existing joint statements and file binding are
 unchanged. Neither these tests nor this table integration requalifies the
 baseline proof mathematically.
