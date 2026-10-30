@@ -255,16 +255,18 @@ platform's separate checkpoint recovery path.
 
 ## Accepted-submission admission
 
-The source manifest now enables `main.submissionAdmission` with version 1 and
-`submissionReferencesEnabled: true`; `tools/generate_hosted.py` preserves this
+Submission reuse is temporarily disabled pending further work. The source
+manifest sets `main.submissionAdmission` to version 1 and
+`submissionReferencesEnabled: false`; `tools/generate_hosted.py` preserves this
 field through the pinned generator. No verifier pin, provider, scientific policy,
 `structured_claims` setting or attribution-DAG setting changes for reuse.
 
 Existing imported benchmarks need a separate owner-authenticated
 `PATCH /api/benchmarks/CONSUMER_BENCHMARK_ID` using
-`examples/submission-admission-update.json`. Source publication/reimport does not
-replace stored live admission. The owner update creates no evaluation or reorg
-and changes admission for new candidates only. Original snapshots remain binding
+`examples/submission-admission-update.json`. This example disables references;
+an owner can explicitly opt in by setting `submissionReferencesEnabled: true`.
+Source publication/reimport does not replace stored live admission. The owner
+update creates no evaluation or reorg and changes admission for new candidates only. Original snapshots remain binding
 for retries and all rejudgments, including score-only or validity-only reorgs.
 Missing/null/false original admission rejects nonempty `prior_results` before
 resolution with `submission_references_disabled`; later enablement cannot upgrade
@@ -274,7 +276,7 @@ References identify immutable submission IDs and reuse only their original atomi
 claim sets. Intake obtains trusted accepted-result snapshots, and later phases
 never refetch authorization. Access, accepted dependencies and required human
 review still gate reuse. Prior scores or checker witnesses cannot substitute for
-the current candidate's score or checks. The enabled-source fixture tests this
-through native mocked review, current checker execution, finalization and export;
-source manifests, selected wrapper provenance and accepted-only ancestry remain
-bound. No live admission update or reorg is performed by this source change.
+the current candidate's score or checks. The reuse fixture explicitly enables
+references and tests this through native mocked review, current checker execution,
+finalization and export; source manifests, selected wrapper provenance and
+accepted-only ancestry remain bound. No live admission update or reorg is performed by this source change.

@@ -56,15 +56,18 @@ class IntegrationTests(unittest.TestCase):
         self.assertIn("tools/generate_hosted.py --check", checker)
         self.assertNotIn("OPENAI_API_KEY", checker)
 
-    def test_enabled_reference_admission_is_preserved_by_generation(self):
+    def test_disabled_reference_default_and_admission_generation_preservation(self):
         configured = json.loads((ROOT / "benchmark.json").read_text())["tracks"][0]
         enabled = {"version": 1, "submissionReferencesEnabled": True}
-        self.assertEqual(configured["submissionAdmission"], enabled)
+        disabled = {**enabled, "submissionReferencesEnabled": False}
+        self.assertEqual(configured["submissionAdmission"], disabled)
+        example = json.loads((ROOT / "examples/submission-admission-update.json").read_text())
+        self.assertEqual(example, {"submissionAdmission": disabled})
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp) / "source"
             shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__"))
             path = root / "benchmark.json"
-            for admission in (enabled, {**enabled, "submissionReferencesEnabled": False}, None):
+            for admission in (disabled, enabled, None):
                 with self.subTest(admission=admission):
                     manifest = json.loads(path.read_text())
                     manifest["tracks"][0]["submissionAdmission"] = admission
