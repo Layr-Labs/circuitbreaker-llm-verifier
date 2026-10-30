@@ -52,9 +52,12 @@ The audit adapts the offline UCLA Moonshot Math Verifier pattern: a planner
 partitions all source into at most eight regions, a whole-proof reviewer and
 region workers assess the claims, and a defender/adjudicator handles findings.
 No external retrieval is added. Both children inherit the same atomic claim and
-scientific policies. They run concurrently, sharing at most four provider workers,
-23 requests and 753,664 reserved completion tokens across at most one experiment
-follow-up. Identical checker requests are deduplicated; distinct requests must fit
+scientific policies. All dependency-ready calls can run concurrently: the primary,
+planner and whole-proof review can start together, and region reviews can start as
+soon as the plan is ready. The optional `limits.max_concurrent_calls` is omitted;
+there is no fixed four-worker limit. They share 23 requests and 753,664 reserved
+completion tokens across at most one experiment follow-up. Identical checker
+requests are deduplicated; distinct requests must fit
 the existing one-follow-up limit. Each phase retains a 1,200-second wall deadline
 and the pipeline retains 2,400 review seconds. These ceilings do not guarantee
 completion; see [the budget derivation](migration.md#configured-review-budget).
@@ -99,15 +102,15 @@ uploads after a partial delivery; original review inputs remain immutable.
 Recovery checkpoints freeze the actual delivered artifact IDs and hashes. Older
 runs without this declaration are not eligible for mixed-attempt recovery.
 
-The verifier pin is `8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` (version 0.8.0); the optional
+The verifier pin is `87f9420a491ad6c16e76f3df6d4562226cfdb799` (version 0.8.1); the optional
 structured-claims protocol remains disabled. This source change does not alter
 the existing live benchmark or page.
 
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission
 
-Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce/docs/solving.md) and
-[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce/skills/llm-verifier-solver/SKILL.md)
+Read the [solver guide](https://github.com/Layr-Labs/llm-verifier/blob/87f9420a491ad6c16e76f3df6d4562226cfdb799/docs/solving.md) and
+[solver skill](https://github.com/Layr-Labs/llm-verifier/blob/87f9420a491ad6c16e76f3df6d4562226cfdb799/skills/llm-verifier-solver/SKILL.md)
 from the same pinned verifier revision as this challenge.
 
 - Use the challenge's verifier revision for `llm-verifier check --root .`.

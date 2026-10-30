@@ -130,7 +130,13 @@ class HostedExportTests(unittest.TestCase):
         self.assertEqual(phase["escalation"]["status"], "failed")
         failure = phase["escalation"]["failure"]
         self.assertEqual(failure["state"]["error"], "provider_timeout")
-        self.assertEqual(len(failure["calls"]), 1)
+        self.assertEqual(len(failure["calls"]), 2)
+        self.assertEqual([r["member_id"] for r in failure["state"]["reviews"]], ["proof"])
+        execution = failure["state"]["execution"]
+        self.assertEqual(execution["version"], "dependency-ready-v1")
+        calls = [call for group in execution["groups"] for call in group["calls"]]
+        self.assertEqual([(call["member_id"], call["error"]) for call in calls],
+                         [("proof", None), ("planner", "provider_timeout")])
         self.assertEqual(phase["comparison"], {"available": False,
                          "valid_disagreement": None, "scores_disagreement": None})
         original = self.dossier.read_bytes()

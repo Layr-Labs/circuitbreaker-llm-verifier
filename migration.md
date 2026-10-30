@@ -53,7 +53,7 @@ Prepare activation with these explicit inputs:
 - The approved published challenge source SHA, repository
   `Layr-Labs/circuitbreaker-llm-verifier`, root directory `null`, `main` track,
   exact two-objective manifest and policy versions above. Keep verifier pin
-  `8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` and artifact `circuitbreaker-score`.
+  `87f9420a491ad6c16e76f3df6d4562226cfdb799` and artifact `circuitbreaker-score`.
 - A separately selected replacement registration name/source branch, actual
   replacement UUID, access/publication choices and any existing page revision
   used by the authorized rebind. Legacy UUID
@@ -122,8 +122,8 @@ source, schema, synthetic or CI tests.
 
 ## Configured review budget
 
-`verifier.json` pins version 0.8.0 at
-`8a7b8efc6fd7fe43bd9aae6461dc8a5a11d863ce` and selects
+The hosted integration pins version 0.8.1 at
+`87f9420a491ad6c16e76f3df6d4562226cfdb799`; `verifier.json` selects
 `builtin:probabilistic-escalation-v1` with `probability: 1` and `mode: record-only`.
 The explicit primary is `builtin:single-v1`; the audit is
 `builtin:math-decomposed-v1`. Neither child overrides its provider. Every role
@@ -153,11 +153,24 @@ Requests from both children share the single experiment follow-up and identical
 checker requests are deduplicated. A union of distinct requests that exceeds the
 configured limit fails closed.
 
-Both children run concurrently, with at most four provider workers shared by
-the pipeline. Each phase has a hard 1,200-second wall deadline and consumes wall
-time rather than the sum of overlapping calls. Per-call deadlines are capped
-by remaining phase time. These limits do not guarantee that every permitted
-call finishes. The 23-call allowance funds the full path, not extra retries.
+All dependency-ready calls run concurrently by default. The primary, audit
+planner and whole-proof reviewer can overlap; region reviews start when the
+plan is ready, without waiting for the whole-proof reviewer. The optional
+`limits.max_concurrent_calls` is omitted from this challenge. If set upstream,
+it is a global cap of 1–64 calls with continuous slot refill, not fixed waves.
+This changes scheduling, not the 23-call allowance or scientific authority.
+
+New child traces use `dependency-ready-v1`, recording logical group queue times
+and per-call start/finish times; the wrapper remains `parallel-children-v1`.
+An already admitted whole-proof call is drained and retained if planning fails.
+Historical `independent-waves-v1` records keep their fixed-four replay semantics.
+Replay old intake/dossier pairs with their original wheel: implementation identity
+remains strict, so old intake must not be rebound to the new wheel.
+
+Each phase has a hard 1,200-second wall deadline and consumes wall time rather
+than the sum of overlapping calls. Per-call deadlines are capped by remaining
+phase time. These limits do not guarantee that every permitted call finishes.
+The 23-call allowance funds the full path, not extra retries.
 
 There is at most one experiment follow-up; initial and follow-up computation
 each allow 20 seconds, with 40 computation seconds total. Generic source limits
