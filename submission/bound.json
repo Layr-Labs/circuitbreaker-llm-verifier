@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "Total family f_n on {0,1}^n for every integer n>=0. Set f_0=0. For n>=1 let k be the least prime strictly greater than 2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)), m=r*k. Fix once a deterministic Shoup algorithm that on input the prime k in unary outputs a monic irreducible q_k in F_2[Z] of degree k in time polynomial in k. Let K=F_2[Z]/(q_k) with basis 1,Z,...,Z^(k-1). Pad x with m-n zeros and split it into r consecutive blocks of k bits; read block i as an element phi_i(x) of K, its first bit being the constant coefficient (an injective F_2-linear map). Let pi:K->F_2 be the constant-coefficient map. For 1<=i<=r put y_i=phi_i(x)^(2^(i+1)-1) and set f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t is the sum of the products over all t-element subsets of {1,...,r}. This is a single deterministic uniformly defined total family with no per-length advice.",
+  "theorem": "Let d(n)=floor(12*m(n)^(4/5))+1 with m(n) as in the family. For every sufficiently large integer n, every deterministic acyclic fan-in-two circuit over the full binary basis B_2 that computes f_n on all 2^n inputs has at least (7/2)*n - 7*d(n) = (7/2)*n - O(n^(4/5)) gates. Since d(n)=O(n^(4/5))=o(n), liminf as n tends to infinity of C_B2(f_n)/n is at least 7/2 in the full Li-Yang B2 model at actual input length n. The family is in P, hence in NP with empty witnesses, and the language, verifier and witness bound are fixed for all lengths.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
