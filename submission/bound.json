@@ -1,36 +1,18 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total family f defined in proof.md Section 1: f_0=0; for N>=1 let k be the least prime with k^5>=32N^3, m=N-k, r=ceil(m/k), t=ceil(sqrt(r)); if not (k<N, r>=2, r+2<=k) then f_N=0. Otherwise the input is w=(q_0..q_{k-1},x_1..x_m); q(z)=z^k+sum q_j z^j; if the test T(q) [z^(2^k)=z mod q, q(0)=1, q(1)=1] fails, f_N(w)=0; else, in K=F_2[z]/(q), pad x with zeros into r blocks u_i in polynomial basis, y_i=u_i^(2^(r+2-i)-1), and f_N(w)=Tr(E_t(y_1,...,y_r)), the trace of the t-th elementary symmetric polynomial.",
+  "theorem": "For this one total family, computable in deterministic polynomial time (hence in NP with the empty witness), C_B2(f_N)>=3N-252*N^(4/5) for every integer N>=2^29 at actual input length N in the full Li-Yang B2 model; hence C_B2(f_N)>=(3-o(1))N at every sufficiently large integer length.",
   "guarantee": {
     "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
-    },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    }
+    "coefficient": {"numerator": "3", "denominator": "1"},
+    "exponent": {"numerator": "1", "denominator": "1"},
+    "log_exponent": {"numerator": "0", "denominator": "1"},
+    "loglog_exponent": {"numerator": "0", "denominator": "1"}
   },
   "projection": {
     "kind": "finite",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
-    },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    }
+    "coefficient": {"numerator": "3", "denominator": "1"},
+    "exponent": {"numerator": "1", "denominator": "1"}
   }
 }
