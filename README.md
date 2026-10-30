@@ -41,12 +41,12 @@ is retained only for transport regression and is not an accepted proof. The proo
 checker and scientific family/model conventions are preserved.
 
 Review uses `builtin:probabilistic-escalation-v1` with probability **1 (100%)**
-and `record-only` mode. Its explicit children are `builtin:single-v1` (primary)
-and `builtin:math-decomposed-v1` (audit), with no child provider overrides. Both
-run for every submission. **The primary decision controls acceptance and scores**;
-a completed audit records its own decision and any disagreement. An audit failure
-retains diagnostics and marks the comparison unavailable; it does not replace a
-completed primary decision. A failed primary does not yield a judgment.
+and `override` mode. Its explicit children are `builtin:single-v1` (primary)
+and `builtin:math-decomposed-v1` (Moonshot audit), with no child provider overrides.
+Both run for every submission. **The Moonshot decision controls acceptance and
+scores**, including when the two judges disagree. Their decisions and comparison
+remain in the dossier. An audit failure retains diagnostics but cannot yield a
+score from a successful primary. A failed primary also prevents a judgment.
 
 The audit adapts the offline UCLA Moonshot Math Verifier pattern: a planner
 partitions all source into at most eight regions, a whole-proof reviewer and
@@ -68,10 +68,10 @@ limit applies despite the generic `max_files` ceiling of 32. The baseline uses
 three files; the existing candidate uses seven. The planner schema enforces the
 same one-to-eight range as runtime validation. Separate failure artifacts
 (`llmv-initial-review-failure` or `llmv-final-review-failure`) are diagnostics,
-not judgments. A record-only dossier can retain failed-audit evidence alongside
-a successful primary; its score is derived only from the primary decision.
-Overdeep malformed audit output is retained as bounded diagnostic text, with its
-attempts charged, rather than embedded as a parsed report that could prevent export.
+not judgments. Failed-audit diagnostics can retain a successful primary, but the
+configured override requires the Moonshot audit to complete before scoring.
+Overdeep malformed audit output is retained as bounded diagnostic text with its
+attempts charged.
 
 Each review prompt has a 2 MiB (2,097,152-byte) ceiling, matching the pinned
 verifier's default. Planning includes the original evidence and numbered source;
@@ -107,6 +107,36 @@ runs without this declaration are not eligible for mixed-attempt recovery.
 The verifier pin is `c3196332cbd0ea75a8f478673e04a78ae03e581d` (version 0.8.2); the optional
 structured-claims protocol remains disabled. This source change does not alter
 the existing live benchmark or page.
+
+## Reusing accepted judgments
+
+The `main` track declares `submissionAdmission: {"version": 1,
+"submissionReferencesEnabled": true}`. A solver can cite up to 16 immutable
+submission IDs in the original `submission/submission.json`:
+
+```json
+"prior_results": [{"submission_id": "SOURCE_SUBMISSION_ID"}]
+```
+
+Explain how the source's original declared claims support the current proof.
+Hosted intake resolves references through the platform and freezes the accepted
+source bytes; copied dossiers or discovery responses cannot authorize reuse.
+Source visibility, acceptance, dependency checks and any required human review
+still apply. Prior scores and checker witnesses do not replace current scoring
+or required checks, and incidental source prose is not an accepted claim.
+
+For an **already imported benchmark**, changing or reimporting this source does
+not update live admission. Its owner must separately PATCH that benchmark with
+[the admission body](examples/submission-admission-update.json). This update
+requires no reorg and applies only to **new candidates**. Retries and rejudgments
+keep their original admission snapshots; an originally disabled candidate must
+be submitted anew to use references. Local intake likewise needs explicit enabled
+`YUKON_EVALUATION.admission` plus trusted resolution; `benchmark.json` is not an
+intake authorization fallback. Reuse is separate from attribution declarations;
+this change does not alter DAG settings or enable `structured_claims`.
+
+See the pinned verifier's [admission contract](https://github.com/Layr-Labs/llm-verifier/blob/c3196332cbd0ea75a8f478673e04a78ae03e581d/docs/submission-admission.md)
+and [prior-result format](https://github.com/Layr-Labs/llm-verifier/blob/c3196332cbd0ea75a8f478673e04a78ae03e581d/docs/prior-results.md).
 
 <!-- llm-verifier:solver-guidance:begin -->
 ## Preparing a submission

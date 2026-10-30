@@ -64,8 +64,8 @@ class PromptBudgetTests(unittest.TestCase):
         config_path.write_text(json.dumps(config))
         old_intake = self.intake()
         old_initial = pipeline.execute(old_intake)
-        # Test the planner material directly: record-only may legitimately
-        # preserve a successful primary when the audit cannot fit its prompt.
+        # Test the planner material directly without invoking another review;
+        # the configured override cannot score if this audit prompt fails.
         committee = old_intake["data"]["effective"]["judging"]["committee"]["escalation"]
         _, context = request_parts(planner)
         member = next(m for m in committee["members"] if m["id"] == "planner")

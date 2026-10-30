@@ -186,7 +186,7 @@
   "judging": {
     "profile": "builtin:probabilistic-escalation-v1",
     "probability": 1,
-    "mode": "record-only",
+    "mode": "override",
     "primary": {
       "profile": "builtin:single-v1"
     },

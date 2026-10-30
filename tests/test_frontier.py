@@ -20,9 +20,9 @@ from tools.generate_hosted import VERIFIER_REVISION
 
 ROOT = Path(__file__).resolve().parents[1]
 PINNED_RICH_HASHES = {
-    "finite": "3fa14b78f7379eeaeb8a536eae83a0607c71181ddb47fefb4c868e566f647dee",
-    "lane": "fb4a663314b10df58c65ff07318663249e14f3cd1e25ec3ee2de821fce77d2ee",
-    "global": "b4b5614e85669af44af5a724bc13f937fcf3da2372a404add23f098dc8146efe"
+    "finite": "67a7472ee2b02fac148c53f81fef20dcdf69317a8e1cce84a84b2a37e712f678",
+    "lane": "455f1cf0b1bbe6ac0754bfa37d6477040ccc0e0a66c19eb2c8f88b99b63162f2",
+    "global": "49e416d0a8fe793a2ed0de0be5c524acb3765de7f3d2ea7abbc0f4f971031c6e"
 }
 
 

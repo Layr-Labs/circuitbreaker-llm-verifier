@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+from llm_verifier import pipeline
 from llm_verifier.artifacts import intake_snapshot
 from llm_verifier.diagnostics import MAX_TEXT
 from llm_verifier.errors import InfrastructureError, VerifierError
@@ -45,7 +46,11 @@ class HostedExportTests(unittest.TestCase):
         self.receipt = self.root / "transfer.json"
 
     def fixture(self, *, valid=True, simulation=False, original_attempt=1, audit_valid=None,
-                audit_failure=None, failure_out=None):
+                audit_failure=None, failure_out=None, mode=None):
+        self.config = json.loads((ROOT / "verifier.json").read_text())
+        if mode is not None:
+            self.config["judging"]["mode"] = mode
+        write_json(self.root / "verifier.json", self.config)
         bound = {"version": VERSION, "convention": CONVENTION,
                  "family": "Synthetic delivery fixture, not a circuit theorem.",
                  "theorem": "SYNTHETIC transport test only.",
@@ -111,8 +116,58 @@ class HostedExportTests(unittest.TestCase):
                     {"artifactName": name, "path": path.name, "sha256": file_hash(path)}
                     for name, path in zip(ARTIFACT_NAMES, (self.wheel, self.intake, self.dossier))])
 
+    def test_default_override_exports_moonshot_decision_and_selected_wrapper_provenance(self):
+        for primary_valid, audit_valid in ((True, False), (False, True)):
+            with self.subTest(primary=primary_valid, moonshot=audit_valid):
+                record = self.fixture(valid=primary_valid, audit_valid=audit_valid)
+                selected = record["data"]["phases"][2]
+                phase = selected["data"]
+                self.assertEqual(self.config["judging"]["mode"], "override")
+                self.assertEqual(phase["authority"]["judge"], "escalation")
+                self.assertEqual(phase["decision"], phase["escalation"]["review"]["decision"])
+                self.assertTrue(phase["comparison"]["valid_disagreement"])
+                self.assertEqual(phase["primary"]["review"]["decision"]["judgment"]["valid"], primary_valid)
+                self.assertEqual(phase["escalation"]["review"]["decision"]["judgment"]["valid"], audit_valid)
+                self.run_export()
+                score = json.loads(self.score.read_text())
+                self.assertEqual(score["valid"], audit_valid)
+                self.assertEqual(score["scores"], [1, 1] if audit_valid else None)
+                if audit_valid:
+                    bundle = pipeline.export_results(record)
+                    self.assertEqual(record["data"]["selected_review_sha256"], selected["sha256"])
+                    self.assertEqual(bundle["source"]["review_sha256"], selected["sha256"])
+                    self.assertEqual(bundle["source"]["manifest"], record["data"]["phases"][0]["data"]["files"]["submission.json"])
+                    self.assertEqual(bundle["judgment"], {"valid": True, "reason": record["data"]["judgment"]["reason"]})
+                else:
+                    with self.assertRaisesRegex(VerifierError, "final_accepted_required"):
+                        pipeline.export_results(record)
+
+    def test_default_override_audit_failure_cannot_export_primary_score(self):
+        nested = {"unexpected": "SYNTHETIC invalid audit"}
+        for _ in range(24):
+            nested = {"nested": nested}
+        for error, expected in ((InfrastructureError("provider_timeout"), "provider_timeout"),
+                                (nested, "review_output_structure_limit")):
+            with self.subTest(error=expected):
+                failure_path = self.root / "failed-audit.json"
+                with self.assertRaisesRegex(InfrastructureError, expected):
+                    self.fixture(valid=True, audit_failure=error, failure_out=failure_path)
+                failure = json.loads(failure_path.read_text())
+                entries = failure["data"]["escalation_checkpoint"]["rounds"][-1]["entries"]
+                self.assertEqual(entries["primary"]["status"], "completed")
+                self.assertTrue(entries["primary"]["review"]["decision"]["judgment"]["valid"])
+                self.assertEqual(entries["escalation"]["status"], "failed")
+                self.assertFalse(self.dossier.exists())
+                self.assertFalse(failure["data"]["publishable"])
+                self.score.write_text("stale score must be removed")
+                with self.assertRaises(VerifierError):
+                    export(failure_path, self.score)
+                self.assertFalse(self.score.exists())
+                with self.assertRaises(VerifierError):
+                    pipeline.export_results(failure)
+
     def test_record_only_disagreement_exports_primary_and_retains_both_decisions(self):
-        record = self.fixture(valid=True, audit_valid=False)
+        record = self.fixture(valid=True, audit_valid=False, mode="record-only")
         phase = record["data"]["phases"][2]["data"]
         self.assertTrue(phase["selection"]["selected"])
         self.assertEqual(phase["authority"]["judge"], "primary")
@@ -128,7 +183,7 @@ class HostedExportTests(unittest.TestCase):
         self.assertEqual(self.dossier.read_bytes(), original)
 
     def test_record_only_failed_audit_exports_primary_without_completed_comparison(self):
-        record = self.fixture(valid=True, audit_failure=InfrastructureError("provider_timeout"))
+        record = self.fixture(valid=True, audit_failure=InfrastructureError("provider_timeout"), mode="record-only")
         phase = record["data"]["phases"][2]["data"]
         self.assertEqual(phase["authority"]["judge"], "primary")
         self.assertEqual(phase["escalation"]["status"], "failed")
@@ -159,7 +214,8 @@ class HostedExportTests(unittest.TestCase):
         for save in (False, True):
             with self.subTest(failure_out=save):
                 failure_path = self.root / "review-failure.json" if save else None
-                record = self.fixture(valid=True, audit_failure=malformed, failure_out=failure_path)
+                record = self.fixture(valid=True, audit_failure=malformed, failure_out=failure_path,
+                                      mode="record-only")
                 phase = record["data"]["phases"][2]["data"]
                 self.assertEqual(phase["authority"]["judge"], "primary")
                 self.assertEqual(phase["primary"]["status"], "completed")
@@ -205,8 +261,10 @@ class HostedExportTests(unittest.TestCase):
                 self.assertEqual(json.loads(self.score.read_text())["scores"], [1, 1])
                 self.assertTrue(json.loads(self.score.read_text())["valid"])
                 self.assertEqual(originals, {p: p.read_bytes() for p in originals})
-                self.assertEqual((self.root / "verifier.json").read_bytes(),
-                                 (ROOT / "verifier.json").read_bytes())
+                self.assertEqual(json.loads((self.root / "verifier.json").read_text()), self.config)
+                expected = json.loads((ROOT / "verifier.json").read_text())
+                expected["judging"]["mode"] = "record-only"
+                self.assertEqual(self.config, expected)
 
     def test_full_rerun_preserves_actual_attempt_without_claiming_recovery_eligibility(self):
         self.fixture(original_attempt=2)

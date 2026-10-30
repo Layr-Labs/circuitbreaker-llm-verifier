@@ -8,7 +8,7 @@ import tempfile
 import unittest
 
 from check_submission import check_submission
-from tools.generate_hosted import BASELINE_RECOVERY, VERIFIER_REVISION, check_generated
+from tools.generate_hosted import BASELINE_RECOVERY, VERIFIER_REVISION, check_generated, generate
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -55,6 +55,22 @@ class IntegrationTests(unittest.TestCase):
         self.assertIn("python\" -m unittest -v", checker)
         self.assertIn("tools/generate_hosted.py --check", checker)
         self.assertNotIn("OPENAI_API_KEY", checker)
+
+    def test_enabled_reference_admission_is_preserved_by_generation(self):
+        configured = json.loads((ROOT / "benchmark.json").read_text())["tracks"][0]
+        enabled = {"version": 1, "submissionReferencesEnabled": True}
+        self.assertEqual(configured["submissionAdmission"], enabled)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp) / "source"
+            shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+            path = root / "benchmark.json"
+            for admission in (enabled, {**enabled, "submissionReferencesEnabled": False}, None):
+                with self.subTest(admission=admission):
+                    manifest = json.loads(path.read_text())
+                    manifest["tracks"][0]["submissionAdmission"] = admission
+                    path.write_text(json.dumps(manifest))
+                    generate(root)
+                    self.assertEqual(json.loads(path.read_text())["tracks"][0]["submissionAdmission"], admission)
 
     def test_regeneration_has_no_drift(self):
         check_generated(ROOT)
