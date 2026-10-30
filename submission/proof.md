@@ -83,6 +83,19 @@ it. Retuning this LP alone cannot advance the record; the certificate is not a
 barrier to another proof. Passing the LP checker certifies only these arithmetic
 claims, not the full circuit theorem, NP construction or exhaustive case analysis.
 
+## Appendix: explicit remainder and limit check (editorial, no new claim)
+
+Let d(n)=floor(6*n^(4/5))+1. The proved bound is |C| >= (31/10)n - R(n) with
+R(n) = (261/10)*d(n) + 128/5. Since d(n) <= 6*n^(4/5)+1, we get
+R(n) <= (1566/10)*n^(4/5) + 261/10 + 128/5 = 156.6*n^(4/5) + 51.5, so
+R(n)/n <= 156.6*n^(-1/5) + 51.5/n -> 0. Hence for every epsilon>0 there is
+N_epsilon with |C| >= (31/10 - epsilon)*n for ALL integers n >= N_epsilon,
+which is exactly liminf C_B2(f_n)/n >= 31/10 over every sufficiently large length,
+not a sparse subsequence. The bound is monotone-free: it uses only the pointwise
+inequality at each n, so no averaging over lengths is needed. The exponent p=1 is
+attained trivially and no logarithmic factor is claimed (q=r=0). This appendix
+restates the existing derivation; the theorem and the family are unchanged.
+
 ## Sources
 
 - LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
