@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total BK/Shoup family defined in proof.md (identical to the starting seed's family): f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
+  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=3n-4*floor(6*n^(4/5))-4 for every sufficiently large integer length n=|x| in the full Li–Yang B2 model, so C_B2(f_n)>=3n-o(n). Proof: the Ben-Sasson–Kopparty affine-disperser property (f_n nonconstant on affine subspaces of dimension >6n^(4/5)) plus a self-contained gate-elimination argument showing any B2 circuit for a function nonconstant on all affine subspaces of dimension >d has at least 3n-4d-4 gates.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "3",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "3",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
