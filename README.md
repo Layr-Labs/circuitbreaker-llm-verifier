@@ -110,9 +110,11 @@ the existing live benchmark or page.
 
 ## Reusing accepted judgments
 
+Submission reuse is temporarily disabled by default while it needs further work.
 The `main` track declares `submissionAdmission: {"version": 1,
-"submissionReferencesEnabled": true}`. A solver can cite up to 16 immutable
-submission IDs in the original `submission/submission.json`:
+"submissionReferencesEnabled": false}`. After explicit owner opt-in, a solver
+can cite up to 16 immutable submission IDs in the original
+`submission/submission.json`:
 
 ```json
 "prior_results": [{"submission_id": "SOURCE_SUBMISSION_ID"}]
@@ -127,8 +129,10 @@ or required checks, and incidental source prose is not an accepted claim.
 
 For an **already imported benchmark**, changing or reimporting this source does
 not update live admission. Its owner must separately PATCH that benchmark with
-[the admission body](examples/submission-admission-update.json). This update
-requires no reorg and applies only to **new candidates**. Retries and rejudgments
+[the admission body](examples/submission-admission-update.json), which now disables
+references. Explicit opt-in remains possible by changing its
+`submissionReferencesEnabled` value to `true`. An admission update requires no
+reorg and applies only to **new candidates**. Retries and rejudgments
 keep their original admission snapshots; an originally disabled candidate must
 be submitted anew to use references. Local intake likewise needs explicit enabled
 `YUKON_EVALUATION.admission` plus trusted resolution; `benchmark.json` is not an

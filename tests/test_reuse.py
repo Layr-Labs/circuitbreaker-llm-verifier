@@ -39,12 +39,16 @@ class ReuseTests(unittest.TestCase):
         self.addCleanup(temp.cleanup)
         self.root = Path(temp.name)
 
-    def package(self, name, coefficient, prior=False):
+    def package(self, name, coefficient, prior=False, *, admission=None):
         root = self.root / name
         (root / "submission").mkdir(parents=True)
         for filename in ("verifier.json", "rules.md", "benchmark.json"):
             shutil.copyfile(ROOT / filename, root / filename)
         shutil.copytree(ROOT / "checkers", root / "checkers")
+        if admission is not None:
+            benchmark = json.loads((root / "benchmark.json").read_text())
+            benchmark["tracks"][0]["submissionAdmission"] = admission
+            write_json(root / "benchmark.json", benchmark)
         bound = {"version": VERSION, "convention": CONVENTION,
                  "family": "SYNTHETIC reuse fixture; no circuit theorem.",
                  "theorem": "SYNTHETIC current declaration, not a scientific judgment.",
@@ -79,7 +83,7 @@ class ReuseTests(unittest.TestCase):
                                  "submitted_at": "2020-01-01T00:00:00Z", "completed_at": "2026-10-29T00:00:00Z",
                                  "bundle": {"format": FORMAT, "sha256": sha(raw_bytes), "bytes": len(raw_bytes), "text": raw_bundle}}],
                     "ancestors": []}
-        consumer, _, manifest = self.package("consumer", Fraction(7, 2), prior=True)
+        consumer, _, manifest = self.package("consumer", Fraction(7, 2), prior=True, admission=ON)
         # The current checker still runs; prior score 9 cannot replace current 3.5.
         manifest["checks"] = json.loads((ROOT / "submission/submission.json").read_text())["checks"]
         write_json(consumer / "submission/submission.json", manifest)
@@ -127,7 +131,7 @@ class ReuseTests(unittest.TestCase):
                          {"version": 1, "snapshot_id": "synthetic-frozen-snapshot"})
 
     def test_enabled_manifest_cannot_upgrade_original_disabled_admission(self):
-        root, _, _ = self.package("disabled-original", Fraction(7, 2), prior=True)
+        root, _, _ = self.package("disabled-original", Fraction(7, 2), prior=True, admission=ON)
         self.assertEqual(json.loads((root / "benchmark.json").read_text())["tracks"][0]["submissionAdmission"], ON)
         for admission in (OFF, None, "missing"):
             original = self.evaluation(root, admission)
