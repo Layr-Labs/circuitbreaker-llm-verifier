@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "One fixed total family f_N on {0,1}^N, defined for every integer N>=1 by proof.md Section 1. Set k(m) = the least prime > 2*m^(3/5) and N(m) = m + k(m); let m(N) be the largest m with N(m) <= N. Read the input as a prefix q in {0,1}^k with k = k(m(N)), a payload y in {0,1}^m with m = m(N), and an ignored tail. Let Q(Z) = Z^k + sum_{i<k} q_i Z^i. If Q is not irreducible over F_2 the value is 0; otherwise, in F = F_2[Z]/(Q) with polynomial basis 1..Z^(k-1), split the payload into r = ceil(m/k) k-bit blocks (zero-padded last block) giving phi_i(y) in F, put y_i = phi_i(y)^(2^(i+1)-1), let Sym_r^t be the t-th elementary symmetric polynomial with t = ceil(sqrt(r)), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The same deterministic polynomial-time algorithm (prime scan, Rabin irreducibility test, field arithmetic, division-free symmetric-polynomial recurrence) computes every f_N; the language is in P, hence in NP with empty witnesses.",
+  "theorem": "For this one fixed total uniform family, at actual input length N and in the full Li-Yang B2 model, C_B2(f_N) >= (7/2)*N - 67*N^(4/5) for every integer N >= 2^10; hence liminf over N of C_B2(f_N)/N >= 7/2, so the declared finite projection (7/2, 1) holds. Proof: fix a valid prefix and the zero tail, restricting to an m(N)-dimensional affine slice on which f_N is the Ben-Sasson-Kopparty affine disperser of dimension floor(6*m^(4/5))+1; the slice circuit computes that disperser, so the gate elimination theorem for affine dispersers (framework.md, Theorem A: every B2 circuit for an affine disperser of dimension d has at least 3.5n-7d gates) gives C_B2(f_N) >= (7/2)*m(N) - 42*m(N)^(4/5) - 7, and m(N) >= N - 7*N^(3/5) - 1 yields the stated remainder. Both directions of NP membership, all integer lengths and an explicit N_epsilon = max(2^10, ceil((67/epsilon)^5)) are established in proof.md.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
