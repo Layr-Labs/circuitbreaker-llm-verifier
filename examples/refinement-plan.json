@@ -1,0 +1,76 @@
+{
+  "version": "circuitbreaker-refinement-plan-v1",
+  "records": [
+    {
+      "id": "synthetic-example-only",
+      "bundle": "trusted/original-bundle",
+      "downloadReceiptSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "platform": "trusted/selected-submission.json",
+      "platformSha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "originalSource": "trusted/original-source",
+      "originalPython": "trusted/original-venv/bin/python",
+      "targetBound": {
+        "version": "circuitbreaker-expression-v2",
+        "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "family": "SYNTHETIC shape example; no theorem or approval.",
+        "theorem": "SYNTHETIC eventual 4n - 7sqrt(n) example; no mathematical acceptance.",
+        "guarantee": {
+          "kind": "eventual_lower_bound",
+          "leading": {
+            "kind": "polynomial_log",
+            "coefficient": {
+              "numerator": "4",
+              "denominator": "1"
+            },
+            "exponent": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "log_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "loglog_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            }
+          },
+          "remainder": {
+            "kind": "explicit",
+            "terms": [
+              {
+                "coefficient": {
+                  "numerator": "7",
+                  "denominator": "1"
+                },
+                "exponent": {
+                  "numerator": "1",
+                  "denominator": "2"
+                },
+                "log_exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                },
+                "loglog_exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                }
+              }
+            ]
+          }
+        },
+        "projection": {
+          "kind": "finite",
+          "coefficient": {
+            "numerator": "4",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        }
+      }
+    }
+  ]
+}

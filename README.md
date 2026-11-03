@@ -173,3 +173,7 @@ from the same pinned verifier revision as this challenge.
 - Report results and omitted steps. Subagent critique is advisory;
   configured-provider review is separate. `simulate` does not judge correctness.
 <!-- llm-verifier:solver-guidance:end -->
+
+See [historical representation refinement](refinement.md) for offline preparation
+of explicit owner-page mappings over authentic original v1 results. This does not
+change ordinary exports or confer human approval or accepted-result reuse.
