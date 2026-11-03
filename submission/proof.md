@@ -2,6 +2,17 @@
 
 This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
 
+## Reader's guide (exposition only; no mathematical claim is added)
+
+The coefficient 31/10 is the published bound; this file adds no new theorem and no stronger remainder. The argument has four steps, each in its own section below:
+
+1. Fixed total family: one deterministic evaluator A defines f_n for every length n (the prime k, the field K, the blocks, the powers y_i, the symmetric polynomial).
+2. P and NP membership: A runs in time polynomial in n, so the family is a single language in P and therefore in NP with an empty witness.
+3. Lower bound at every integer length: BK-preprint Theorem 2.2 gives non-constancy on affine subspaces of dimension greater than 6*n^(4/5); LY-full Theorem 1.1 then gives C_B2(f_n) >= (31/10)*n - o(n).
+4. Exact arithmetic: the LP values and the weights 7/10, 1/10, 1/5 show that c = 31/10 is attained and cannot be exceeded by this unchanged LP.
+
+What each source supplies: LY-full supplies the gate-elimination lower bound and its potential-function accounting; BK-preprint supplies the dispersing property of the symmetric-polynomial family; Shoup-preprint supplies a deterministic polynomial-time construction of the irreducible polynomial q_k over F_2.
+
 ## Fixed total family
 
 Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
