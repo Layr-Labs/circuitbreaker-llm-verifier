@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total MOD3 family defined in proof.md Section 1: L = {x in {0,1}^* : the number of ones in x is divisible by 3}; f_n(x)=1 iff |x|_1 = 0 (mod 3) for every integer n>=0 (f_0=1). It is decided at every length by one fixed linear-time counter-mod-3 evaluator, and V(x,w)=1 iff w is empty and the evaluator accepts x, with witness bound W=0.",
+  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=2n-3 for every integer n>=2 in the full Li–Yang B2 model (proved even for circuits with free constant source nodes), hence C_B2(f_n)>=2n-o(n) at every sufficiently large integer length n=|x|.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "2",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "2",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
