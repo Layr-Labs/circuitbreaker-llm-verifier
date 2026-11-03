@@ -322,3 +322,12 @@ been requalified. No acceptance is extracted from prose, inferred from a liminf,
 or obtained by relabelling v1. Identical numeric scores do not prove an identical
 remainder. A score-only reorg is operationally separate and needs explicit live
 authorization after source/consumer review; this implementation performs none.
+
+## Existing historical results
+
+The optional [owner-page representation refinement](refinement.md) prepares
+faithful v2 transcriptions of an authenticated already-covered full theorem. It
+keeps original v1 outputs, review identities and provisional status immutable.
+This bounded path uses existing selected results and requires no registration,
+reorg, new scoring execution or new model review. Owner publication of an exact
+page configuration is separate from offline preparation.

@@ -1,0 +1,264 @@
+{
+  "notice": "Synthetic transport only; no scientific approval or real submission. Output assembly uses synthetic replay report, not authenticated downloads.",
+  "representationRefinements": {
+    "records": [
+      {
+        "audit": {
+          "manifestSha256": "2672079c31cec2b1fcded490a95ca6afb251bb5406e8750f02b33bec6492bb1b",
+          "receiptSha256": "33df94cdec54fb44581c9790dabbc95bceb860b34547e651e65c04799cf5cead"
+        },
+        "id": "synthetic-golden",
+        "origin": {
+          "benchmarkId": "consumer-benchmark",
+          "candidateKey": "digest:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "dossierSha256": "056b4eefbc7bc52fdfd9531fb86a322140446895f851a4d6effc24102671f1a2",
+          "evaluationId": "consumer-evaluation",
+          "intakeSha256": "7acd01c12b0d4c7602adbabbb0a27f9f9db52382b3f377a338ebb4b5c7f4fcaa",
+          "originalEnvelopeSha256": "c7436d8a60d1a7769e1aedcd584e4af5672a9a3d6fb90082b3f94b387267780c",
+          "originalRichSha256": "79b093e7957312387365f4343ad2b8273045e184d516aebfa9f0988e65114e16",
+          "packetId": "synthetic-packet",
+          "scoreEvidence": {
+            "commitSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "evaluatedAt": "2026-01-01T00:00:00Z",
+            "evaluatorId": "consumer-evaluation",
+            "jobId": "consumer-job",
+            "policyVersionId": "synthetic-policy",
+            "resultId": "synthetic-score-result",
+            "sourceRef": "2cd3a17f3f296b7f0ac248a63a9b54a0fabdf851"
+          },
+          "sourceSha256": "4c4f355f073b7380e8e17363f7819b5e137fb99dfc648089db0d1d769e02e6c0",
+          "submissionId": "22222222-2222-4222-8222-222222222222",
+          "validityEvidence": {
+            "commitSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "evaluatedAt": "2026-01-01T00:00:00Z",
+            "evaluatorId": "consumer-evaluation",
+            "jobId": "consumer-job",
+            "policyVersionId": "synthetic-policy",
+            "resultId": "synthetic-validity-result",
+            "sourceRef": "2cd3a17f3f296b7f0ac248a63a9b54a0fabdf851"
+          },
+          "validityVersionId": "synthetic-validity-policy"
+        },
+        "recordSha256": "dfe2ff7db54128af361b11cd3381e62a2ec8d5d52ce3ccf98dccfdd7aec1ea16",
+        "targetBound": {
+          "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+          "family": "SYNTHETIC language \u2014 transport only \ud83d\ude00.",
+          "guarantee": {
+            "kind": "eventual_lower_bound",
+            "leading": {
+              "coefficient": {
+                "denominator": "1",
+                "numerator": "4"
+              },
+              "exponent": {
+                "denominator": "1",
+                "numerator": "1"
+              },
+              "kind": "polynomial_log",
+              "log_exponent": {
+                "denominator": "1",
+                "numerator": "0"
+              },
+              "loglog_exponent": {
+                "denominator": "1",
+                "numerator": "0"
+              }
+            },
+            "remainder": {
+              "kind": "explicit",
+              "terms": [
+                {
+                  "coefficient": {
+                    "denominator": "1",
+                    "numerator": "7"
+                  },
+                  "exponent": {
+                    "denominator": "2",
+                    "numerator": "1"
+                  },
+                  "log_exponent": {
+                    "denominator": "1",
+                    "numerator": "0"
+                  },
+                  "loglog_exponent": {
+                    "denominator": "1",
+                    "numerator": "0"
+                  }
+                }
+              ]
+            }
+          },
+          "projection": {
+            "coefficient": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "exponent": {
+              "denominator": "1",
+              "numerator": "1"
+            },
+            "kind": "finite"
+          },
+          "theorem": "SYNTHETIC: eventual 4n - 7\u221an. DEL: \u007f. No theorem or approval asserted.",
+          "version": "circuitbreaker-expression-v2"
+        }
+      }
+    ],
+    "version": "circuitbreaker-owner-refinements-v1"
+  },
+  "submission": {
+    "benchmarkId": "consumer-benchmark",
+    "evaluation": {
+      "candidateKey": "digest:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "evaluationId": "consumer-evaluation",
+      "human": null,
+      "id": "synthetic-packet",
+      "scores": {
+        "evidence": {
+          "commitSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "evaluatedAt": "2026-01-01T00:00:00Z",
+          "evaluatorId": "consumer-evaluation",
+          "jobId": "consumer-job",
+          "policyVersionId": "synthetic-policy",
+          "resultId": "synthetic-score-result",
+          "sourceRef": "2cd3a17f3f296b7f0ac248a63a9b54a0fabdf851"
+        },
+        "values": [
+          4.0,
+          1.0
+        ]
+      },
+      "validity": {
+        "evidence": {
+          "commitSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "evaluatedAt": "2026-01-01T00:00:00Z",
+          "evaluatorId": "consumer-evaluation",
+          "jobId": "consumer-job",
+          "policyVersionId": "synthetic-policy",
+          "resultId": "synthetic-validity-result",
+          "sourceRef": "2cd3a17f3f296b7f0ac248a63a9b54a0fabdf851"
+        },
+        "reason": "SYNTHETIC fixture; not a scientific verdict.",
+        "valid": true
+      },
+      "validityVersionId": "synthetic-validity-policy"
+    },
+    "id": "22222222-2222-4222-8222-222222222222",
+    "officialMetrics": {
+      "circuitbreaker": {
+        "bound": {
+          "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+          "family": "SYNTHETIC language \u2014 transport only \ud83d\ude00.",
+          "guarantee": {
+            "coefficient": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "exponent": {
+              "denominator": "1",
+              "numerator": "1"
+            },
+            "kind": "polynomial_log",
+            "log_exponent": {
+              "denominator": "1",
+              "numerator": "0"
+            },
+            "loglog_exponent": {
+              "denominator": "1",
+              "numerator": "0"
+            }
+          },
+          "projection": {
+            "coefficient": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "exponent": {
+              "denominator": "1",
+              "numerator": "1"
+            },
+            "kind": "finite"
+          },
+          "theorem": "SYNTHETIC: eventual 4n - 7\u221an. DEL: \u007f. No theorem or approval asserted.",
+          "version": "circuitbreaker-expression-v1"
+        },
+        "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "dossier_sha256": "056b4eefbc7bc52fdfd9531fb86a322140446895f851a4d6effc24102671f1a2",
+        "evidence": {
+          "bound.json": "9ffbba5a4db05ed7af5fd383748c38f06e5c452b383d3c93ebea086587d940dd",
+          "proof.md": "4394599bdeef2de5bb60bcfe19af281e43b901d10637f1afb6ab5dddfa7f43d7"
+        },
+        "intake_sha256": "7acd01c12b0d4c7602adbabbb0a27f9f9db52382b3f377a338ebb4b5c7f4fcaa",
+        "score_records": [
+          {
+            "objective": "gate_coefficient",
+            "projection": "finite",
+            "record": {
+              "denominator": "1",
+              "numerator": "4"
+            },
+            "source_sha256": "4c4f355f073b7380e8e17363f7819b5e137fb99dfc648089db0d1d769e02e6c0"
+          },
+          {
+            "objective": "gate_exponent",
+            "projection": "finite",
+            "record": {
+              "denominator": "1",
+              "numerator": "1"
+            },
+            "source_sha256": "51e723a8b13db79c55f69b14148e836c927d082a8524d80c6b6467b1ac342f7b"
+          }
+        ],
+        "selected_review_sha256": "685d69f412a55948d4b8ba545c5d039adafa0635322c30d604240134e117843f",
+        "statements": [
+          "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"SYNTHETIC language \\u2014 transport only \\ud83d\\ude00.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"SYNTHETIC: eventual 4n - 7\\u221an. DEL: \\u007f. No theorem or approval asserted.\",\"version\":\"circuitbreaker-expression-v1\"}",
+          "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"SYNTHETIC language \\u2014 transport only \\ud83d\\ude00.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"SYNTHETIC: eventual 4n - 7\\u221an. DEL: \\u007f. No theorem or approval asserted.\",\"version\":\"circuitbreaker-expression-v1\"}"
+        ],
+        "status": "accepted_provisional",
+        "submission_sha256": "7ce3adec5a751ac6c44640fd7391a03cde4319c9ee10cfb7cd668cc773500f35",
+        "verifier_sha256": "2d5ec1a8a2b744b7fc056c5cc28047c304c0eb3505d696c8ed76764d5d0ca2a2",
+        "version": "circuitbreaker-expression-v1"
+      },
+      "circuitbreaker_frontier": {
+        "comparator": "circuitbreaker-v1",
+        "dossier_sha256": "056b4eefbc7bc52fdfd9531fb86a322140446895f851a4d6effc24102671f1a2",
+        "intake_sha256": "7acd01c12b0d4c7602adbabbb0a27f9f9db52382b3f377a338ebb4b5c7f4fcaa",
+        "model": "full-b2-v1",
+        "notation": "lower-bound",
+        "resources": {
+          "circuit_size": {
+            "bound": {
+              "coefficient": {
+                "denominator": "1",
+                "numerator": "4"
+              },
+              "exponent": {
+                "denominator": "1",
+                "numerator": "1"
+              },
+              "kind": "polynomial_log",
+              "log_exponent": {
+                "denominator": "1",
+                "numerator": "0"
+              },
+              "loglog_exponent": {
+                "denominator": "1",
+                "numerator": "0"
+              }
+            },
+            "evidence": {
+              "bound.json": "9ffbba5a4db05ed7af5fd383748c38f06e5c452b383d3c93ebea086587d940dd",
+              "proof.md": "4394599bdeef2de5bb60bcfe19af281e43b901d10637f1afb6ab5dddfa7f43d7"
+            },
+            "source_sha256": "4c4f355f073b7380e8e17363f7819b5e137fb99dfc648089db0d1d769e02e6c0",
+            "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"SYNTHETIC language \\u2014 transport only \\ud83d\\ude00.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"SYNTHETIC: eventual 4n - 7\\u221an. DEL: \\u007f. No theorem or approval asserted.\",\"version\":\"circuitbreaker-expression-v1\"}"
+          }
+        },
+        "scope": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "version": "circuitbreaker-frontier-v1"
+      }
+    },
+    "status": "review"
+  },
+  "synthetic": true
+}

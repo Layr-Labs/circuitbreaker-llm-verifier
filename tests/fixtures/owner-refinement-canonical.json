@@ -1,0 +1,37 @@
+[
+  {
+    "label": "ascii-del",
+    "input": {
+      "x": "\u007f"
+    },
+    "canonical": "{\"x\":\"\\u007f\"}",
+    "sha256": "8b78773091ef51cfaf977582ba6e38dfb1de4dffb44bf2d5ccab32da90ffa6fb"
+  },
+  {
+    "label": "unicode-scalar-key-order",
+    "input": {
+      "\ue000": "bmp",
+      "\ud800\udc00": "astral"
+    },
+    "canonical": "{\"\\ue000\":\"bmp\",\"\\ud800\\udc00\":\"astral\"}",
+    "sha256": "477c178d6afec3699c850efc7f36d5e2e87f4f1fb48e8424836ebf82867ab70f"
+  },
+  {
+    "label": "controls-and-surrogate-pair",
+    "input": {
+      "x": "\b\t\n\f\r\"\\/\u00e9\ud83d\ude00"
+    },
+    "canonical": "{\"x\":\"\\b\\t\\n\\f\\r\\\"\\\\/\\u00e9\\ud83d\\ude00\"}",
+    "sha256": "d92c9c1eb481da09e09656200b6705a88e00ac2dacf1f186e4e12964eacc916d"
+  },
+  {
+    "label": "booleans-and-null",
+    "input": {
+      "a": true,
+      "b": false,
+      "c": null
+    },
+    "canonical": "{\"a\":true,\"b\":false,\"c\":null}",
+    "sha256": "58ea9f23c715c4f8fee078efd41139485403f053775482d58b6f4f454b34ecf0"
+  }
+]
