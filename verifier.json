@@ -2,7 +2,7 @@
   "version": 1,
   "id": "circuitbreaker",
   "rules_path": "rules.md",
-  "review_standard": "circuitbreaker-joint-bounds-v2",
+  "review_standard": "circuitbreaker-joint-bounds-v3",
   "objectives": [
     {
       "name": "gate_coefficient",
@@ -34,7 +34,7 @@
   "allow_unscored": true,
   "policies": {
     "scoring": {
-      "version": "coefficient-exponent-expression-v1"
+      "version": "coefficient-exponent-expression-v2"
     },
     "validity": {
       "version": "fixed-family-full-b2-v1"
@@ -44,9 +44,9 @@
     "scoring": [
       {
         "selector": {
-          "version": "coefficient-exponent-expression-v1"
+          "version": "coefficient-exponent-expression-v2"
         },
-        "instructions": "Apply the joint coefficient/exponent contract in rules.md. Both source claims must state and prove the same complete bound.json declaration and have identical evidence. Review the full expression and its projection together for one fixed eligible family; atomic validity is mandatory. Endpoint score fields are transport only, not numerical infinite exponents. Zero coefficient earns no exponent. Return scores:null."
+        "instructions": "Apply the joint coefficient/exponent contract in rules.md. Both source claims must state and prove the same complete bound.json declaration and have identical evidence. Review the entire quantified guarantee, including any v2 eventual_lower_bound remainder, and its projection for one fixed eligible family. Explicit remainder means there exists N such that for every integer n>=N, C(n)>=L(n)-sum(terms(n)); big_o means there exist K>0 and N such that for every integer n>=N, C(n)>=L(n)-K*n^a*(log2 n)^b*(log2 log2 n)^d. A liminf or little-o leading statement alone never establishes a particular remainder, even with the same finite scores. Do not infer a remainder from prose, floats, or comparison hints. Atomic validity is mandatory. Endpoint score fields are transport only, not numerical infinite exponents. Zero coefficient earns no exponent. Return scores:null."
       }
     ],
     "validity": [

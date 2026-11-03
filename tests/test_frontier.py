@@ -56,8 +56,9 @@ class FrontierTests(unittest.TestCase):
         return synthetic_dossier(self.root, bound, manifest, valid=valid, simulation=simulation)
 
     def test_additive_wire_preserves_legacy_metric_and_exact_joint_binding(self):
-        # Fresh verifier-revision fixture hashes, including new intake/review
-        # provenance. The scientific/exporter implementation is unchanged.
+        # Original rules/config retain exact historical v1 output, including provenance.
+        for filename in ("verifier.json", "rules.md"):
+            shutil.copyfile(ROOT / "tests/fixtures/legacy-v1" / filename, self.root / filename)
         for kind in PINNED_RICH_HASHES:
             with self.subTest(kind=kind):
                 dossier = self.dossier(kind)
@@ -87,7 +88,7 @@ class FrontierTests(unittest.TestCase):
 
     def test_schema_and_page_fragment_match_exact_emitted_contract(self):
         schema = json.loads((ROOT / "schemas/frontier-v1.schema.json").read_text())
-        tab = json.loads((ROOT / "examples/complexity-result-tab.json").read_text())["resultTabs"][0]
+        tab = json.loads((ROOT / "tests/fixtures/circuitbreaker-frontier-v1.json").read_text())["contract"]
         table = projection(self.dossier())["metrics"]["circuitbreaker_frontier"]
         self.assertEqual(set(schema["required"]), set(table))
         self.assertEqual(set(schema["properties"]), set(table))

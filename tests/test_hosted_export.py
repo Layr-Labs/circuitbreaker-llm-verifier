@@ -19,7 +19,7 @@ from llm_verifier.runner import DockerRunner
 
 from export_hosted import ARTIFACT_NAMES, export_hosted, file_hash
 from export_metrics import export
-from expressions import CONVENTION, VERSION, claims_for, polynomial
+from expressions import CONVENTION, VERSION, VERSION_V2, claims_for, polynomial, ratio
 from tests.synthetic import synthetic_dossier
 from tests.test_expressions import finite
 from tools.generate_hosted import VERIFIER_REVISION
@@ -46,12 +46,12 @@ class HostedExportTests(unittest.TestCase):
         self.receipt = self.root / "transfer.json"
 
     def fixture(self, *, valid=True, simulation=False, original_attempt=1, audit_valid=None,
-                audit_failure=None, failure_out=None, mode=None):
+                audit_failure=None, failure_out=None, mode=None, bound=None):
         self.config = json.loads((ROOT / "verifier.json").read_text())
         if mode is not None:
             self.config["judging"]["mode"] = mode
         write_json(self.root / "verifier.json", self.config)
-        bound = {"version": VERSION, "convention": CONVENTION,
+        bound = bound or {"version": VERSION, "convention": CONVENTION,
                  "family": "Synthetic delivery fixture, not a circuit theorem.",
                  "theorem": "SYNTHETIC transport test only.",
                  "guarantee": polynomial(1, 1), "projection": finite()}
@@ -115,6 +115,23 @@ class HostedExportTests(unittest.TestCase):
                 self.assertEqual(lineage["inputFiles"], [
                     {"artifactName": name, "path": path.name, "sha256": file_hash(path)}
                     for name, path in zip(ARTIFACT_NAMES, (self.wheel, self.intake, self.dossier))])
+
+    def test_v2_remainder_survives_hosted_delivery_and_lineage(self):
+        bound = {"version": VERSION_V2, "convention": CONVENTION,
+                 "family": "Synthetic hosted v2 fixture; no circuit theorem.",
+                 "theorem": "Synthetic transport only.",
+                 "guarantee": {"kind": "eventual_lower_bound", "leading": polynomial(1, 1),
+                               "remainder": {"kind": "big_o", "exponent": ratio(0),
+                                             "log_exponent": ratio(1), "loglog_exponent": ratio(0)}},
+                 "projection": finite()}
+        record = self.fixture(bound=bound)
+        self.run_export()
+        score = json.loads(self.score.read_text())
+        self.assertEqual(score["metrics"]["circuitbreaker"]["bound"], bound)
+        self.assertEqual(score["metrics"]["circuitbreaker_frontier"]["version"], "circuitbreaker-frontier-v2")
+        lineage = json.loads(self.lineage.read_text())
+        self.assertEqual(lineage["scoreSha256"], file_hash(self.score))
+        self.assertEqual(lineage["identity"]["dossierSha256"], record["sha256"])
 
     def test_default_override_exports_moonshot_decision_and_selected_wrapper_provenance(self):
         for primary_valid, audit_valid in ((True, False), (False, True)):

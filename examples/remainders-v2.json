@@ -1,0 +1,257 @@
+{
+  "synthetic": true,
+  "description": "Wire-format examples only. The full quantified bound, including the remainder, needs proof and joint review.",
+  "examples": [
+    {
+      "id": "exact-eventual",
+      "bound": {
+        "version": "circuitbreaker-expression-v2",
+        "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "family": "SYNTHETIC format example only; no circuit family or construction is asserted.",
+        "theorem": "SYNTHETIC declaration, not a proven or accepted theorem.",
+        "guarantee": {
+          "kind": "eventual_lower_bound",
+          "leading": {
+            "kind": "polynomial_log",
+            "coefficient": {
+              "numerator": "4",
+              "denominator": "1"
+            },
+            "exponent": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "log_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "loglog_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            }
+          },
+          "remainder": {
+            "kind": "explicit",
+            "terms": []
+          }
+        },
+        "projection": {
+          "kind": "finite",
+          "coefficient": {
+            "numerator": "4",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "constant-loss",
+      "bound": {
+        "version": "circuitbreaker-expression-v2",
+        "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "family": "SYNTHETIC format example only; no circuit family or construction is asserted.",
+        "theorem": "SYNTHETIC declaration, not a proven or accepted theorem.",
+        "guarantee": {
+          "kind": "eventual_lower_bound",
+          "leading": {
+            "kind": "polynomial_log",
+            "coefficient": {
+              "numerator": "4",
+              "denominator": "1"
+            },
+            "exponent": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "log_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "loglog_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            }
+          },
+          "remainder": {
+            "kind": "explicit",
+            "terms": [
+              {
+                "coefficient": {
+                  "numerator": "7",
+                  "denominator": "1"
+                },
+                "exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                },
+                "log_exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                },
+                "loglog_exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                }
+              }
+            ]
+          }
+        },
+        "projection": {
+          "kind": "finite",
+          "coefficient": {
+            "numerator": "4",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "two-term-loss",
+      "bound": {
+        "version": "circuitbreaker-expression-v2",
+        "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "family": "SYNTHETIC format example only; no circuit family or construction is asserted.",
+        "theorem": "SYNTHETIC declaration, not a proven or accepted theorem.",
+        "guarantee": {
+          "kind": "eventual_lower_bound",
+          "leading": {
+            "kind": "polynomial_log",
+            "coefficient": {
+              "numerator": "4",
+              "denominator": "1"
+            },
+            "exponent": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "log_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "loglog_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            }
+          },
+          "remainder": {
+            "kind": "explicit",
+            "terms": [
+              {
+                "coefficient": {
+                  "numerator": "2",
+                  "denominator": "1"
+                },
+                "exponent": {
+                  "numerator": "1",
+                  "denominator": "2"
+                },
+                "log_exponent": {
+                  "numerator": "-1",
+                  "denominator": "1"
+                },
+                "loglog_exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                }
+              },
+              {
+                "coefficient": {
+                  "numerator": "7",
+                  "denominator": "1"
+                },
+                "exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                },
+                "log_exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                },
+                "loglog_exponent": {
+                  "numerator": "0",
+                  "denominator": "1"
+                }
+              }
+            ]
+          }
+        },
+        "projection": {
+          "kind": "finite",
+          "coefficient": {
+            "numerator": "4",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        }
+      }
+    },
+    {
+      "id": "unknown-constant-loss",
+      "bound": {
+        "version": "circuitbreaker-expression-v2",
+        "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "family": "SYNTHETIC format example only; no circuit family or construction is asserted.",
+        "theorem": "SYNTHETIC declaration, not a proven or accepted theorem.",
+        "guarantee": {
+          "kind": "eventual_lower_bound",
+          "leading": {
+            "kind": "polynomial_log",
+            "coefficient": {
+              "numerator": "4",
+              "denominator": "1"
+            },
+            "exponent": {
+              "numerator": "1",
+              "denominator": "1"
+            },
+            "log_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "loglog_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            }
+          },
+          "remainder": {
+            "kind": "big_o",
+            "exponent": {
+              "numerator": "1",
+              "denominator": "2"
+            },
+            "log_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            },
+            "loglog_exponent": {
+              "numerator": "0",
+              "denominator": "1"
+            }
+          }
+        },
+        "projection": {
+          "kind": "finite",
+          "coefficient": {
+            "numerator": "4",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "1",
+            "denominator": "1"
+          }
+        }
+      }
+    }
+  ]
+}

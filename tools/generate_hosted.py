@@ -40,6 +40,20 @@ def validate_presentation(root, track):
                 for tab in items]
     if contract(tabs) != contract(expected):
         raise ValueError("Presentation Complexity tab differs from the producer metric contract")
+    # Comparing two copies alone would accept a shared stale version or typo.
+    expected_tuple = {
+        "kind": "metrics-frontier",
+        "metricsPath": "circuitbreaker_frontier",
+        "metricsVersion": "circuitbreaker-frontier-v2",
+        "comparator": "circuitbreaker-v2",
+        "scope": "uniform-np-full-b2-actual-length-all-lengths-v1",
+        "model": "full-b2-v1",
+        "notation": "lower-bound",
+        "columns": [{"key": "circuit_size", "label": "Circuit size lower bound", "direction": "+"}],
+        "defaultSort": {"by": "metric", "key": "circuit_size", "direction": "desc"},
+    }
+    if len(tabs) != 1 or any(tabs[0].get(key) != value for key, value in expected_tuple.items()):
+        raise ValueError("Presentation Complexity tab must select the exact v2 producer contract")
 
 
 def generate(root=ROOT):
@@ -74,7 +88,6 @@ def check_generated(root=ROOT):
         changed = [p for p in paths if (root / p).read_bytes() != (copy / p).read_bytes()]
         if changed:
             raise SystemExit("Generated integration drift: " + ", ".join(changed))
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)

@@ -1,4 +1,4 @@
-"""Generate synthetic exporter parity cases; never a scientific results corpus.
+"""Historical v1 generator; --check verifies frozen bytes, never current replay.
 
 Expected order is assigned by an explicit mathematical tier sequence, independently
 of expressions.compare. Accepted envelopes come through the actual exporter and
@@ -7,6 +7,7 @@ full deterministic synthetic phase chain. Mutated/consumer-state cases are label
 
 import argparse
 import copy
+import hashlib
 from fractions import Fraction as F
 import json
 from pathlib import Path
@@ -25,6 +26,7 @@ from tests.synthetic import synthetic_dossier
 from tools.generate_hosted import VERIFIER_REVISION
 
 FIXTURE = ROOT / "tests/fixtures/circuitbreaker-frontier-v1.json"
+HISTORICAL_SHA256 = '29896a4de110a34ac7c46d9f0db55406d9172b10f054e12d4c0ddab1d97be69f'
 
 
 def finite(c, p):
@@ -86,7 +88,6 @@ def declarations():
     add("global", {"kind": "superpolynomial"}, {"kind": "global_endpoint"})
     assert len(entries) == 58
     return entries
-
 
 def generate():
     contract = json.loads((ROOT / "examples/complexity-result-tab.json").read_text())["resultTabs"][0]
@@ -220,14 +221,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    content = encoded()
     if args.check:
-        if FIXTURE.read_bytes() != content:
-            raise SystemExit("Frontier fixture drift; regenerate with the pinned verifier")
-        print("Frontier fixtures reproduce exactly")
+        if hashlib.sha256(FIXTURE.read_bytes()).hexdigest() != HISTORICAL_SHA256:
+            raise SystemExit("Historical v1 fixture changed; restore its original bytes")
+        print("Historical v1 fixture SHA-256 matches (not current-exporter reconstruction)")
     else:
-        FIXTURE.write_bytes(content)
-        print(f"Wrote {FIXTURE.relative_to(ROOT)} ({len(content)} bytes)")
+        raise SystemExit("V1 corpus is frozen. Reconstruct with its original source revision; use the v2 generator for current exporter replay.")
 
 
 if __name__ == "__main__":
