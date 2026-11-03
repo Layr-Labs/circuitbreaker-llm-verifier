@@ -13,15 +13,30 @@ from llm_verifier.files import clear_output, distinct_paths, read_json, write_js
 from llm_verifier.jsonutil import canonical, digest, loads
 from llm_verifier.scoring import score_value
 
-from expressions import (CONVENTION, POLICIES, REVIEW, VERSION, ExpressionError,
+from expressions import (CONVENTION, POLICIES, REVIEW, VERSION, VERSION_V2, ExpressionError,
                          claims_for, ratio, validate_bound)
 
 
+# Select the complete wire tuple only after validating the declaration.
+FRONTIER_VERSIONS = {
+    VERSION: ("circuitbreaker-frontier-v1", "circuitbreaker-v1"),
+    VERSION_V2: ("circuitbreaker-frontier-v2", "circuitbreaker-v2"),
+}
+
+
+LEGACY_REVIEW = "circuitbreaker-joint-bounds-v2"
+LEGACY_POLICIES = {
+    "scoring": {"version": "coefficient-exponent-expression-v1"},
+    "validity": {"version": "fixed-family-full-b2-v1"},
+}
+
+
 def validate_contract(config):
+    legacy = config["review_standard"] == LEGACY_REVIEW and config["policies"] == LEGACY_POLICIES
+    current = config["review_standard"] == REVIEW and config["policies"] == POLICIES
     objectives = config["objectives"]
     if (config["id"] != "circuitbreaker"
-            or config["review_standard"] != REVIEW
-            or config["policies"] != POLICIES
+            or not (legacy or current)
             or config.get("acceptance_policy", "atomic-claims-v1") != "atomic-claims-v1"
             or config.get("manifest_preprocessor") is not None
             or "structured_claims" in config
@@ -32,6 +47,7 @@ def validate_contract(config):
             or [o.get("score_minimum") for o in objectives] != [ratio(0), ratio(1)]
             or any("score_maximum" in o for o in objectives)):
         raise VerifierError("circuitbreaker_objective_contract")
+    return legacy
 
 
 def accepted_bound(manifest, files):
@@ -69,7 +85,7 @@ def projection(record, *, expected_intake=None):
     if expected_intake is not None and intake["sha256"] != expected_intake:
         raise VerifierError("circuitbreaker_intake_mismatch")
     config = intake["data"]["effective"]["config"]
-    validate_contract(config)
+    legacy = validate_contract(config)
     result = dict(data["yukon_projection"])
     if not data["judgment"]["valid"]:
         return result
@@ -80,6 +96,8 @@ def projection(record, *, expected_intake=None):
             if data["score_records"] or data["judgment"]["scores"] is not None:
                 raise ExpressionError("lemma must not carry main scores")
             return result
+        if legacy and bound["version"] != VERSION:
+            raise ExpressionError("legacy review cannot accept a v2 declaration")
         scores = validate_bound(bound)
     except ExpressionError as exc:
         raise VerifierError("circuitbreaker_bound_contract: " + str(exc)) from exc
@@ -96,8 +114,9 @@ def projection(record, *, expected_intake=None):
     if (canonical(data["score_records"]) != canonical(expected_records)
             or canonical(data["judgment"]["scores"]) != canonical(numeric)):
         raise VerifierError("circuitbreaker_projection_disagreement")
+    frontier_version, comparator = FRONTIER_VERSIONS[bound["version"]]
     result["metrics"] = {"circuitbreaker": {
-        "version": VERSION,
+        "version": bound["version"],
         "convention": CONVENTION,
         "status": "accepted_provisional",
         "bound": bound,
@@ -111,8 +130,8 @@ def projection(record, *, expected_intake=None):
         "evidence": {p: files[p]["sha256"] for p in manifest["claims"][0]["evidence"]},
     }}
     result["metrics"]["circuitbreaker_frontier"] = {
-        "version": "circuitbreaker-frontier-v1",
-        "comparator": "circuitbreaker-v1",
+        "version": frontier_version,
+        "comparator": comparator,
         "scope": CONVENTION,
         "model": "full-b2-v1",
         "notation": "lower-bound",

@@ -1,5 +1,10 @@
 # Coefficient/exponent registration and legacy retirement
 
+The registration/retirement instructions below describe the older transition from
+one objective to two. The remainder-v2 change keeps both existing objectives and
+uses the existing two-objective registration; see [the v2 migration](#remainder-v2-migration-and-evidence-inventory).
+It does not require a replacement registration.
+
 This repository declares only the current two-objective `main` track. The legacy
 single-objective registration is not part of its manifest or current page. Retire
 that legacy registration through the supported close and soft-archive lifecycle,
@@ -30,12 +35,12 @@ projection of an existing expression is not fresh progress.
 ## Prepared page and source inputs
 
 [The complete presentation template](examples/circuitbreaker-presentation.json)
-is copied from Yukon commit `f340c97dad9f170941e03c233a8a263ae76b8998` (merged
-PR1283). It combines `results.scoreTracks` grouped by `gate_exponent` with the
-`circuitbreaker-v1` Complexity tab. The default numeric view is coefficient over
+builds on Yukon commit `f340c97dad9f170941e03c233a8a263ae76b8998` (merged
+PR1283) and now selects the v2 remainder contract. It combines `results.scoreTracks` grouped by `gate_exponent` with the
+`circuitbreaker-v2` Complexity tab. The default numeric view is coefficient over
 time at the highest eligible finite exponent. Accepted null-score endpoints
-remain in the full-expression table. The older [table-only fragment](examples/complexity-result-tab.json)
-and its conformance corpus are unchanged.
+remain in the full-expression table. The [table-only fragment](examples/complexity-result-tab.json) selects the same
+v2 contract; the historical v1 conformance corpus remains unchanged.
 
 The template is a presentation, not an import request: it has no benchmark UUID
 or publication flag and uses `unbound/circuitbreaker/main`. `benchmark.json`
@@ -48,7 +53,8 @@ Full platform schema validation and replacement-source binding still apply.
 Prepare activation with these explicit inputs:
 
 - The target API origin and compatible API/Challenges UI releases containing
-  both registered `circuitbreaker-v1` and `results.scoreTracks`. A merged PR alone
+  both registered `circuitbreaker-v2` (including authenticated v1 envelopes)
+  and `results.scoreTracks`. A merged PR alone
   does not establish that the selected deployment supports either field.
 - The approved published challenge source SHA, repository
   `Layr-Labs/circuitbreaker-llm-verifier`, root directory `null`, `main` track,
@@ -280,3 +286,39 @@ the current candidate's score or checks. The reuse fixture explicitly enables
 references and tests this through native mocked review, current checker execution,
 finalization and export; source manifests, selected wrapper provenance and
 accepted-only ancestry remain bound. No live admission update or reorg is performed by this source change.
+
+
+## Remainder v2 migration and evidence inventory
+
+For an existing two-objective registration, prepare the reviewed v2 source and
+compatible consumer, then use a separately authorized reorg to activate the policy
+change. No new registration or single-objective retirement is needed for v2.
+The scoring policy is `coefficient-exponent-expression-v2`; review standard is
+`circuitbreaker-joint-bounds-v3`. Validity stays `fixed-family-full-b2-v1` because
+it already covers the complete claim. New reviews accept either declaration
+version and export that exact version's rich/table tuple. Keep every historic v1
+schema, fixture, accepted metric and statement unchanged. The exporter permits
+authentic original v1 dossiers only with their exact legacy
+review standard `circuitbreaker-joint-bounds-v2` and scoring policy
+`coefficient-exponent-expression-v1` (unchanged validity policy). That path rejects
+every v2 declaration and preserves the original v1 outputs. Replaying old dossiers
+requires the original rules/config and compatible pinned verifier wheel; replay
+does not upgrade their scientific claim or infer a remainder.
+
+Before a separately authorized trusted refinement, inventory for each result:
+
+- Its original successful dossier and selected review, intake, source revision,
+  submitted bound, complete claims, proof/evidence bytes and their hashes.
+- Original verifier wheel/revision, effective configuration, acceptance and
+  access status, and the existing v1 rich/table envelopes.
+- An organizer-validated refinement manifest binding those original identities
+  to the proposed exact v2 AST and quantified claim, its supporting proof, and
+  the review decision that authorizes the stronger remainder.
+- A distinct migration identity, resulting versioned metrics and a retained link
+  to the immutable original record, including any objections and human approval.
+
+This is a required evidence inventory, not a claim that any historical proof has
+been requalified. No acceptance is extracted from prose, inferred from a liminf,
+or obtained by relabelling v1. Identical numeric scores do not prove an identical
+remainder. A score-only reorg is operationally separate and needs explicit live
+authorization after source/consumer review; this implementation performs none.

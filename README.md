@@ -9,8 +9,8 @@ and their typed expression metrics remain available. The additive
 `circuitbreaker_frontier` envelope supports the registered Complexity table.
 [The complete presentation template](examples/circuitbreaker-presentation.json)
 combines that table with coefficient history grouped by the selected power of n.
-It uses the merged Yukon contract from `f340c97dad9f170941e03c233a8a263ae76b8998`;
-compatible API and UI releases must be running before it is selected.
+It selects the v2 table contract and requires compatible API and UI releases
+that accept authenticated v1 and v2 envelopes. A v1-only consumer rejects v2.
 
 The [starting proof](submission/proof.md) is the unchanged published 31/10
 baseline, represented as (31/10,1). It is a literature seed, not a guarantee of
@@ -23,6 +23,18 @@ must belong to that same complete theorem; two independent lemmas cannot be
 combined. Put a relevant unscored partial result in string claims instead.
 See [the expression/metric contract](metrics.md) and its JSON schemas.
 
+Version 2 adds quantified eventual lower bounds with an explicit subleading
+loss (up to eight monomials) or a Big-O loss with an unknown positive constant.
+The entire remainder must be proved for all sufficiently large integer lengths;
+it cannot be inferred from a liminf or the finite score pair. Scoring policy is
+`coefficient-exponent-expression-v2`, review standard is
+`circuitbreaker-joint-bounds-v3`, and validity remains `fixed-family-full-b2-v1`.
+The baseline, historical v1 schemas, fixture bytes and statement semantics stay
+unchanged. New reviews of v1 declarations still emit the v1 metric tuple.
+[Synthetic v2 declarations](examples/remainders-v2.json) illustrate the wire
+format only; they assert no new mathematical result.
+
+
 Use the pinned llm-verifier installation for credential-free validation:
 
 ```sh
@@ -30,11 +42,13 @@ python check_submission.py
 python -m unittest -v
 python tools/generate_hosted.py --check
 python tools/generate_frontier_fixtures.py --check
+python tools/generate_remainder_fixtures.py --check
 llm-verifier test-checkers --root .
 ```
 
 Prepare the digest-pinned Python Docker image before the last command. These
-checks do not perform a mathematical review. [Scientific cases](scientific-cases.md)
+checks do not perform a mathematical review. The v1 fixture check verifies
+its frozen digest; it does not recreate historical reviews under current rules. [Scientific cases](scientific-cases.md)
 explain known valid and invalid reasoning; synthetic exporter tests assert no
 new circuit result. The exact seven-file candidate fixture under `tests/fixtures`
 is retained only for transport regression and is not an accepted proof. The proof byte budget, per-call provider configuration, LP

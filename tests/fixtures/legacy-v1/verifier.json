@@ -1,0 +1,197 @@
+{
+  "version": 1,
+  "id": "circuitbreaker",
+  "rules_path": "rules.md",
+  "review_standard": "circuitbreaker-joint-bounds-v2",
+  "objectives": [
+    {
+      "name": "gate_coefficient",
+      "direction": "+",
+      "unit": "coefficient of n^p",
+      "semantics": "First transport coordinate of the jointly accepted bound.json declaration. Finite c>0 is exact; an endpoint uses positive_infinity and has no native numeric tuple. The full expression metric is authoritative.",
+      "score_source": {
+        "claim": 0
+      },
+      "score_minimum": {
+        "numerator": "0",
+        "denominator": "1"
+      }
+    },
+    {
+      "name": "gate_exponent",
+      "direction": "+",
+      "unit": "power of actual input length n",
+      "semantics": "Second transport coordinate of the SAME jointly accepted theorem. Finite rational p>=1; a global endpoint uses positive_infinity only as a transport placeholder. Never interpret it as n^infinity.",
+      "score_source": {
+        "claim": 1
+      },
+      "score_minimum": {
+        "numerator": "1",
+        "denominator": "1"
+      }
+    }
+  ],
+  "allow_unscored": true,
+  "policies": {
+    "scoring": {
+      "version": "coefficient-exponent-expression-v1"
+    },
+    "validity": {
+      "version": "fixed-family-full-b2-v1"
+    }
+  },
+  "supported_policies": {
+    "scoring": [
+      {
+        "selector": {
+          "version": "coefficient-exponent-expression-v1"
+        },
+        "instructions": "Apply the joint coefficient/exponent contract in rules.md. Both source claims must state and prove the same complete bound.json declaration and have identical evidence. Review the full expression and its projection together for one fixed eligible family; atomic validity is mandatory. Endpoint score fields are transport only, not numerical infinite exponents. Zero coefficient earns no exponent. Return scores:null."
+      }
+    ],
+    "validity": [
+      {
+        "selector": {
+          "version": "fixed-family-full-b2-v1"
+        },
+        "instructions": "Apply rules.md to every original claim and its evidence. The same fixed uniform NP family must work for all coefficients, all exponents in a global theorem, and all sufficiently large actual integer lengths. Unsupported conditions, family swaps, model changes, or larger projected guarantees invalidate the main claim. No scientific acceptance follows from a schema or LP checker pass."
+      }
+    ]
+  },
+  "provider": {
+    "max_attempts": 1,
+    "max_response_bytes": 262144,
+    "max_completion_tokens": 32768,
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "response_format": "json_schema",
+    "timeout_seconds": 1200,
+    "background": true
+  },
+  "limits": {
+    "cpus": 1,
+    "followup_seconds": 20,
+    "initial_seconds": 20,
+    "max_file_bytes": 65536,
+    "max_files": 32,
+    "max_followups": 1,
+    "max_initial_runs": 1,
+    "max_prompt_bytes": 2097152,
+    "max_submission_bytes": 262144,
+    "memory_mb": 256,
+    "pids": 32,
+    "run_seconds": 20,
+    "stderr_bytes": 65536,
+    "stdout_bytes": 65536,
+    "tmpfs_mb": 16,
+    "total_output_bytes": 393216,
+    "total_provider_requests": 23,
+    "total_review_seconds": 2400,
+    "total_seconds": 40,
+    "total_review_tokens": 753664
+  },
+  "runtime": {
+    "image": "python:3.12.12-slim-bookworm@sha256:2986c55feb36e6cae00fa1fefb454283e4b33f35e75ff8bdd123b134130be301",
+    "platform": "linux/amd64"
+  },
+  "checkers": [
+    {
+      "description": "Exact rational feasibility and upper certificate for the unchanged Li–Yang Theorem 4.1 LP. Arithmetic evidence only.",
+      "files": [
+        "checkers/lp_certificate.py"
+      ],
+      "id": "lp-certificate",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "alpha_I": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "alpha_Q": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "alpha_phi": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          },
+          "delta": {
+            "maxLength": 64,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "alpha_I",
+          "alpha_Q",
+          "alpha_phi",
+          "delta"
+        ],
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "coefficient": {
+            "maxLength": 1024,
+            "type": "string"
+          },
+          "constraint_slacks": {
+            "items": {
+              "maxLength": 1024,
+              "type": "string"
+            },
+            "maxItems": 6,
+            "type": "array"
+          },
+          "dual_bound": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "dual_weights": {
+            "items": {
+              "maxLength": 64,
+              "type": "string"
+            },
+            "maxItems": 3,
+            "type": "array"
+          },
+          "message": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "passed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "passed",
+          "coefficient",
+          "constraint_slacks",
+          "dual_weights",
+          "dual_bound",
+          "message"
+        ],
+        "type": "object"
+      },
+      "required_for_score": false,
+      "source": "checkers/lp_certificate.py"
+    }
+  ],
+  "acceptance_policy": "atomic-claims-v1",
+  "judging": {
+    "profile": "builtin:probabilistic-escalation-v1",
+    "probability": 1,
+    "mode": "override",
+    "primary": {
+      "profile": "builtin:single-v1"
+    },
+    "escalation": {
+      "profile": "builtin:math-decomposed-v1"
+    }
+  }
+}

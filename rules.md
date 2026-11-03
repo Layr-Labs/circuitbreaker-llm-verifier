@@ -65,7 +65,9 @@ main claims receive no score, not numeric zero. Binary64 projections may tie
 different exact rationals, so they are not authoritative for comparison.
 
 The canonical versioned declaration is `submission/bound.json`, described by
-`schemas/bound-v1.schema.json`. Version 1 supports three full guarantee kinds:
+`schemas/bound-v1.schema.json` for legacy declarations or
+`schemas/bound-v2.schema.json` for version 2. Version 1 keeps its original
+meaning and three full guarantee kinds; version 2 retains all three:
 
 - `polynomial_log`: g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r, c>0, p>=1,
   with exact rational c,p,q,r (q and r may be negative). The meaning is
@@ -74,6 +76,32 @@ The canonical versioned declaration is `submission/bound.json`, described by
 - `lane_endpoint`: C_B2(f_n)/n^p tends to infinity at one declared rational p>=1.
 - `superpolynomial`: the global endpoint below. It asserts no specific rate
   such as exponential growth.
+
+Version 2 (`circuitbreaker-expression-v2`) additionally supports
+`eventual_lower_bound` with a `leading` polynomial_log and a `remainder`:
+
+- `explicit`: `terms` is an array of zero to eight monomials, each containing
+  exactly `coefficient`, `exponent`, `log_exponent`, `loglog_exponent`. For one
+  fixed eligible family there exists N such that for EVERY integer n>=N,
+  C_B2(f_n)>=L(n)-sum(terms(n)). An empty array means C_B2(f_n)>=L(n) eventually.
+- `big_o`: contains exactly `kind`, `exponent`, `log_exponent`,
+  `loglog_exponent`, with NO coefficient. There exist K>0 and N such that for
+  EVERY integer n>=N, C_B2(f_n)>=L(n)-K*n^a*(log2 n)^b*(log2 log2 n)^d.
+  K and N may depend on the fixed theorem, never on n.
+
+L(n) is the leading polynomial/log expression, with positive coefficient and
+p>=1. All remainder coefficients are positive reduced bounded rationals.
+Remainder power triples (a,b,d) must be lexicographically >=(0,0,0) and strictly
+below the leading triple, so n^(1/2)/log2(n) is an allowed remainder. Explicit
+terms must be strictly descending by that order; duplicate powers are rejected,
+not combined. All fields are closed. Thresholds and the unknown Big-O constant
+are not comparison keys; finite-threshold ordering is outside this contract.
+
+Review the ENTIRE quantified declaration, including the loss, not just its
+leading projection. A liminf or little-o statement alone never establishes a
+specified remainder. Do not infer acceptance from theorem prose, native floats,
+or candidate comparison hints. A v1 declaration must reject the eventual AST;
+historical v1 records cannot be relabelled as v2 refinements.
 
 Expressions outside this grammar require a future reviewed grammar version;
 no unsupported expression is rounded, silently coerced or granted a comparison.
@@ -86,7 +114,8 @@ most 256 characters each, positive denominator. Finite native coordinates must
 also have finite, non-underflowing binary64 projections. Overflow never earns
 an endpoint. The canonicalizer validates exact spelling, not heuristic algebra.
 
-For a polynomial/log full expression, the declared finite or lane projection
+For a polynomial/log full expression, or the leading term of an eventual
+bound, the declared finite or lane projection
 must follow by the protected exact algebra in `expressions.py`. This permits
 a weaker explicit projection when no largest polynomial exponent is attained.
 For example, a hypothetical n^2/log2(n) guarantee permits a lane endpoint at
@@ -126,9 +155,10 @@ NaN, finite sentinel or normalization is permitted.
 
 ## Full-expression comparison
 
-`expressions.compare` compares strength of established guarantees under the
-same pinned model/input/asymptotic convention. Different eligible families may
-tie in guarantee strength; this never identifies their families or proofs.
+`expressions.compare` orders real-valued guaranteed lower-bound envelopes by
+sound sufficient implication rules under the same pinned model/input/asymptotic
+convention. Different eligible families may tie under these rules; this never
+identifies their families or proofs.
 The comparator uses polynomial exponent first, then log exponent, then loglog
 exponent, then exact coefficient. Divergence at p dominates every finite
 coefficient at p but does not assert a logarithmic rate. A higher polynomial
@@ -137,8 +167,25 @@ global theorem dominates every supported fixed polynomial/log guarantee.
 These are implications between lower-bound guarantees, not upper bounds on
 actual complexity. Results are `stronger`, `weaker`, `equivalent`, or `unknown`;
 unsupported syntax or incompatible conventions are unknown, never ties or
-dominance. Equivalent rows remain visible; weakened projections are not new
-progress. No candidate-provided comparison hint is trusted.
+dominance. Rows equivalent under the rules remain visible; weakened projections are not
+new progress. No candidate-provided comparison hint is trusted.
+
+With different leading terms, compare growth powers first and exact coefficient
+second; a strictly greater leading term supplies slack for any supported lower
+order loss. Lane and global endpoints keep their original semantics. At the
+same leading term, eventual bounds imply the liminf bound, never conversely.
+For two explicit losses compare the highest-power differing coefficient: the
+smaller loss is stronger, and the empty sum is smallest. For two Big-O losses
+the smaller lexicographic power triple is stronger; equal triples are equivalent.
+An explicit loss implies a Big-O loss iff it is empty or its largest power is
+at most the Big-O power. A Big-O loss implies an explicit loss iff the explicit
+sum is nonempty and its largest power is strictly greater than the Big-O power.
+An unknown constant cannot certify a fixed coefficient at the same rate.
+
+`stronger` does not prove semantic inequivalence for integer circuit sizes.
+For example, the envelopes 4n-1/4 and 4n-3/4 both round to C(n)>=4n for integer
+C(n), but this comparator orders their real-valued losses. There is no integer
+rounding equivalence policy. Unknown is never an inferred tie or dominance.
 
 ## Submission and evidence
 
@@ -161,7 +208,8 @@ the pinned atomic evidence policy, unfamiliar or uncertain material external
 premises need sufficient supporting argument reproduced and validated in
 supplied evidence; the reviewer does not retrieve links. No new unrestricted
 attachment channel is added. Existing limits remain 32 files, 64 KiB per file,
-256 KiB aggregate submission and 128 KiB complete review prompt.
+256 KiB aggregate submission and 2 MiB complete review prompt. The selected
+audit profile further limits submissions to eight files, including manifests.
 
 Discharge every premise needed for the scored conclusion. If finite computation
 supports the proof, establish reduction to all applicable configurations,

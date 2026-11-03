@@ -66,3 +66,17 @@ class PresentationTests(unittest.TestCase):
                 self.page["resultTabs"][0][field] = value
                 with self.assertRaisesRegex(ValueError, "Complexity tab"):
                     self.validate()
+
+    def test_rejects_shared_wrong_contract_in_both_presentation_files(self):
+        original = copy.deepcopy(self.page)
+        fragment_path = self.root / "examples/complexity-result-tab.json"
+        for field, value in (("metricsVersion", "circuitbreaker-frontier-v1"),
+                             ("comparator", "circuitbreaker-v1"),
+                             ("scope", "different-scope"), ("model", "monotone"),
+                             ("notation", "upper-bound"), ("columns", [])):
+            with self.subTest(field=field):
+                self.page = copy.deepcopy(original)
+                self.page["resultTabs"][0][field] = value
+                fragment_path.write_text(json.dumps({"resultTabs": self.page["resultTabs"]}))
+                with self.assertRaisesRegex(ValueError, "exact v2 producer contract"):
+                    self.validate()

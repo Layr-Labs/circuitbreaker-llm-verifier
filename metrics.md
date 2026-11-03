@@ -1,11 +1,22 @@
-# Accepted expression interface, version 1
+# Accepted expression interface, versions 1 and 2
 
 `export_metrics.py` rebuilds a trusted shared-verifier dossier and appends
 `metrics.circuitbreaker` plus the additive table envelope
 `metrics.circuitbreaker_frontier` to its unchanged native projection. The rich
 `circuitbreaker` record keeps its original fields and meaning and follows
-[the metric schema](schemas/accepted-metric-v1.schema.json); its `bound` follows
-[the declaration schema](schemas/bound-v1.schema.json). `expressions.py` supplies
+the schema selected by the validated declaration version:
+
+| Declaration and rich metric version | Rich schema | Declaration schema | Table version / comparator |
+| --- | --- | --- | --- |
+| `circuitbreaker-expression-v1` | [v1 metric](schemas/accepted-metric-v1.schema.json) | [v1 bound](schemas/bound-v1.schema.json) | `circuitbreaker-frontier-v1` / `circuitbreaker-v1` |
+| `circuitbreaker-expression-v2` | [v2 metric](schemas/accepted-metric-v2.schema.json) | [v2 bound](schemas/bound-v2.schema.json) | `circuitbreaker-frontier-v2` / `circuitbreaker-v2` |
+
+Legacy schemas, fixtures and statement semantics remain unchanged. Authentic
+legacy dossiers under review v2/scoring v1 remain exportable as v1 only; the
+legacy review path rejects every v2 declaration. Current review v3/scoring v2
+accepts either declaration version. Mismatched review/policy pairs are rejected. A newly
+reviewed v1 declaration still exports the v1 tuple, even under the new scoring
+policy. Version 2 can also carry any legacy guarantee kind. `expressions.py` supplies
 additional exact rational, domain and implication validation. Both schema shape
 and runtime validation matter. The full statement and its two source fields
 must be jointly accepted, not just present in a snapshot.
@@ -32,8 +43,8 @@ is emitted. Exact scientific ordering never reads native floats.
 
 ## Registered Complexity table
 
-The generic metrics-frontier table can select the registered `circuitbreaker-v1`
-comparator. [The complete presentation](examples/circuitbreaker-presentation.json)
+The prepared generic metrics-frontier table selects the `circuitbreaker-v2`
+comparator; deployment requires a compatible consumer. [The complete presentation](examples/circuitbreaker-presentation.json)
 combines the table with coefficient history grouped by exponent using the merged
 Yukon `results.scoreTracks` contract. It selects `gate_exponent`, numeric descending
 order and the highest eligible finite group by default; `results.defaultView`
@@ -41,18 +52,26 @@ selects coefficient over time. Each group retains its complete eligible history,
 including results dominated on the global Pareto frontier. These are display
 groups, not new benchmark tracks or different scoring rules. Group keys use native
 binary64 exponent values; exact rational distinctions remain in full expressions.
-Null-score endpoints never create numeric groups.
+Null-score endpoints never create numeric groups. Eventual bounds use their
+leading term for the same finite or endpoint projection rules; that projection
+does not discard the remainder from either accepted metric.
 
 [The table-only fragment](examples/complexity-result-tab.json) remains available
 for existing integrations. Both templates add `resultTabs` at the chosen page or
 track presentation level. The tab selects
-`circuitbreaker_frontier`, version `circuitbreaker-frontier-v1`, scope
+`circuitbreaker_frontier`, version `circuitbreaker-frontier-v2`, scope
 `uniform-np-full-b2-actual-length-all-lengths-v1`, model `full-b2-v1`, and notation
 `lower-bound`. The single `circuit_size` column is maximized and initially
 sorted descending. The fragment requires that registered comparator extension;
 it does not itself publish source, update a page, or register a benchmark.
 
-The [table schema](schemas/frontier-v1.schema.json) describes the exact envelope:
+The v2 consumer accepts both authenticated v1 and v2 envelopes from that same
+namespace, validating each exact version/comparator/scope/model/notation/resource
+tuple. V1 envelopes must contain only v1 ASTs. The v1 consumer/config remains
+unchanged and rejects v2; changing just a label never makes an envelope valid.
+
+The [v1](schemas/frontier-v1.schema.json) and [v2 table schema](schemas/frontier-v2.schema.json)
+describe the exact version-specific envelope:
 `version`, `comparator`, `scope`, `model`, `notation`, `intake_sha256`,
 `dossier_sha256`, and `resources`. Its sole resource `circuit_size` contains:
 
@@ -82,7 +101,11 @@ Read n as actual input bit length; all logarithms are base 2. A
 `polynomial_log` bound represents a liminf guarantee with its exact rational
 coefficient, not equality to actual circuit complexity. A lane endpoint is
 omega(n^p): its ratio to n^p diverges without asserting a particular logarithmic
-rate. `superpolynomial` means all fixed powers for the SAME family and all
+rate. Version 2's `eventual_lower_bound` means there exists N such that
+C(n)>=L(n)-sum(terms(n)) for every integer n>=N for an explicit loss; for a
+Big-O loss there exist K>0,N such that C(n)>=L(n)-K*n^a*(log2 n)^b*(log2 log2 n)^d
+for every integer n>=N. A liminf assertion alone never certifies either loss.
+`superpolynomial` means all fixed powers for the SAME family and all
 sufficiently large lengths, not exponential growth or n^infinity. The numeric
 graph remains the declared [coefficient, exponent] projection. Endpoints retain
 null native scores while participating in the Complexity table.
@@ -116,9 +139,12 @@ accepted status; unsupported versions, missing data, revoked acceptance or
 incompatible conventions cannot enter a frontier. `normalize` validates and
 copies the canonical AST; it does not round or repair it.
 
-`stronger` means the left guaranteed lower bound strictly implies the right
-within this supported language. `equivalent` means equal guarantee strength,
-even when the families or proofs differ. Keep tied rows. `unknown` never means
+The comparator applies sufficient implication rules to real-valued guaranteed
+envelopes. `stronger` means those rules establish the left-to-right direction
+but not the reverse. It does not prove semantic inequivalence for integer circuit
+sizes: 4n-1/4 and 4n-3/4 both imply the integer bound C(n)>=4n. There is no integer
+rounding equivalence policy. `equivalent` means both directions follow under
+the supported rules, even when families or proofs differ. Keep tied rows. `unknown` never means
 equality, dominance, or permission to suppress a row. The native coordinatewise
 Pareto frontier and this expression ordering are intentionally different.
 Compare complete current accepted history, including null-score endpoints,
@@ -175,24 +201,29 @@ exercise exporter validation. No provider request or credential is used.
 
 `tests/fixtures/circuitbreaker-frontier-v1.json` contains 58 eligible synthetic
 exporter outputs, 3,364 independently assigned pairwise expectations, selected
-frontier/tie scenarios and labelled omitted cases. Every eligible envelope is
-produced by the actual exporter after a fresh deterministic synthetic phase
-chain; there are no copied live results or relabelled old-runtime dossiers.
+frontier/tie scenarios and labelled omitted cases. Every eligible envelope was
+produced by the v1 exporter after a deterministic synthetic phase
+chain at its original revision; there are no copied live results or relabelled old-runtime dossiers.
 Expected strength tiers are explicitly arranged from weaker to stronger without
 calling `expressions.compare`; tests compare the authoritative Python algebra
 against those expectations and the platform uses the same corpus.
 
 Only the table namespace is retained in the corpus to avoid duplicating rich
-records. Separate regressions freeze the rich namespace under the current
-verifier and validate its exact joint binding with the unchanged exporter. `mutated-exporter` cases deliberately
+records. Separate regressions freeze the legacy statement/semantic bytes and validate
+the current exporter's exact joint binding. Current review/rules changes necessarily
+change fresh intake and dossier hashes; those do not rewrite historical fixtures. `mutated-exporter` cases deliberately
 corrupt a copy for consumer validation; `consumer-state` cases retain valid
 metric bytes while requiring the current-result policy to omit them. A valid
 platform result awaiting manual promotion is distinct from an unreviewed claim.
 Simulation is rejected by the exporter and has no output.
 
-Regenerate with `python tools/generate_frontier_fixtures.py`, or use `--check`
-for reproducibility. CI runs schema/wire/parity regressions and the fixture drift
-check with the same pinned verifier wheel. The current pin is
+`python tools/generate_frontier_fixtures.py --check` verifies the frozen v1 file's
+SHA-256, not reconstruction by the current exporter. In-place v1 regeneration
+is disabled; historical reconstruction requires its original source revision.
+Current exporter replay belongs to the v2 corpus, generated by
+`python tools/generate_remainder_fixtures.py`; its `--check` mode reconstructs
+the exact current exporter output and compares bytes. CI retains the 3,364 legacy
+semantic comparisons as well as v2 schema/export tests. The current pin is
 `c3196332cbd0ea75a8f478673e04a78ae03e581d`; its optional `structured_claims`
 protocol remains disabled. Existing joint statements and file binding are
 unchanged. Neither these tests nor this table integration requalifies the

@@ -148,3 +148,27 @@ other. Altering an exponent, proof file, source digest, score record, or compari
 hint without the corresponding trusted full-chain review cannot create an
 accepted metric. Synthetic unit tests exercise these contracts with labelled
 fabricated phase records; they are not model verdicts or mathematical discoveries.
+
+
+## Quantified v2 remainders (positive and negative implications)
+
+The OR proof above establishes C_B2(OR_n)=n-1 for every n>=2. It therefore
+supports a v2 `eventual_lower_bound` with leading n and explicit remainder 1,
+or with a Big-O constant remainder (choose K=1, N=2). The same finite score
+(1,1) does not justify an empty explicit remainder: that would claim C>=n
+eventually, which the OR tree disproves. Reviewing only the leading coefficient
+would miss this false strengthening.
+
+For a hypothetical proved bound C(n)>=4n-7 eventually, an explicit constant
+loss 7 implies a Big-O constant loss. The converse does not follow: an unknown
+positive K in C(n)>=4n-K cannot certify K<=7. A proved C(n)>=4n-O(log2 n)
+implies the liminf leading guarantee, but a liminf leading guarantee alone gives
+no such rate. These are implication examples, not new circuit constructions.
+All thresholds and Big-O constants must work for the same fixed family and all
+sufficiently large integer lengths.
+
+The comparator orders real-valued guaranteed envelopes. It ranks a loss 1/4
+above a loss 3/4 with leading 4n, although integer circuit sizes satisfying either
+inequality are at least 4n. Thus `stronger` is not a certificate of semantic
+inequivalence after integer rounding; no integer-rounding equivalence policy is
+implemented. Unsupported or malformed declarations remain unknown.
