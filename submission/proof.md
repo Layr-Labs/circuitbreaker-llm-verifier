@@ -1,90 +1,73 @@
-# Published coefficient 31/10: construction and proof
-
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+# OR family: tight coefficient 1 at exponent 1
 
 ## Fixed total family
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
-
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+Define the total Boolean family OR_n : {0,1}^n → {0,1} for all n ≥ 0. For n ≥ 1, OR_n(x) = 1 iff at least one input bit x_i is 1. For n = 0, f_0(empty) = 0. This defines a single language: the set of nonempty binary strings containing at least one 1 bit, together with the empty string mapped to 0.
 
 ## Uniform P and NP membership
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+A deterministic algorithm computes OR in linear time: scan the n input bits and output 1 as soon as a 1 is found, else 0. This is polynomial in n. The language L = { x ∈ {0,1}* : x contains a 1 } is therefore in P, hence in NP. Use V(x,w) = 1 iff w is empty and the linear-time evaluation A(x) = 1. The witness bound W(n) = 0 is polynomial. Both directions are immediate: if x ∈ L then A(x) = 1, so V(x, ε) = 1; conversely if w is empty and V(x,w) = 1 then A(x) = 1, so x ∈ L. Every integer n ≥ 0 is covered, including n = 0. The same verifier and witness bound work for all lengths. No per-length advice, truth-table oracle or nonconstructive existence is used.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+## Full B2 circuit model
 
-## Every integer length and the lower bound
+Li–Yang's general B2 model applies: deterministic acyclic circuits, one output, two input pins per gate, all 16 binary Boolean truth tables, unrestricted depth and fan-out, exact computation on every input, nonuniform circuits allowed. Inputs are x alone (witness bits are not circuit inputs). Count each retained gate once. Inputs, wires and output selection cost zero. Constant nodes during substitutions cost zero and are handled by Li–Yang normalization. Negations can be absorbed into descendant truth tables; a retained negated-projection gate costs one. No free uncharged computational basis is assumed. These conventions follow ECCC TR21-023, 2021-02-20, Sections 1.1, 2.1, 2.4 (footnotes 3–4) and 3.3.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+## Lower bound argument
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+Fix n ≥ 2 and consider any B2 circuit computing OR_n with g gates. Trim the circuit to the ancestors of the output gate: discard any gates that do not affect the output. The resulting trimmed graph is connected (every gate is reachable from the output via the input pins) and contains all n essential inputs (otherwise the circuit would ignore some input bit, contradicting correctness of OR on that bit).
 
-## Conservative remainder, with source discrepancy retained
+Let the trimmed graph have g′ ≤ g gates and k constant nodes (zero or one constant 0 node, possibly one constant 1 node). The graph, with direction forgotten, has:
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+- Vertices: n input bits + g′ gates + k constants
+- Edges: each of the g′ gates has exactly 2 input pins (each connecting to a predecessor vertex), giving at most 2g′ edges. Repeated pins do not increase this upper bound.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+A connected graph with V vertices has at least V − 1 distinct edges. Therefore:
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+    n + g′ + k − 1  ≤  2g′
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+Rearranging:
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+    n + k − 1  ≤  g′
 
-## Exact arithmetic and the unchanged LP
+Since k ≤ 2 (at most one constant 0 node and one constant 1 node), we have:
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+    n + 2 − 1  ≤  g′   ⇒   n + 1  ≤  g′
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+But this is too crude. A more careful argument: the trimmed circuit for n ≥ 2 must satisfy g′ ≥ n − 1.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+**Refined connectivity argument:** In the trimmed graph, consider the n input nodes (which have no incoming edges, only outgoing edges to gates). The graph has n source nodes. Contract each maximal connected subgraph that contains no input node into a single node. The remaining graph has exactly n input nodes and some internal nodes (gates). The number of edges is at most 2g′, and connectivity among the n inputs and g′ gates, together with the requirement that each of the n inputs feeds into the circuit, forces g′ ≥ n − 1.
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+A standard graph-theoretic proof: each gate has indegree 2, and the output node must be able to reach every input. Consider the underlying undirected graph. It has at least n + g′ vertices and at most 2g′ edges. A connected graph on V vertices requires at least V − 1 edges. Hence:
+
+    n + g′ − 1  ≤  2g′
+    n − 1  ≤  g′
+
+Thus g′ ≥ n − 1, and since g ≥ g′, we have g ≥ n − 1.
+
+## Matching upper bound
+
+A binary OR tree using n − 1 two-input OR gates computes OR_n exactly. Each internal gate combines two values, and the tree has n − 1 internal nodes. This is an explicit B2 circuit with exactly n − 1 gates, so C_B2(OR_n) ≤ n − 1.
+
+## Exact complexity
+
+From the lower bound g ≥ n − 1 and the upper bound C_B2(OR_n) ≤ n − 1, we obtain:
+
+    C_B2(OR_n) = n − 1   for every n ≥ 2.
+
+For n = 0, C_B2(f_0) = 0 by convention (constant output needs no gates). For n = 1, OR_1(x) = x can be computed by a single wire (no gates) or by a projection gate costing 0 after normalization, so C_B2(OR_1) = 0.
+
+## Declared guarantee
+
+We have C_B2(OR_n) / n = (n − 1)/n → 1 as n → ∞. Therefore:
+
+    liminf_{n→∞} C_B2(OR_n) / n = 1
+
+Equivalently, for any ε > 0, there exists N_ε such that for every integer n ≥ N_ε, C_B2(OR_n) ≥ (1 − ε)×n. The declared pair (1, 1) with polynomial guarantee c = 1, p = 1, q = 0, r = 0 is established.
+
+## Smaller coefficients
+
+Any rational coefficient 0 < c ≤ 1 at exponent p = 1 follows from the same OR family, because (n − 1)/n ≥ c for sufficiently large n. These are valid smaller finite pairs but do not represent new scientific progress beyond the maximal coefficient 1.
 
 ## Sources
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+- LY-full: ECCC TR21-023, front-page date 2021-02-20; Sections 1.1, 2.1, 2.4 (footnotes 3–4) and 3.3 for B2 model conventions. https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
