@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total family F_n defined in proof.md: F_n=0 for n<1024. For n>=1024 let k be the least prime with k^5>32*n^3, m=n-k, r=ceil(m/k), and t=ceil(sqrt(r)). The first k input bits encode the coefficients below the leading term of a monic degree-k binary polynomial q. Output 0 if q is reducible. Otherwise form K=F_2[Z]/(q), pad the remaining m input bits with zeros to r*k bits, and interpret the blocks z_i in the polynomial basis, constant coefficient first. Set y_i=z_i^(2^(r+2-i)-1) and output Tr_(K/F_2)(sum over t-element I subset {1,...,r} of product_(i in I) y_i). The field description is part of the actual n-bit input. The fixed evaluator and empty-witness NP verifier are specified in proof.md.",
+  "theorem": "For this one fixed total uniform polynomial-time Boolean family, hence one language in NP with witness bound zero, C_B2(F_n)>=(7/2)(n-k)-7*d(n)>=(7/2)n-(469/4)n^(4/5) for every integer n>=1024, where d(n)=ceil(k*r/t)+k*t+r*(r+1)+1. Therefore liminf over all integer lengths n of C_B2(F_n)/n >= 7/2 in the full Li-Yang B2 model at actual input length n=|x|. Equivalently, for every real epsilon>0 there exists N_epsilon such that every integer n>=N_epsilon satisfies C_B2(F_n)>=(7/2-epsilon)*n.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
