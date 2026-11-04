@@ -41,6 +41,75 @@ def archive(root, artifact_id, name, path):
             "path": path.name, "file_sha256": sha(raw)}
 
 
+@unittest.skipIf(derivation is None, "requires the score-derivation verifier")
+class DerivationTaskSchemaTests(unittest.TestCase):
+    def setUp(self):
+        from llm_verifier.derivation_schema import compile_schema, validate_value
+        from tests.test_score_derivation import original, target, term
+
+        config = derivation.normalize_config(json.loads((ROOT / "derivation.json").read_text()))
+        self.payload_schema = compile_schema(config["payload_schema"])
+        self.response_schema = derivation.response_schema(config)
+        self.validate = validate_value
+        self.original = original()
+        self.target = target(self.original, {"kind": "explicit", "terms": [term(182, 4, 5)]})
+
+    def response(self, target):
+        return {"status": "derived", "payload": {"target_bound": target},
+                "reason": "Synthetic schema regression.", "source_refs": []}
+
+    def assert_rejected_by_both_schemas(self, target):
+        with self.assertRaises(VerifierError):
+            self.validate(self.payload_schema, {"target_bound": target})
+        with self.assertRaises(VerifierError):
+            self.validate(self.response_schema, self.response(target))
+
+    def test_unrelated_guarantees_cannot_replace_a_remainder_transcription(self):
+        from expressions import ratio
+
+        for guarantee in ({"kind": "superpolynomial"},
+                          {"kind": "lane_endpoint", "exponent": ratio(1)},
+                          self.original["guarantee"]):
+            with self.subTest(kind=guarantee["kind"]):
+                proposed = deepcopy(self.target)
+                proposed["guarantee"] = guarantee
+                self.assert_rejected_by_both_schemas(proposed)
+
+    def test_endpoint_projections_cannot_replace_the_retained_finite_projection(self):
+        from expressions import ratio
+
+        for projection in ({"kind": "global_endpoint"},
+                           {"kind": "lane_endpoint", "exponent": ratio(1)}):
+            with self.subTest(kind=projection["kind"]):
+                proposed = deepcopy(self.target)
+                proposed["projection"] = projection
+                self.assert_rejected_by_both_schemas(proposed)
+
+    def test_explicit_multiterm_big_o_and_constant_losses_remain_representable(self):
+        from expressions import ratio
+        from tests.test_score_derivation import target, term
+
+        for remainder in (
+            {"kind": "explicit", "terms": [term(182, 4, 5)]},
+            {"kind": "explicit", "terms": [term(8, 1, 100), term(6, 3, 50000), term(23, 0)]},
+            {"kind": "big_o", "exponent": ratio(4, 5),
+             "log_exponent": ratio(0), "loglog_exponent": ratio(0)},
+            {"kind": "explicit", "terms": [term(3, 0)]},
+        ):
+            with self.subTest(remainder=remainder):
+                proposed = target(self.original, remainder)
+                self.validate(self.payload_schema, {"target_bound": proposed})
+                self.validate(self.response_schema, self.response(proposed))
+
+    def test_unsupported_and_not_applicable_null_outputs_remain_available(self):
+        for status in ("unsupported", "not_applicable"):
+            with self.subTest(status=status):
+                self.validate(self.response_schema, {
+                    "status": status, "payload": None,
+                    "reason": "No new representation claimed.", "source_refs": [],
+                })
+
+
 @unittest.skipIf(derivation is None, "requires the score-derivation verifier; exercised by its dedicated CI job")
 class GenericAdapterIntegration(unittest.TestCase):
     def setUp(self):
