@@ -1,90 +1,106 @@
-# Published coefficient 31/10: construction and proof
+# Coefficient/exponent pair (1, 1) for the fixed total AND family
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+This proof is self-contained: it uses no external theorem, only the pinned
+model conventions from `rules.md` and elementary counting. It claims a
+finite score of [1,1], i.e. `C_B2(f_n) >= n - 1` at every length `n >= 1`.
 
 ## Fixed total family
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+For `n >= 1`, let `f_n : {0,1}^n -> {0,1}` be the AND of all `n` input bits.
+For `n = 0`, set `f_0(empty) = 1` (the empty conjunction is vacuously true).
+This defines one total family at every length, with no exceptions.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+The language is `L = {x in {0,1}* : f_|x|(x) = 1}`.
 
 ## Uniform P and NP membership
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+One fixed deterministic algorithm decides `L`: on input `x` of length `n`,
+scan the `n` bits once and accept iff every bit is 1 (accept the empty input).
+This runs in `O(n)` time, so the family is uniform polynomial-time.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+NP membership uses the fixed polynomial-time verifier `V(x, w)` that ignores
+`w`, scans the bits of `x`, and outputs 1 iff every bit of `x` is 1, with the
+fixed polynomial witness bound `W(n) = 0`. Both directions hold: if `x in L`
+then `V(x, empty) = 1` with `|empty| = 0 <= W(|x|)`; if `V(x, w) = 1` for some
+`w` with `|w| <= W(|x|)` then every bit of `x` is 1, so `x in L`. Per
+`rules.md`, a fixed polynomial-time evaluator with an empty witness suffices.
+The same language, verifier, and witness bound are used throughout.
 
-## Every integer length and the lower bound
+## Circuit model: native B2, no transfer
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+The lower bound is proved directly in the pinned Li-Yang general B2 model of
+`rules.md` (deterministic acyclic circuits, one output, two input pins per
+gate, all 16 binary truth tables, unrestricted depth and fan-out, exact
+computation on every input, every retained gate counted once). No transfer
+from another model is needed. There are no blocks, field encodings, or
+padding: the circuit input is exactly the `n` bits of `x`, so `n = |x|`
+is the actual input bit length and there is no linear loss. Witness bits
+are not circuit inputs.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+## Lemma (variable dependence): a g-gate circuit depends on at most g+1 inputs
 
-## Conservative remainder, with source discrepancy retained
+Say a signal in a circuit *depends on* input variable `x_i` if there exist
+two assignments to the inputs, differing only at `x_i`, that give different
+values to that signal. A bare-input feed depends on exactly its own variable
+(one variable); a constant feed depends on none.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+For a gate `G`, let `cone(G)` be the set of gates that feed `G`, including
+`G` itself (all gates with a directed path to `G`). Claim: the output signal
+of `G` depends on at most `|cone(G)| + 1` input variables.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+Proof by strong induction on `|cone(G)| >= 1`. The two pins of `G` are each
+fed by a signal that is either a bare input, a constant, or the output of
+some gate `H` with `cone(H) subset of cone(G) \ {G}` (acyclicity: every path
+into a pin-feed through another gate extends to `G`, and no path from `G`
+reaches its own pin-feeds). The output of `G` is a fixed Boolean function of
+its two pin values, so its dependency set is contained in the union of the
+two pin-feed dependency sets.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Bound each pin-feed: a bare input contributes at most 1 variable; a constant
+contributes 0; a gate `H` contributes at most `|cone(H)| + 1` by the induction
+hypothesis, since `|cone(H)| <= |cone(G)| - 1`. In the worst case both pins
+are fed by gates `H1, H2` with disjoint cones, giving at most
+`(|cone(H1)| + 1) + (|cone(H2)| + 1) <= (|cone(G)| - 1) + 2 = |cone(G)| + 1`
+variables, using `|cone(H1)| + |cone(H2)| <= |cone(G)| - 1` for disjoint
+subsets of `cone(G) \ {G}`. Shared subgraphs (overlapping cones) and repeated
+pins (both pins fed by the same signal) only shrink the union, and constant
+pins contribute nothing, so all degenerate cases satisfy the same bound.
+This closes the induction.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+Consequences used below:
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+- Every gate in a circuit with `g` gates depends on at most `g + 1`
+  variables, since `|cone(G)| <= g`.
+- If the circuit output selects a bare input directly (in particular any
+  `g = 0` circuit), it depends on exactly 1 variable, which is `<= g + 1`.
+- Constant nodes, unary behavior (both pins carrying the same signal),
+  negated projections, and shared subcircuits are all covered above; no
+  substitution or normalization step is performed, and every retained gate
+  is counted once in `g`. No direct-sum additivity is assumed: the argument
+  upper-bounds a dependency set by a union, which holds under arbitrary
+  sharing.
 
-## Exact arithmetic and the unchanged LP
+## The AND function depends on all n inputs
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+For `n >= 1` and each position `i`, the all-ones input gives `f_n = 1`
+while flipping only bit `i` to 0 gives `f_n = 0`. Hence `f_n` depends on
+every one of its `n` input variables.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+## Main bound
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+Let a B2 circuit with `g` gates compute `f_n` exactly, `n >= 1`. Its output
+signal equals `f_n`, so it depends on all `n` variables. By the Lemma it
+depends on at most `g + 1`. Therefore `g + 1 >= n`, i.e. `g >= n - 1`.
+Since the circuit was arbitrary:
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+    C_B2(f_n) >= n - 1 = (1)*n^1 - 1, for every integer n >= 1.
 
-## Sources
+With `r(n) = 1`, `r(n)/n^1 -> 0`, so this is a `c*n^p - r(n)` bound with
+`c = 1`, `p = 1`. It implies `liminf C_B2(f_n)/n >= 1`. Explicitly, for
+every `eps > 0`, taking `N_eps = ceil(1/eps)`, every integer `n >= N_eps`
+satisfies `n - 1 >= (1 - eps)*n` (equivalent to `eps*n >= 1`). All
+sufficiently large integer lengths are covered, with the same family,
+verifier, and witness bound throughout.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+This establishes the declared full guarantee `polynomial_log` with
+`c = 1/1`, `p = 1/1`, `q = 0`, `r = 0` and its finite projection `[1, 1]`.
