@@ -21,7 +21,8 @@
       ],
       "paretoPolicies": {
         "scoring": {
-          "version": "coefficient-exponent-expression-v2"
+          "version": "coefficient-exponent-expression-v3",
+          "retained_result": "yukon-retained-result-v1"
         },
         "validity": {
           "version": "fixed-family-full-b2-v1"
