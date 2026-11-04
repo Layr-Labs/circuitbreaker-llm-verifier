@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total language defined by the deterministic evaluator in proof.md. At actual input length N<2^20 output zero. Otherwise let b be the least positive integer with 25^5*b^5>=24^5*N^3, and let ell be the first prime strictly larger than b found by deterministic trial division. Put m=N-ell, r=ceil(m/ell), and t=ceil(sqrt(r)). Read the first ell bits as the coefficients below the leading term of a monic degree-ell binary polynomial P. Output zero unless X^(2^ell)=X modulo P and gcd(P,X^2-X)=1. For a valid prefix, append r*ell-m zero bits to the remaining m payload bits and interpret the r consecutive ell-bit blocks as x_1,...,x_r in F_2[X]/(P), in the polynomial basis with constant coefficient first. Set w_i=r+2-i, y_i=x_i^(2^(w_i)-1), and output the absolute trace Tr_(K/F_2) of the order-t elementary symmetric polynomial in y_1,...,y_r. Every prefix bit counts in N; P is part of the input, not advice. One fixed polynomial-time evaluator and empty-witness NP verifier define all lengths.",
+  "theorem": "For this one fixed total language in P, hence in NP with witness bound zero, every exact circuit in the full pinned B2 model at actual input length N has at least 4*N-(51/4)*N^(4/5) gates for every integer N>=2^20, and at least 4*N-(25/2)*N^(4/5) gates for every integer N>=2^25. Consequently liminf over all integer lengths N of C_B2(F_N)/N is at least 4, and for every real epsilon>0 every integer N>=max(2^20,ceil((51/(4*epsilon))^5)) satisfies C_B2(F_N)>=(4-epsilon)*N. The same fixed evaluator and verifier apply throughout both bounds and all asymptotic quantifiers.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
