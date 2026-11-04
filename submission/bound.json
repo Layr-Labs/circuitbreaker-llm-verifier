@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total family defined in proof.md Section 1: f_0=0; for n>=1 let k be the least prime with k^5>32n^3; if n<=k then f_n=0; else the first k bits give the monic polynomial Q=Z^k+sum b_j Z^j, and f_n=0 unless Z^(2^k)=Z mod Q and gcd(Q,Z^2+Z)=1; if so, with K=F_2[Z]/(Q), m=n-k, r=ceil(m/k), t=ceil(sqrt(r)), pad the remaining m bits with zeros to r blocks of k bits read as y_i in K via the polynomial basis, and output Tr(Sym_r^t(y_1^(2^(r+1)-1), y_2^(2^r-1), ..., y_r^(2^2-1))) with Tr the absolute trace K->F_2.",
+  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, every circuit in the full Li-Yang B2 model computing f_n has at least (7/2)n - 56 n^(4/5) - (35/2) n^(3/5) - 7 gates for every integer n >= 10^7, all k prefix bits being counted in n; hence C_B2(f_n) >= (7/2)n - o(n) at every sufficiently large integer length n = |x|.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
