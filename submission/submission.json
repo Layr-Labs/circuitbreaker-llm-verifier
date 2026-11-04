@@ -1,40 +1,24 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "CL-v1 (unscored): at four explicit witness states, degree-class weights cannot lift the ternary-pair step accounting above 4",
   "claims": [
+    "Unscored barrier lemma CL-v1, with full proof in proof.md; it asserts no circuit lower bound and no circuit upper bound. Let R be the ternary-pair gate-elimination procedure as defined in proof.md Section 1 (provenance in proof.md Section 6). Let R' be any variant of R that differs only at R's minimal-AND step: when both parents of the gate G chosen there (the first gate in list order) are unpaired parameters, R' may, instead of GP, fix one of G's two parents to 0 or 1 and then exhaust D1 and D2, which ends that step. Consider potentials W = s + (sum over unpaired parameters u of k(min(deg u,3))) + (sum over pairs {p,r} of pi(min(deg p,3),min(deg r,3))), where k(0)=0, k(1),k(2),k(3) are arbitrary reals, pi is an arbitrary real symmetric function on {0,1,2,3}^2, and kmax=max(k(1),k(2),k(3)). Let S1, S2, S3 be the explicit states of proof.md Section 2 and S1' the state that R reaches from S1 (proof.md Section 3). If a real delta satisfies Delta W <= delta*Delta a for the step that R takes at each of S1, S1', S2 and S3, then delta-kmax <= 4. The same conclusion holds for the steps R' takes at those four states, whatever R' chooses at S1 and S2. If R' fixes a parent of G at S2, to either value, the four inequalities give delta-kmax <= 11/3 whatever R' does at S1, also when the M and D4 performed in the next iteration after a 1-fixing at S2 are counted as part of that step. If R' fixes a parent of G at S1 to its non-controlling value 1, the S1 inequality alone gives delta-kmax <= 3. For k(1)=k(2)=k(3)=5, pi=3 and delta=9, all four inequalities for R hold with equality and delta-kmax=4."
+  ],
+  "experiments": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "31",
-        "denominator": "10"
+      "id": "witness-audit",
+      "source": "audit.py",
+      "purpose": "Supplementary exact replay of the witness states S1, S1', S2, S3. It rebuilds each gate list and checks the syntactic conditions showing that no earlier row applies. It then applies each stated step with constant and literal propagation (including the M and D4 that follow the 1-fixing at S2), compares every change of a potential term with proof.md Section 3, re-derives the bound for each choice in exact rational arithmetic, and checks the attainment equalities. It checks only these finite states; the lemma is proved in proof.md.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
       },
-      "evidence": [
-        "bound.json",
-        "proof.md"
-      ]
-    },
-    {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "1",
-        "denominator": "1"
-      },
-      "evidence": [
-        "bound.json",
-        "proof.md"
+      "initial_inputs": [
+        {}
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": []
 }
