@@ -20,10 +20,12 @@ powers in BK-preprint Theorem 2.2, equation (4).
 ## Uniform P and NP membership
 
 One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
+candidate primes q in increasing order, testing each candidate for primality by trial
+division, and stopping at the first q with q>2*n^(3/5). For integer q and n this
+stopping condition is equivalent to q^5>32*n^3. Bertrand's
 bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
 Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
+O(i+1) field operations (squarings and multiplications) for each exponent, whose bit length is i+1.
 Field operations in the polynomial basis have polynomial bit cost.
 
 Compute the symmetric polynomial without characteristic-two division: start E_0=1
@@ -82,6 +84,15 @@ u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
 it. Retuning this LP alone cannot advance the record; the certificate is not a
 barrier to another proof. Passing the LP checker certifies only these arithmetic
 claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+
+## Revision versus baseline
+
+This revision clarifies wording only. It names the scanned candidate prime q in the
+k-search and states the stopping condition as q>2*n^(3/5), equivalently q^5>32*n^3,
+and it corrects the powering sentence to O(i+1) field operations (squarings and
+multiplications) rather than multiplications alone. It changes no family, field,
+symmetric polynomial, witness bound, B2 counting, LP point, remainder, coefficient,
+or exponent, and it claims no new theorem.
 
 ## Sources
 
