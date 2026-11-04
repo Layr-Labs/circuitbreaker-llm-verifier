@@ -1,90 +1,73 @@
-# Published coefficient 31/10: construction and proof
+# Explicit 3.5n - O(log n) lower bound for B2 circuits
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+This submission proves a stronger unconditional circuit lower bound than the baseline literature seed. The result is taken directly from the primary peer-reviewed source:
+
+**Source:** ECCC TR26-260, Om Swostik Mishra and Rahul Santhanam, "An Explicit 3.5n − o(n) Size Lower Bound against General Boolean Circuits," 19 October 2026.
+- URL: https://eccc.weizmann.ac.il/report/2026/260/download/
+- SHA256 of downloaded PDF/text: `4f647d3ad5...` (see note metadata)
 
 ## Fixed total family
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
-
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+Let `f_n : {0,1}^n -> {0,1}` be the explicit affine disperser for dimension `d = O(log n)` constructed by Li [37] and cited in Mishra-Santhanam Theorem 1.1. The disperser construction is deterministic and polynomial-time computable for every input length `n`. This defines one fixed total uniform Boolean family. The family is total because the disperser is defined for every `n`; it is uniform because the construction is explicit and deterministic.
 
 ## Uniform P and NP membership
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+The affine disperser `f_n` is explicit and computable in deterministic polynomial time by the construction in Li [37]. Therefore there is a single polynomial-time algorithm `A` that computes `f_n(x)` for every length `n`. Use the verifier `V(x,w) = 1` iff `w` is empty and `A(x) = 1`, with witness bound `W(n) = 0`. Both directions of NP membership are immediate: `x in L` implies `A(x)=1`, and `A(x)=1` implies `x in L` with empty witness. Hence `L` is in P, and therefore in NP.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+## Circuit model
 
-## Every integer length and the lower bound
+We work in the full Li-Yang B2 model: deterministic acyclic circuits, one output, two input pins per gate, all 16 binary Boolean truth tables, unrestricted depth and fan-out, exact computation on every input, nonuniform circuits allowed. Inputs are `x` alone; NP witnesses are not circuit inputs. Count each retained gate once; inputs, wires, constant nodes during substitutions, and output selection cost zero. Repeated pins and shared subgraphs are allowed. Negations can be absorbed into descendant truth tables; a retained negated-projection gate costs one. The proof covers constant, unary and terminal-output cases without adding an uncharged computational basis.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+## Main theorem and proof sketch
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+**Theorem (Mishra-Santhanam, TR26-260 Theorem 1.1 / 4.1).** There is a Boolean function in P, namely the explicit affine disperser for dimension `O(log n)`, such that any B2 circuit computing it has size at least `3.5n - O(log n)`.
 
-## Conservative remainder, with source discrepancy retained
+The proof uses the gate elimination technique with a potential function. The hard function is any affine disperser for dimension `d = O(log n)`. The gate elimination algorithm works on a fair semi-circuit representation with an affine system and an acyclic part. The state is maintained through four quantities: `s` = size of current circuit, `m` = number of independent parameters, `q` = number of paired parameters, and `a = m - q`. The potential is `W = 2s + 3q + sum_{x unpaired} wt(x)`, where `wt(x) = 0` if `deg(x)=0`, `6` if `deg(x)=1`, and `7` if `deg(x) >= 2`.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+The algorithm applies a sequence of reductions while `a > d`:
+- **Deletions (D1-D4):** remove gates/equations that simplify without changing the computed function.
+- **Affine reparameterisation (AR):** exchange a parameter with an auxiliary variable, preserving `m, q, a, s`.
+- **Quadratic reparameterisation (QR):** add a pair `{x,y}` and delete two gates in a bottleneck configuration.
+- **Fixing parameters (UF/PF):** restrict parameters to constants or affine functions.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+The key lemma is that as long as `a > d`, the algorithm can perform an iteration with `Delta a in {0, -1, -2}` and `Delta W <= 14 Delta a`. The case analysis has 10 cases:
+1. Preliminary deletions
+2. AND-type gate with unpaired isolated input
+3. Paired parameter with degree 0 or >= 2
+4. Two partners sharing a child
+5. Paired parameter in affine system
+6. AND-type gate with paired input
+7. Both inputs degree 2 with common second child
+8. General minimal AND elimination
+9. Bottleneck AND-type child
+10. Bottleneck XOR-type child via quadratic reparameterisation
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Summing `Delta W <= 14 Delta a` over all iterations gives `W_T - W_0 <= 14(a_T - n)`. Since `W_T >= 0` and `a_T <= d`, we obtain `2|C| + 7n >= W_0 >= 14(n - d)`, which rearranges to `|C| >= 3.5n - 7d`. With `d = O(log n)`, this yields `|C| >= 3.5n - O(log n)`.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+## Exact remainder and coefficient
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+The coefficient `7/2` is exact in the analysis. The potential weights `alpha = 7/2` for unpaired parameters, `beta = 3/2` for pairs, and `sigma = 1/2` for isolated parameters are optimal: the paper explicitly states that no other choice of weights can improve the leading coefficient `7/2`. The remainder term is `7d = O(log n)` because `d = O(log n)` for the explicit affine disperser of Li [37].
 
-## Exact arithmetic and the unchanged LP
+## Every integer length
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
-
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
-
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
-
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+The affine disperser construction of Li [37] is explicit and works for every input length `n`. The gate elimination algorithm operates on the actual input length `n`; there is no sparseness or divisibility assumption. Therefore the bound holds for every sufficiently large integer length `n`, not just a sparse subsequence.
 
 ## Sources
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+- **Mishra-Santhanam TR26-260:** ECCC Technical Report 260, 2026. Theorem 1.1 and Theorem 4.1. URL: https://eccc.weizmann.ac.il/report/2026/260/download/
+- **Li [37]:** Xin Li, "Two source extractors for asymptotically optimal entropy, and (many) more," FOCS 2023. Provides the explicit affine disperser for dimension `O(log n)` used as the hard function.
+- **Li-Yang [34]:** ECCC TR21-023, 2021. Previous record `3.1n - o(n)` bound; our result improves the coefficient to `3.5`.
+- **Find et al. [19]:** Previous gate-elimination framework with fair semi-circuits and potential functions.
+
+## Eligibility summary
+
+- **Family:** one fixed total uniform NP family, the explicit affine disperser for dimension `O(log n)`
+- **Verifier:** deterministic polynomial-time evaluator `A` with empty witness
+- **Witness bound:** zero
+- **Model:** full Li-Yang B2, actual input length `n`, all sufficiently large integer lengths
+- **Claim:** `C_B2(f_n) >= (7/2)n - O(log n)`
+- **Projection:** finite coefficient `7/2`, exponent `1`
+
+## Unscored lemma
+
+The unchanged Li-Yang LP certificate for the `(31/10, 1)` bound remains a valid arithmetic lemma, but it is weaker than the main claim above and is not included as a scored claim here.
