@@ -10,6 +10,10 @@ import sys
 
 VERIFIER_REVISION = "c3196332cbd0ea75a8f478673e04a78ae03e581d"
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+if (ROOT / "score-derivation-profile.json").exists():
+    from tools.derivation_profile import read_profile
+    VERIFIER_REVISION = read_profile(ROOT)["verifier_revision"]
 BASELINE_RECOVERY = {
     "version": 1,
     "deliveryJob": "Export accepted CircuitBreaker expressions",
@@ -58,6 +62,10 @@ def validate_presentation(root, track):
 
 def generate(root=ROOT):
     root = Path(root)
+    if (root / "score-derivation-profile.json").exists():
+        from tools.derivation_profile import regenerate
+        regenerate(root)
+        return
     subprocess.run([
         sys.executable, "-m", "llm_verifier", "github", "--root", str(root),
         "--verifier-revision", VERIFIER_REVISION,

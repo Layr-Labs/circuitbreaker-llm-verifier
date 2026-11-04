@@ -1,0 +1,131 @@
+  route:
+    name: Validate complete source profile and select requested fields
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    permissions:
+      contents: read
+    outputs:
+      route: ${{ steps.route.outputs.route }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          submodules: false
+          lfs: false
+      - id: route
+        env:
+          YUKON_EVALUATION: ${{ inputs.yukon_evaluation }}
+        run: python3 select_scoring_route.py
+
+  verify:
+    needs: [route]
+    if: needs.route.outputs.route == 'ordinary'
+    uses: Layr-Labs/llm-verifier/.github/workflows/verify.yml@@VERIFIER_REVISION@
+    with:
+      verifier_repository: Layr-Labs/llm-verifier
+      verifier_revision: @VERIFIER_REVISION@
+      root_dir: '.'
+      config_path: verifier.json
+      submission_path: submission
+      score_path: .yukon/score.json
+      yukon_accepted_results: ${{ inputs.yukon_accepted_results }}
+      yukon_evaluation: ${{ inputs.yukon_evaluation }}
+    secrets:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      VERIFIER_CHECKOUT_TOKEN: ${{ secrets.VERIFIER_CHECKOUT_TOKEN }}
+
+  derive:
+    needs: [route]
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+    if: needs.route.outputs.route == 'derive'
+    uses: Layr-Labs/llm-verifier/.github/workflows/derive-score.yml@@VERIFIER_REVISION@
+    with:
+      verifier_repository: Layr-Labs/llm-verifier
+      verifier_revision: @VERIFIER_REVISION@
+      root_dir: '.'
+      config_path: derivation.json
+      submission_path: submission
+      score_path: .yukon/score.json
+      yukon_accepted_results: ${{ inputs.yukon_accepted_results }}
+      yukon_evaluation: ${{ inputs.yukon_evaluation }}
+    secrets:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      VERIFIER_CHECKOUT_TOKEN: ${{ secrets.VERIFIER_CHECKOUT_TOKEN }}
+
+
+  derivation_metrics:
+    name: Export retained-validity score derivation
+    needs: [derive]
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          submodules: false
+          lfs: false
+      - name: Bootstrap trusted artifact transfer before wheel download
+        env:
+          LLMV_TRANSFER_HELPER: ${{ needs.derive.outputs.helper_base64 }}
+          LLMV_TRANSFER_SHA256: ${{ needs.derive.outputs.helper_sha256 }}
+        shell: bash
+        run: |
+          python3 -I - <<'PY'
+          import base64, hashlib, os
+          from pathlib import Path
+          encoded = os.environ["LLMV_TRANSFER_HELPER"]
+          if not encoded or len(encoded) > 87384:
+              raise SystemExit("Invalid transfer helper size")
+          data = base64.b64decode(encoded, validate=True)
+          if len(data) > 65536 or hashlib.sha256(data).hexdigest() != os.environ["LLMV_TRANSFER_SHA256"]:
+              raise SystemExit("Invalid transfer helper digest")
+          root = Path(os.environ["GITHUB_WORKSPACE"]) / ".llmv-artifact-transfer"
+          root.mkdir()
+          with (root / "transfer.py").open("xb") as target:
+              target.write(data)
+          PY
+          python3 -I "$GITHUB_WORKSPACE/.llmv-artifact-transfer/transfer.py" install-action
+      - name: Download and verify immutable export inputs
+        uses: ./.llmv-artifact-transfer
+        timeout-minutes: 4
+        env:
+          LLMV_ARTIFACTS: >-
+            [
+              {"artifact":${{ needs.derive.outputs.package_artifact }},"path":"wheel"},
+              {"artifact":${{ needs.derive.outputs.intake_artifact }},"path":"intake"},
+              {"artifact":${{ needs.derive.outputs.derivation_artifact }},"path":"derivation"}
+            ]
+      - name: Export from the current wheel, intake and derivation
+        env:
+          LLMV_PACKAGE_ARTIFACT: ${{ needs.derive.outputs.package_artifact }}
+          LLMV_INTAKE_ARTIFACT: ${{ needs.derive.outputs.intake_artifact }}
+          LLMV_DERIVATION_ARTIFACT: ${{ needs.derive.outputs.derivation_artifact }}
+          LLMV_EXPECTED_INTAKE: ${{ needs.derive.outputs.intake_sha256 }}
+          LLMV_REVIEW_RUN_ID: ${{ needs.derive.outputs.review_run_id }}
+          LLMV_REVIEW_RUN_ATTEMPT: ${{ needs.derive.outputs.review_run_attempt }}
+        shell: bash
+        run: |
+          python3 -m venv "$RUNNER_TEMP/llmv-env"
+          "$RUNNER_TEMP/llmv-env/bin/python" -m pip install --no-index --no-deps "$RUNNER_TEMP"/wheel/*.whl
+          "$RUNNER_TEMP/llmv-env/bin/python" export_hosted_derivation.py --intake "$RUNNER_TEMP/intake/intake.json" --derivation "$RUNNER_TEMP/derivation/derivation.json" --wheel "$RUNNER_TEMP"/wheel/*.whl --transfer-receipt "$RUNNER_TEMP/llmv-transfer-receipt.json" --out "$RUNNER_TEMP/circuitbreaker-score/.yukon/score.json" --lineage "$RUNNER_TEMP/derivation-lineage/lineage.json"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: circuitbreaker-score
+          path: ${{ runner.temp }}/circuitbreaker-score/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+          overwrite: true
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: circuitbreaker-derivation-lineage
+          path: ${{ runner.temp }}/derivation-lineage/
+          if-no-files-found: error
+          retention-days: 30

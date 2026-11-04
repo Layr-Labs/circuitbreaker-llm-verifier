@@ -34,9 +34,14 @@ LEGACY_POLICIES = {
 def validate_contract(config):
     legacy = config["review_standard"] == LEGACY_REVIEW and config["policies"] == LEGACY_POLICIES
     current = config["review_standard"] == REVIEW and config["policies"] == POLICIES
+    derivation_profile = config["review_standard"] == REVIEW and config["policies"] == {
+        "scoring": {"version": "coefficient-exponent-expression-v3",
+                    "retained_result": "yukon-retained-result-v1"},
+        "validity": POLICIES["validity"],
+    }
     objectives = config["objectives"]
     if (config["id"] != "circuitbreaker"
-            or not (legacy or current)
+            or not (legacy or current or derivation_profile)
             or config.get("acceptance_policy", "atomic-claims-v1") != "atomic-claims-v1"
             or config.get("manifest_preprocessor") is not None
             or "structured_claims" in config
