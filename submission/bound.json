@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total certificate-prefix language defined in proof.md. At actual input length N, let k be the least prime not less than the least positive B with B^5>32*N^3; read the first k bits of x as the lower coefficients of the monic degree-k polynomial Q=Z^k+sum_j q_j Z^j over F_2, and reject Q unless the exact Frobenius/gcd test proves it irreducible. Put m=N-k, K=F_2[Z]/(Q), r=ceil(m/k), t=ceil(sqrt(r)). Zero-pad the remaining m bits to r blocks of k bits, read block i as a_i in K in the polynomial basis, and output the constant coefficient of the sum over t-element subsets I of the product over i in I of a_i^(2^(r+2-i)-1). Output 0 for N=0, for m<=0, and whenever a guard fails. The k prefix bits are part of the input and counted in N; Q is not advice.",
+  "theorem": "This fixed total language is in P, hence in NP with empty witnesses. Fix any valid prefix Q. For every integer N>=2^20 with k,r,t as above, 1<=t<r and k*t>=r(r+1), and disperser.md proves the payload function is nonconstant on every affine subspace of dimension greater than d(N)=floor(k*r/t)+k*t+r(r+1). Fixing the prefix in a circuit for F_N leaves a circuit with the same gate count for a function on m=N-k bits that is nonconstant on every affine subspace of dimension greater than d(N), so elimination.md gives C_B2(F_N)>=4m-9(d(N)+1)=4N-R(N) with R(N)=4k+9(floor(k*r/t)+k*t+r(r+1)+1). Here k<4*N^(3/5)+2, r<N^(2/5)/2+1 and sqrt(r)<=t<=sqrt(r)+1, so d(N) and R(N) are O(N^(4/5)); in fact R(N)<=58*N^(4/5). Hence liminf over integer N of C_B2(F_N)/N is at least 4: for every epsilon>0, N_epsilon=max(2^20,ceil((58/epsilon)^5)) gives C_B2(F_N)>=(4-epsilon)*N for every integer N>=N_epsilon.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
