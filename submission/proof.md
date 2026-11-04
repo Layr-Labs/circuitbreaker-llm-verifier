@@ -1,90 +1,224 @@
-# Published coefficient 31/10: construction and proof
+# Coefficient 2 for MOD3 in the full B2 model: a self-contained gate-elimination proof
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+This file proves, with no external premises, that the counting family
+MOD3 below satisfies C_B2(f_n) >= 2n - 3 for every integer n >= 2, hence
+liminf C_B2(f_n)/n >= 2. The declared pair is (2, 1). The argument is the
+classical gate-elimination method (Schnorr 1974; see also Wegener, *The
+Complexity of Boolean Functions*, 1987, Ch. 5). Those works are named only
+for provenance: every step used here is proved below, for this concrete
+family, in the circuit model of rules.md. No new circuit result beyond this
+classical bound is claimed; the bound is weaker than the 31/10 literature seed.
 
-## Fixed total family
+## 1. The family, at every length
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+For a binary string x let |x|_1 be its number of ones. For n >= 0 and a
+residue a in Z_3 = {0,1,2} define
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+    M^n_a(x) = 1  if |x|_1 ≡ a (mod 3),   and 0 otherwise,   x in {0,1}^n.
 
-## Uniform P and NP membership
+The scored family is f_n = M^n_0 for EVERY integer n >= 0. In particular
+f_0(empty string) = 1 (the empty count is 0), f_1(x) = 1 iff x = 0, and
+f_2(x) = 1 iff x = 00. There are no exceptional lengths. The language is
+L = { x in {0,1}* : |x|_1 ≡ 0 (mod 3) }, and f_n is its characteristic
+function on {0,1}^n. The auxiliary functions M^n_1, M^n_2 are used only
+inside the induction.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+## 2. Uniform polynomial time, hence NP
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Algorithm A: scan x once, keeping a counter c in Z_3 (start c = 0; on each
+1 replace c by c+1 mod 3); output 1 iff c = 0 at the end. A runs in time
+O(n) on input length n, uses no advice and is the same algorithm at every
+length; it outputs f_{|x|}(x) by definition.
 
-## Every integer length and the lower bound
+NP verifier: V(x, w) = 1 iff w is the empty string and A(x) = 1. Witness
+bound W(n) = 0. Both directions: if x in L then w = empty gives
+V(x, w) = A(x) = 1 with |w| = 0 <= W(|x|); conversely if V(x, w) = 1 for
+some w with |w| <= W(|x|) then A(x) = 1, so x in L. V runs in polynomial
+time. So L is in P, hence in NP, with one fixed verifier and witness bound.
+Witnesses are not circuit inputs; the circuits below read only x.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+## 3. Circuit model and conventions
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+We use the general B2 model of rules.md (Li–Yang, ECCC TR21-023, Sections
+1.1, 2.1, 2.4, 3.3). A circuit on variables x_1, ..., x_n is a finite
+directed acyclic graph whose nodes are: the n input nodes; any number of
+constant nodes labelled 0 or 1; and gates. Each gate v has an ordered pair
+of pins (p_1(v), p_2(v)), each pin being an earlier node (pins may coincide),
+and an arbitrary truth table g_v : {0,1}^2 -> {0,1} (all 16 are allowed).
+One node is designated the output. On input x every node gets a value in
+the obvious way; the circuit computes h if the output value equals h(x) for
+EVERY x in {0,1}^n. The size |C| is the number of gates, each counted once
+whether or not it is degenerate; inputs, constant nodes, wires and output
+selection cost zero. Fan-out, sharing and depth are unrestricted.
+C_B2(h) is the minimum size of a circuit computing h; it is well defined
+because every h has a circuit (e.g. a DNF built from binary gates). Renaming
+the variables does not change sizes.
 
-## Conservative remainder, with source discrepancy retained
+**Model transfer.** This model contains the Li–Yang B2 model of rules.md:
+every circuit there is a circuit here with the same size (free constant
+nodes are merely permitted here, never required). So the minimum here is at
+most the minimum in rules.md, and every lower bound proved here holds in the
+rules.md model. Section 4 below plays the role of the Li–Yang normalization
+(Sections 2.4 and 3.3 of TR21-023): it covers constant, unary, repeated-pin
+and terminal-output cases explicitly, and each removal only exhibits a
+smaller circuit, so every gate of every circuit considered stays charged.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+A function h depends on x_i if some two inputs differing only in x_i get
+different h-values.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+**Proper gates.** A gate v is *proper* if (i) its two pins are distinct
+nodes, (ii) neither pin is a constant node, and (iii) g_v depends on both
+of its arguments. A gate that is not proper is *degenerate*.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+**Observation 3.1.** If v is degenerate then, on every input, value(v) =
+u(value(w)) for one fixed node w that is a pin of v, or a constant node,
+and one fixed u in {0, 1, id, neg}.
+*Proof.* If the pins coincide (= w), value(v) = g_v(w, w), a unary function
+of w. If a pin is a constant node κ, substitute κ into g_v; what remains is
+a unary function of the other pin (if the other pin is also constant, take
+w to be that constant node). If g_v does not depend on one argument, it is
+a unary function of the other pin. Every unary function is 0, 1, id or neg. ∎
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+## 4. The removal lemma (normalization)
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+**Lemma 4.1 (removing one degenerate gate).** Let D be a circuit computing
+a function h that depends on at least two variables, and let v be a
+degenerate gate of D. Then there is a circuit D' with |D'| = |D| - 1
+computing h, whose gates are exactly the gates of D other than v (possibly
+with rewired pins and modified truth tables), such that every gate that was
+degenerate in D is still degenerate in D'.
 
-## Exact arithmetic and the unchanged LP
+*Proof.* Write value(v) = u(value(w)) as in Observation 3.1; note w is not v
+and w precedes v. Delete v and repair as follows.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+1. *Successor pins.* For each gate z and each pin of z that equals v: if u
+   is the constant κ, point the pin to a constant node κ; if u = id, point
+   it to w; if u = neg, point it to w and replace g_z by the table obtained
+   by negating that argument. Then z receives exactly the same argument
+   value as before on every input, so all node values are unchanged.
+   Acyclicity is kept because w precedes v, which precedes z.
+2. *Output.* If v is not the output, nothing else is needed. If v is the
+   output: u is not constant and w is not a constant node, since otherwise
+   h would be constant. If u = id, make w the output. If u = neg, then w is not an input node or constant node,
+   because then h would depend on at most one variable; so w is a gate.
+   Replace g_w by 1 - g_w, and for every gate z with a pin on w, negate that
+   argument in g_z (as in step 1). All nodes other than w keep their values,
+   w now computes the old value of v, and w becomes the output.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+So D' computes h and has one gate fewer. Degeneracy is preserved for every
+other gate z: if z had a constant pin, that pin is untouched (the only
+pins changed are those pointing to the gate v in step 1; step 2 changes
+truth tables only) — in step 1 a pin may additionally become constant,
+which keeps z degenerate; if z had two equal pins, both are
+rewired identically, so they stay equal or both become constants (a
+constant pin); if g_z ignored an argument, negating arguments or negating
+the whole table does not create dependence on it. ∎
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+**Corollary 4.2 (normalization).** If h depends on at least two variables
+and D computes h, then there is a circuit D* computing h with |D*| <= |D|
+in which every gate is proper and every gate is an ancestor of the output
+(or the output itself). Moreover, if D has k distinct degenerate gates, a
+circuit computing h of size <= |D| - k exists.
+*Proof.* While some gate is degenerate, apply Lemma 4.1 to it. Each
+application removes exactly one gate, and every originally degenerate gate
+stays degenerate until it is itself removed, so all k of them are removed
+(at least k applications) and the process stops, since size decreases, with
+every gate proper. Finally delete all gates that are not ancestors of the
+output; this changes no output value, cannot make a gate degenerate (the
+pins of kept gates are kept) and does not increase size. ∎
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+In D*: the output is a gate (h depends on two variables, so it is neither
+an input node nor a constant node); no gate has a constant pin; constant
+nodes, if any remain, are unused and free.
 
-## Sources
+## 5. Facts about MOD3
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+**Lemma 5.1 (restriction).** Fixing x_i = b in M^n_a gives, on the other
+n-1 variables (renamed in order), the function M^{n-1}_{a-b}.
+*Proof.* The count of the remaining bits must be ≡ a - b. ∎
+
+**Lemma 5.2 (full dependence).** For n >= 2 and every a, M^n_a depends on
+every variable.
+*Proof.* Since n >= 2, some t in {0, ..., n} has t ≡ a (mod 3). Take any x
+with exactly t ones. Flipping x_i changes the count to t ± 1, which is not
+≡ a, so the value changes from 1 to 0. ∎
+
+**Lemma 5.3 (three subfunctions).** Let n >= 3, a in Z_3, i ≠ j. The four
+restrictions of M^n_a obtained by fixing (x_i, x_j) in {0,1}^2 include at
+least three pairwise distinct functions of the remaining m = n-2 >= 1
+variables.
+*Proof.* Fixing (x_i, x_j) = (b, c) yields M^m_{a-b-c}; the residues for
+(0,0), (0,1), (1,1) are a, a-1, a-2, i.e. all three residues. The functions
+M^m_0, M^m_1, M^m_2 are pairwise distinct for m >= 1: the all-zero input
+(count 0) gives value 1 only to M^m_0, and an input with exactly one 1
+(possible since m >= 1) gives value 1 only to M^m_1. ∎
+
+## 6. The elimination lemma
+
+Let S(n) = min over a in Z_3 of C_B2(M^n_a).
+
+**Lemma 6.1.** For every n >= 3, S(n) >= S(n-1) + 2.
+
+*Proof.* Fix a and a circuit C of size s computing M^n_a. By Lemma 5.2,
+M^n_a depends on all n >= 3 variables, so Corollary 4.2 gives a circuit C*
+of size s* <= s computing it, with all gates proper and the output a gate.
+Choose a gate G that is minimal in a topological order, i.e. no pin of G is
+a gate. Its pins are neither constant nodes nor equal (G is proper), so they
+are two distinct input nodes x_i and x_j. For an input node, its *fan-out*
+is the number of distinct gates having it as a pin.
+
+*Case 1: x_i and x_j both have fan-out 1* (only G). Form D from C* by
+deleting x_i, x_j and turning G into a fresh input node y. Since every edge
+leaving x_i or x_j enters G, each remaining node of C* computes, on input x,
+exactly the value its counterpart in D computes on (y, x_rest) with
+y = g_G(x_i, x_j), where x_rest are the other n-2 variables. Hence
+M^n_a(x) = F(g_G(x_i, x_j), x_rest) for the function F computed by D. Every
+restriction of (x_i, x_j) to constants therefore yields F(0, ·) or F(1, ·):
+at most two distinct functions. This contradicts Lemma 5.3. So Case 1 is
+impossible.
+
+*Case 2: one of them, say x_i, has fan-out >= 2.* Then besides G there is a
+gate H ≠ G with a pin on x_i. Replace the input node x_i by a constant node
+with value b = 0. The resulting circuit has the same
+size s* and computes M^{n-1}_{a} on the remaining variables (Lemma 5.1).
+In it, G and H are two distinct gates each having a constant pin, so both
+are degenerate. The computed function depends on all n - 1 >= 2 variables
+(Lemma 5.2), so Corollary 4.2 (with k = 2) gives a circuit for M^{n-1}_a of
+size <= s* - 2 <= s - 2.
+
+Hence C_B2(M^n_a) >= S(n-1) + 2 for every a, i.e. S(n) >= S(n-1) + 2. ∎
+
+Note that all repeated-pin, constant-node, unary-gate and negated-output
+situations, including ones created by the substitution, are absorbed by
+Lemma 4.1, which charges every gate and adds no free basis element.
+
+## 7. The bound at every length
+
+**Base.** S(2) >= 1: M^2_a depends on two variables (Lemma 5.2), so no
+circuit whose output is an input or constant node computes it; the output
+is a gate.
+
+**Induction.** By Lemma 6.1, S(n) >= 2n - 3 for every integer n >= 2.
+
+**Theorem.** For every integer n >= 2,
+C_B2(f_n) = C_B2(M^n_0) >= S(n) >= 2n - 3.
+
+**Asymptotics.** For every integer n >= 2, C_B2(f_n)/n >= 2 - 3/n. Given
+ε > 0, put N_ε = max(2, ceil(3/ε)); then C_B2(f_n) >= (2 - ε) n for EVERY
+integer n >= N_ε. Thus liminf_{n→∞} C_B2(f_n)/n >= 2. The loss 3 is a
+constant, so 3/n -> 0 and the coefficient is exactly 2, not reduced by a
+linear loss. This holds at every sufficiently large integer length, not on
+a subsequence, for the one fixed family f_n = M^n_0 with the fixed
+evaluator A and verifier V of Section 2, measured against the actual input
+length n with no padding or encoding.
+
+This establishes the declared full guarantee
+g(n) = 2 n^1 (log2 n)^0 (log2 log2 n)^0 with liminf C_B2(f_n)/g(n) >= 1,
+and its finite projection (c, p) = (2, 1).
+
+## 8. Scope
+
+The coefficient 2 is below the 31/10 literature seed (Li–Yang). This
+submission's value is a complete, citation-free proof that a reviewer can
+check line by line. It makes no claim about upper bounds beyond what is
+stated (MOD3 has linear-size circuits, so no superlinear claim is made).
