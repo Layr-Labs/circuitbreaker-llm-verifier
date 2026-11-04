@@ -1,36 +1,36 @@
 {
-  "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total Boolean language F defined in proof.md Section 1, at actual input length N=|x|. For N=0 the output is 0. For N>=1 let B be the least positive integer with B^5>32*N^3 and let k be the least prime at least B; if k>=N output 0. Put m=N-k, r=ceil(m/k), t=ceil(sqrt(r)); if t>=r or k*t<r*(r+1) output 0. Read the first k input bits as the lower coefficients of the monic degree-k polynomial Q(Z)=Z^k+sum_j b_j Z^j over F_2; test Q exactly by checking Z^(2^k)=Z mod Q and gcd(Q,Z^2+Z)=1, and output 0 if the test fails. Otherwise let K=F_2[Z]/(Q), pad the remaining m payload bits with zeros into r blocks of k bits read in the polynomial basis with the first bit as the constant coefficient, set y_i=a_i^(2^(r+2-i)-1) for 1<=i<=r, and output the constant coefficient pi in K of the elementary symmetric polynomial of order t in y_1,...,y_r. One fixed deterministic polynomial-time evaluator computes F at every length; the NP verifier accepts exactly the empty witness on inputs the evaluator accepts, so the witness bound is 0 and the witness is never a circuit input. The first k bits are counted in N; the zero padding is inside the injective F_2-linear payload map and adds no circuit input.",
   "guarantee": {
-    "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "denominator": "1",
+      "numerator": "4"
     },
     "exponent": {
-      "numerator": "1",
-      "denominator": "1"
+      "denominator": "1",
+      "numerator": "1"
     },
+    "kind": "polynomial_log",
     "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+      "denominator": "1",
+      "numerator": "0"
     },
     "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+      "denominator": "1",
+      "numerator": "0"
     }
   },
   "projection": {
-    "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "denominator": "1",
+      "numerator": "4"
     },
     "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    }
-  }
+      "denominator": "1",
+      "numerator": "1"
+    },
+    "kind": "finite"
+  },
+  "theorem": "For this one fixed total uniform polynomial-time Boolean family, hence one language in NP with witness bound zero, C_B2(F_N) >= 4*N - 87*N^(4/5) for every integer N >= 1024, where C_B2(F_N) is the minimum number of gates in a full Li-Yang B2 circuit computing the length-N restriction of F. Therefore liminf over all integer N of C_B2(F_N)/N >= 4 in the full Li-Yang B2 model at actual input length N=|x|. Equivalently, for every real epsilon>0 there exists N_epsilon such that every integer N>=N_epsilon satisfies C_B2(F_N) >= (4-epsilon)*N.",
+  "version": "circuitbreaker-expression-v1"
 }
