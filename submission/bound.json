@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total certificate-prefix language specified in proof.md and family.py. For actual length N, choose k as the least prime at least the least positive B with B^5>32*N^3; read k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2, reject invalid Q by the exact Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial on the remaining N-k bits with zero padding, r=ceil((N-k)/k), t=ceil(sqrt(r)). Output 0 for N=0 or the explicit failed guards in proof.md. The output is the constant coefficient in F_2[Z]/Q. All k prefix bits are included in N; Q is input, not advice.",
+  "theorem": "This fixed total language is in P, hence NP with empty witnesses. For every integer N>=2^20, let k,r,t be its declared parameters and d_N=floor(r(r+3)/2+max(kr/t,(t-1)(k-2)))+1. In the full pinned B2 model C_B2(F_N)>=(7/2)(N-k)-7d_N>=(7/2)N-17N^(4/5)-18N^(3/5)-6N^(2/5)-7. In particular liminf over all integer N of C_B2(F_N)/N is at least 7/2.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "7",
+      "denominator": "2"
     },
     "exponent": {
       "numerator": "1",
