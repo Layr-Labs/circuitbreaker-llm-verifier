@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The one total certificate-prefix language defined by the deterministic evaluator in proof.md. At actual input length N=0 output 0. Otherwise choose B as the least positive integer with B^5>32*N^3 and k as the least prime at least B; if k>=N output 0. Put m=N-k, r=ceil(m/k), t=ceil(sqrt(r)); output 0 if t>=r or k*t<r*(r+1). Read the first k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2; output 0 unless Z^(2^k)=Z modulo Q and gcd(Q,Z^2+Z)=1. Zero-pad the remaining m bits into r field elements a_i of F_2[Z]/Q, constant coefficient first in each block. Output the constant coefficient of the order-t elementary symmetric polynomial in a_i^(2^(r+2-i)-1), for i=1,...,r. All prefix bits are part of N; Q is input, not advice.",
+  "theorem": "This fixed total language is in P and hence in NP with the empty-witness verifier in proof.md. In the pinned full B2 model, for every sufficiently large integer actual input length N, C_B2(F_N)>=4*N-O(N^(4/5)), and therefore liminf over all integer N tending to infinity of C_B2(F_N)/N>=4. The family and verifier are fixed independently of all asymptotic thresholds.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
