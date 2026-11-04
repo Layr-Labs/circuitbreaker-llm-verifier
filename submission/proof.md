@@ -1,90 +1,49 @@
-# Published coefficient 31/10: construction and proof
+# Exact optimal face and stability of the unchanged six-row LP
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+This is an unscored arithmetic lemma. It asserts no circuit lower bound.
+The optimum 31/10 and its dual certificate are already in the pinned baseline;
+we additionally describe all maximizers and quantitative stability.
 
-## Fixed total family
+## Theorem
+Let I,Q,h,D be real, 0<=Q<=I, 0<=h<=1/2, D>=0. Put u=D-I and assume
+u<=min(I/3,2-2h+Q,4-4h,3+h,5-Q,(5-2h+Q)/2).
+Then c=u-h/2<=31/10, with equality exactly for
+h=1/5, Q=9/5, I>=48/5, D=I+16/5.
+Write s4=3+h-u, s5=5-Q-u, s6=(5-2h+Q)/2-u and e=31/10-c.
+Then e=7*s4/10+s5/10+s6/5,
+h=1/5-2*e+2*s4, Q=9/5+2*e-s4-s5, u=16/5-2*e+s4.
+Consequently |h-1/5|<=2*e, |Q-9/5|<=8*e,
+|u-16/5|<=2*e and I>=48/5-6*e.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+## Complete proof
+All six constraint slacks are nonnegative. Weight rows four, five and six
+by 7/10,1/10,1/5. Their weights sum to one and their weighted right sides are
+(7/10)(3+h)+(1/10)(5-Q)+(1/5)(5/2-h+Q/2)=31/10+h/2.
+Subtracting u yields the identity for e and proves its nonnegativity.
+Equality requires all three positively weighted slacks to vanish, so
+u=3+h=5-Q=(5-2h+Q)/2. The first two give Q=2-h; substitution
+in the last gives 6+2h=7-3h, hence h=1/5, Q=9/5, u=16/5.
+The first constraint gives I>=48/5, and D=I+u.
+Conversely at these parameters the six right sides are
+I/3,17/5,16/5,16/5,16/5,16/5, all at least 16/5.
+The parameter constraints also hold, proving the exact characterization.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+Since u=c+h/2=31/10-e+h/2, s4=-1/10+h/2+e.
+Solving gives the stated identities for h and u; Q=5-u-s5 gives its identity.
+The weighted slack identity implies 0<=s4<=10e/7 and
+s4+s5<=10e, because 10e=7s4+s5+2s6>=s4+s5.
+Thus -2e<=h-1/5<=6e/7, -2e<=u-16/5<=-4e/7,
+and -8e<=Q-9/5<=2e. These imply the absolute-value bounds.
+Finally I>=3u>=48/5-6e. This proof works over the reals, including e=0,
+and needs no finite computation or outside mathematical theorem.
 
-## Uniform P and NP membership
-
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
-
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
-
-## Every integer length and the lower bound
-
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
-
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
-
-## Conservative remainder, with source discrepancy retained
-
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
-
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
-
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
-
-    |C| >= (31/10)*n-(261/10)*d-128/5.
-
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
-
-## Exact arithmetic and the unchanged LP
-
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
-
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
-
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
-
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
-
-## Sources
-
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+## Scope and attribution
+The system is reproduced from the pinned baseline section 'Exact arithmetic
+and the unchanged LP' and protected checkers/lp_certificate.py. The baseline
+attributes its inequalities to Li-Yang, ECCC TR21-023 (2021-02-20), Theorem 4.1.
+We use only the explicit inequalities above, not the external circuit theorem.
+The optimum and dual argument are prior work, not a claimed discovery here.
+The optimal face and stability are elementary consequences supplied in full.
+This does not establish eligibility of a Boolean family, a new circuit bound,
+or a barrier to other proofs or other inequality systems. No previous hosted
+submission or judgment was used. No computational experiments are declared.
