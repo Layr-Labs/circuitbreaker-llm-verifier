@@ -1,36 +1,18 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "MOD3-zero family, defined in proof.md Section 1: L is the set of all binary strings x (including the empty string) whose number of 1-bits is divisible by 3. For every integer n>=0, f_n:{0,1}^n->{0,1} is f_n(x)=1 iff x_1+...+x_n is congruent to 0 modulo 3 (so f_0=1). One fixed linear-time evaluator computes f_n at every length; the NP verifier V(x,w)=1 iff w is empty and f_|x|(x)=1, with witness bound W=0.",
+  "theorem": "For this one total uniform polynomial-time family (hence in NP with empty witnesses), C_B2(f_n)>=2n-6 for every integer n>=3 in the full Li–Yang B2 model (all 16 binary gate types, unrestricted fan-out and depth, constant nodes free, every retained gate counted), with n=|x| the actual input length. Hence liminf over all integers n of C_B2(f_n)/n >= 2.",
   "guarantee": {
     "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
-    },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    }
+    "coefficient": {"numerator": "2", "denominator": "1"},
+    "exponent": {"numerator": "1", "denominator": "1"},
+    "log_exponent": {"numerator": "0", "denominator": "1"},
+    "loglog_exponent": {"numerator": "0", "denominator": "1"}
   },
   "projection": {
     "kind": "finite",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
-    },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    }
+    "coefficient": {"numerator": "2", "denominator": "1"},
+    "exponent": {"numerator": "1", "denominator": "1"}
   }
 }
