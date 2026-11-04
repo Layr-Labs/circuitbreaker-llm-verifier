@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The one fixed total family of proof.md Section 1 and family.md Section 2, the Ben-Sasson-Kopparty subspace-polynomial affine disperser at p=2: f_0(empty)=0; for n>=1 let k be the least prime strictly larger than 2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); let A be one fixed deterministic polynomial-time algorithm which on input k outputs a monic irreducible q_k in F_2[Z] of degree k, and put K=F_2[Z]/(A(k)) (the family is defined by A, and the evaluator runs the same A, so definition and evaluation agree; deterministic polynomial-time constructions of such q_k are classical, e.g. Adleman-Lenstra 1986 and Shoup 1989 Section 3); let iota:F_2^n->K^r pad x with r*k-n zeros, cut it into r blocks of k bits, and read each block in the basis 1,Z,...,Z^(k-1); let pi:K->F_2 be the coefficient of Z^0; put y_i=iota_i(x)^(2^(i+1)-1) and f_n(x)=pi(sum over t-element subsets I of [r] of prod_{i in I} y_i). One fixed deterministic algorithm evaluates f_n at every length (family.md Lemma 3.1), so the yes-language is in P and hence in NP with the empty witness and witness bound 0 (family.md Corollary 3.2). f_n is an affine disperser for dimension d(n)=floor(6*n^(4/5))+1, proved in disperser.md Parts I-VIII (family.md Corollary 4.2).",
+  "theorem": "For this one fixed total uniform NP family, in the full Li-Yang B2 model at actual input length n=|x| (deterministic acyclic circuits, one output, fan-in two, all 16 binary operations, unbounded depth and fan-out, gates counted once with inputs, wires and output selection free, exact computation on every input, nonuniform circuits allowed): C_B2(f_n) >= 4n - 10*d(n) = 4n - 60*n^(4/5) - O(1) for every integer n >= 16807, by gate-elimination.md Theorem 10.1 applied to family.md Corollary 4.2. Consequently liminf_n C_B2(f_n)/n >= 4: for every epsilon>0 there is N_epsilon such that C_B2(f_n) >= (4-epsilon)*n for every integer n >= N_epsilon. The full guarantee is the polynomial_log expression g(n)=4*n^1*(log2 n)^0*(log2 log2 n)^0, and the declared projection is the finite pair (coefficient 4, exponent 1). No sublinear-dimension affine disperser is assumed to require more than 4n gates; nothing about p>1 is claimed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
