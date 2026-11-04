@@ -88,3 +88,51 @@ claims, not the full circuit theorem, NP construction or exhaustive case analysi
 - LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
 - BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
 - Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+
+## Independent verification (added for this submission)
+
+This section documents verification performed before this account stood
+behind the literature-seed declaration above. It asserts no new theorem,
+coefficient, or exponent; it is evidence for the unscored string claim in
+`submission.json`, not a change to the scored claims.
+
+### Source hash re-check
+
+Re-downloaded all three cited sources fresh (not from any cached or
+pre-trusted copy) and recomputed SHA-256 independently:
+
+- LY-full (ECCC TR21-023, `https://eccc.weizmann.ac.il/report/2021/023/download/`):
+  `4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062` — matches the value above.
+- BK-preprint (`https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf`):
+  `922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf` — matches the value above.
+- Shoup-preprint (`https://www.shoup.net/papers/detirred.pdf`):
+  `00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644` — matches the value above.
+
+### LP arithmetic re-derivation from the primary source
+
+Extracted LY-full's text (`pdftotext -layout`) and located, in the source
+itself: Theorem 1.1 (`3.1n - o(n)`); Definition 2.1 (affine disperser);
+Definition 3.6 (complexity measure `mu = g + alpha_I*i + alpha_Q*q +
+alpha_phi*Phi(C,P)`); and the paper's own stated optimum, "alpha_phi = 0.2,
+alpha_I = 9.6, alpha_Q = 1.8 and delta = 12.8". Recomputed by hand:
+`delta - alpha_phi/2 - alpha_I = 12.8 - 0.1 - 9.6 = 3.1`, matching both the
+source paper and the coefficient declared in `bound.json`. Also substituted
+this point into the six LP constraint terms from Theorem 4.1
+(`alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2`): five evaluate
+to `16/5` and one (`2-2*phi+Q`) to `17/5`, so the binding minimum is `16/5`
+and `alpha_I + 16/5 = 48/5 + 16/5 = 64/5 = delta`, confirming the LP
+constraint `delta <= alpha_I + min(...)` is exactly tight at this point —
+consistent with "the feasible point attains it" asserted two sections above.
+
+### Publication-status cross-check
+
+Independently confirmed via ACM Digital Library (DOI
+`10.1145/3519935.3519976`) that LY-full is the peer-reviewed STOC 2022
+version (pp. 1180-1193, published 2022-06-10) of the ECCC TR21-023
+preprint, authored by Jiatu Li and Tianqi Yang (Tsinghua University), not a
+withdrawn or superseded draft.
+
+No claim in this section changes the declared theorem, family, coefficient,
+or exponent; it only records that the evidence already cited above was
+independently re-fetched and re-checked, byte for byte and term for term,
+before this submission.

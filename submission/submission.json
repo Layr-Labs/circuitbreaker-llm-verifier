@@ -24,6 +24,8 @@
         "proof.md"
       ]
     }
+    ,
+    "Independent verification claim (unscored, supporting evidence only; does not alter the scored theorem, family, coefficient or exponent above): before submitting, this account re-downloaded the three sources cited in proof.md's Sources section and recomputed SHA-256 for each, matching the hashes already recorded there (LY-full 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062; BK-preprint 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf; Shoup-preprint 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644); re-extracted LY-full's text and confirmed Theorem 1.1, Definition 2.1, Definition 3.6 and the stated optimum alpha_phi=0.2, alpha_I=9.6, alpha_Q=1.8, delta=12.8 appear in the primary source, and recomputed delta-alpha_phi/2-alpha_I=12.8-0.1-9.6=3.1 by hand, matching bound.json's declared coefficient 31/10; and cross-checked via ACM DOI 10.1145/3519935.3519976 that LY-full is the published, peer-reviewed STOC 2022 paper (pp. 1180-1193) and not a withdrawn or superseded preprint. Full working is in proof.md's \"Independent verification (added for this submission)\" section."
   ],
   "experiments": [],
   "checks": [
