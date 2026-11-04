@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total language L of proof.md Part A: MOD3. For every integer n >= 0 and every x in {0,1}^n, f_n(x) = 1 iff the Hamming weight of x is congruent to 0 modulo 3. Thus f_0(empty) = 1 (empty sum 0), f_1 = 1 exactly on the all-zero string, and in general f_n is the characteristic function of the ternary residue of the weight. One fixed deterministic linear-time evaluator computes f_n at every length: scan the input, maintain the weight modulo 3, compare with 0. One fixed verifier accepts exactly the empty witness on yes-inputs.",
+  "theorem": "For this one fixed total uniform polynomial-time family, which lies in P and hence in NP with empty witnesses, and whose circuits are required to compute f_n exactly on every input in the full Li-Yang B2 model, C_B2(f_n) >= 2n - 8 holds at every integer length n >= 4. Hence liminf over all integers n of C_B2(f_n)/n is at least 2, and for every epsilon > 0 the explicit threshold N_epsilon = max(4, ceil(8/epsilon)) makes C_B2(f_n) >= (2 - epsilon)*n hold for every integer n >= N_epsilon.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "2",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "2",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
