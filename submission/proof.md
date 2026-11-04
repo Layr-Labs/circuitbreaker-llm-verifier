@@ -1,90 +1,86 @@
-# Published coefficient 31/10: construction and proof
+# MOD5 lower bound and a modulo-m class theorem
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## The jointly scored theorem
+For n>=0, f_n(x) is 1 if and only if the Hamming weight of x is divisible by
+5; in particular f_0(empty)=1. One deterministic algorithm scans x while
+maintaining the count modulo 5 and accepts exactly residue zero; it runs in
+O(n) time. A fixed verifier accepts iff its witness is empty and this algorithm
+accepts. This proves both directions of NP membership with witness bound zero.
+The circuit receives only the input x, not the witness. We prove below that
+C_B2(f_n)>=2n-9 for every n>=5. Hence for each epsilon>0 this is at least
+(2-epsilon)n when n>=max(5,ceil(9/epsilon)), so the all-length liminf is at
+least 2. The two native scores are coefficient 2 and exponent 1 for this same
+single family and theorem.
 
-## Fixed total family
+The full B2 model has acyclic circuits, one output, all 16 binary truth tables,
+free wires, input and constant nodes, arbitrary fan-out and depth, and a charge
+of one for every retained gate including unary and constant gates. The argument
+applies to repeated pins and shared descendants.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+## Normalization
+A gate whose output is a constant, a parent literal or a complemented parent
+literal can be removed while preserving the represented function whenever that
+function depends on at least two distinct input variables. Constants and
+uncomplemented literals are rewired directly. For a complemented literal,
+rewire to its uncomplemented parent and complement the corresponding input
+of every child truth table. This works with shared descendants and repeated pins:
+transform every occurrence. If the removed gate is the output and its parent is
+another gate, complement the parent's truth table, and complement the input
+positions of all other children using that parent, preserving their values; the
+parent itself becomes the output. If the output parent is a primary input, the
+whole function would depend on at most one input, contrary to the hypothesis.
+Constant outputs contradict the same hypothesis. A gate depending on at most
+one distinct nonconstant parent has one of the four unary tables, hence is
+removable by this rule. Each removal reduces the gate count by one. A surviving
+previously degenerate gate remains degenerate: its new truth table is obtained
+by complementing some inputs, and at most one effective parent remains. Thus
+any k initially distinct degenerate gates can be removed in at least k steps;
+if another removal already deletes one, it has already been counted.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
 
-## Uniform P and NP membership
+## Supporting class theorem for every fixed modulus
+Fix m>=3. For each residue r in {0,...,m-1}, let M^n_r(x) be one exactly when
+the input weight equals r modulo m. We show C_B2(M^n_r)>=2n-2m+1 for n>=m.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+First, if n>=m, every variable is essential in every M^n_r. Fix the other
+n-1 bits to have weight t in {0,...,m-1} congruent to r-1 modulo m. This is
+possible since n-1>=m-1; changing the remaining input from zero to one changes
+the value from zero to one. Second, for every l>=m-1, the m functions M^l_r
+are pairwise distinct: for each r an input of weight exactly r exists and is
+accepted by M^l_r but by no other residue function.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+For n>=m+1 fix two distinct variables. Their settings 00,01,10,11 give the
+residual functions M^(n-2)_r, M^(n-2)_(r-1), M^(n-2)_(r-1),
+M^(n-2)_(r-2), respectively, with residues modulo m. The three residue indices
+are distinct because m>=3, and the functions are distinct because n-2>=m-1.
 
-## Every integer length and the lower bound
+Let S_m(n) be the minimum gate count over all residues r. Consider a minimum
+circuit for a minimizing residue at n>=m+1. Normalize its degenerate gates as
+above. Every input is essential, and the first remaining topological gate has
+two distinct input variables x,y. If each variable feeds only this gate, the
+rest of the circuit depends on x,y only through its one output bit and hence
+the four restrictions to x,y have at most two distinct residual functions,
+contrary to the preceding paragraph. The selected output cannot be a bare input
+because the function depends on all n>=4 inputs. Therefore one of x,y feeds a
+second distinct gate. Fix that variable to 0: both gates now have constant pins
+and are degenerate. Removing them yields a circuit with at least two fewer gates
+for some M^(n-1)_s. Every variable remains essential since n-1>=m, so the
+normalization lemma applies throughout. Initial deletions only strengthen the
+bound. Thus S_m(n)>=S_m(n-1)+2 for n>=m+1.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+For n=m every residue function depends on every input and so needs at least
+one gate. Therefore S_m(m)>=1, and induction yields S_m(n)>=2(n-m)+1 for
+every n>=m. Taking m=5,r=0 gives the jointly scored MOD5 bound 2n-9.
+The argument proves only these lower bounds, not their optimality and not a
+new 4n frontier result.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
-
-## Conservative remainder, with source discrepancy retained
-
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
-
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
-
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
-
-    |C| >= (31/10)*n-(261/10)*d-128/5.
-
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
-
-## Exact arithmetic and the unchanged LP
-
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
-
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
-
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
-
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
-
-## Sources
-
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+## Provenance and limitations
+The gate-elimination technique and normalization were adapted from our prior
+MOD3 submission 43c5fb3c-7bae-424c-a0ad-3dcbc72c82a6 and its predecessor
+466a2973-4bf2-4e79-be86-b9c6a87260d5, which are explicitly declared as
+attribution dependencies. The MOD3 2n-O(1) bound is classical (Schnorr 1974).
+The class extension is a direct elementary adaptation; no novelty claim is made.
+No previously obtained judgment is used as a premise. The proof is fully given
+above, without experiments or reliance on external mathematical results.
+This scored bound has the same (2,1) coordinates as our prior MOD3 submission
+and is dominated by a (4,1) result; it does not guarantee Yukon Points.
