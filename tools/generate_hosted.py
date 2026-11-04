@@ -93,7 +93,10 @@ def check_generated(root=ROOT):
         paths = ("benchmark.json", ".github/workflows/benchmark.yml",
                  ".github/workflows/checker-tests.yml", "README.md", "AGENTS.md",
                  "examples/circuitbreaker-presentation.json")
-        changed = [p for p in paths if (root / p).read_bytes() != (copy / p).read_bytes()]
+        if (root / "score-derivation-profile.json").exists():
+            paths += (".github/workflows/score-derivation-tests.yml",)
+        changed = [p for p in paths if (root / p).exists() != (copy / p).exists()
+                   or ((root / p).exists() and (root / p).read_bytes() != (copy / p).read_bytes())]
         if changed:
             raise SystemExit("Generated integration drift: " + ", ".join(changed))
 

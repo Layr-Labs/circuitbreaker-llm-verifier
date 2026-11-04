@@ -208,6 +208,33 @@ class GenericAdapterIntegration(unittest.TestCase):
         self.assertNotIn("@VERIFIER_REVISION@", workflow)
         self.assertEqual(json.loads((ROOT / "verifier.json").read_text()), original_config)
         self.assertEqual((ROOT / ".github/workflows/benchmark.yml").read_bytes(), original_workflow)
+        from tools.check_derivation_profile import validate
+        self.assertEqual(validate(output)["retained_records"], 1)
+        report_path = output / "reorg/score-derivation-report.json"
+        report_bytes = report_path.read_bytes()
+        metadata_path = output / "score-derivation-profile.json"
+        metadata_bytes = metadata_path.read_bytes()
+        report = json.loads(report_bytes)
+        report["plan_sha256"] = "0" * 64
+        write_json(report_path, report)
+        metadata = json.loads(metadata_bytes)
+        metadata["files"]["reorg/score-derivation-report.json"] = sha(report_path.read_bytes())
+        write_json(metadata_path, metadata)
+        with self.assertRaisesRegex(ValueError, "report/plan"):
+            validate(output)
+        report_path.write_bytes(report_bytes)
+        metadata_path.write_bytes(metadata_bytes)
+        self.assertFalse((output / ".github/workflows/score-derivation-tests.yml").exists())
+        profile_checks = (output / ".github/workflows/checker-tests.yml").read_text()
+        self.assertIn("/test-checkers.yml@" + "e" * 40, profile_checks)
+        self.assertIn("tools/check_derivation_profile.py", profile_checks)
+        self.assertIn("-m unittest tests.test_score_derivation -v", profile_checks)
+        self.assertNotIn("-m unittest -v", profile_checks)
+        self.assertNotIn("generate_remainder_fixtures.py", profile_checks)
+        bad_workflow = output / ".github/workflows/checker-tests.yml"
+        bad_workflow.write_text(profile_checks + "# drift\n")
+        with self.assertRaises(ValueError):
+            validate(output)
         regenerate(output)
         self.assertEqual((output / ".github/workflows/benchmark.yml").read_text(), workflow)
         check_generated(output)

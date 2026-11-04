@@ -72,6 +72,10 @@ jobs:
     return header + jobs + (root / "tools/metrics-job.yml").read_text()
 
 
+def render_checks(root, revision):
+    return (Path(root) / "tools/derivation-checks.yml").read_text().replace("@VERIFIER_REVISION@", revision)
+
+
 def regenerate(root):
     root = Path(root)
     profile = read_profile(root)
@@ -82,6 +86,11 @@ def regenerate(root):
     benchmark["tracks"][0]["paretoPolicies"] = {"scoring": SCORING, "validity": VALIDITY}
     benchmark_path.write_text(json.dumps(benchmark, indent=2, ensure_ascii=False) + "\n")
     (root / ".github/workflows/benchmark.yml").write_text(render_workflow(root, profile["verifier_revision"]))
+    (root / ".github/workflows/checker-tests.yml").write_text(render_checks(root, profile["verifier_revision"]))
+    # The library CI materializes a fresh profile and pins historical default
+    # hashes. A materialized source instead validates its own configuration
+    # and registered checkers, without recursively materializing itself.
+    (root / ".github/workflows/score-derivation-tests.yml").unlink(missing_ok=True)
 
 
 def materialize(root, output, snapshot, artifact_index, archives, verifier_revision):
