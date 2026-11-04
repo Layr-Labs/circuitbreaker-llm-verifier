@@ -10,6 +10,10 @@ import sys
 
 VERIFIER_REVISION = "c3196332cbd0ea75a8f478673e04a78ae03e581d"
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+if (ROOT / "score-derivation-profile.json").exists():
+    from tools.derivation_profile import read_profile
+    VERIFIER_REVISION = read_profile(ROOT)["verifier_revision"]
 BASELINE_RECOVERY = {
     "version": 1,
     "deliveryJob": "Export accepted CircuitBreaker expressions",
@@ -58,6 +62,10 @@ def validate_presentation(root, track):
 
 def generate(root=ROOT):
     root = Path(root)
+    if (root / "score-derivation-profile.json").exists():
+        from tools.derivation_profile import regenerate
+        regenerate(root)
+        return
     subprocess.run([
         sys.executable, "-m", "llm_verifier", "github", "--root", str(root),
         "--verifier-revision", VERIFIER_REVISION,
@@ -85,7 +93,10 @@ def check_generated(root=ROOT):
         paths = ("benchmark.json", ".github/workflows/benchmark.yml",
                  ".github/workflows/checker-tests.yml", "README.md", "AGENTS.md",
                  "examples/circuitbreaker-presentation.json")
-        changed = [p for p in paths if (root / p).read_bytes() != (copy / p).read_bytes()]
+        if (root / "score-derivation-profile.json").exists():
+            paths += (".github/workflows/score-derivation-tests.yml",)
+        changed = [p for p in paths if (root / p).exists() != (copy / p).exists()
+                   or ((root / p).exists() and (root / p).read_bytes() != (copy / p).read_bytes())]
         if changed:
             raise SystemExit("Generated integration drift: " + ", ".join(changed))
 
