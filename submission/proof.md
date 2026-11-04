@@ -1,90 +1,49 @@
-# Published coefficient 31/10: construction and proof
+# Exact gate complexity of the uniform parity family
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## Scope and status
 
-## Fixed total family
+This is an elementary, self-contained theorem, not a claim of new research or a stronger bound than the published 31/10 seed. The claimed joint projection is (1,1). Every argument below concerns the one fixed family defined here. No prior accepted submission, numerical experiment, LP certificate, or external theorem is a premise.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+## One uniform total language, including every length
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+For every integer n >= 0 and x in {0,1}^n, define f_n(x) as the XOR of all input bits. The empty XOR is zero. Let L contain exactly the binary strings of odd parity. A single deterministic algorithm initializes a bit b to zero, scans x from left to right, replaces b by b XOR x_i, and returns b. Induction on the number of scanned bits proves this computes f_n at every length, including zero. It takes O(n+1) time and constant work space on a sequential input model.
 
-## Uniform P and NP membership
+Set the witness bound W(n)=0. Define V(x,w) to reject every nonempty w and otherwise run the algorithm just given and accept if and only if its output is one. The empty string is the only witness of length at most W(n). If x is in L, that witness is accepted. Conversely, if an allowed witness is accepted, the algorithm returned one, so x is in L. Thus L is in NP with a fixed polynomial-time verifier and a fixed polynomial witness bound; indeed it is in P. There is no advice, length-dependent choice, padding, field encoding, or auxiliary input. The circuit input length is exactly n=|x|.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+## Circuit model and syntactic reachability
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Consider any deterministic acyclic circuit computing f_n in the full B2 model of rules.md. Each retained gate has two incoming pins and may use any of the 16 binary Boolean truth tables; depth and fan-out are unrestricted. Repeated pins and arbitrary shared descendants are allowed. Count each retained gate once. Inputs, wires, and output selection cost zero. We also allow free constant source nodes in the following argument, so constants introduced by normalization cannot invalidate the lower bound.
 
-## Every integer length and the lower bound
+A variable is syntactically reachable from the selected output when there is a directed path from its input source to that output; selecting that input itself counts as a path of length zero. If an input variable is not reachable, changing only that variable cannot change the output. To prove this assertion, put the gates in a topological order (an order exists for a finite acyclic graph: repeatedly remove a vertex with no predecessors; if none existed, following predecessors in a finite graph would produce a directed cycle). Induct through this order in the subgraph of ancestors of the selected output. Each source in that subgraph is either a constant or an input other than the absent variable, and hence has unchanged value. Each gate applies its fixed truth table to two unchanged pin values and hence also has unchanged value. The output therefore has unchanged value. This proof uses no property of a particular basis and works equally for constant gates and truth tables that ignore one or both pins.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+For n>=1, parity depends essentially on every input: the all-zero assignment has output zero, while changing only bit i to one yields output one. Thus every input variable must be syntactically reachable from the output of any correct circuit.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+## Fan-in counting lemma with sharing and degeneracies
 
-## Conservative remainder, with source discrepancy retained
+Suppose the selected output is a gate, and retain just its syntactic ancestors, including that gate and every source reached by following its incoming pins recursively. Let G be the number of retained gates in this ancestor subgraph, S the number of source vertices, and E the number of directed pin edges counted with multiplicity. In particular, two repeated pins give two edges. A source vertex is an input or a free constant; a retained constant-valued gate still counts as a gate, not as a free source. All pins of each retained gate have their predecessor present. Hence E=2G. If a normalized representation omits ignored pins or uses explicit unary nodes, the same argument gives E<=2G, which is sufficient.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+Every vertex of this subgraph has a directed path to the selected output. Forget directions and multiplicities; the resulting simple undirected graph on G+S vertices is connected. Any connected finite undirected graph on v>=1 vertices has at least v-1 distinct edges: start with one visited vertex and, while some vertex is unvisited, connectivity provides an edge from the visited set to its complement; add that edge and its new endpoint. Exactly v-1 such steps visit all vertices, and all chosen edges are distinct. Restoring multiplicities cannot reduce the edge count. Therefore
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+    G + S - 1 <= E <= 2G,
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+so G >= S-1. If all n input variables are reachable, their n distinct input sources occur in the subgraph, so S>=n and G>=n-1. Extra constant sources only strengthen this counting inequality. If the representation permits duplicate source nodes carrying the same variable, at least n sources are still needed to represent n distinct variables. Repeated pins only increase edge multiplicity; sharing never invalidates connectivity or the bound on the number of pins.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+The full circuit has at least G gates because deleting vertices outside the output's ancestor subgraph cannot increase gate count. Thus the original circuit has at least n-1 gates.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+## Terminal cases and normalization
 
-## Exact arithmetic and the unchanged LP
+If the selected output is a free constant, it cannot compute parity for any n>=1. If it is an input wire, it depends on at most one variable and therefore cannot compute parity for n>=2. For n=1, a zero-gate circuit selecting x_1 is correct and the claimed lower bound is zero. If a terminal negation is represented as a retained negated-projection gate, it is counted once and is covered by the preceding gate argument. The model does not grant an uncharged terminal computational operation. Negations absorbed into descendant truth tables remain covered because all truth tables were allowed from the start.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+No substitution or normalization is required in this proof. Nevertheless the counting argument explicitly permits free constant nodes and gates with fewer than two effective inputs, and the reachability argument covers all constant and unary functions. Consequently Li-Yang normalization does not introduce a basis restriction or an uncounted resource into the argument. We never infer that the number of gates is a potential, assume a direct sum, restrict fan-out, or turn the circuit into a formula.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+Combining these cases, every full-B2 circuit computing f_n has at least n-1 gates for every n>=1.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+## Matching upper bound and all-length asymptotics
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+For n=1, select the input x_1. For n>=2, use a chain of n-1 XOR gates: first x_1 XOR x_2, then XOR that output with x_3, continuing until x_n. XOR is one of the allowed binary truth tables. Induction on chain length proves its output is f_n. This gives C_B2(f_n)<=n-1. Together with the lower bound,
 
-## Sources
+    C_B2(f_n)=n-1  for every integer n>=1.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+The n=0 family member was defined as zero and is irrelevant to the asymptotic assertion. In particular, for positive n the ratio C_B2(f_n)/n equals 1-1/n, so its limit and liminf over all integer lengths are one. Explicitly, for any real epsilon>0 choose N_epsilon=max(1,ceil(1/epsilon)). Then for every integer n>=N_epsilon, 1/n<=epsilon and C_B2(f_n)>=(1-epsilon)n.
+
+In bound.json the full guarantee is g(n)=1*n^1*(log2 n)^0*(log2 log2 n)^0=n for sufficiently large n. The declared finite projection is exactly coefficient 1 and exponent 1, both attached to this entire same theorem. It is not an endpoint, a sparse-length claim, an improved literature record, or a claim that NP is outside P/poly. No finite computation is needed to establish the universal assertion.
