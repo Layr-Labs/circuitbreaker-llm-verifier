@@ -1,32 +1,50 @@
 {
-  "version": "circuitbreaker-expression-v1",
+  "version": "circuitbreaker-expression-v2",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total deterministic certificate-free language in family.py and proof.md. Fixed C=2^20 defines k=ceil(log2(N+2))^C; failed exact metadata shapes return zero. All actual input bits are payload. Folded affine condensation and a reproduced basic SU orbit extractor produce short-seed linear images; indexed alternating extraction breaks their correlations; a reproduced monotone polynomial-graph resilient disperser supplies the output bit. Every field choice is uniform and no advice or field-polynomial prefix is supplied. Runtime is one fixed polynomial with an enormous degree.",
+  "theorem": "For this one fixed total uniform language in P, hence NP with empty witnesses, there exist fixed K>0 and N0 such that C_B2(F_N)>=4N-K*(log2 N)^(1048576) for every integer actual length N>=N0 in the full pinned B2 model. The proof supplies universal affine dispersal at dimension ceil(log2(N+2))^(1048576) and the full gate kernel4N-8(d+1). All material extractor, conditioning and resilient-output premises are reproduced in the evidence. This same complete guarantee implies the joint finite projection (4,1).",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "kind": "polynomial_log",
+      "coefficient": {
+        "numerator": "4",
+        "denominator": "1"
+      },
+      "exponent": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "big_o",
+      "exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "1048576",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     }
   },
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
