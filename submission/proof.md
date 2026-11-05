@@ -1,90 +1,204 @@
-# Published coefficient 31/10: construction and proof
+# A fixed uniform NP family with subpolynomial gate remainder
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+For the one total language defined here, at every sufficiently large integer
+actual length N, we prove C_B2(F_N)>=4N-2^(40000*(log2 N)^(3/4)*(log2(log2 N))^(1/4)). More strongly, for
+every fixed epsilon>0 the remainder can be N^epsilon for the SAME family.
+The pinned leading-term projection remains (4,1).
 
-## Fixed total family
+The strengthened finite gate theorem C_B2(f)>=4n-8d is supplied in
+elimination.md Section 12, refining the complete 4n-10d argument in Section 11, following Mishra--Santhanam revision 1,
+November 3, 2026. Its affine promised-pair representation is distinct
+from the older matching-quadratic arguments retained in Sections 1--10. The
+large-length disperser adapts Shaltiel's 2011 challenge-response construction,
+with supplied proofs of its specialized extraction ingredients in
+disperser.md A1--A6. A1 adapts Shaltiel--Umans's low-degree construction;
+A2 adapts Ben-Sasson--Kopparty's cubic coefficient argument; A3 supplies
+Haramaty--Shpilka's bounded-rank derivative argument; A4 adapts Rao's affine
+somewhere-random condenser; A5--A6 adapt Shaltiel's block extractor and
+challenge-response analysis. Our substitutions use smaller outputs and
+larger thresholds, and specify every construction field and matrix as
+charged input data. No cited specialized component is assumed without
+its supplied argument.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+Primary gate-proof provenance: [Mishra--Santhanam revision 1](https://eccc.weizmann.ac.il/report/2026/260/revision/1/download).
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+Primary extraction provenance: [Shaltiel 2011](https://www.cs.haifa.ac.il/~ronen/online_papers/AffineDisp.pdf),
+[Shaltiel--Umans](https://www.cs.haifa.ac.il/~ronen/online_papers/SUlong-rev2.ps),
+[Haramaty--Shpilka revision 1](https://eccc.weizmann.ac.il/report/2009/080/revision/1/download),
+[Rao](https://homes.cs.washington.edu/~anuprao/pubs/lowweight.pdf), and
+Ben-Sasson--Kopparty, Affine Dispersers from Subspace Polynomials, 2010 author
+version, Sections 3 and 4. These credits are mathematical provenance;
+Yukon submission dependencies are separately declared in the public note.
 
-## Uniform P and NP membership
+## Exact fixed evaluator
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+Keep the existing family.py evaluator as legacy_evaluate. On a binary
+string x of actual length N, return legacy_evaluate(x) if N.bit_length()
+is less than 1024. Otherwise compute Plan(N) in engine.py. If its ready
+flag is false, return legacy_evaluate(x). If ready, split off exactly
+Plan.prefix bits as construction data and run Engine(plan,x).evaluate().
+All integer operations, ordering choices, seed interpretation and padding
+are specified by engine.py. This is one deterministic evaluator for all
+strings and lengths; it chooses no data by an unspecified search.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Plan uses L=ceil(log2 N), z=ceil(log2 L), S=ceil((L^3*z)^(1/4)),
+k=2^(20000*S), t=2^ceil(ceil((L*z^3)^(1/4))/1000),
+ell=2^ceil(3*ceil(sqrt(L*z))/100), pmax=2^ceil(S/2000), and
+q=1000000*floor(sqrt(floor(L/z))). Every root uses exact integer comparisons,
+for example S is the least integer u with u^4>=L^3*z.
+The padded length n=t^ceil(L/log2 t) lies between N and Nt; the tree
+is truncated below node length floor(k^.4). The exact active limit is
+hA=floor(h/q). Remaining integer choices are as follows.
 
-## Every integer length and the lower bound
+Let K=2^floor(log2 k/2), r=2^floor(log2 K/2),
+D=ceil(100 ceil(log2 n)/log2 K), h0=D*ceil(n^(1/D)). E0 is the seeded
+extractor on n bits, output r, error 1/8, field degree selected by the
+explicit q-bound. E1 uses the same output but error 2^-floor(K^.001).
+Let T=2^floor(log2 r/10), b=1+ceil(d0/log2 T), where d0 is E0's seed
+length. Every use of BE has b blocks, each padded to n bits. Its initial
+2^d0 rows are grouped into T-row chunks at each reduction. Final
+chunks are padded by repeating their last row. The output is the first
+pmax bits of the final r-bit row.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+For the somewhere-random chunk extractor, the exact row/width sequence
+is t_j=T/2^j and r_j=r/2^j for j<log2 T. Let w_j=floor(r_j^.1),
+p_j=2w_j+1 (odd). Its base extractor uses p_j field coordinates
+and computes the trace coordinates of the seventh power, on two slices
+padded with zeros. The near-half extractor uses ambient t_j*r_j,
+D_j=100000, m_j=2^floor(999 log2 r_j/1000), error
+2^-floor(r_j^.00001), and the accompanying explicit seeded parameters.
+It concatenates ceil((r_j/2)/m_j) fresh seeds and truncates the output
+to exactly r_j/2 bits. The base extractor supplies exactly that many
+seed bits. (At large lengths m_j divides r_j/2; the finite algorithm
+also defines the other case by truncation.)
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+## Every construction datum is an actual input bit
 
-## Conservative remainder, with source discrepancy retained
+Prefix order is E0's modulus and matrix, E1's modulus and matrix, then
+for each j in increasing order the base field modulus and the near-half
+extractor's modulus and matrix. A degree-s modulus is specified by s
+bits for its lower coefficients, with leading coefficient 1 implicit.
+A D-by-D matrix uses D^2 consecutive s-bit field elements in row order.
+Least-significant bits come first. There are no additional hardwired
+length-dependent field or matrix choices. Repeated uses at the same
+scale share these input data. Every matrix entry, every modulus bit,
+and the entire prefix count towards N.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+Good choices exist: finite fields of every size 2^s and their extensions
+exist by the Frobenius root argument, and multiplicative groups of finite
+fields are cyclic. Multiplication by a generator of F_(2^(sD)) in a basis
+over F_(2^s) is a D-by-D matrix cycling through all nonzero vectors.
+These existence statements supply prefixes on which the component proofs
+apply. The evaluator never searches for these moduli or matrices. It
+does not validate them, either. For every other prefix it runs the same
+bounded quotient-ring and positive matrix-power algorithms. A monic
+modulus always defines reduction and multiplication; even a reducible
+modulus therefore gives a total Boolean output. The trace loop's
+constant coefficient is used, agreeing with the trace bit on good data.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+## Uniformity and polynomial time, including bad prefixes
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+All prefix dimensions and loop bounds depend only on N. Plan has no
+field-data search. It computes only the scalar exponent
+entropy_log=20000*S and compares it with N.bit_length()-1.
+If larger, k>N and Plan returns ready=false BEFORE constructing 2^entropy_log.
+This comparison takes polynomial time: entropy_log has O(log log N) bits
+plus a fixed constant, and roots use integer binary search. On the remaining
+branch k<=N, and all later scalar dimensions are polynomial in N. Each p_j=2w_j+1 is computed directly; no prime-distribution theorem
+or search is used in the large-length branch. Integer roots are found by
+binary search using fixed or O(log N) integer exponents. D<=O(log N),
+while each near-half D_j is the fixed constant 100000. All scalar integer
+bit lengths in parameter planning are polynomial in N, including the
+powers of two used to specify seed spaces. The field degrees and data
+lengths are polynomial in N before any prefix allocation.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+Once ready is true, guards give d0<=1000000 ceil(log2 n), so enumeration
+of E0 seeds uses at most n^2000000 possibilities. The guard
+h*t^b<=ell bounds tuple enumeration per tree node, and the complete
+tree has at most 2n nodes. The stored matrix sizes, all row lengths,
+all field degrees, all output counts, all polynomial exponents and
+all concatenation counts are polynomial in N. The low-degree extension
+stores or streams only its first n monomials; enumerating these in total
+degree and lexicographic order has polynomial delay. For each monomial,
+compute powers by binary powering and multiply at most D field values.
+There is no enumeration of the field or a reconstruction search in the
+evaluator: reconstruction is solely a counting proof of extraction.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Field/matrix arithmetic is polynomial even on invalid prefixes. The
+number of tree-node visits is the fixed finite tree size. Both tree
+traversal and weak-composition enumeration are iterative; they do not
+require an unbounded interpreter recursion limit. Thus one fixed
+polynomial in N bounds the whole evaluator, with an enormous constant
+exponent allowed. Failed guards invoke the already polynomial legacy
+evaluator. The witness verifier accepts exactly the empty witness and
+runs this evaluator. This gives a total uniform P language, hence a
+uniform NP language with witness bound zero, without advice.
 
-## Exact arithmetic and the unchanged LP
+## All large actual integer lengths take the new branch
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+Here L=ceil(log2 N) tends to infinity through integers and log n=L+O(L^.25*(log2 L)^.75).
+Thus the asymptotic comparisons in the component proofs hold along ALL
+large integer N, including at rounding discontinuities. They imply:
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+* E0 and E1 satisfy the explicit seeded entropy inequalities. Their
+  monomial degree is K^(.01+o(1)); E0's field degree is O(log K+log D),
+  and E1's is O(K^.001+log K). Thus their advice terms are respectively
+  K^(.51+o(1)) and K^(.511+o(1)), both o(K).
+* d0/log n is bounded by an absolute constant less than 1000000:
+  from s<=8*(21+log2(16D+16)+log2 h0+4*(6+log2 r)),
+  D=ceil(100 ceil(log2 n)/log2 K), log2 h0<=.01 log2 K+log2(2D),
+  log2 r<=.5 log2 K, one gets d0<10000 log2 n eventually.
+* T>=2, b<=t, hA>=1, ell*pmax<=r,
+  h*t^b<=ell, and ell^(6hA+6)<=pmax. The needed ratios are stated explicitly in A6: limsup log2(t^b)/log2 ell
+  is at most 2/3; the confidence-logarithm/output-logarithm ratio
+  is at most 18/25; and both are strictly below 1. Structural descent
+  has entropy-loss ratio at most 1/(80)+o(1), while the
+  active partition ratio tends to 1/20. These fit the
+  k^.8 to k^.77 and k^.75 margins.
+* Each near-half extractor satisfies its explicit advice/entropy bound
+  with threshold r_j/4. Its concatenated seed length is r_j^(.00101+o(1)),
+  whereas the base extractor supplies p_j^(1/8)=r_j^(.0125+o(1)) bits.
+  All scale lengths r_j are at least r/T>=r^.9 and tend to infinity,
+  so the inequalities hold uniformly over every one of O(log r) rounds.
+* The chunk extractor's final width r/T>=r^.9 exceeds E1's seed
+  length K^(.001+o(1)).
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+The number P of prefix bits is
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+ (D^2+1)(s0+s1)+sum_j [p_j+(100000^2+1)*s_j].
 
-## Sources
+Here p_j=O(r_j^.1), s_j=O(r_j^.00001+log r_j), and there are O(log r)
+terms. Therefore P=K^(.05+o(1))=k^(.025+o(1))=N^o(1). In particular
+P+k<=N eventually. Every ready condition is consequently met at all
+sufficiently large lengths. The fixed cutoff N.bit_length()<1024
+excludes only finitely many lengths.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+## Circuit lower bound with actual prefix cost
+
+Fix any sufficiently large N and good values of all P prefix bits.
+Restricting a full B2 circuit to these constants cannot increase its
+number of gates in the pinned normalization. The remaining m=N-P bits
+are embedded injectively into n coordinates by zero padding. The supplied
+challenge-response argument makes the new disperser nonconstant on
+every affine subspace of dimension k in those n coordinates. Therefore
+its restriction to the payload is also nonconstant on every dimension-k
+affine subspace of F2^m, since injective linear embedding preserves
+dimensions. The universal finite theorem of elimination.md Section 12
+then gives, for every circuit computing the WHOLE new family,
+
+ C_B2(F_N)>= 4(N-P)-8k
+          = 4N-R(N),  R(N)=4P+8k=N^o(1).
+
+This conclusion charges the entire prefix and the exact integer N.
+No claim that the entire input function is itself an affine disperser
+is needed. For every real epsilon>0, R(N)<=N^epsilon eventually, hence
+C_B2(F_N)>=4N-N^epsilon at all sufficiently large integer N. In
+particular the stronger explicit fixed remainder is 2^(40000*(log2 N)^(3/4)*(log2(log2 N))^(1/4)), and
+the leading pair is still (4,1). The stronger remainder changes neither
+the exponent 1 nor the leading coefficient 4 in the pinned v1 policy.
+
+The last explicit bound follows from log2 k=20000*S and
+P=k^(.025+o(1)): log2 R(N)=(20000+o(1))*S.
+Here S=(1+o(1))*(log2 N)^(3/4)*(log2(log2 N))^(1/4).
+Thus the declared coefficient 40000 bounds the exact loss
+at every sufficiently large integer N, including at rounding changes.
