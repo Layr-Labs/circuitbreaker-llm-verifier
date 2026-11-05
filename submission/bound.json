@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "Fixed total family.py;N<128 or failed guards output0. Let L=ceil(log2 N),z=ceil(log2 L),D=max(2,z),C=2^30; Gamma code of S>0 has H=2floor(log2S)+1 bits;malformed/S>2^L rejects. With P2:a=P2(z^2),j=log2a,Bc=ceil(5L/j),h=P2(SL^2),e=P2(SL^2z),ell=P2(128ze),q0=(2ha+Cez^2+10)ell,eprime=P2(512ha*ell+4e),d=16q0+128eprime+128L+1280,Y=P2(10000Bc*hd+4Cez^2d),k=hY+100Bc*ha*ell+10d+Cez^2ell. Initial A1D11,precisionceil(L/28)+10,adaptiveB1,exact reconstructionfield,seedcap5L. Ordered base-a words give ceil(d0/j) index rounds,a<=h. Four internal B2.1maps have dimensionD,K=C*e*z^2*M,at most2 eventual calls,stipulated seedell. C6 raises all four A1 field degrees to their maximum s_star,rechecks advice/seed predicates,and uses ONE paid C5 package of t_star-a(t_star)bits,t_star=D*s_star,a(t)=floor(log2(floor(log2t)-1)) for t>=32,elsemin(2,t). C5/C3 decode/compile once. Own nprime,H,m0,error/calls remain;bad data yieldzero/ring maps. Good primitive data work universally. Short E1 is direct B2.3,no data. Initial and B5data are canonical by C1 bounded exhaustive search,using initials0<=5L/12 and B5s2<=2048w. B5 uses A2 two1024-wise position samplers,ell_s=P2(r)//2176000,kappa=ell_s//16000,weak outputkappa//8,internal seedD1=5*(1000w)^2+2000w,directA1D4 helper outputP2(D1),errorlog160w+10,and constant-bounded fresh-seed rounds. Prefixdegree1000w/output250w gives shifted agreement. CompleteG is nonlinear; only strong general extraction/shifted agreement are used. Layoutdelta1/125,m=floor(r/125),b=floor(floor(sqrt(S))*w/(30*125^2)),u=2b+2w+10,w=ceil(log2 r). All headers/data are handled by one polynomial-time program. One fixed goodS0 is only a paid restriction. Eventuald0<4L,P=O_S0(L^2z^2)=o(k),initialbad2N^(-1/28) and S_groups^delta<=2^((4/125)L) close the all-length bound. Each biased group uses firstu bits of ONE completed row,ell>=u;capacityB*M<=2^d0. B6 needsO(r^2) goodROW independence and O(r^2u) errorlog,paid separately byh,e.",
+  "theorem": "This fixed total language is in P and NP with empty witnesses on every input. There exist absolute B>0,N0 such that for every actual integer N>=N0, unconditionally in pinned full B2, C_B2(F_N)>=4*N-B*(log2 N)^9*(log2(log2 N))^5/log2(log2(log2 N)). For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^9*(log2(log2 N))^(5+epsilon), hence also4*N-(log2 N)^(9+epsilon) and4*N-N^epsilon. One fixed gamma header S0 gives hardness. Exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data; P=O_S0(L^2*(ceil(log2 L))^2)=o(k), including the shared growing-dimension package serving all four maps. The supplied finite4n-8d theorem covers all16 B2 tables, constants and sharing. The robust moment proof needs O(r^2) ROW independence and O(r^2*u) log-error. Layout loses only a factor2^O_S0(log r), preserving actual bad-coordinate accounting. No numerical B, efficient search for S0 or unpaid weak-design construction is assumed. At common admitted scalar plans let s_i be the individual pre-common field degrees,b_i=D_int*s_i-a(D_int*s_i),s_star=max_i s_i,P_individual=H(S)+sum_i b_i. Current P=H(S)+D_int*s_star-a(D_int*s_star),so the certified4*P_individual+8*k loss decreases by4*sum_(i!=j)b_i for any maximum-degree indexj. The full advice/seed predicates are rechecked after enlargement. At the fixed good header P/P_individual tends to1/4. Native4,1 is unchanged. C7 gives P_gamma=H(S0)+shared_data with fixed H(S0); versus the preceding L-bit header at identical scalar plans,the certified loss decreases by4*(L-H(S0)) eventually. Malformed codes output0; all actual header bits are paid. C10 growing alphabet yields k=Theta_S(L^9z^5/log2z). C11 keeps dyadic Y for one initial call,uses exact integer d and X budget k with preallocation cap. Versus C10 at the same fixed good scale,the limsup certified-loss ratio is at most1/2. Prefix/layout may change. Native4,1 remains.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
