@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total prefix-data language in proof.md, family.py and engine.py. At small lengths or a failed explicit parameter guard it uses the legacy certificate-prefix evaluator. At all sufficiently large actual lengths N it uses the exact integer-rounded Shaltiel challenge-response construction with k=2^(300*ceil((L^3*ceil(log2 L))^(1/4))), L=ceil(log2 N) and elementary odd-degree cubic base fields with charged input-prefix field moduli and traversing matrices. All good-data choices are actual input bits; invalid data still give bounded quotient-ring and matrix evaluation. The payload is zero-padded injectively. No per-length advice or uncharged construction data are used.",
+  "theorem": "This fixed total language is in P, hence NP with empty witnesses. Unconditionally in the pinned full B2 model, for every sufficiently large integer actual length N, C_B2(F_N)>=4*N-2^(600*(log2 N)^(3/4)*(log2(log2 N))^(1/4)). More strongly, for every real epsilon>0 there is N_epsilon such that C_B2(F_N)>=4*N-N^epsilon for every integer N>=N_epsilon, for this SAME family. The exact eventual loss is R(N)=4*P(N)+8*k(N)=N^o(1), including all P(N) prefix bits, as proved in proof.md and the supplied disperser arguments.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
