@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "One fixed total scale-header language in family.py and engine.py PolyPlan/PolyEngine. At large actual length N, the first L=ceil(log2 N) bits encode S-1; every scale1<=S<=2^L is evaluated by the same algorithm, rejected large plans return zero, and the finite small cutoff uses the fixed legacy evaluator. Exact parameters are k=P2(S^13 L^22 z^8),h=e=P2(S L^3),ell=P2(S^3 L^6 z^3),eprime=P2(S^5 L^9 z^3),d=P2(S^9 L^15 z^8),Y=P2(S^11 L^19 z^8),z=ceil(log2 L). Independence order h is separate from the BINARY index alphabet a=2; b=d0 and look-ahead steps are at most2. Initial dimension10000 and design dimension100 are fixed; five internal dimensions equal z. All header and field/matrix data are actual input bits, and condenser fields are computed deterministically. No good scale, advice, witness or field is supplied externally. The supplied proof gives one fixed-scale hard restriction at every sufficiently large actual integer length.",
+  "theorem": "This fixed total language is in P, hence NP with empty witnesses, on every input header and field string. There exist absolute constants B>0,N0 such that for every integer actual length N>=N0, unconditionally in the pinned full B2 model, C_B2(F_N)>=4*N-B*(log2 N)^22*(log2(log2 N))^8. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^22*(log2(log2 N))^(8+epsilon), and hence also4*N-(log2 N)^(22+epsilon) and4*N-N^epsilon. The proof fixes one actual header S0, not per-length advice: exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data, with P=L+O(S0^5 L^9 z^5)=o(k). Existence of S0 proves hardness only; the fixed evaluator computes every header. The supplied finite gate bound is4n-8d including all sharing and B2 tables.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
