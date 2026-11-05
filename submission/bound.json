@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "One fixed total guarded language evaluated by family.py. N<128 outputs0; larger inputs have L=ceil(log2 N),z=ceil(log2 L),D_int=max(2,z),C=2^30,actual L-bit header S-1. With P2 rounding: h=e=P2(S L^2 z),ell=P2(S^3 L^2 z^2),eprime=P2(S^5 L^4 z^3),d=P2(S^9 L^4 z^5),Y=P2(S^11 L^7 z^6),k=P2(S^13 L^9 z^7). Initial D11 A1 has precisionceil(L/28)+10,exact rational field and adaptive B1,seedcap5L. Four internal maps use B2.1 affine extraction at growing dimensionD_int,K=C*h*z^2*M,charged field/matrix packages,at most2 eventual A1calls and exact stipulated ell-seed guard. Setq0=(4h+C*h*z^2+10)ell. Short E1 is direct B2.3. B5 is the fully supplied logarithmic-external-seed bootstrap: r-bit source padded to n=P2(r),w=ceil(log2 r),two1024-wise polynomial bit samplers,ell_s=n//2176000,kappa=ell_s//16000,weak outputM1=kappa//8,weak shared-field seedD1=5*(1000w)^2+2000w,direct A1D4 helper outputP2(D1),errorlog160w+10,and ceil((m-c)/M1) fresh external-seed rounds. Prefix hash degree1000w,lengthc250w supplies shifted agreement. Sampler scalar error and all entropy/helper guards are exact program checks. Entire G is generally nonlinear; only strong general extraction and shifted agreement are used. Layout delta1/125,m=floor(r/125),b=floor(floor(sqrt(S))*w/(30*125^2)),u=2b+2w+10. Only FOUR internal A1 matrices/fields are charged input bits, in orderT,W,E2,E3. InitialD11 and B5prefix/sampler/helper data are canonical by C1 exhaustive search, proved uniform polynomial-time using initials0<=5L/12 and B5s2<=2048w. Short E1 has no data. Every failed plan outputs0,all headers/data are evaluated by one polynomial-time algorithm. A fixed good S0 is only a charged hard restriction. Eventuald0<4L,P=O_S0(L^2 z^3)=o(k) and initialbad2N^(-1/28) versus S_groups^delta<=2^((4/125)L) close the bound.",
+  "theorem": "This fixed total language is in P and NP with empty witnesses on every input. There exist absolute B>0,N0 such that for every actual integer N>=N0, unconditionally in pinned full B2, C_B2(F_N)>=4*N-B*(log2 N)^9*(log2(log2 N))^7. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^9*(log2(log2 N))^(7+epsilon), hence also4*N-(log2 N)^(9+epsilon) and4*N-N^epsilon. One fixed ordinary header S0 gives hardness. Exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data; P=O_S0(L^2*(ceil(log2 L))^3)=o(k), including the four internal growing-dimension packages. The supplied finite4n-8d theorem covers all16 B2 tables, constants and sharing. The robust moment proof needs O(r^2*u) independence and log-error. Layout loses only a factor2^O_S0(log r), preserving actual bad-coordinate accounting. No numerical B, efficient search for S0 or unpaid weak-design construction is assumed. For common admitted scalar plans define P_paid=P+122*s0+1001*w+17*s2. C1 canonicalization reduces the certified expression4*P_paid+8*k by exactly4*(122*s0+1001*w+17*s2), preserving9,7 asymptotics.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
