@@ -1,90 +1,284 @@
-# Published coefficient 31/10: construction and proof
+# MOD3 in full B2: an explicit lower bound of 2n - 2
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## 0. The claim and its provenance
 
-## Fixed total family
+For every integer n >= 0 and r in {0,1,2}, define
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+    M(n,r)(x) = 1 iff the Hamming weight of x is congruent to r modulo 3.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+The ONE scored family is f_n = M(n,0), on exactly n input bits. We prove
 
-## Uniform P and NP membership
+    C_B2(f_n) >= 2n - 2 for every integer n >= 4.                 (T)
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+In fact the same inequality holds for each of the three auxiliary residues.
+The auxiliaries serve an induction; they are not different families used to
+supply the two score coordinates. The declaration's leading expression is
+2n, its explicit remainder is the constant 2, and its finite projection is
+(2,1). No superlinear lower bound, separation of complexity classes, exact
+upper bound, leaderboard record, or historical novelty is claimed.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+The restriction and two-gate deletion strategy is adapted from kaankolcu's
+Yukon submission 466a2973-4bf2-4e79-be86-b9c6a87260d5, original source commit
+8c58caa6d5bd7dd75ef67c792c11255658e1d870, file submission/proof.md, especially
+Sections 3-7. That source proves 2n-3 for MOD3. Its proof was read while
+preparing this submission and is declared as a dependency. The contribution
+developed here is the explicit three-input obstruction in Section 5 and the
+choice of a restriction value in Section 6, improving that finite estimate
+by one gate. We do not claim that this refinement is new in the literature.
+No previous evaluation or approval is a premise. All arguments needed for
+(T), including normalization, are provided below.
 
-## Every integer length and the lower bound
+## 1. A total uniform language in P and NP
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+Let L be the set of all finite binary strings whose number of ones is
+divisible by 3. On the empty input f_0=1; on one bit f_1(x)=1-x. The same
+definition applies at all other lengths. A single deterministic evaluator
+starts a counter at zero, updates it modulo 3 for each input bit, and accepts
+exactly when the final counter is zero. It takes O(n) time and constant
+counter space. It has no advice, padding, certificate input, or parameter
+chosen differently for each length.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+Set W(n)=0 and let V(x,w) accept exactly when w is empty and the evaluator
+accepts x. If x is in L, the empty witness is accepted. Conversely, if there
+is a witness of length at most W(|x|) accepted by V, the evaluator accepts x,
+so x is in L. This proves both directions of NP membership with one fixed
+polynomial-time verifier. Circuit inputs below are x alone, of actual length
+n; the witness introduces no input bits.
 
-## Conservative remainder, with source discrepancy retained
+## 2. Model and normalization with every gate charged
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+We work with acyclic deterministic circuits having one output, all sixteen
+binary Boolean truth tables, two ordered pins per gate, unrestricted fan-out
+and depth, and exact computation on every assignment. Each gate is counted
+once. Repeated pins, shared descendants, and degenerate truth tables are
+permitted. Input nodes, wires and output selection do not count as gates.
+We also allow any number of free constant source nodes. This is at least as
+powerful as the challenge's full B2 model, so a lower bound proved here
+transfers to that model: its minimum size cannot be smaller. We never allow
+free gates implementing a new basis or free computational edges.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+A gate is proper if its pins are distinct nonconstant nodes and its truth
+table depends on both pin values. Otherwise it is degenerate. At a
+degenerate gate v its value is a constant, a pin value, or the complement
+of a pin value. This follows by substituting a constant pin, identifying
+repeated pins, or deleting an argument ignored by the truth table. A unary
+Boolean function has exactly these four possibilities.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Normalization lemma. If a circuit computes a function depending on at
+least two variables, a degenerate gate can be deleted without adding any
+gate. Moreover every other currently degenerate gate remains degenerate
+until it too is removed. Consequently k distinct degenerate gates permit
+at least k gate deletions, even when their descendants are shared.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+Proof. If v computes a constant, replace every use of v by that constant
+source. If it forwards a pin w, redirect every use to w. If it complements
+w, redirect each use to w and complement the corresponding argument in the
+receiving gate's truth table. Do this for every occurrence, including both
+pins if necessary. Each receiving gate still has an allowed binary truth
+table and its value is unchanged. The substituted node precedes v, so
+acyclicity is preserved. No descendant is duplicated.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+If v is the output, a constant value or a function of an input node alone
+cannot equal the assumed function of at least two variables. In the
+forwarding case designate w as output. In the complement case w must be
+another gate. Complement w's truth table, designate w as output, and
+after the redirections above, compensate at every surviving gate pin now
+pointing to w by complementing that argument in its receiving truth table.
+The value of w becomes the old value of v; all other
+surviving gate values remain unchanged. This repairs a terminal negation
+without introducing a free NOT gate.
 
-## Exact arithmetic and the unchanged LP
+A pre-existing constant pin remains constant or is supplemented by a new
+constant pin. Equal pins are redirected identically and remain equal.
+Complementing truth-table arguments or the whole output cannot create
+dependence on an ignored argument. Thus every other degenerate gate stays
+degenerate. Each operation removes exactly one gate, so the process
+terminates. Removing gates outside the output's ancestor subgraph afterward
+only decreases size and does not change retained pins. This proves the
+lemma and yields a circuit in which every gate is proper and relevant. Its
+output is a gate, since a constant or an input is insufficient. QED.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+All lower bounds will be proved for such normalized circuits. Given any
+original circuit, normalization supplies one with no more gates, so a
+lower bound for the normalized circuit is also a lower bound for the
+original one.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+## 3. Residues and the one-bit bottleneck
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+Restriction identity. Fixing any variable to b in {0,1} turns M(n,r) into
+M(n-1,r-b), where residues are reduced modulo 3 and the other variables
+are relabeled in their original order. This follows directly by subtracting
+the fixed bit from the Hamming weight.
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+Full dependence. For n>=2 every M(n,r) depends on every input. There is an
+assignment of weight r because r<=2<=n. Flipping any chosen coordinate of
+that assignment changes its weight by 1 or -1; the output changes from 1
+to 0 because neither change is divisible by 3.
 
-## Sources
+Three distinct pair restrictions. For n>=3, fixing two distinct inputs to
+00, 01, and 11 leaves respectively M(n-2,r), M(n-2,r-1), and M(n-2,r-2).
+For m=n-2>=1 the three residue functions on m bits are pairwise distinct:
+the all-zero assignment singles out residue 0, and an assignment of weight
+one singles out residue 1. This also distinguishes residue 2 from each of
+the other two when it is the zero function at m=1.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+Thus M(n,r) cannot have a representation
+
+    F(g(x_i,x_j), x_rest)                                      (B)
+
+for any Boolean g and F and any pair i!=j when n>=3. Once x_i,x_j are
+fixed, (B) has at most two possible residual functions, F(0,.) and F(1,.),
+contrary to the three just exhibited. This observation allows arbitrary
+sharing inside F; it is an information bottleneck, not a formula bound.
+
+## 4. Deleting two gates for either restriction value
+
+For n>=3, take a normalized circuit C for M(n,r). The first gate G in a
+topological ordering has two distinct primary inputs, say x_i and x_j:
+it has no earlier gates and proper gates have no constant or repeated pins.
+If both inputs feed no other gate, all their influence on the output passes
+through the single value of G. This is the forbidden representation (B).
+
+Therefore one of these input nodes, call it x, feeds at least two DISTINCT
+gates. Fan-out here counts successor gates, not pin occurrences. Fix x to
+any b in {0,1}. Both successors have a constant pin, so they are two
+distinct degenerate gates. The restricted function is M(n-1,r-b); it
+depends on all n-1>=2 remaining variables. The normalization lemma deletes
+both successors, even if one is an ancestor of the other. It cannot
+resurrect the second as a proper gate. Thus
+
+    |C| >= C_B2(M(n-1,r-b)) + 2, for EACH b in {0,1}.           (D)
+
+The same identified input works for both choices of b. Equation (D) is
+not a direct-sum assertion and does not require disjoint descendant cones.
+
+For completeness M(2,r) needs at least one gate, since it depends on two
+variables. Applying (D) gives a preliminary bound of three gates for every
+M(3,r). This will rule out circuits of fewer than three gates in the next
+section; their impossibility is not assumed.
+
+## 5. A three-input terminal obstruction
+
+Write E1(x,y,z)=1 iff exactly one of its three inputs is 1, and E2=1 iff
+exactly two are 1. These are M(3,1) and M(3,2), respectively. We show that
+each requires at least FOUR gates in the full model above. No computer
+enumeration is used.
+
+A Boolean function of y,z is called affine here if it has the form
+alpha*y XOR beta*z XOR gamma with alpha,beta,gamma in {0,1}. Composition
+with unary Boolean functions, or complementing the output, preserves
+affinity. XOR and XNOR are affine. AND and NOR are not: the XOR of their
+values on 00,01,10,11 is 1, while for every affine function it is 0.
+
+For any chosen variable x, the two restrictions of E1 are
+
+    E1(0,y,z)=y XOR z;    E1(1,y,z)=NOR(y,z).
+
+The restrictions of E2 are
+
+    E2(0,y,z)=AND(y,z);   E2(1,y,z)=y XOR z.
+
+In both cases one slice is parity and the other is nonaffine. Both
+functions are symmetric in the variable names, so this statement holds
+whichever variable is named x.
+
+Suppose either function had a circuit with at most three gates. Normalize
+and trim it. Section 4 gives a lower bound of three, so there are exactly
+three proper relevant gates. Name them A,B,H in topological order. H is
+the output. There are only the following possibilities, which exhaust the
+graph without imposing a fan-out restriction.
+
+Case I: B does not use A. Both A and B have primary-input pins. Relevance
+forces both to feed H. Their two-element input sets together must contain
+all three variables. Consequently they overlap in exactly one variable,
+and after renaming the representation is
+
+    H(A(x,y), B(x,z)).                                        (I)
+
+Fix x to the parity-slice value b (b=0 for E1, b=1 for E2). Both A(b,y)
+and B(b,z) must depend on their variables, or (I) would miss that variable.
+Each is therefore a bijection on {0,1}, either identity or complement.
+As y,z vary, H is tested on all four possible input pairs. Since (I) is
+parity on this slice, its full truth table must be XOR or XNOR. Now on
+the other slice A(1-b,y) and B(1-b,z) are unary functions, possibly
+constant. XOR or XNOR of two unary functions is affine in y,z. This
+contradicts the nonaffine other slice.
+
+Case II: B uses A. A is a gate on two primary variables u,v. Its other
+input at B is a primary variable w; there is no other earlier gate, and
+properness forbids using A twice. H must use B for relevance. Its other
+pin is either A or a primary variable t.
+
+If w is one of u,v, the third variable z has not appeared in A or B.
+Essential dependence on z forces the other input of H to be z. But
+then the circuit is H(B(A(u,v),w),z), a representation of type (B) in
+which the Boolean pair function is B(A(u,v),w). Section 3 forbids it.
+
+It remains that w is the third variable z, so B=B(A(u,v),z). If H's
+other input is A or z, all influence of u,v again passes through the
+single bit A. Section 3 forbids both possibilities. The only remaining
+case has H's other input equal to u or v. Renaming that input x and the
+other member of the pair y gives
+
+    H(B(A(x,y),z),x).                                         (II)
+
+Fix x to the parity-slice value b. The unary map A(b,y) must be a
+bijection, and the unary map s -> H(s,b) must also be a bijection;
+otherwise the output cannot be parity in y,z. Inverting those identity
+or complement maps shows that B's FULL truth table on its two inputs
+is XOR or XNOR. On the other slice B(A(1-b,y),z) is therefore affine
+in y,z, and composing it with the unary map s -> H(s,1-b) keeps it
+affine (including the constant cases). This contradicts the other slice.
+
+There is no third topology: if B is independent of A it is Case I;
+otherwise it is Case II. Unused gates were trimmed; repeated or constant
+pins and terminal unary gates were eliminated in Section 2; all three
+variables are essential. Shared use of A in B and H was considered in
+Case II, rather than silently excluded. We have proved
+
+    C_B2(M(3,1)) >= 4 and C_B2(M(3,2)) >= 4.                   (E)
+
+No equality or existence of a four-gate circuit is asserted.
+
+## 6. All sufficiently large integer lengths
+
+Take any residue r at n=4. Section 4 identifies an input with two distinct
+successor gates. Choose the fixed value b so that r-b is 1 or 2 modulo 3:
+for r=0 take b=1; for r=1 or r=2 take b=0. Equation (D) and (E) imply
+
+    C_B2(M(4,r)) >= 2 + 4 = 6 = 2*4 - 2.
+
+Suppose now that n>=5 and the stated bound holds for every residue at
+length n-1. Apply (D), choosing for instance b=0. It gives, for each r,
+
+    C_B2(M(n,r)) >= 2 + [2(n-1)-2] = 2n-2.
+
+Induction proves this for every integer n>=4 and every residue. In
+particular it proves (T) for the fixed scored family f_n=M(n,0).
+
+This is an eventual bound with the explicit threshold N=4 and constant
+remainder 2, not merely a liminf statement. Its declaration is exactly
+L(n)=2*n^1*(log2 n)^0*(log2 log2 n)^0 and a single remainder monomial
+2*n^0*(log2 n)^0*(log2 log2 n)^0. Thus it uses no rounding of an unsupported
+expression. Dividing by n yields C_B2(f_n)/n >= 2-2/n. For any epsilon>0,
+N_epsilon=max(4,ceil(2/epsilon)) suffices for C_B2(f_n)>=(2-epsilon)n at
+EVERY integer n>=N_epsilon. This proves the matching finite projection
+(2,1) for that same family. No sparse-length argument, parameter-dependent
+family, encoding loss, external theorem, or computational witness is used.
+
+## 7. Scope of this entry
+
+The earlier attributed argument supplies a 2n-3 estimate. The explicit
+terminal proof and the adaptive choice of b at n=4 above supply 2n-2.
+This is a finite-estimate refinement, not an improved leading coefficient.
+The entry is below the challenge's 31/10 literature seed and the currently
+displayed coefficient-four candidates. It does not establish a frontier
+advance, a prize entitlement, or a formal machine-checked proof. Its
+mathematical content must be assessed from the complete proof above.
+
+Source of the adapted method:
+https://github.com/Layr-Labs/circuitbreaker-llm-verifier/blob/8c58caa6d5bd7dd75ef67c792c11255658e1d870/submission/proof.md
+
+This link documents provenance only; no retrieval of it is needed to check
+the submitted argument. Neither the source's text nor any previous review
+is being incorporated as an unproved premise.
