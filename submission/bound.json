@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total charged-prefix language in family.py and engine.py PolyPlan/PolyEngine. Finite failed lengths use the fixed legacy evaluator. At all sufficiently large actual lengths N, L=ceil(log2 N),z=ceil(log2 L), and k is the least power of two at least L^28*z^10. The payload uses the supplied deterministic-tower linear condenser, streamed affine extractors, refreshed affine index/look-ahead construction and robust almost-independent-bit function in disperser.md A1,B1-B7. Initial extraction keeps dimension10000 for polynomial seed enumeration; the five internal extractor dimensions equal z. Every construction datum is an actual prefix bit; the entire prefix has P=O(L^15*z^6). Large condenser extension fields are computed deterministically. Invalid prefixes still give total bounded ring/matrix evaluation. The payload is zero-padded injectively; no witness, advice, or oracle supplies fields.",
+  "theorem": "This fixed total language is in P, hence NP with empty witnesses. Unconditionally in the pinned full B2 model, for every sufficiently large integer actual length N, C_B2(F_N)>=4*N-32*(log2 N)^28*(log2(log2 N))^10. The exact eventual loss is R(N)=4*P(N)+8*k(N), with k the least power of two at least ceil(log2 N)^28*ceil(log2(ceil(log2 N)))^10 and P=O(ceil(log2 N)^15*ceil(log2(ceil(log2 N)))^6); every prefix bit is charged. For this SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^(28+epsilon), and hence also C_B2(F_N)>=4*N-N^epsilon. The supplied proofs establish all-length affine dispersal at dimension k, the full-B2 finite bound4n-8d, uniform polynomial-time evaluation and exact actual input accounting.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",

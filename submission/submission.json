@@ -1,40 +1,60 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Full B2 coefficient 4 with supplied remainder 32 log(N)^28 loglog(N)^10",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total charged-prefix language in family.py and engine.py PolyPlan/PolyEngine. Finite failed lengths use the fixed legacy evaluator. At all sufficiently large actual lengths N, L=ceil(log2 N),z=ceil(log2 L), and k is the least power of two at least L^28*z^10. The payload uses the supplied deterministic-tower linear condenser, streamed affine extractors, refreshed affine index/look-ahead construction and robust almost-independent-bit function in disperser.md A1,B1-B7. Initial extraction keeps dimension10000 for polynomial seed enumeration; the five internal extractor dimensions equal z. Every construction datum is an actual prefix bit; the entire prefix has P=O(L^15*z^6). Large condenser extension fields are computed deterministically. Invalid prefixes still give total bounded ring/matrix evaluation. The payload is zero-padded injectively; no witness, advice, or oracle supplies fields.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P, hence NP with empty witnesses. Unconditionally in the pinned full B2 model, for every sufficiently large integer actual length N, C_B2(F_N)>=4*N-32*(log2 N)^28*(log2(log2 N))^10. The exact eventual loss is R(N)=4*P(N)+8*k(N), with k the least power of two at least ceil(log2 N)^28*ceil(log2(ceil(log2 N)))^10 and P=O(ceil(log2 N)^15*ceil(log2(ceil(log2 N)))^6); every prefix bit is charged. For this SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^(28+epsilon), and hence also C_B2(F_N)>=4*N-N^epsilon. The supplied proofs establish all-length affine dispersal at dimension k, the full-B2 finite bound4n-8d, uniform polynomial-time evaluation and exact actual input accounting.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "engine.py",
+        "family.py",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total charged-prefix language in family.py and engine.py PolyPlan/PolyEngine. Finite failed lengths use the fixed legacy evaluator. At all sufficiently large actual lengths N, L=ceil(log2 N),z=ceil(log2 L), and k is the least power of two at least L^28*z^10. The payload uses the supplied deterministic-tower linear condenser, streamed affine extractors, refreshed affine index/look-ahead construction and robust almost-independent-bit function in disperser.md A1,B1-B7. Initial extraction keeps dimension10000 for polynomial seed enumeration; the five internal extractor dimensions equal z. Every construction datum is an actual prefix bit; the entire prefix has P=O(L^15*z^6). Large condenser extension fields are computed deterministically. Invalid prefixes still give total bounded ring/matrix evaluation. The payload is zero-padded injectively; no witness, advice, or oracle supplies fields.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P, hence NP with empty witnesses. Unconditionally in the pinned full B2 model, for every sufficiently large integer actual length N, C_B2(F_N)>=4*N-32*(log2 N)^28*(log2(log2 N))^10. The exact eventual loss is R(N)=4*P(N)+8*k(N), with k the least power of two at least ceil(log2 N)^28*ceil(log2(ceil(log2 N)))^10 and P=O(ceil(log2 N)^15*ceil(log2(ceil(log2 N)))^6); every prefix bit is charged. For this SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^(28+epsilon), and hence also C_B2(F_N)>=4*N-N^epsilon. The supplied proofs establish all-length affine dispersal at dimension k, the full-B2 finite bound4n-8d, uniform polynomial-time evaluation and exact actual input accounting.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "engine.py",
+        "family.py",
         "proof.md"
+      ]
+    },
+    "Supplemental local lemma under elimination.md Sections 1-4 and 8: in the injective matching-quadratic representation with potential H=2s+3q+sum of unpaired weights 0,6,7 at degrees 0,1,at least 2, assume the preliminary exclusions and prepared minimal AND G on distinct unpaired x,y of degrees u,v>=2. If G has exactly one child D, no child of G reads x or y, and D is AND-type with an unpaired isolated other parent z, let j count common children of x,y other than G. There is a legal restriction/deletion reduction with Delta a=-2 and Delta H<=-20-2(u+v-j). If the value of G that forces D constant is its majority output value, there is also a legal reduction with Delta a=-1 and Delta H<=-15-2*max(u,v). Both statements allow D to be the output, count shared original objects only once, preserve the representation on every remaining assignment, and do not assert any improvement of the leading scored coefficient.",
+    "Supplemental local lemma under elimination.md Sections 1-3 and 9: assume preliminary cases 1-5 absent in the same injective matching-quadratic representation and a>d. Any AND-type acyclic gate G with a paired parameter p as one input can be removed, together with its original children, by fixing p to a forcing constant and removing its pair. The other input may be a parameter, an auxiliary value or a gate. The reduction deletes only G and its original children, retaining other objects for later cleanup. The gate cannot be the output under these hypotheses. If t>=1 is its number of distinct children, t_1 counts those whose other input was an isolated unpaired parameter, and B is the unique child of the partner h of p, then Delta a=0 and Delta H<=1-2t+t_1<=0 when B is not a child of G; when B is a child, Delta H<=2-2t+t_1<=0 with t_1<=t-1. Shared descendants and arbitrary rerouting fan-out are covered. The operation preserves the representation, introduces no gate, and asserts no larger leading coefficient.",
+    "For every total Boolean function f on n bits that is nonconstant on every dimension-d affine subspace of F_2^n (integers n>=0,d>=1), every circuit computing f in the pinned full B2 model has at least (7/2)n-(13/2)d gates. This universal finite gate theorem is proved by the matching-quadratic representation and reweighted potential J=2s+2q+sum of unpaired weights 0,5,6 at degrees 0,1,at least2, with complete modified isolated-input and AND-child reductions in elimination.md Section10. If d>n the stated bound is nonpositive.",
+    "For every total Boolean function f on n bits that is nonconstant on every dimension-d affine subspace of F_2^n (integers n>=0,d>=1), every circuit computing f in the pinned full B2 model has at least 4n-10d gates. The supplied proof is elimination.md Section11: Phi is injective affine, correctness is maintained only on Z(P) where each disjoint paired product is zero, and W=s+4q+6I has Delta W<=10 Delta(m-q) under a complete deletion, paired-cleanup and minimal-AND analysis. The result covers arbitrary sharing, all binary tables and terminal outputs.",
+    "For every total Boolean function f on n bits that is nonconstant on every dimension-d affine subspace of F_2^n (integers n>=0,d>=1), every circuit computing f in the pinned full B2 model has at least 4n-8d gates. elimination.md Section12 proves that the two-paired-input case removes four distinct original gates, including when partner children or descendants coincide; constant-output exceptions contradict the surviving dimension-d affine space. Reweighting all supplied Section11 cases with V=s+2q+4I yields Delta V<=8 Delta(m-q), proving the bound with no additional hardness or model assumption."
+  ],
+  "experiments": [
+    {
+      "id": "finite-audit",
+      "source": "audit.py",
+      "purpose": "Supplementary exact finite checks of full-B2 local identities and potential arithmetic, retained algebraic fixtures, deterministic tower/PV expansion and linearity, exact threshold/layout arithmetic, and bounded evaluator traversal. These computations do not establish universal extraction coverage, all-length asymptotics, or the enormous complete advanced family evaluation.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": []
 }
