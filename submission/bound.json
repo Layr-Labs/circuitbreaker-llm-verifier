@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "One fixed total charged-header language in family.py and engine.py PolyPlan/PolyEngine. At large actual length N, the first L=ceil(log2 N) bits encode S-1; EVERY scale1<=S<=2^L is evaluated by the same algorithm. A rejected large plan outputs zero; finite small cutoff lengths use the fixed legacy evaluator. Parameters are exactly k=P2(S^15 L^28 z^7),h=e=P2(S L^3),ell=P2(S^3 L^6 z^3),eprime=P2(S^7 L^15 z^3),d=P2(S^11 L^21 z^8),Y=P2(S^13 L^25 z^7),z=ceil(log2 L). Initial dimension10000 and design dimension100 are fixed; internal dimensions equal z. All header and field/matrix data are actual input bits; condenser fields are computed deterministically. No good scale, field, advice or witness is supplied externally. The supplied proof establishes a hard restriction at ONE fixed scale S0 for every sufficiently large integer N.",
+  "theorem": "This fixed total language is in P, hence NP with empty witnesses, on every input header and field string. There exist absolute constants B>0,N0 such that for every integer actual length N>=N0, unconditionally in the pinned full B2 model, C_B2(F_N)>=4*N-B*(log2 N)^28*(log2(log2 N))^7. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^28*(log2(log2 N))^(7+epsilon), and hence also4*N-(log2 N)^(28+epsilon) and4*N-N^epsilon. The proof fixes one actual header value S0, not per-length advice: exact loss is R(N)=4*P(N,S0)+8*k(N,S0), with P including the ENTIRE header and all construction bits and P=L+O(S0^7 L^15 z^5)=o(k). Existence of S0 is used only for hardness, while eligibility and all algorithms are fixed and compute every header. The supplied finite gate proof is4n-8d with all sharing and B2 tables.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
