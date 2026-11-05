@@ -1,32 +1,76 @@
 {
-  "version": "circuitbreaker-expression-v1",
+  "version": "circuitbreaker-expression-v2",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total certificate-free language in proof.md and family.py, with fixed STRENGTH=2^850 and delta=2^(-850). Exact delayed-constant root guards define zero at failed shapes. Otherwise every actual input bit is payload for the balanced-tree challenge-response construction. Its half-rate component is the mixed relative-trace cubic Tr_(K/L)(x^3+nu*x^7) over explicit power-of-two quadratic-tower fields; small design fields are deterministically searched. All choices are uniform, no field-polynomial prefix or advice is supplied, and the fixed polynomial runtime exponent is enormous.",
+  "theorem": "For this one fixed total language in P, hence NP with empty witnesses, C_B2(F_N)>=4N-8*N^(2^(-850))-8 for every sufficiently large integer actual length N in the full pinned B2 model. The same complete guarantee implies liminf C_B2(F_N)/N>=4. Every construction, subfield case, gate reduction and guard is proved; strength is fixed and no subpolynomial-remainder endpoint is asserted.",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "kind": "polynomial_log",
+      "coefficient": {
+        "numerator": "4",
+        "denominator": "1"
+      },
+      "exponent": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "explicit",
+      "terms": [
+        {
+          "coefficient": {
+            "numerator": "8",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "1",
+            "denominator": "7507516828804700229971157695509256861311759593549503536677899390762631562619231707947410198580331380848554019184705462619182690666302243261761460906639905160039726922590902577336628349889145412319979767917902626154330339044684617119264613887239597666074624"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        },
+        {
+          "coefficient": {
+            "numerator": "8",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        }
+      ]
     }
   },
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
