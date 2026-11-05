@@ -1,90 +1,293 @@
-# Published coefficient 31/10: construction and proof
+# One fixed family with lower bound 4N-O((log N)^11/loglog N)
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+For the single total language defined by family.py, there exist fixed
+K>0 and N0 such that for EVERY integer actual input length N>=N0,
 
-## Fixed total family
+    C_B2(F_N)>=4N-K*(log_2 N)^11/(log_2 log_2 N).
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+The evaluator is deterministic polynomial time, with an enormous fixed
+degree and onset, hence gives an empty-witness NP verifier. Both
+structured score claims assert this SAME full version-2 Big-O guarantee
+and its joint finite projection (4,1). All material component arguments
+are supplied. A finite experiment or previous verdict is not a premise.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+## Provenance and the new component
 
-## Uniform P and NP membership
+The fair gate kernel, indexed correlation proof and resilient graph
+argument derive from fbadbf8d-fdb1-495b-a11f-2aba6ad4a9d2, source commit
+41f5c012ad9745b26125b387924c77861d873995, with their earlier sources
+preserved in the manuscripts. Their authorship is not claimed here.
+No prior scientific score or attribution decision authorizes this proof.
+The supplied state kernel retains 4n-8(d+1) in the full B2 model.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+The new seeded component replaces the previous full-field primitive
+orbit and code-bit long extractors. It uses an element of only bounded
+large order, found by a root-count search polynomial in ambient length,
+and a diagonal orbit whose values form a Vandermonde information set.
+Thus a full primitive-element search in a huge field is unnecessary.
+A deterministic quadratic tower represents that field efficiently.
+Its seed length is linear in error exponent plus logarithmic ambient
+length; the entropy requirement is paid explicitly, not mislabeled
+constant-fraction extraction. seeded.md supplies the complete condenser,
+reconstruction, hybrid, field and runtime arguments.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+These shorter seeds allow both h and ell to have order (log N)^2,
+and d order (log N)^6. The transcript budget has order
+(log N)^9/loglog N; the initial joint-row entropy budget costs another
+factor h. Explicit constants pay the resulting borderline comparisons.
+The changed extractor thresholds, all metadata guards and resilience
+parameter are accounted for below and in correlation.md. The present
+refinement additionally postpones full current Q observations until
+after the fresh target selected response. Its weak-seed defect is
+O(h^2 ell), with an explicit count, instead of O(h Qlen). This permits
+the linear d scale h^2 ell and the smaller loss exponent11.
 
-## Every integer length and the lower bound
+## 1. Exact total family
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+For N<2 return zero. Otherwise put
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+    L=floor(log_2 N), J=ceil(log_2(L+2)),
+    k=floor(2^10000*L^11/J).
 
-## Conservative remainder, with source discrepancy retained
+All are exact integer computations. Return zero if k>N. Otherwise set
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+    m=floor(k/(2^300*L^2)),
+    h=the least power of two >=2^200*L^2,
+    ell=2^300*L^2, C_L=2^4110,
+    Qlen=64h^2*ell,
+    d=2^64*(h^2*ell+L),
+    E=2^200*L^2, E_1=2^20*h^2*ell+E.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+Short is seeded.md's folded/diagonal extractor at ambient N, threshold
+k, output m and error exponent E_short=16ceil(log_2(N+2)). Its field
+width is the least power of two >=128*(E_short+bitlength(N)+
+bitlength(m+2)+10). Its seed has s=130w bits. Put M=2^s,
+l=log_2 h and b=ceil(s/l). Each internal call uses the same extractor
+with its requested output/error and the exact threshold H_call from
+seeded.md. Guards check that threshold, its advice and coefficient
+capacity, available source entropy, seed lengths and the full rank
+budgets. Failure of any listed FamilyShape.build condition returns zero.
+The guard M<=N^(2^20) is part of the total definition.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+When all guards pass, pack ALL N input bits as payload. Enumerate the
+M Short seeds in increasing binary order to get m-bit rows Y_i.
+Split each s-bit index into l-bit advice blocks, padding the last on
+the right. Starting with the first d bits of Y_i, at each block run
+Xrefresh, Yrefresh and the h-slot Xalt/Qalt alternating chain. Select
+the response at that block's digit; Ynext refreshes the d-bit next seed
+from the ORIGINAL Y_i. Use the first bit of the final selected response
+as word coordinate i. All ordering and masks are fixed by family.py.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+Apply resilient.md's monotone polynomial-graph map to that M-bit word,
+with fixed delta=1/2^20 and graph degree a=4/delta=2^22. Its exact
+field, rational ln2 approximation, grid, selected offsets and row order
+are determined uniformly. Its ignored suffix is explicitly accounted for.
+Its integer moment/order/error guards are checked before enumeration.
+No good set, source direction, witness, advice or certificate prefix is
+an input to this evaluator or to the target circuit.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+## 2. Uniform polynomial runtime and NP membership
 
-## Exact arithmetic and the unchanged LP
+Every branch terminates. Numerical exponents and constants are fixed.
+Metadata uses polynomially many bits and operations in actual N; guarded
+parameters are bounded by fixed powers of N. A failed guard returns zero.
+For each extractor call the exact entropy guard gives H<=ambient A.
+Its bounded-order search uses U=max(A,h_SU^128)<=A^2, at most U^2+1
+candidate field elements and U multiplications each: polynomial in A.
+The field may have superpolynomial cardinality, but its tower degree
+w is polynomially bounded in N and arithmetic has polynomial bit cost.
+There is no enumeration of that field, no factorization of its group
+order and no search for a transitive primitive orbit.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+Every actual extractor call is polynomial in its ambient length, output
+and w, hence polynomial in N here. Reconstruction is only a counting
+proof, not an evaluator routine. Code stacks avoid unbounded host recursion.
+The M<=N^(2^20) row enumeration has b<=s stages and h polynomially many
+slots each. The final graph map enumerates q^(2^22) rows with q<=M,
+polynomially many blocks per row and O(log M) positions per block.
+Its small graph field has degree O(log M)=O(log N), with a fixed large
+constant, so its exhaustive irreducible search is also polynomial in N.
+Thus fixed finite c0,c1 bound time by c0*(N+1)^c1 on ALL inputs.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+The degree and onset are enormous. No nontrivial asymptotic instance
+is claimed practical or executed. Define V(x,w)=1 exactly when w is
+empty and this total evaluator outputs one. A member has that empty
+witness; an accepted permitted witness implies membership. This proves
+both directions with witness bound zero. The same fixed language and
+algorithms work at every length. Witnesses and internal seeds are not
+circuit inputs, and no per-length hard table is chosen.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+## 3. Every sufficiently large integer passes every guard
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+Let N range through ALL integers. Then L~log_2 N, J~log_2 L,
+k~2^10000*L^11/J and eventually k<=N. In orders of L,
 
-## Sources
+    m=Theta(L^9/J), h=Theta(L^2), ell=Theta(L^2),
+    Qlen=Theta(L^6), d=Theta(L^6), E=Theta(L^2), E_1=Theta(L^6).
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+Floors change only factors tending to one; all hidden constants are
+fixed. The following explicit bounds pay the borderline comparisons.
+
+Short has m<=N and E_short<=16(log_2 N+2). Its width satisfies
+w<=256*(E_short+bitlength(N)+bitlength(m+2)+10), hence
+s=130w<=2^20 log_2 N eventually. Thus M<=N^(2^20), and
+s<=2^21 L eventually. Since log_2 h>=2log_2 L,
+b<=2^21 L/log_2 L eventually. Also
+
+    2^200 L^2<=h<=2^201 L^2,
+    Qlen<=2^708 L^6,
+    h^2*ell<=2^702 L^6, d<=2^767 L^6.
+
+The sum d+Qlen+h*ell is at most 2d eventually. Therefore
+
+    B_0=2^20*C_L*b*h*(d+Qlen+h*ell)
+        <=2^5120*L^9/log_2 L.
+
+On the other hand k>=2^9999 L^11/J and eventually
+m>=k/(2^301 L^2)>=2^9698 L^9/J. With J<=2log_2 L,
+
+    m>=2^9697 L^9/log_2 L.
+
+Thus m exceeds 4B_0 with a huge fixed factor of slack. Moreover
+h*m<=2^-99 k exactly by the upper bound on h and the floor defining m.
+The weak target-seed defect is now r_def=64h^2*ell, by the
+complete seed-exposed observation argument in correlation.md Section5.2.
+Current smaller-row Q words are not recorded before that test; only
+their T values and alternating seeds/responses are recorded. Full Q
+words are postponed until after the target selected response and before
+Ynext's rank test, when their matrices are already fixed. They are then
+charged to B_0, so the next-stage past transcript still includes them.
+This is the material conditioning change, not an omitted rank charge.
+Since d>=2^64h^2 ell and E_1=2^20h^2 ell+E, both the seed dimension
+and defect amplification have fixed slack. Eventually h^2>=C_L,
+and m/d has order L^3/J and tends to infinity.
+
+For Short's encoding, its dimension 128 and degree floor(k^(1/64))
+give coefficient capacity Theta(k^2), exceeding its k field coefficients.
+Its advice is O(m*k^(1/64)*w). Relative to k this has order
+L^(-53/64)*J^(-1/64): w=Theta(L) and m/k=Theta(L^-2).
+Thus advice/k tends to zero. Its additional error/log term is O(L),
+also o(k). All exact Short capacity and advice guards pass eventually.
+The strong Short error is <=N^-16, hence <=2N^-8 as used below.
+
+For ordinary internal calls w_call<=512E eventually, because requested
+output bit length is O(log L) and ambient bit length is at most O(L).
+Their seed length 130w_call is below 2^17 E; the supplied
+ell=2^300 L^2 pays this by a fixed factor exceeding 2^83.
+For Xrefresh, w_call<=512E_1 eventually, so its seed is below
+2^17 E_1<=2^38 h^2 ell. The supplied d>=2^64 h^2 ell pays it
+by a fixed factor at least 2^26.
+
+The exact entropy thresholds H_call=ceil((2^20*output*w_call)^(33/32))
+have growth powers
+
+    H_Xrefresh,H_Ynext,H_Yrefresh=Theta(L^(33/4)),
+    H_Xalt,H_Qalt=Theta(L^(33/8)).
+
+Each lies below its ambient length: 33/4<9 for Ynext and Yrefresh, 33/8<6 for Qalt, and both X thresholds
+are below 11. Their coefficient capacities grow as Theta(H_call^2),
+and the exact advice guards pass by seeded.md's
+(33/32)*(63/64)=2079/2048>1 estimate.
+In particular H_Y=max(H_Yrefresh,H_Ynext)=o(m),
+H_X=max(H_Xrefresh,H_Xalt)=o(k), and
+H_alt=max(H_Xalt,H_Qalt)=o(h^2 ell). Combining these with the
+fixed-factor B_0/m slack and h*m/k bound proves
+
+    m>=4B_0+4H_Y, k>=4h*m+4B_0+4H_X,
+    Qlen>=8h^2 ell+8H_alt,
+    k-h*m-B_0>=4h^2 ell+4H_alt.
+
+These are the actual guarded source budgets, not an unproved claim
+that the new long extractor needs only O(output) entropy. All supplied
+seeds, exact advice, capacity and entropy conditions therefore pass.
+
+The resilient shape has q=Theta(M/log M), z,w_graph=Theta(log M),
+and q_0=Theta(q), so its basic shape guards eventually pass.
+Use a=2^22. Since z,w_graph<=s<=2^21 L, its integer moment order
+R=2^20*(a z+1)+4 is at most 2^64 L eventually. Consequently
+
+    R*w_graph<=2^85 L^2<h.
+
+Its exact coded error charge is
+
+    20+2ceil_log2(b+1)+4ceil_log2(h+1)+ceil_log2(R+1)
+    +R*(1+ceil_log2(q_0+1))+10a z+100.
+
+The R term is at most 2^86 L^2 since q_0<=2^z. The other terms
+are eventually below 2^50 L^2. Thus the full charge is at most
+2^87 L^2<E. Equal logarithmic powers are paid by these explicit
+fixed factors, rather than by a nonexistent strict exponent margin.
+
+There are finitely many guards. Each is covered by a fixed positive
+factor or strictly smaller growth order. Thus one common fixed finite
+onset makes all of them pass at EVERY integer N beyond it, including
+all rounding effects. No special lengths, sampled sources or compatible
+field-degree subsequence are used.
+
+## 4. Universal affine dispersal
+
+Take ANY affine source X on F_2^N of dimension at least k. At the
+onset from Section 3 all guards pass independently of this source.
+seeded.md proves Short strong error <=2N^-8 and fixed-seed linearity.
+A rank-deficient affine image has distance >=1/2 from uniform, so a
+FIXED fraction at least 1-4N^-8 of the M rows are exactly uniform m-bit
+images. The good set depends only on the source direction, not its
+sample or affine shift.
+
+correlation.md gives for every at-most-h subset of those good indices
+approximately independent selected ell-bit responses, with error
+
+    gamma=2^20*b^2*h^4*2^-E.
+
+Its affine decomposition, source-direction rank test, deficient-seed
+bound and lexicographic induction are reproduced. The revised exact
+H_call thresholds and guarded budgets pay each use. Equal-prefix rows
+may coincide; their simultaneous responses are excluded from the
+independence assertion. All seeds are fixed before linear data
+observations; the target's own previous transcript is charged. No
+claim of independence of the full nonlinear M-row matrix is made.
+
+The other at most 4M*N^-8 coordinates may depend arbitrarily on X.
+Since M<=N^(2^20), M^(-1/2^20)>=N^-1. Thus eventually
+4N^-8<=M^(-1/2^20), so their number is at most M^(1-delta),
+delta=1/2^20. The rank and error guards just proved meet precisely
+the hypotheses in resilient.md. That proof permits non-oblivious bad
+bits, using monotone zero/one extremes, graph packing, explicit
+negative correlation, two-row moments and truncated inclusion-exclusion.
+Both final outputs have positive probability. Therefore this SAME F_N
+is nonconstant on EVERY affine subspace of dimension at least k.
+The source, direction and affine offset were arbitrary.
+
+## 5. Original full-B2 gates and exact remainder
+
+Apply elimination.md at n=N,d=k-1, eventually a nonnegative integer.
+Its complete kernel gives C_B2(F_N)>=4N-8k. It handles every binary
+truth table, constant and unary effects, repeated pins, unrestricted
+sharing, safe paired domains and terminal output cases. Its charged
+potential is telescoped back to original gates; no direct-sum or
+restricted-basis lower bound is assumed.
+
+All N bits are actual payload. No witness, encoding prefix, field
+certificate or padded replacement length is counted. As L<=log_2 N
+and L+2>log_2 N, J>=log_2 log_2 N whenever positive. Hence
+
+    8k<=2^10003*(log_2 N)^11/(log_2 log_2 N).
+
+Take fixed K=2^10003 and the common onset. This proves the entire
+version-2 Big-O loss through all integer lengths; no bounded rational
+coefficient for this enormous K is asserted. The loss divided by N
+tends to zero, giving the SAME joint projection (4,1). The specific
+remainder is proved directly, never inferred from the leading liminf.
+
+## 6. Computational evidence and limits
+
+The declared family.py audit takes {}. It checks bounded integer,
+field, orbit, folded-rank, graph, covariance and Bonferroni predicates,
+plus bounded-order searches and small diagonal Vandermonde matrices.
+Its actual full-family calls exercise only the explicit zero branch.
+The older primitive-orbit toy has degree16, while the actual new
+extractor has 128 diagonal coordinates; neither finite check is a
+certification of the universal source theorem. No nontrivial asymptotic
+instance is claimed run or feasible. The adaptive transcript induction
+remains especially intricate and requires independent scrutiny. A
+simulation, prior verdict or finite audit is not mathematical authority.

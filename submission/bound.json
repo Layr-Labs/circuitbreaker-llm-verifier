@@ -1,32 +1,50 @@
 {
-  "version": "circuitbreaker-expression-v1",
+  "version": "circuitbreaker-expression-v2",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single fixed total certificate-free language in family.py and proof.md. For N>=2 let L=floor(log2 N), J=ceil(log2(L+2)), k=floor(2^10000*L^11/J); k>N or failed exact metadata guards return zero. Set m=floor(k/(2^300 L^2)), h=pow2ceil(2^200 L^2), ell=2^300 L^2, d=2^64*(h^2*ell+L), E=2^200 L^2. A supplied bounded-order diagonal-orbit linear extractor provides Short and all long calls with their exact paid entropy thresholds. Indexed alternating extraction with postponed full-current-Q observations and the monotone polynomial-graph resilient map with delta=1/2^20 supply the output. All N bits are payload; every field and ordering is uniform, with no advice or witness input. Runtime is one fixed polynomial with an enormous degree.",
+  "theorem": "For this one fixed total uniform language in P, hence NP with empty witnesses, there exist fixed K>0 and N0 such that C_B2(F_N)>=4N-K*(log2 N)^11/(log2 log2 N) for every integer actual length N>=N0 in the full pinned B2 model. The supplied complete bounded-order diagonal extraction, correlation with the supplied smaller weak-seed defect, resilience and fixed-factor accounting prove affine dispersal at the exact k, and the full kernel gives 4N-8k. This same complete guarantee implies the joint finite projection (4,1).",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "kind": "polynomial_log",
+      "coefficient": {
+        "numerator": "4",
+        "denominator": "1"
+      },
+      "exponent": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "big_o",
+      "exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "11",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "-1",
+        "denominator": "1"
+      }
     }
   },
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
