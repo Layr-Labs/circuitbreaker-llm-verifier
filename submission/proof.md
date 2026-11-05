@@ -1,90 +1,157 @@
-# Published coefficient 31/10: construction and proof
+# One fixed uniform family with log(N)^9 loglog(N)^5 / logloglog(N) loss
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+For the single total language evaluated by family.py, we prove that absolute B>0,N0 exist such that for EVERY actual integer input length N>=N0,
 
-## Fixed total family
+ C_B2(F_N)>=4N-B*(log2 N)^9*(log2(log2 N))^5/log2(log2(log2 N)).
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+Both canonical claims assert this ENTIRE declaration and all stated eventual weakenings for the SAME family. Their protected coefficient/exponent guarantee and projection remain(4,1). No larger endpoint is claimed. All required extraction arguments are supplied in seeded.md and disperser.md; the complete full-B2 gate theorem is in elimination.md. Citations identify provenance, not unexplained premises or instructions to retrieve external papers.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+## Total program and actual input
 
-## Uniform P and NP membership
+The entire evaluator, scalar plans, arithmetic and compilation are in family.py. N<128 outputs0, including N=0. For larger N put L=ceil(log2 N),z=ceil(log2 L),D_int=max(2,z),C=2^20. The actual prefix is the standard Elias gamma code of positive S: j=floor(log2 S) zeros followed by the full MSB-first binary representation of S. Its length is H(S)=2j+1. Truncation,more than L leading zeros,or S>2^L rejects. Thus1<=S<=2^L<=2N on every admitted input. Every header is handled by the same program. Let P2 round upward to a power of two. Exact scales are
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+ (a,B_cap,E0) is selected by the exact feasible optimization in C22,s_idx=log2 a,
+ (U,V,T)=unpack_scales(S),
+ h=P2(U L^2),e=P2(V L^2 z),ell=P2(16ze),
+ eprime=100h*a*ell+e+2,q0=(2h*(a-1)+Cez^2)ell,
+ d=max(q0,(2h*a+10)ell,2P2(8*(ell+eprime+L+10))),
+ Y=100B_cap*h*d+Cez^2d,
+ k=hY+100B_cap*h*a*ell+10d+Cez^2ell.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+The index alphabet is the selected power of two2<=a<=h,with s_idx=log2a and b=ceil(d0/s_idx) and q0=(2h*(a-1)+C*e*z^2)ell. h is ROW independence,e is error precision; they are not equated. The bounded exact k is computed and ceil_log(k) is checked before source binding and k>N rejects. All source/seed/prefix/compiler/layout guards are exact. Failed plans return0. The initial d0<=5L cap precedes initial-seed enumeration. ell>=u ensures a whole biased group fits one completed row.
 
-## Every integer length and the lower bound
+Initial A1 and all B5 field/matrix data are canonical by C1, with no input-data bits. Short E1 is data-free. A single paid internal package follows the header. First compute the four ordinary scalar plans,put s_star=max_i s_i,and replace each field degree by s_star while retaining its own nprime,H,m0,error,calls. Recheck exact advice/entropy and ell-seed guards;reject failures. C6 proves eventual success and universal sharing. The one package has t_star-a(t_star) bits,t_star=D_int*s_star,and C5/C3 decode/compile it once. Each map is separately reparameterized with its own source/output metadata and that shared field/cyclic action;bad data yield bounded ring or zero maps. No further data are read. The engine checks its cursor,removes the ENTIRE P and pads payload with P zeros to N coordinates.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+Good primitive binary packages exist at every required degree by finite-field cyclicity, and C5 represents every such polynomial at large degree (the small fallback represents a reciprocal choice). They give exactly the universal A1 field/cyclic-matrix hypotheses. The one good internal tuple is only a PAID hardness restriction,universal across all four maps by C6. The evaluator neither searches for nor tests their primitivity. Arbitrary data still define bounded ring/compiler calculations or zero maps. There is no advice, witness data or external table defining the language.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+## Supplied chain and exact resource closure
 
-## Conservative remainder, with source discrepancy retained
+A1 proves strong binary linear extraction over any size2^s field with a specified binary basis containing1 first and a matrix cycling all nonzero vectors. B1 supplies deterministic tower rank condensation and its exact adaptive parameters. B2.1 combines them with fresh seeds and paid conditional affine-rank loss. For the four internal maps use dimension D_int,source threshold K=C*e*z^2*M,precision e,stipulated seed ell. Outputs are ell for W/T,q0 for E2,d for E3.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+B2.2 retains all dimension dependence: largest K=O_S(L^6z^8),condensed nprime=O_S(K),H<=128z,R<=32z,s<5e eventually at fixed S. Advice<=327680*M*e*z^2<K/2 makes the first power-of-two candidate pass; at most two calls suffice. Actual seed<12ze fits ell at a sufficiently large fixed S. Every seed bit is retained; fixed combined seeds are linear. The maximum field also has s_star<5e eventually,so C6 preserves these same advice/seed bounds after explicit rechecks. No independence of field/matrix constants is assumed. Short E1 is the direct B2.3 multi-bit polynomial hash with K=10d and error eprime,with its supplied collision proof.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+B3--B4 give the complete refreshed look-ahead/index argument, including final-round refresh and the correct A/B conditioning order. They prove that ANY at most h good initial indices yield entire ell-bit rows jointly within gamma=100b*h^2*2^-e of independent uniform rows,where b=ceil(d0/s_idx). Source thresholds are C*e*z^2 times output,not the old half-output ratios. q0 leaves the W/T residual exactly; d>=q0 and the seed/transcript guards hold by its maximum envelope. Y pays100bhd and both E2/E3 thresholds since e*z^2*d/Y=O_S(z^3*log z/L)->0. k pays hY and all smaller X losses. eprime pays the weak-seed rank bound with100h*a*ell+e+2. B7 supplies every explicit scale inequality and all finite guards eventually,with h/e kept separate.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Initial dimension10 uses the selected precision E0. The exact selector enforces E0>=ceil_sqrt(L)+ceil(L/125) and E0<=L,initial validity,d0<=5L,b<=B_cap,and125E0-d0>=125ceil_sqrt(L). The initial requested output is M_init=P2(Y);only its first Y bits are used. Because E0>=L/125,generic B1 has condensed nprime=O(k). Thus H=O(k^(1/10)),field degreeO(L),and first-candidate adviceO(Y*k^(1/10)*L) has strict L exponent89/10<9. One call eventually suffices uniformly across selected precisions. Good canonical initial data meet the actual scalar hypotheses. The deficient-row fraction is at most2*2^-E0.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+A2 and B5 supply the logarithmic-external-seed bootstrap in full:1024-wise entropy sampling,clipped probability-tree weights,repeated-position collision moments,seedwise smoothing,conditional two-block repair,direct GENERAL-source A1 on the second block and shared-multiplier weak hashing on the first. Rare transcripts and every seed are paid; a constant-bounded number of fresh-seed repetitions recovers the output. Whole G is generally nonlinear. B6 uses only its proved strong general extraction below r^-80 and shifted agreement below r^-200,never a rank promise about G.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+## Whole-row robust input and one hard header
 
-## Exact arithmetic and the unchanged LP
+For each selected initial index i,the evaluator computes the complete W_i row and takes its first u bits as ONE biased group. B4's joint-row guarantee passes to these prefixes and biased values by data processing. Inner Bonferroni events depend on O(r^2) GROUPS and hence O(r^2) GOOD ROWS. The number of compared terms remains exp(O(r^2u)); independence h therefore needs O(r^2),while error logarithm e still needs O(r^2u). B6 proves this separation,ideal probability estimates,exceptional partitions and finite absolute constants without an external fooling theorem.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+Use S_groups=B*M<=M0=2^d0 rows. Exact layout maximizes r subject to m+b_seed<=d0,with m=floor(r/125),b_seed=floor(T*ceil(log2 r)/(30*125^2)),u=2b_seed+2ceil(log2 r)+10. Every bad row gives at most one bad group; monotonicity bounds arbitrary dependence by setting bad-group bits all0/all1. Coverage loses at most2^O_S(log r). Under the cap r<=1000L and at fixed S,u=O(Tz). One fixed sufficiently large S0 meets h>=A_t*r^2 and gamma<=2^(-A_gamma*r^2u),all bias/seed/source constants,and ell>=u.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+At this S0,the initial bad-row count is at most2M0*2^-E0. Coverage gives q/S_groups<=2^(-E0+O_S(z)),while S_groups^(1/125)<=2^(d0/125). The EXACT selected margin E0-d0/125>=ceil_sqrt(L) makes their product at most2^(-sqrt(L)+O_S(z)),which tends to zero. Hence the required bad-group allowance holds eventually. The fixed gamma code fits at EVERY sufficiently large integer N and every guard holds there. No fixed constant error exponent or favorable rounding is assumed for the selected initial plan.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+## Uniformity, NP and gate application
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+Canonical initial search is polynomial on every admitted header by s0<=5L/11 and fixed dimension10. B5 searches are polynomial in r by its uniform O(log r) degrees and fixed helper dimension4; C1 proves these bounds exactly. C5 enumerates only small irreducibles of degree O(log t),uses bounded CRT and has fixed polynomial complexity in t. The one actual package t_star-a(t_star)>=t_star/2 at large degree implies t_star<=2N; small fallback degree is bounded. C3 kernel/module reconstruction is binary linear algebra and ring arithmetic of polynomial size. It enumerates no2^t elements. Bad indices/rank failures are bounded then zero.
 
-## Sources
+Growing D_int=O(loglog N) is not a runtime exponent. The evaluator streams ONLY its first nprime coefficient monomials,with polynomial tuple/exponentiation cost and no full grid. All admitted finite dimensions are polynomial in N. Tower arithmetic uses explicit stacks; B5 designs use exact polynomial-time CE. The d0 cap bounds2^d0 by(2N)^5. Threshold integers have at most uBM+O(r)<=uM0+O(r) bits; u<=ell<=N gives a fixed polynomial N bound. Thus all headers/data,cutoff/rejection paths and normal evaluation use ONE fixed polynomial-time algorithm.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+Let L_yes={x:evaluate(x)=1}. The NP witness bound is0. Accept exactly empty w when the same evaluator returns1. Every yes input has that witness,and every accepted allowed witness implies a yes input. Both directions concern this SAME fixed language; witnesses are not circuit inputs.
+
+At S0,each internal s=O(e)=O(L^2z),D_int=O(z),so current P=H(S)+D_int*s_star-a(D_int*s_star)=O_S0(L^2z^2)=o(k),including every header/data bit. Fix one good shared internal package and the header. Injective zero padding preserves payload affine dimension. B1--B7 give an affine disperser at dimension k on N-P actual variables. Apply elimination.md's complete4n-8d theorem,covering all16 B2 tables,sharing,constants,repeated pins,affine exchanges and terminal cleanup. Restriction adds no gates:
+
+ C_B2(F_N)>=4(N-P)-8k=4N-(4P+8k).
+
+Since k=O_S0(L^9z^5/log z),the exact loss is O(L^9z^5/log z). Rounding ratios L/log2 N and z/log2 log2 N tend to1 at all integer lengths,so absolute B,N0 prove the declaration. For this SAME family any fixed extra loglog exponent absorbs B,any fixed extra log exponent absorbs the loglog factor,and N^epsilon dominates the fixed polylogarithm. These are exactly the other stated inequalities and joint liminf projection.
+
+## Provenance and finite evidence
+
+This revision builds on C9 explicit envelopes6a291850-3ba9-440e-83b7-fe169de7d8d2,06f789be tight source allocation,46681146 gamma coding,77e43640 common field,71e6d94e unit coding and c1f8eee2 whole-row closure. C10 source84bbd016-28f8-4a06-802f-9932903344ee supplied growing index words/divisor;C11 source6b4b7dde-5bf3-4091-b601-16bd48e0af8d supplied exact integer accounting;C12 source716f7ddf-5173-4f9c-b4e0-32f636197d64 supplied initial prefix/larger alphabet;C13 source16909354-df8a-4331-94e0-31ae44bce9c9 root-scale allocation is prior work;C14 source3c0edbbe-db2c-403f-bbeb-a99ebd4060f5 supplied packed parameters;C15 source613ac482-02fc-449b-83e3-74fa80219735 supplied exact Y reserve;C16 exact weak-seed precision is prior work;C17 exact Q/maximum seed budget is prior work;C18 reduced entropy coefficient is prior work;C19 reduced seed envelope is prior work;C20 initial precision/round cap is prior work;C21 exact alphabet optimization is prior work;C22 joint initial allocation is new. C1--C4 derive from local/submitted reciprocal89c0424d,companion a50a59d7 and earlier f72b2eba; whole-row grouping/9,5 closure from c1f8eee2; growing dimension from61c0ea3e and charged direct maps from90a83107. Those endpoint verdicts are no premises. Older source/code and primary mathematical provenance are identified in the complete supporting proofs and public dependency note. Failed/unpublished sources are neither accepted results nor proofs of negation. No prior_results premise is used.
+
+The declared audit establishes ONLY its scoped finite algebra,compiler,codec,packing and scalar predicates. Large scalar plans allocate no corresponding input/field/seed. Large canonical searches and the eventual complete family are not executed. Unused half-output code/checks and duplicate narrative were removed; no removed predicate is claimed retained. Universal correctness rests on the supplied mathematics. Advisory critique,configured-provider judgment and human promotion remain separate.
+
+The complete published inherited material provider is3c0edbbe-db2c-403f-bbeb-a99ebd4060f5 (all source bytes verified at8bd222454102e93425ed43d6bdf9221306aef984). A content audit,not a graph-path assumption,finds57 inherited runtime definitions unchanged with PolyPlan modified and explicit own scalar helpers for resource candidates,parent-class alphabet allocation and current joint selection,identical imports/module statements,byte-identical gate proof,A1,A2 and B5-B6. The earlier C17 carry audit also matched C1-C10/B1-B2;current C18-C22 explicitly updates coefficient,seed accounting,initial dimension/precision and allocation selection in C6/B2.1-B2.2,so those larger block identities are no longer asserted. The remaining scientific changes are the supplied own C15-C22 guards/resource arguments. Own C15 parent613ac482-02fc-449b-83e3-74fa80219735 is also a published direct provider;all eight source bytes were verified atf8c8605f1c647f6d0739fa4f388725e55ab0ec4b. Own C16 parentbf1f92a0-1e66-4e77-84a2-1752d9636b41 is presently unpublished and requires a later formal link after both endpoints publish. Older ancestry is credited below;formal direct-provider scope is not a claim of independence or a certified contribution graph.
+
+Historical inherited source ledger:9597bd82-cdc2-4d11-a0e9-95eb31bc3a1d architecture/A1/B1/B3-B7/design;28feddfa-dfc6-412a-a507-a525b15567fe compact full gate proof;db5f9c6e-607f-424a-89f8-5a49d29d07df charged-prefix concept;510a59cf-e44e-48bb-ad85-cd80e6b19bf4 direct short hash;19095349-8b20-42f2-849e-3591198e69ed recycling/design ancestry;b71edbca-7db5-49c3-8943-412187b9e9e9 initial accounting ancestry (D12 retired);b5cfccde-17ee-470a-9ccc-cf5b4b64dac1 entropy/overlap/hybrid ancestry;7fa479d9-a2b8-481a-8e50-609b41bb1476 D11 balance;b4e82f7b-c309-4da5-8df6-2e5545685c14 exact field bound;681c4fbf-95e1-4cca-a829-ec6cdaad8551 adaptive PV;35570f1a-1cc2-45ac-b6b6-34eb05c4fc81 shared-multiplier raw tables;25690f4d-c287-431e-a541-9e594b02602d entropy sampler/bootstrap;89c0424d-4ebf-4e97-984a-eea330c6fb3e primitive compiler/reciprocal fallback;c1f8eee2-5cd0-401f-a6d9-d86c348b6075 whole-row closure;71e6d94e-7b71-45ee-a790-a7be07c8cdc1 unit codec;77e43640-f90b-45ac-a18c-0233345a54c6 shared field;06f789be-34b1-4538-b496-c7549ab1217e earlier tight-source method (dyadic k retired);84bbd016-28f8-4a06-802f-9932903344ee logarithmic-divisor alphabet;6b4b7dde-5bf3-4091-b601-16bd48e0af8d exact X budget. Retired classes/parameters are historical,not claimed as current code identities.
+
+
+# C15. Exact look-ahead source reserve
+
+The CURRENT formula is Y=100B_cap*h*d+Cez^2d. The packed header and exact Y reserve are retained;C16 below changes the E1 precision envelope. Remove the older separate guard Y>=1000bhd. Retain the stronger actual residual check Y-100bhd>=Cez^2max(d,q0). Since b<=B_cap and d>=q0,current Y pays that check exactly at the worst round cap. It also gives Y>=d,which is needed for the initial d-bit seed.
+
+Here is the use audit for the complete B4 proof. Z consists of all selected initial Y-bit row prefixes and has rank at most hY;the X source budget explicitly pays this value. Conditioning and splitting X by Z do not require a fractional Y reserve. The induction for target Y_v uses only its original uniform Y-bit marginal and rank losses from fixed observations. Within an index round,the fixed old/current/next seeds and Q/A-message lists have the supplied conservative total bound100hd. Thus the residual after the current round is at leastY-100jhd,for j<=b. This meetsCez^2q0 before E2 and Cez^2d before E3 by the single displayed residual guard. The target's first d bits exist becauseY>=d. B3's Q-rank premise is paid separately by q0 and its source thresholds;its X-rank premise is paid by the separate k guard. Final-round refresh uses the same Y source thresholds and no final E3 call. Ordered-row coupling then retains the same100b*h^2*eta error. None of these steps bounds a Y loss by Y/10 or needs1000bhd;their actual absolute rank loss and extractor entropy thresholds are exactly the quantities retained. This is a proof of B4 under the weakened displayed hypothesis,not an invocation of a black box with an unmet assumption.
+
+All source/seed plans remain well-defined. E2/E3 thresholds are at mostCez^2d<=Y. Every other direct guard is unchanged. Initial requested M_init=P2(Y)<2Y stays dyadic;the engine uses only its Y-bit prefix. Initial advice is still o(k) by the strict L exponent,one call and d0<=5L with the exact joint error-margin guard remain. Internal requested outputs and thresholds are unchanged except their ambient Y,whose fixed-scale order remains the same. Field/advice/seed bounds,shared-degree revalidation,at-most-two internal calls,canonical polynomial caps and total finite rejection paths retain their complete proofs.
+
+The C15 constant-factor comparison used its previous precision envelope. Current C22 supplies the comparison below;earlier sum-envelope comparisons are historical and are not asserted current.
+
+The same fixed good code from the independent-scale proof meets the unchanged robust row/error/bias hypotheses. Exact Y source payment and the retained initial bounds establish every guard eventually at ALL actual integer lengths. Current k remainsTheta(L^9z^5/log z),so the full4N-O(L^9z^5/log z) theorem,same-family weakenings and native(4,1) hold. The1000 reserve predicate is deliberately retired,not silently counted as a passing current test. Finite scalar cases check the exact required residual for several round counts and equality at B_cap;universal correctness rests on the supplied proof and its independent critique.
+
+# C16. Exact weak-seed precision and budget difference
+
+C16 builds directly on source613ac482-02fc-449b-83e3-74fa80219735.
+
+Set CURRENT eprime=100h*a*ell+e+2,an integer. The strong linear E1 map has error eta'=2^-eprime. For each fixed affine B component in B4,its deficient-seed fraction is at most2eta' by the supplied fixed-seed rank lemma. The designated seed has entropy at leastd-100h*a*ell;its maximum point probability inflates the bad fraction by at most2^(100h*a*ell). Therefore bad history mass is at most2^(100h*a*ell+1-eprime)=2^(-e-1)=eta/2. The complete B4 proof above is stated and proved with this revised guard. The other E2/E3/B3 errors are still paid within10h*eta per round and100b*h^2*eta jointly. This is the sole use of the former E1 precision inequality;the proof uses the rank conclusion on good histories,not an extra E1 approximate-independence premise.
+
+Integer precision is permitted by the supplied direct short-map proof. Its actual seed remains at most32*(ell+eprime+L+10). Current d is at least the EXACT seed2P2(8*(ell+eprime+L+10)),as proved in C17 below. Its source10d coversell+2eprime+10. Thus changing the precision guard does not remove the separate E1 source or seed hypotheses. Internal A1 maps still use row precision e,and exact Y/k payments retain the complete C15 proof for their current d. Initial dyadic output/prefix,one-call advice bound and leading d0<=5L with the exact joint error-margin guard are unchanged in order. All normal/rejected headers remain fixed polynomial-time computations with the same packed parameter code.
+
+
+# C17. Exact Q entropy and a maximum seed/transcript budget
+
+C17 builds on actual own sourcebf1f92a0-1e66-4e77-84a2-1752d9636b41;the full inherited published provider is3c0edbbe-db2c-403f-bbeb-a99ebd4060f5.
+
+Set CURRENT q0=(2h(a-1)+Cez^2)ell. B3's displayed source condition is now met with equality:q0-2h(a-1)ell=Cez^2ell. Its target Q_v is uniform on q0 coordinates;the first ell coordinates exist sinceCez^2>=1. Each completed transition fixes at mosth*ell seed observations andh*ell A-parts,so at most2h*ell rank is lost. There are at mosta-1 transitions before the last W output. Every T call therefore has its full required Cez^2ell entropy,including the equality boundary. The X kernel threshold is separately retained. This reuses the COMPLETE B3 conditioning proof under precisely its stated residual inequality;it does not omit any observation or assume independence of nondesignated streams.
+
+Let D_seed=2P2(8*(ell+eprime+L+10)) and set d=max(q0,(2h*a+10)ell,D_seed). The direct ShortSeedPlan at ambient N has EXACT actual seed D_seed because ceil_log(N)=L. Hence its stipulated seed is paid. Moreover D_seed>=16*(ell+eprime+L+10),so source10d>=ell+2eprime+10. The first maximum term pays q0 and Cez^2ell;the second is exactly B4's displayed transcript guard. Thus all T/W,E1 and Q-padding hypotheses hold for every scalar plan,not merely eventually. Q has lengthq0<=d and is padded with zero coordinates only when needed.
+
+C15's Y=100B_cap*h*d+Cez^2d still pays the precise Y residual atb<=B_cap,while the exact k formula pays the X losses. C16's eprime=100haell+e+2 still gives weak-seed rank failure<=eta/2. B4's absolute target-Y rank loss100hd per round uses d>=(2ha+10)ell,which is retained explicitly. No former sum16q0+128eprime+128L+1280 is used in those proofs. Current initial requestedM_init=P2(Y) remains dyadic and explicitly truncated toY;its strict advice exponent,one call and d0<=5L with the exact joint error-margin guard leading bound are unchanged.
+
+For the historical fixed comparison alphabet a0=P2(max(2,floor(z^3/max(1,ceil_log z)))) at any fixed good code,q0~Cez^2ell=Theta(L^4z^5). The other two maximum terms have orderh*a*ell=Theta(L^4z^5/log z),because eprime=Theta(h*a*ell) and the fixed L term is lower order. Thus d=q0 EXACTLY at every sufficiently large integer length of that comparison allocation. C21 proves the selected allocation by general Theta bounds and does not assume this equality. This equality is allowed by all guards. E2 and E3 can then have identical parameter tuples and even the same fixed extractor map;their proof uses strong extraction on fresh conditioned seeds and has no premise that construction matrices or tuples are distinct. C6 already permits a shared good cyclic tuple. The current argument covers that coincidence and the zero-padding boundary.
+
+Largest internal source remains O(L^6z^8),so all supplied field/advice/seed estimates and common-degree rechecks retain their order and strict coefficient slack. Y=Theta(L^7z^5/log z),k=Theta(L^9z^5/log z),P=O(L^2z^2)=o(k). Canonical searches,streamed monomials,actual seed/prefix caps and bad-data guards retain fixed polynomial runtime. The new maximum uses only bounded integer arithmetic before any binding. Normal,rejected and malformed inputs remain a single total uniform language with empty-witness NP verification. The unchanged good packed code meets every robust row/error/bias requirement for all sufficiently large actual lengths.
+
+# C18. Reduced entropy coefficient with explicit strict advice slack
+
+C18 builds directly on actual own C17 source8fadd573-138b-49e7-8891-7baf47e8adc9. The current evaluator sets C=2^20. C17's historical candidate used C_old=2^30; all resource equations in the present proof use current C unless explicitly subscripted old. Its exact-Q/maximum-budget construction and complete proof remain supplied, while this revision reduces every corresponding source threshold and payment consistently.
+
+B2.2 and C6 are the only places where a numerical lower bound on C is needed rather than its algebraic source-payment role. Their explicit advice estimate is16*M*R*H*s<=327680*M*e*z^2, with H<=128z,R<=32z,s_star<5e eventually at each fixed code. CURRENT K/2=524288*M*e*z^2, leaving196608*M*e*z^2 strict slack. This absorbs the additive A1 logarithmic term at every sufficiently large integer length; floor(K/2) causes no issue since K is even. K/4>=M eventually. Hence the first power-of-two candidate still passes, with at most two calls, including common-field reparameterization. The same field inequalities and seed<12ze remain because log K changes by only a constant and nprime=O(K). The threshold K=C e z^2 M is an exact algebraic requirement everywhere else: B3, B4, ShortSeed source, Q/Y/X residuals all retain their complete proofs with that same C. No old numerical C lower bound is used there.
+
+The full supplied chain is therefore proved at current C. Largest K=O(L^6z^8),H<=128z,R<=32z,initial advice o(k),d0<=5L with the exact joint error-margin guard,shared prefix O(L^2z^2),row/error robustness and exact selected error margin remain. C is one absolute constant,not a header parameter or length-dependent promise. All scalar guards remain explicit and bad plans reject. The fixed good packed code,finite-field existence,canonical searches,streaming runtime,totality and empty-witness verifier apply unchanged at every sufficiently large actual integer length.
+
+# C19. A sharper actual seed bound and eightfold allocation reduction
+
+C19 builds directly on actual own C18 source0b1b6f07-9528-4016-a58e-5b42b74128d3. Set CURRENT ell=P2(16ze) instead ofP2(128ze),with current C=2^20. The B2.2 proof above now retains the additive field-seed term precisely: B1 uses<5e bits,eventually D_int=z,and two direct calls use at most2(z+1)s_star<10(z+1)e. TOTAL actual seed is therefore<(10z+15)e<=12ze for z>=8. This is an eventual asymptotic condition at ALL sufficiently large integer lengths,not an unchecked finite-input promise. The exact ell-seed guards remain for every finite admitted plan. Since ell>=16ze,strict4ze slack remains,including common-degree reparameterization. One-call cases are even smaller.
+
+All four internal maps retain their actual output and source metadata; they are recomputed at the smaller ell. Largest internal K keeps orderO(L^6z^8),so H<=128z,R<=32z,s_star<5e and strict advice slack196608Mez^2 persist. This is not circular: these orders follow algebraically from the scalar formulas,then yield the explicit first-candidate/two-call and seed guard conclusions. q0/eprime/d/Y/k are recomputed consistently; the exact residual,weak-seed precision,ShortSeed source/actualseed,transcript and conditional rank arguments in C15-C18 remain supplied for these values. Always d>=q0;E2/E3 coincidence is covered whenever equality occurs.
+
+Current initial dyadic output isP2(Y),with its explicit Y-bit prefix. Its advice remains o(k),one call and d0<=5L with the exact joint error-margin guard follow with the same strict L-exponent margin. ell>=u at the fixed good packed code still holds since ell=Theta(L^2z^2),whereas robust group widthu=O(z). Header/package charging,canonical searches,streamed monomials,all finite rejection paths,polynomial-time totality and empty-witness NP verification are retained. The main loss orderL^9z^5/log z and native(4,1) remain.
+
+# C20. Supplied parent initial construction class
+
+Own C20 source730ab947-bb32-4e0f-896f-7042bfc6ffeb follows C19 source4d52cc9a-445f-4dd3-bf3c-0eec178d5d6f. Its initial D11,precisionceil(L/35)+10 and B=ceil(357L/(100log2a)) form the C21 PARENT comparison class,not the current initial selector. At its resource orders,the initial first-candidate advice has L exponent7+9/11+1<9,so one call suffices. The exact field formula yields s0<=(768/6335+o(1))L;PV seed<=(74/35+o(1))L;totald0<=(646/181+o(1))L<357L/100 with gap17/18100. The corresponding initial deficient fraction2N^-1/35 and group capacity give strict margin1/35-357/12500=1/87500. Thus this parent class is independently supplied and certified by the same generic primitive/gate arguments,without its judgment as a premise. For this parent class,the finite cap12s0<=5L bounds canonical searches by2^((5/8)L+O(1)) and2^((55/6)L),fixed polynomials inN. The current joint class below uses its own exact margin and dimension10.
+
+# C21. Supplied parent class: exact optimization over index alphabets
+
+This section concerns the C21 PARENT construction class and its helper,not the current C22 selector. C21 builds on own actual C20 source730ab947-bb32-4e0f-896f-7042bfc6ffeb. The new helper optimized_alphabet_resources enumerates every step j=1,...,log2h and alphabet a=2^j. For each it computes EXACTLY B=ceil(357L/(100j)),ep=100haell+e+2,q=(2h(a-1)+Cez^2)ell,d=max(q,(2ha+10)ell,2P2(8(ell+ep+L+10))),Y=100Bhd+Cez^2d,and k=hY+100Bhaell+10d+Cez^2ell. Select the lexicographically smallest(k,j);all other metadata are those of that same candidate. This is a finite scalar optimization,not a choice of a different language or uncharged advice. The normal evaluator uses that one deterministic result and all original source/seed/prefix guards. In particular2<=a<=h is automatic.
+
+There areO(logh)=O(logN) candidates on every admitted header,withO(logN)-bit integers of fixed polynomial magnitude before binding. Indeed U,V<=2N,h/e/ell are polynomial inN,and a<=h;each ep/q/d/Y/k is a fixed product/sum/rounding of these integers. No candidate field,array,input or seed space is enumerated. On rejected headers or bad data the same bounded program returns its normal Boolean value. Top-level runtime helpers are inherited except this explicit scalar helper and the modified PolyPlan. Polynomial totality,canonical finite search caps and empty-witness NP verification remain.
+
+Here is a complete noncircular resource closure for ONE fixed packed code. The old a0=P2(max(2,floor(z^3/max(1,ceil_log z)))) is eligible eventually. Its complete equations above give q=Theta(L^4z^5),ep=o(q),d=q eventually,B=Theta(L/logz),Y=Theta(L^7z^5/logz),k=Theta(L^9z^5/logz). Therefore selected k is at most that bound. Always d>=q>=Cez^2ell and k>=100B h^2d. Also d>=(2ha+10)ell and B>=cL/logh=Omega(L/z),because h=Theta(L^2) at fixed code. Thus k>=200B h^3aell first gives a=O(z^4/logz). Consequently loga=O(logz),so B=Omega(L/logz);using that stronger bound gives a=O(z^3). The Q lower bound and selected-k upper bound also imply B=O(L/logz). Hence B=Theta(L/logz),k=Theta(L^9z^5/logz),d=Theta(L^4z^5),Y=Theta(L^7z^5/logz). No d=q equality is needed for the selected allocation.
+
+Largest internal threshold is therefore O(L^6z^8). B2.2/C6 retain H<=128z,R<=32z,s_star<5e,strict advice slack196608Mez^2,at most two calls,and total actual seed<12ze paid byell>=16ze. Initial advice still has strict L exponent7+9/11+1<9;one call and the full646/181 seed leading bound apply,so actualb<=selectedB eventually. The precision35 bad-group margin1/87500,shared packageP=O(L^2z^2),ell>=u,and B3/B4 error100bh^2*2^-e retain their proofs. Robust row/error/bias conditions use only their absolute constants and b<=5L,a<=h. They can be met by ONE fixed sufficiently large packed triple withV>=U. The complete uniform all-length theorem and native(4,1) follow as before;no predecessor judgment is a premise.
+
+The earlier fixed-alphabet comparison is historical and is not reasserted as a current atomic claim. Parent primitive/source/uniformity closure above independently certifies its allocated4P+8k loss;no accepted verdict is used.
+
+# C22. Joint exact initial allocation with an explicit error margin
+
+C22 builds directly on own actual C21 sourceb1ed0533-5065-466c-aae0-c7dbd177798a. The current selector enumerates power-of-twoa=2^j<=h,integer round budgetB fromceil(L/j) throughceil(5L/j),and integer initial precisionE0 fromceil_sqrt(L)+ceil(L/125) throughL. For each(a,B),alphabet_resource_candidate computes the exact ep/q/d/Y/k formulas already supplied,now using this B. It skips ceil_log(k)>floor_log(N). For each E0 it constructs only the scalar INITIAL AffineSeedPlan(N,k,P2(Y),E0,dimension10,canonicalTrue). It admits a candidate only when that plan is valid,actuald0<=5L,ceil(d0/j)<=B,and125E0-d0>=125ceil_sqrt(L). Select min(k,j,B,E0);none gives output0. For each fixed(a,B),the first admittedE0 is the least tie precision,so breaking that inner loop is exact. Pruning k above a known best does not remove a minimizer. Every feasible plan hasd0>=PVseed>=L,so the lower B and E0 bounds omit no eligible candidate.
+
+All selection depends only on N and the PAID header,not payload bits or a source distribution. No unknown probability,field test,source property,mathematical judgment or external oracle is queried. Candidate objects are scalar metadata;canonical fields are bound ONLY for the selected plan. At mostO((logN)^3) candidates with polynomial-bit arithmetic and fixed dimension10 are considered. The generic halving loop/root computations also have fixed polynomial bit complexity. Even arbitrary rejected headers have bounded scalar work;no candidate field,array or input is enumerated.
+
+Here is a feasible witness at every sufficiently large integer length,without invoking the parent's verdict. Use the PARENT optimized alphabeta_old from C21;its supplied closure givesa_old=O(z^3),B_old=Theta(L/logz),d=Theta(L^4z^5),andk/Y ordersL9/L7. Keep that alphabet,but useB_w=ceil(337L/(100log2a_old)),E_w=ceil(L/37)+10,dimension10. Initial advice has exponent7+9/10+1=8.9<9,so its full first candidate passes. For D10,R176,R-D166,the direct seed coefficient is44*176/(166*37),and PV contributes78/37. Total
+d0<=(10346/3071+o(1))L<(337/100)L,
+with gap327/307100. The margin E_w-d0/125 is at least(31/462500+o(1))L,which eventually exceedsceil_sqrt(L). Thus the witness belongs to the exact finite search at EVERY sufficiently large N. Its k has orderL^9z^5/logz,so selected k has that same upper bound.
+
+For any selected candidate,d0>=L andceil(d0/log2a)<=B,soB>=L/logh=Omega(L/z). The same exact lower bounds k>=100B h^2d,d>=(2ha+10)ell,q>=Cez^2ell from C21 bootstrap a=O(z^4/logz),then loga=O(logz),thena=O(z^3),B=Theta(L/logz). They givek=Theta(L^9z^5/logz),d=Theta(L^4z^5),Y=Theta(L^7z^5/logz). Hence internal field/advice/seed/residual/precision proofs and paid prefixP=O(L^2z^2) remain. No selected d=q identity or fixed precision denominator is assumed;the guards derive E0>=L/125.
+
+The selected margin andd0>=PVseed>=L imply E0>=ceil_sqrt(L)+ceil(L/125),while the search hasE0<=L. Thus exact PV seed isO(L),PV exponent is at leastL/125,and generic condensed length nprime=O(k). For D10,H=O(k^(1/10)) and direct field degreeO(L),uniformly across selected precisions. The full dyadic first-candidate adviceO(Y*k^(1/10)*L)=o(k),since89/10<9. One initial call eventually suffices uniformly,although exact finite validity and seed caps were already selected. No fixed precision denominator is imposed;the positive fraction lower bound is derived from actual seed/error feasibility.
+
+For selected good initial data the deficient-row fraction is at most2*2^-E0. Exactly as the full robust proof above,coverage contributes2^O_S(z) andS_groups^delta<=2^(d0/125). The chosen guard therefore gives bad-group product<=2^(-sqrt(L)+O_S(z))->0. It replaces the former fixed1/87500 margin for the current program. Because d0<=5L,the robust r/h/e/bias bounds still use their same absolute constants;one fixed sufficiently large PAID packed triple works. All initial/good-data/row guards hold at every sufficiently large actual N. Canonical initial runtime uses11*s0<=d0<=5L,so s0<=5L/11;binary modulus search is at most2^((15/22)L+O(1))poly(L),and companion search at most2^((100/11)L)poly(L). They are fixed polynomials inN on EVERY admitted finite header. B5/runtime/streaming/NP/gate arguments remain unchanged.
+
+For the certified-loss comparison,at the parent's selecteda_old the witness has all ep/q/d/h/e/ell values identical;only B and initial parameters change. Its k(B)=100B*h*(h*d+a*ell)+R,whereR=h*Cez^2d+10d+Cez^2ell. Uniformly along those a_old=O(z^3),R=o(B*h^2d),and B_w/B_old->337/357. Thus witnessk/parentk->337/357. Current selectedk is at most witnessk. Both entire prefixes areO(L^2z^2)=o(k),so the limsup of current certified loss divided by the parent's allocated loss is at most337/357<1. This proves a strict leading resource improvement including complete paid prefixes. Functions,fields,layouts and true minimum circuit complexities need not coincide.
+
+Historical parent fixed/optimized-alphabet cases remain explicitly construction-class finite predicates. Current finite evidence checks exact search rejection/capacity certificates and positive SCALAR feasibility witnesses with D10/precision37/rational budget337,including their exact error guard. It constructs no astronomical N and does not execute the complete joint search at its theoretical normal threshold. The universal theorem rests on this complete supplied proof,not those finite cases or a predecessor judgment.
