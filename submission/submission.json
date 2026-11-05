@@ -1,40 +1,55 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Coefficient4 log^9 loglog^7 family with reciprocal primitive binary packages",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"One fixed total family evaluated by family.py. N<128 or failed guards output0. Let L=ceil(log2 N),z=ceil(log2 L),D=max(2,z),C=2^30; actual L-bit header encodesS-1. With P2 rounding:h=e=P2(SL^2z),ell=P2(S^3L^2z^2),eprime=P2(S^5L^4z^3),d=P2(S^9L^4z^5),Y=P2(S^11L^7z^6),k=P2(S^13L^9z^7). Initial A1D11,precisionceil(L/28)+10,adaptiveB1,exact reconstructionfield,seedcap5L. Four internal B2.1maps have dimensionD,K=C*h*z^2*M,at most2 eventual calls,stipulated seedell;q0=(4h+C*h*z^2+10)ell. Their ONLY paid data are FOURC4 reciprocal codes for monic constant-one binary polynomials of degreeD*s,eachD*s-2bits (t=2 canonical,invalid codeszero),in orderT,W,E2,E3. For good primitive input C3 reconstructs the size2^s subfield and relative companion action by binary linear algebra; rank failures yieldzero maps. Good primitive tuples exist,with no search by evaluator. Short E1 is direct B2.3,no data. Initial and B5data are canonical by C1 bounded exhaustive search,using initials0<=5L/12 and B5s2<=2048w. B5 uses A2 two1024-wise position samplers,ell_s=P2(r)//2176000,kappa=ell_s//16000,weak outputkappa//8,internal seedD1=5*(1000w)^2+2000w,directA1D4 helper outputP2(D1),errorlog160w+10,and constant-bounded fresh-seed rounds. Prefixdegree1000w/output250w gives shifted agreement. CompleteG is nonlinear; only strong general extraction/shifted agreement are used. Layoutdelta1/125,m=floor(r/125),b=floor(floor(sqrt(S))*w/(30*125^2)),u=2b+2w+10,w=ceil(log2 r). All headers/data are handled by one polynomial-time program. One fixed goodS0 is only a paid restriction. Eventuald0<4L,P=O_S0(L^2z^2)=o(k),initialbad2N^(-1/28) and S_groups^delta<=2^((4/125)L) close the all-length bound.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P and NP with empty witnesses on every input. There exist absolute B>0,N0 such that for every actual integer N>=N0, unconditionally in pinned full B2, C_B2(F_N)>=4*N-B*(log2 N)^9*(log2(log2 N))^7. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^9*(log2(log2 N))^(7+epsilon), hence also4*N-(log2 N)^(9+epsilon) and4*N-N^epsilon. One fixed ordinary header S0 gives hardness. Exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data; P=O_S0(L^2*(ceil(log2 L))^2)=o(k), including the four internal growing-dimension packages. The supplied finite4n-8d theorem covers all16 B2 tables, constants and sharing. The robust moment proof needs O(r^2*u) independence and log-error. Layout loses only a factor2^O_S0(log r), preserving actual bad-coordinate accounting. No numerical B, efficient search for S0 or unpaid weak-design construction is assumed. For common admitted scalar plans define P_comp=P+sum_internal(s+2),P_full=P_comp+sum_internal(D_int^2-D_int)*s,P_paid=P_full+122*s0+1001*w+17*s2. C3/C4 reduce exact4*P_comp+8*k by4*sum_internal(s+2); C2/C1 account for their separate stated representation savings. All preserve9,7 asymptotics.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
-        "proof.md"
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "proof.md",
+        "seeded.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"One fixed total family evaluated by family.py. N<128 or failed guards output0. Let L=ceil(log2 N),z=ceil(log2 L),D=max(2,z),C=2^30; actual L-bit header encodesS-1. With P2 rounding:h=e=P2(SL^2z),ell=P2(S^3L^2z^2),eprime=P2(S^5L^4z^3),d=P2(S^9L^4z^5),Y=P2(S^11L^7z^6),k=P2(S^13L^9z^7). Initial A1D11,precisionceil(L/28)+10,adaptiveB1,exact reconstructionfield,seedcap5L. Four internal B2.1maps have dimensionD,K=C*h*z^2*M,at most2 eventual calls,stipulated seedell;q0=(4h+C*h*z^2+10)ell. Their ONLY paid data are FOURC4 reciprocal codes for monic constant-one binary polynomials of degreeD*s,eachD*s-2bits (t=2 canonical,invalid codeszero),in orderT,W,E2,E3. For good primitive input C3 reconstructs the size2^s subfield and relative companion action by binary linear algebra; rank failures yieldzero maps. Good primitive tuples exist,with no search by evaluator. Short E1 is direct B2.3,no data. Initial and B5data are canonical by C1 bounded exhaustive search,using initials0<=5L/12 and B5s2<=2048w. B5 uses A2 two1024-wise position samplers,ell_s=P2(r)//2176000,kappa=ell_s//16000,weak outputkappa//8,internal seedD1=5*(1000w)^2+2000w,directA1D4 helper outputP2(D1),errorlog160w+10,and constant-bounded fresh-seed rounds. Prefixdegree1000w/output250w gives shifted agreement. CompleteG is nonlinear; only strong general extraction/shifted agreement are used. Layoutdelta1/125,m=floor(r/125),b=floor(floor(sqrt(S))*w/(30*125^2)),u=2b+2w+10,w=ceil(log2 r). All headers/data are handled by one polynomial-time program. One fixed goodS0 is only a paid restriction. Eventuald0<4L,P=O_S0(L^2z^2)=o(k),initialbad2N^(-1/28) and S_groups^delta<=2^((4/125)L) close the all-length bound.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P and NP with empty witnesses on every input. There exist absolute B>0,N0 such that for every actual integer N>=N0, unconditionally in pinned full B2, C_B2(F_N)>=4*N-B*(log2 N)^9*(log2(log2 N))^7. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^9*(log2(log2 N))^(7+epsilon), hence also4*N-(log2 N)^(9+epsilon) and4*N-N^epsilon. One fixed ordinary header S0 gives hardness. Exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data; P=O_S0(L^2*(ceil(log2 L))^2)=o(k), including the four internal growing-dimension packages. The supplied finite4n-8d theorem covers all16 B2 tables, constants and sharing. The robust moment proof needs O(r^2*u) independence and log-error. Layout loses only a factor2^O_S0(log r), preserving actual bad-coordinate accounting. No numerical B, efficient search for S0 or unpaid weak-design construction is assumed. For common admitted scalar plans define P_comp=P+sum_internal(s+2),P_full=P_comp+sum_internal(D_int^2-D_int)*s,P_paid=P_full+122*s0+1001*w+17*s2. C3/C4 reduce exact4*P_comp+8*k by4*sum_internal(s+2); C2/C1 account for their separate stated representation savings. All preserve9,7 asymptotics.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
-        "proof.md"
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "proof.md",
+        "seeded.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "finite-audit",
+      "source": "audit.py",
+      "purpose": "Bounded exact reciprocal-code enumeration, compiler/field-product/relative-orbit/Seeded-output/parser/bad-package linearity checks, scalar savings and retained auxiliary companion/canonical/sampler/hash/circuit predicates. Giant scalar plans allocate no fields/inputs/matrices/seeds. Finite checks do not prove the universal theorem or run the eventual complete family.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }

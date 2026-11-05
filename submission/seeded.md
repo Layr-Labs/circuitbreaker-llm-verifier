@@ -1,0 +1,356 @@
+# Supplied extraction arguments for the polylogarithmic branch
+
+All dimensions and entropies are binary. A1 is proved for any good field/matrix tuple. Internal calls read their tuples as actual input-prefix bits; C1 constructs the initial/B5 tuples canonically. The deterministic fields in B1 require no such data.
+Charged uses fix good internal prefix data for hardness while remaining total on all prefix strings. C1 instead constructs initial/B5 good data canonically; those calls consume no input-data bits.
+
+# A1. a strong linear seeded extractor
+
+## Exact construction and parameters
+
+Let the source length be n bits. Fix positive integers D,h,m,s with
+binomial(h+D-1,D)>=n, and let q=2^s. Let K be any field of size2^s with a specified binary basis whose first vector is1; for example K=F_2[T]/Q for a monic irreducible binary Q of degree s. Let A be a D-by-D matrix over K
+whose action cycles through K^D minus zero. Such matrices exist, as
+justified below. This property is a mathematical hypothesis on A; the
+generic A1 evaluation does not require a search or test of A. C1 separately supplies bounded canonical searches for selected calls; C3 supplies the internal reconstruction.
+
+Enumerate all D-variate monomials of total degree below h, first by total
+degree and then lexicographically. For x in F_2^n, let P_x be the K-valued
+polynomial with its first n coefficients x_1,...,x_n and all remaining
+coefficients zero. This is an injective F_2-linear encoding with degree
+at most h-1. The seed consists of v in K^D and z in F_2^s. Output
+
+    E(x;v,z)_i = <bits(P_x(A^i v)),z>,   1<=i<=m.
+
+The bracket is the binary dot product. For each seed this is linear in
+x. Evaluation takes polynomial time in n,m,D,h,s and the number of
+monomials, without enumerating K^D or finding a primitive element.
+
+Take 0<epsilon<=1/4 with rho=epsilon/(8m) reciprocal to an integer. Let
+r=16D+16. Sufficient deliberately loose hypotheses are
+
+    q^(r-D) >= (2^20*r*h/rho^4)^r,
+    k >= 16*m*r*h*s + 4*ceil(log2(1/rho)) + 10.             (1)
+
+Claim to prove: every source X on n bits with min-entropy at least k
+satisfies TV((U_seed,E(X,U_seed)),(U_seed,U_m))<=epsilon. This is strong,
+not merely a statement about the output marginal.
+
+## Two elementary counting tools
+
+1. Polynomial list recovery. Let q points each have a list of at most L
+field values. A degree-at-most b polynomial is accepted if its value
+belongs to the list on at least a points. If a^2>=2bqL, at most 2qL/a
+polynomials are accepted. Indeed, for T accepted polynomials count
+coinciding accepted evaluations in qL buckets. Cauchy--Schwarz gives at
+least ((Ta)^2/(qL)-Ta)/2 pairs. Distinct polynomials agree at no more
+than b positions, giving at most T(T-1)b/2. Thus
+T(a^2/(qL)-b)<=a and T<=2qL/a. No efficient list-recovery algorithm is
+needed: the reconstruction below may enumerate all polynomials.
+
+2. Limited-independence lower tail. If q Bernoulli variables are 2r-wise
+independent, have common expectation p and mean mu=pq>=r, then
+
+    Pr[sum Y_j < mu/2] <= (C*r/mu)^r
+
+for an absolute C (one can take a loose C=2^12). Expand the 2r-th
+central moment. Terms with an index appearing once vanish; remaining
+terms have at most r distinct indices. Grouping by their multiplicities
+and using |Y-p|<=1 and E|Y-p|^a<=2p for a>=2 bounds the moment by
+(C*r*mu)^r when mu>=r. Markov at (mu/2)^(2r) gives the stated form after
+increasing C. For an explicit check, write Z_j=Y_j-p. Since |Z_j|<=1 and
+E|Z_j|^a<=p for a>=2, terms using exactly ell distinct indices contribute
+at most binomial(q,ell)*ell^(2r)*p^ell. For 1<=ell<=r and mu>=r,
+mu^ell/ell!<=mu^r/r!. Thus the moment is at most
+r*r^(2r)*mu^r/r! <= (2e*r*mu)^r, using r!>=(r/e)^r and r<=2^r.
+Markov contributes a factor 4^r, so C=32 already suffices; C=2^12
+is safe. The factorial bound follows by integrating log on [1,r].
+
+## A q-ary list-predictor contradiction
+
+Suppose a predictor F receives a seed v and prior field symbols
+P_x(A v),...,P_x(A^(i-1)v), and returns a list of at most rho^-2 field
+elements. Assume its list contains P_x(A^i v) with probability greater
+than rho over x drawn from X and uniform v. Then the set of source
+strings on which its probability is at least rho/2 has mass greater
+than rho/2. Fix such an x. We reconstruct x with short advice and
+success probability at least 1/2 over coins independent of x.
+
+At u=A^i v, the predictor can be evaluated with known u and values
+P_x(A^(-i+1)u),...,P_x(A^-1 u). Its success density on K^D is at least
+rho/2. Dependence on the seed is harmless: the reconstruction explicitly
+passes A^-i u to F.
+
+Choose 2r random distinct field elements t_1,...,t_(2r), and independent
+uniform points y_1,...,y_(2r) in K^D. Interpolate degree-at-most 2r-1 curves
+p_1,p_2 such that
+
+    p_1(t_j)=y_j for all j,
+    p_2(t_j)=A y_j for j<=r, and y_j for j>r.
+
+Define C_(2j+1)=A^j p_1 and C_(2j+2)=A^j p_2 for j>=0. Each curve is
+uniform among degree-at-most 2r-1 curves, so its evaluations at distinct
+field arguments are 2r-wise independent uniform points. Consecutive
+curves share r random distinct argument positions, independent of the
+current curve: the last r positions for p_1,p_2 and the first r for
+p_2,A p_1. A matrix power preserves these statements. If y_1 is nonzero,
+the curves up to index 2q^D cover all nonzero K^D points, since A cycles
+through them. The event y_1=0 has probability q^-D.
+
+Advice gives the coefficients of P_x composed with the first 2i
+curves. Each composition has univariate degree at most 2rh, so at most
+6mrh field coefficients, or 6mrhs bits, suffice. The reconstruction
+knows its random curves and all construction parameters as public data.
+
+Proceed through later curves in order, starting at index 2i+1. The two
+extra initial curves ensure that the preceding curve and all earlier
+2a-shifted curves are known even when i=1. At a point u of current curve
+C_j, the prior points A^-a u lie on C_(j-2a), so their values are already
+known. Evaluate F to obtain a list at each field argument of C_j. The
+moment bound shows that fewer than rho*q/4 successful predictions has
+probability at most
+
+    (2^14*r/(rho*q))^r <= 1/(64*q^D)
+
+under (1). With at least a=rho*q/4 successful positions, the list-recovery
+bound applies at b=2rh, L=rho^-2 and yields at most 8rho^-3 candidate
+univariate polynomials, including the true composition.
+
+The preceding curve's known values at its r shared argument positions
+identify the correct candidate. An incorrect degree-at-most 2rh candidate
+agrees at no more than 2rh arguments. The shared r-subset is independent
+of the current curve, hence of its candidate list (the fixed true x and
+predictor do not introduce additional randomness). Its chance to agree
+at all shared positions is at most (4rh/q)^r. Union over candidates
+bounds the chance of an incorrect survivor by
+
+    8rho^-3*(4rh/q)^r <= 1/(64*q^D).
+
+For both displayed inequalities, the new exact field condition (1) gives
+q^(1-D/r)>=2^20*r*h*rho^-4 directly by taking a positive r-th root. The code chooses s=ceil(r*ceil(log2 base)/(r-D)), where base=2^20*r*h*rho^-4, using integer arithmetic. Thus s*(r-D)>=r*ceil(log2 base) and q^(r-D)>=base^r. Since r>D, this also implies q>=base>=64*r*h*rho^-4. No old eighth-power premise is needed. The first left-hand
+side times q^D is at most (2^-6*rho^3/h)^r <=2^-6r<1/64.
+The second left-hand side times q^D is at most
+8rho^-3*(2^-18*rho^4)^r<1/64, since r>=32 and rho<=1.
+Also q>=64*r*h*rho^-4 gives a^2>=2bqL, as needed for list recovery. Union over at most 2q^D steps, plus the
+coverage exception y_1=0, leaves success probability above 1/2. On that
+event P_x is known on every nonzero vector. These evaluations determine
+a polynomial of total degree below h<q-1 uniquely: a nonzero low-degree
+polynomial cannot vanish on all nonzero points. For example, restrict
+to every coordinate-parallel line avoiding zero and use the root bound,
+then recover the missing value on a line through zero. Thus x is recovered.
+
+For the positive-mass set of good x, each has some advice of at most
+8mrhs bits yielding recovery with probability at least 1/2. Fixing the
+random coins by averaging gives a deterministic reconstruction with at
+most 2^(8mrhs) outputs capturing mass greater than rho/4. A min-entropy-k
+source gives these outputs mass at most 2^(8mrhs-k), which is less than
+rho/4 under (1). Contradiction. Therefore no q-ary list predictor of the
+specified size succeeds with probability greater than rho.
+
+## Strong binary output
+
+If the strong binary conclusion failed with distance greater than epsilon,
+the standard hybrid argument would give an i and predictor B(v,z,prior
+bits) with advantage greater than epsilon/m=8rho for the i-th bit.
+For each x,v, view its predictions as a received Hadamard word indexed
+by z. Averaging shows that a set of x,v of mass greater than rho has
+prediction advantage at least rho over z. For each fixed v and prior
+field symbols, form the list of field elements whose binary dot-product
+codewords agree with this received word on at least 1/2+rho of seeds z.
+By orthogonality of characters and Parseval this list has size at most
+1/(4rho^2), hence at most rho^-2. For more than a rho fraction of x,v it
+contains the actual next symbol. This contradicts the q-ary property.
+The argument passes v and z as seed data throughout and therefore proves
+strong extraction, rather than assuming a weak extractor is strong.
+
+## Good field and matrix data exist; input-prefix use
+
+The roots of X^(2^s)-X form a field of size 2^s; the Frobenius-orbit
+argument supplies irreducible polynomials of every degree (the union of
+proper subfields has fewer elements than the full field). Over K an
+extension of degree D exists by the same argument. The multiplicative
+group of any finite field is cyclic: in a finite abelian group its exponent
+is attained as an element order, and if the exponent were below the group
+size, the polynomial X^exponent-1 would have too many roots. Multiplication
+by a generator in a K-basis of the extension gives the required A.
+
+With the GENERIC full-matrix encoding, the wrapper reads Q and A as actual input bits,
+with their lengths predetermined by the total length. For bad data it
+still runs the same bounded ring/matrix algorithm, defining a total
+polynomial-time function. A lower-bound restriction fixes good data,
+whose existence was proved; all data bits must be paid for in actual
+input length. That generic full-matrix encoding requires(D^2+1)s bits. C2 uses companion encoding requiring(D+1)s bits. The CURRENT family instead uses C3/C4 reciprocal primitive binary packages for its four internal maps, requiring D*s-2 bits; C1 computes initial/B5 tuples canonically with zero input-data bits. Every actually read bit is charged in proof.md.
+
+
+
+
+# A2. A strong entropy sampler with polynomial error
+
+This section supplies the exact sampling variant used by B5. It is a distributional statement about a deterministic, seeded bit-selection algorithm; no source probabilities, repairs or good-event flags are computed by the evaluator. Sampling/block-source conversion and backward extraction are related to Nisan--Zuckerman and Zuckerman's randomness-optimal sampling architecture (David Zuckerman, Randomness-Optimal Oblivious Sampling, Random Structures and Algorithms11(4),1997; https://www.cs.utexas.edu/~diz/pubs/sampler.pdf). No theorem from that paper is used as a premise. The arguments needed here are given below rather than assumed from those works.
+
+## Statement and probability-tree bound
+
+Let n be a power of two, 0<sigma<=1 a fixed rational, b=ceil(log2(64/sigma)), and t>=1 an integer. Let t<=ell<=sigma*n/(64b). Select ell positions I_1,...,I_ell in [n], uniformly and 4t-wise independently, allowing repetition. For every source X on n bits with min-entropy at least sigma*n, the joint distribution of the seed and sampled word is epsilon-close to (seed,V_seed), where EVERY conditional V_seed has min-entropy at least
+
+ kappa=floor(sigma*ell/8),
+
+and one may take
+
+ epsilon = 2^(-sigma*n/8)
+   +(128*t*b^2/(sigma^2*ell))^t
+   +C_t*n^t*(128b/(7sigma*ell))^(2t),
+ C_t=2t*(2t)^(4t)*2^(2t).                              (A2.1)
+
+The seed marginal is unchanged and uniform. Thus this is a STRONG smoothed-entropy statement, not merely a bound on the marginal sampled word.
+
+For the proof, use any fixed order of the n input bits. On a supported input x let p_i be its conditional bit probability given the previous bits and w_i=-log2 p_i. Then sum_i w_i=-log2 Pr[X=x]>=sigma*n pointwise. Conditional probabilities on unsupported prefixes can be completed arbitrarily; they do not affect the source distribution. Put T_i=(w_i-b)_+. Conditional on any supported prefix,
+
+ E[2^(T_i/2)|prefix]<=1+2^(1-b)<=1+sigma/32.
+
+Indeed an outcome of probability p<2^-b contributes 2^(-b/2)*sqrt(p), at most2^-b, and there are at most two outcomes. Other outcomes contribute their original probabilities. Iterated conditioning and Markov consequently give
+
+ Pr[sum_i T_i>sigma*n/2]
+ <=exp(sigma*n/32)*2^(-sigma*n/4)<=2^(-sigma*n/8).
+
+The last inequality follows from ln2>=1/2, for example by integrating1/x on[1,2]. Outside this event the clipped weights sum to at least sigma*n/2.
+
+For a fixed such x, normalize its clipped weights to z_i=min(w_i,b)/b in[0,1]. Their mean is at least sigma/(2b). The 2t-th centered moment of their sum at 2t-wise independent uniform sample positions is at most(8t*ell)^t. To check the constant, expand the moment: terms containing a singleton index vanish, and terms with j<=t distinct indices contribute at most binomial(ell,j)*j^(2t). Since ell>=t, summing these is at most t*t^(2t)*ell^t/t! <=(2e*t*ell)^t<=(8t*ell)^t. The factorial estimate follows by integrating log, as in A1. Markov at half the mean shows that the sampled clipped weight is below sigma*ell/4 with probability at most the second term of(A2.1). This argument is uniform in x, so it can be averaged over X.
+
+## Repeated positions are explicitly paid
+
+Let C=sum_(j<k)1[I_j=I_k] and mu=binomial(ell,2)/n. We claim
+
+ E[(C-mu)^(2t)]<=C_t*n^t.                              (A2.2)
+
+Its expectation agrees with independent uniform positions because every expanded term uses at most4t position variables. In the independent case expand into ordered sequences of2t centered equality indicators. A term with a vertex appearing in only one indicator vanishes: condition on all other positions and average that centered indicator. Every remaining multigraph therefore has weighted minimum degree at least two, at most2t vertices and at most t components.
+
+For a fixed remaining graph with v vertices and c components, expand each centered indicator into equality minus1/n. For a chosen subset of retained edges, its equality probability is n^(-rank), where rank is v minus the number of components, including isolated vertices. Deleting an edge raises the number of components by at most one. Thus omitted-edge count plus retained rank is at least v-c. Every summand in this expansion has magnitude at most n^(-(v-c)), and there are at most2^(2t) summands. Overcount graph types by(2t)^(4t), label choices by ell^v<=n^v, and sum at most2t possible vertex counts. Since c<=t, this gives exactly(A2.2). It counts repeated edges and shared vertices, not only disjoint pairs.
+
+Our ell bound gives mu<=sigma*ell/(128b). Markov applied to(A2.2) yields
+
+ Pr[C>sigma*ell/(16b)]
+ <=C_t*n^t*(128b/(7sigma*ell))^(2t).
+
+The number of repeated draws beyond the distinct selected positions is at most C. Removing repeated clipped weights therefore loses at most bC. Outside both sampling exceptions, the sum of ORIGINAL surprisals over DISTINCT selected positions is at least
+
+ sigma*ell/4-sigma*ell/16>=sigma*ell/8.
+
+This step is necessary: counting the surprisal of a repeated position twice would not prove entropy of the sampled word.
+
+## Turning the good event into conditional min-entropy
+
+Fix a sampler seed and a consistent output word y. Its positions determine a distinct set S and the values at S. Define a modified probability-tree measure Q_y by forcing those selected bits to their specified values with probability one, and following the original conditional probabilities at unselected positions. Complete zero-probability prefixes arbitrarily. This is a probability measure. For every original supported x consistent with y,
+
+ Pr[X=x]=Q_y(x)*product_(i in S)p_i(x_i|x_<i).
+
+On the good event the product is at most2^(-sigma*ell/8). Summing over good supported x proves that the probability of output y AND the good event is at most2^(-sigma*ell/8)<=2^-kappa. Inconsistent duplicate outputs have probability zero. Thus, for EACH fixed seed, the good subdistribution has point masses at most2^-kappa. Fill its removed mass under that same cap to obtain a full distribution: the output alphabet has capacity2^ell*2^-kappa>=1, so sufficient capacity always remains. The total variation cost is at most the removed mass. Fill may use words inconsistent with repeated positions; this is allowed in a comparison distribution, not an operation performed by the sampler. Averaging over the unchanged seed proves(A2.1).
+
+## Exact polynomial-seed implementation and guards
+
+The implementation uses sigma=1/2000,b=17,t=256 and4t=1024. With n=2^w it reads1024 independent field coefficients and evaluates the degree-at-most1023 polynomial at distinct field points0,...,ell-1. Its field values are the selected positions. For any at most1024 distinct arguments, the evaluation map is surjective by the Vandermonde determinant: the product of pairwise argument differences is nonzero. Hence those positions are independent uniform field elements. If fewer arguments exist the entire smaller tuple is independent. The current sampler uses C1's canonical degree-w irreducible modulus, with existence supplied in A1 and polynomial(r) construction proved in C1. The generic sampling routine also remains bounded on arbitrary monic data.
+
+In B5 set n=P2(r),w=ceil(log2 r),ell=floor(n/(64*2000*17)) and kappa=floor(ell/16000). The plan checks ell>=t and the following integer inequalities:
+
+ n>=16000*152*w,
+ 4*(128*t*17^2*2000^2)^t*r^150<=ell^t,
+ 4*C_t*n^t*(128*17*2000)^(2t)*r^150<=(7ell)^(2t).
+
+The first bounds the exponential term in(A2.1) by r^-152<=r^-150/4 for r>=2; the other two bound the polynomial terms by r^-150/4 each. Therefore sampler error is at most(3/4)r^-150. The first comparison is logarithmic: the planner never allocates2^n. All integer bit lengths are polynomial in log r, with t fixed. The guards eventually hold for EVERY integer r: ell is a fixed positive fraction of n up to flooring, r<=n<2r, and t=256>150. Small or failed plans are rejected by the outer total evaluator.
+
+
+# C1. Canonical fixed-dimension field and cyclic-matrix searches
+
+The current family retains charged packages for the FOUR growing-dimension internal maps. Initial dimension11 and B5's prefix/sampler fields and dimension4 helper are instead constructed by the following deterministic canonical searches. This changes the total family and removes their data bits; it assumes no unproved efficient finite-field or primitive-element algorithm. Search costs are explicitly bounded below.
+
+## Least binary irreducible modulus
+
+For degree s>=1 enumerate lower coefficient vectors0,...,2^s-1 in that order, forming monic Q. Test divisibility by EVERY monic binary polynomial of each degree1,...,floor(s/2), using ordinary leading-term XOR division. Accept the first Q with no such divisor. A reducible monic polynomial has a monic proper factor of degree at most s/2 (take a smallest irreducible factor). Conversely any enumerated divisor makes it reducible. Thus this is an exact irreducibility test, including degree1 where no divisor test is needed. A1 proved existence of an irreducible at every degree, so search terminates. At most2^s candidates and fewer than2^(s/2+1) trial factors occur per candidate. Cost is2^(3s/2+O(1))*poly(s), with fixed polynomial bit cost and bounded memory. The least choice is determined only by s; no external table or input data is consulted.
+
+## Least primitive companion action without factoring its period
+
+Fix D>=1 and the canonical field F_q,q=2^s. Enumerate all q^D coefficient tuples(c_0,...,c_(D-1)) in little-endian numeric order, representing monic T^D+sum c_j T^j. Its companion action on a vector v is
+
+ v'_j=c_j*v_(D-1)+(v_(j-1) if j>0 else0).
+
+For each tuple start at v=(1,0,...,0) and iterate this action for period T0=q^D-1 steps. Reject if zero occurs, or if the start returns before step T0. Accept exactly if the start returns at T0 with no earlier rejection. A successful orbit has T0 distinct nonzero states: if another state repeated earlier, determinism would force an earlier return to the start when following the final return. Hence it contains ALL nonzero vectors, and the companion matrix cycles them. No factorization of T0, random primality test or primitive-element oracle is used.
+
+A successful tuple exists. By A1, a degree-D extension field exists and its multiplicative group is cyclic. A generator alpha has degree D over F_q: a smaller-degree minimal polynomial would put it in a field of q^d elements,d<D, contradicting order q^D-1. In the basis1,alpha,...,alpha^(D-1), multiplication by alpha is exactly a companion action of the enumerated form and has the required orbit. Thus the search terminates and provides precisely the A1 cyclic-matrix hypothesis. The first successful tuple is canonical. There are q^D candidates and at most q^D iterations each, each of cost polynomial(D,s). Total cost is q^(2D)*poly(D,s), with polynomial(D,s) memory and no full orbit stored.
+
+The implementation may cache only a fixed bounded number of degree or(s,D) results during execution. This is an ordinary deterministic computation cache, not an external advice source. It constructs a Seeded object with the caller's actual scalar parameters; cached matrices do not change those parameters.
+
+## Why these searches are uniformly polynomial in actual N
+
+For the INITIAL call, dimension D=11 is fixed. Binding occurs only after the checked d0<=5L cap and every ready guard. Its seed contains at least12*s0 bits, even when multiple calls were planned. Thus s0<=5L/12 on every admitted header. Binary-modulus search costs at most2^((5/8)L+O(1))*poly(L). Companion search costs at most2^((55/6)L)*poly(L). Since2^L<2N for N>=2, these are fixed polynomials in N, uniformly over all admitted headers. No asymptotic eventual-good-header assumption is used for this runtime bound.
+
+B5 parameters depend only on r, not the header: w=ceil(log2 r), prefix degree1000w, sampler degree w and helper D=4. Its helper field degree s2 is at most2048w on every admitted call. For an explicit coarse bound, D1=5,000,000w^2+2000w<=2^23*w^2, so log2 M2=ceil_log(D1)<=23+2w for w>=1. H=4ceil(ell^(1/4))<=8r^(1/4),R=80, hence ceil_log(RH)<=10+w. The exact base logarithm is at most32+4*(160w+10)+4*(23+2w)+(10+w)=174+649w<=823w. Its field degree ceil(80*base_log/76)<=2*base_log<=1646w<2048w. All these are scalar inequalities; no giant field is allocated to prove them.
+
+Consequently B5 binary-modulus searches cost2^O(w) and its fixed-dimension helper companion search costs2^(8s2)*poly(s2)=2^O(w). With r>=2,w<=2log2 r, these are fixed polynomials in r. Since r=O(log N) under the initial cap, they are polynomial in actual N. Constants/exponents are large and no practical full-family runtime is claimed.
+
+The internal growing-dimension packages are deliberately RETAINED as actual input bits. Their field degree is Theta(L^2z), so the above exhaustive search would not have the initial polynomial bound there. No canonical-search claim is made for them. Good choices exist by A1 and are fixed only in the charged hard restriction; arbitrary admitted internal data remain bounded ring/matrix computations.
+
+## Exact data saving
+
+For any fixed internal package encoding at identical scalar N,S plans, canonicalization changes no seed length, extraction threshold, r/layout parameter or k. Replacing ONLY the paid initial/B5 packages removes exactly122*s0+1001*w+17*s2 construction bits. C2 separately accounts for internal-package compression. The current complete prefix consists of the L-bit header and the four internal packages. The lower-bound proof uses this current P in4(N-P)-8k. Thus the certified finite expression improves by four times those removed bits at every common admitted scalar plan. The main O(L^9z^7) remainder and protected(4,1) projection are unchanged. This is a stronger exact length accounting, not a new asymptotic exponent claim.
+
+
+# C2. Auxiliary companion encoding and primitive existence
+
+For any binary field K of size2^s and dimension D, a paid companion package can encode a monic modulus Q in s bits followed by D field coefficients c_j. The package has(D+1)s bits and constructs the companion matrix with subdiagonal ones and last column c_j. This was the preceding encoding; C3 below now reconstructs an isomorphic field and companion action from one binary package instead. The generic companion parser remains for finite identity checks.
+
+Good companion data exist for EVERY s,D, including growing D_int. A1 supplies a degree-D extension and a multiplicative generator alpha. Its minimal polynomial over K has degree D, since a smaller field has too few nonzero elements for its order. Multiplication by alpha in its power basis has the companion form and cycles all nonzero vectors. Any chosen binary basis of K with first vector1 supports the same A1 proof: field operations, root counts and coefficient encoding are unchanged, and binary dot products over all z are all additive characters in that basis.
+
+For arbitrary paid coefficients the companion matrix and bounded ring evaluation still define a total fixed-seed linear map. No internal exhaustive search is performed. The full-matrix encoding has(D^2+1)s bits; companion encoding has(D+1)s bits, a saving(D^2-D)s with scalar seeds, source thresholds and outputs held fixed. Current C3 uses this existence argument and companion action, and its exact loss comparison below defines separate prefixes for each representation. No predecessor verdict is a premise.
+
+# C3. One primitive binary package and polynomial reconstruction
+
+## Actual data and good-package existence
+
+For each of the FOUR internal maps keep EXACTLY its existing SeedParams s,D,m,n,h,error and all call/seed/source parameters. Put t=D*s. C4 decodes t-2 actual input bits to a representative monic constant-one polynomial R of degree t, or to failure. On failure return the zero seeded map before reconstruction. For t=2 it uses the canonical R=X^2+X+1 and zero bits. C3 below reconstructs from the decoded R; its field/ring arguments do not depend on which reciprocal representative was selected.
+
+Thus monic and constant coefficients are fixed to1. Good packages exist: in a field of size2^t choose a multiplicative generator alpha. Its minimal polynomial over F2 has degree t by the same order argument as C2, is monic and has constant1. For t>2 either this primitive polynomial or its reciprocal is one of C4's encoded representatives; for t=2 the canonical primitive polynomial is encoded. We neither search for nor test primitivity. Such a good R is used only as a PAID input restriction, universal for every required source. All other admitted R are evaluated by the bounded reconstruction below.
+
+## Exact binary linear algebra and the derived subfield
+
+For arbitrary encoded R, work in the t-bit quotient ring A=F2[X]/R. Multiplication is ordinary bounded polynomial reduction. The map x->x^(2^s)-x is binary linear, because repeated squaring is additive in characteristic two. Compute its t columns on1,X,...,X^(t-1) using s repeated squarings per column. XOR Gaussian column elimination retains an original-coordinate combination for each pivot; dependent columns give an independent kernel basis. The kernel basis has length t-rank, spans all solutions and is computed without enumerating ring elements. BinaryColumns.solve reduces a target by pivots and returns its unique input-coordinate combination when the selected columns are independent, or failure if outside their span. These facts follow by the invariant that every stored pivot equals its recorded combination of original columns. Dependent combinations have a new last column index, proving independence and completeness by rank-nullity.
+
+If the fixed-point kernel does not have dimension s, return the ZERO seeded map. Otherwise choose its binary basis deterministically with FIRST vector1: start with1 and append sorted kernel-basis vectors only when independent of the selected span. The unit belongs to the kernel. This process produces exactly s independent vectors spanning it. Call this subring B. It is closed under addition and multiplication: for fixed x,y, Frobenius^(s)(x+y)=x+y and Frobenius^(s)(xy)=xy. It contains0 and1. Encoding its binary coordinates is XOR of the selected vectors; decoding is the exact independent-column solve. Products therefore always decode. The implementation returns0 defensively if an unexpected solve fails, still defining a bounded total algorithm; it cannot fail under the just-proved subring conditions.
+
+For GOOD primitive R, A is the field F_(2^t), and B is its size2^s subfield. To justify its dimension, s divides t; X^(2^s)-X divides X^(2^t)-X, as seen by iterating the s-fold Frobenius or by polynomial division. All its2^s distinct roots lie in F_(2^t), are closed under field operations, and are exactly the fixed-point kernel. Thus the kernel dimension is exactly s, so the first guard passes. The selected basis has field identity coordinate1, as needed by monomial evaluation.
+
+## Relative power basis and companion action
+
+Let alpha be X mod R. Construct the t vectors alpha^j*b_i for0<=j<D,0<=i<s, ordered by j then i, where b_i is the selected B basis. Use the same binary column elimination. If their rank is not t, return the zero seeded map. Otherwise they form a binary basis of A; decoding a vector returns D consecutive s-bit B-coordinates. Decode alpha^D to coefficients c_0,...,c_(D-1) and form the companion matrix from C2.
+
+For GOOD R, alpha has degree D over B. A smaller degree d<D would place it in a field with2^(sd) elements, contradicting its order2^t-1. Hence1,alpha,...,alpha^(D-1) are linearly independent over B, and all t module vectors form a binary basis. The second guard therefore passes. Multiplication by alpha in this relative basis is exactly the derived companion action, and has one orbit on all nonzero vectors. This is PRECISELY the universal A1 matrix hypothesis. The derived B field has2^s elements and an allowed binary basis, so all A1 arguments and seed/error conditions apply unchanged. No field representation or basis cost is uncharged advice: the computation is fully determined by the t-2 read bits.
+
+For BAD R, either guard may fail, yielding a zero map, or the program still computes bounded ring/subring/matrix operations. Each fixed seed gives a binary linear map of the coefficient input: all basis choices and matrix/ring data depend only on R, not the payload, and each polynomial coefficient is a payload bit multiplied by a fixed ring value. Zero maps are also linear. No field, primitive or cyclic hypothesis is asserted for arbitrary data, and none is needed for totality.
+
+RelativeSeeded uses the SAME coefficient/seed/monomial algorithm as Seeded, with multiplication and powering delegated to the derived B-coordinate operations. Binary character output uses the specified B basis. The generic binary-polynomial Seeded methods are retained unchanged in meaning for canonical initial/B5 and auxiliary tests. Unit coordinate1 is preserved explicitly. Data are consumed only by Prefix.primitive_seeded; package order remains T,W,E2,E3.
+
+## Uniform polynomial runtime
+
+The compiler uses t*s squarings of t-bit ring elements and binary elimination on t columns, plus t relative-basis vectors and another elimination. Encoding, decoding, multiplication and exponentiation have polynomial bit cost in t,s,D. The first nprime monomials are still streamed with polynomial delay. There is NO enumeration of2^t ring elements, no primitive-polynomial search and no factorization. Failed guards are bounded computations followed by zero output.
+
+On an admitted plan, actual package length t-2 is counted in P and P+k<=N, so t<=N+2. Also s,D<=t. All compiler dimensions and loops are therefore polynomial in actual N with fixed exponents, uniformly over every header and data string. Canonical initial/B5 searches retain their separate C1 polynomial bounds. Growing dimension never becomes a runtime exponent. Cached external data or credentials are not used.
+
+## Exact current prefix and comparisons
+
+At common admitted scalar plans define
+
+ P_comp=P+sum_internal(s+2),
+ P_full=P_comp+sum_internal(D_int^2-D_int)*s,
+ P_paid=P_full+122s0+1001w+17s2.
+
+The CURRENT complete prefix is P=L+sum_internal(D_int*s-2). C3 together with C4 saves exactly s+2 bits per internal map versus companion encoding, without changing SeedParams, seed lengths, calls, thresholds, k or layout. Thus4P_comp+8k decreases by4*sum_internal(s+2). C2 and C1 account separately for the other two comparison expressions. Current P remains O_S(L^2z^2)=o(k), so the main9,7 theorem is unchanged, while the exact length bound improves. The gate application ALWAYS uses current actual P. These are supplied algebraic comparisons, not accepted-result premises.
+
+
+# C4. A bounded reciprocal-representative package code
+
+Let t>=3 and n=t-1. The middle coefficients of a monic constant-one binary polynomial form an n-bit word b. Taking the reciprocal polynomial reverses this word. Reciprocal primitive polynomials are primitive, because inverse field generators have the same order. A primitive degree-t polynomial cannot be self-reciprocal for t>2: if alpha^-1 were a conjugate alpha^(2^j),0<=j<t, then its order2^t-1 would divide2^j+1, which is positive and at most2^(t-1)+1<2^t-1. Contradiction. Thus every primitive reciprocal pair has one unique word b smaller numerically than its reversal.
+
+There are(2^n-2^ceil(n/2))/2 such representatives, strictly fewer than2^(n-1). Hence n-1=t-2 bits suffice to index them. The following direct decoder is polynomial in t, not a search through exponentially many polynomials. Partition representatives by their first unequal OUTER pair j=0,...,floor(n/2)-1. The j earlier outer pairs are equal, with j free bits. At pair j the more significant bit is0 and its partner is1. The n-2j-2 inner bits are arbitrary. This block has2^(n-j-2) elements.
+
+Given the t-2-bit index, subtract these block sizes in increasing j until it fits one. Within that block use the low n-2j-2 bits for the inner word and the remaining j bits for the equal outer pairs. Set the unequal pair to0,1 and assemble b, then R=X^t+1+X*b. If no block fits, return failure. Every canonical nonpalindromic word appears exactly once, by its unique first unequal pair and unique remaining bits. The number of decoded words agrees with the above count by summing the block sizes. All operations use O(t)-bit integers and O(t) iterations, so runtime and memory are polynomial in t. No primitive test or field search is performed by the decoder.
+
+For t=2, the primitive polynomial X^2+X+1 is self-reciprocal; use it canonically with t-2=0 data bits. Current internal dimensions have t=D_int*s>=2. Thus good packages exist at every relevant scalar t, including this exceptional case. Failed indices give the zero seeded map. Successful indices use the C3 bounded compiler on the decoded R; primitive good representatives satisfy all its hypotheses.
+
+C4 saves exactly ONE further actual bit per internal package versus C3's unrestricted middle-bit encoding, hence four prefix bits and16 units in the exact gate-loss expression. The combined current package has t-2 bits, so its saving versus companion encoding is s+2. All fields, seeds, calls, entropy thresholds, k and layouts are unchanged. Current prefix and all comparison expressions are exactly those in C3 with s+2. The9,7 asymptotic claim and protected(4,1) projection are unchanged. This is a finite encoding improvement only.
