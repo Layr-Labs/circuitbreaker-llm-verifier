@@ -1,40 +1,53 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Coefficient-four log^11 loglog^9 construction with adaptive rank-condenser allocation",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"One fixed total language evaluated by family.py PolyPlan/PolyEngine. N<128 outputs0; larger N uses L=ceil(log2 N),z=ceil(log2 L), actual L-bit header encoding S-1. Every1<=S<=2^L is evaluated, failed scalar plans output0. With P2 rounding: h=e=P2(S L^2 z^2),ell=P2(S^3 L^4 z^3),eprime=P2(S^5 L^6 z^5),d=P2(S^9 L^6 z^5),Y=P2(S^11 L^9 z^7),k=P2(S^13 L^11 z^9). Initial A1 dimension11, precision E0=ceil(L/28)+10, checked seed d0<=5L. Its122 field-element data and the B5 modulus follow the header; all these actual bits count in prefix P. Other five internal maps have zero data and deterministic tower fields. Four B2.2 maps use t=floor(log2 L),rho=2^t,T=ceil(2a^2/t)+a,hash blocks B=E+ceil(log2 M)+10,source threshold4rho*M and K>=32B; seed O(E^2/z) at fixed scale. Short E1 is B2.3 direct multi-bit hash with seed O(eprime). The index alphabet2 and d0 rounds are separate from independence h. Robust layout uses delta=1/125,m=floor(r/125),w=ceil(log2 r),b=floor(floor(sqrt(S))*w^2/(30*125^2)),u=2b+2w+10. B5 uses degree1000w fields,100w-bit blocks and its separate3/2 CE design in T=ceil(5a^2/2)+a for a=2000w; only its hash modulus is input data. All CE designs are computed, not advice. Initial bad fraction2*N^(-1/28), eventual d0<4L,P<20L and S_groups^delta<=2^((4/125)L) pay the robust bad-coordinate bound. Good fixed S0 is used only for a charged hardness restriction; the same total polynomial-time program handles every header/data string. Initial A1 retains its exact rational-exponent field budget. B1 uses a=ceil(log2 K)+e+10 and s=P2(ceil(log2 n)+ceil(log2 K)+a+e+3); its general output bound is supplied without dropping the ambient term.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P and NP with empty witnesses on every input. There exist absolute B>0,N0 such that for every actual integer N>=N0, unconditionally in pinned full B2, C_B2(F_N)>=4*N-B*(log2 N)^11*(log2(log2 N))^9. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^11*(log2(log2 N))^(9+epsilon), hence also4*N-(log2 N)^(11+epsilon) and4*N-N^epsilon. One fixed ordinary header S0 gives hardness. Exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data; P<=20L eventually, hence P=O(L)=o(k). The supplied finite4n-8d theorem covers all16 B2 tables, constants and sharing. The robust moment proof needs O(r^2*u) independence and log-error. Layout loses only a factor2^O_S0(log r), preserving actual bad-coordinate accounting. No numerical B, efficient search for S0 or unpaid weak-design construction is assumed.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"One fixed total language evaluated by family.py PolyPlan/PolyEngine. N<128 outputs0; larger N uses L=ceil(log2 N),z=ceil(log2 L), actual L-bit header encoding S-1. Every1<=S<=2^L is evaluated, failed scalar plans output0. With P2 rounding: h=e=P2(S L^2 z^2),ell=P2(S^3 L^4 z^3),eprime=P2(S^5 L^6 z^5),d=P2(S^9 L^6 z^5),Y=P2(S^11 L^9 z^7),k=P2(S^13 L^11 z^9). Initial A1 dimension11, precision E0=ceil(L/28)+10, checked seed d0<=5L. Its122 field-element data and the B5 modulus follow the header; all these actual bits count in prefix P. Other five internal maps have zero data and deterministic tower fields. Four B2.2 maps use t=floor(log2 L),rho=2^t,T=ceil(2a^2/t)+a,hash blocks B=E+ceil(log2 M)+10,source threshold4rho*M and K>=32B; seed O(E^2/z) at fixed scale. Short E1 is B2.3 direct multi-bit hash with seed O(eprime). The index alphabet2 and d0 rounds are separate from independence h. Robust layout uses delta=1/125,m=floor(r/125),w=ceil(log2 r),b=floor(floor(sqrt(S))*w^2/(30*125^2)),u=2b+2w+10. B5 uses degree1000w fields,100w-bit blocks and its separate3/2 CE design in T=ceil(5a^2/2)+a for a=2000w; only its hash modulus is input data. All CE designs are computed, not advice. Initial bad fraction2*N^(-1/28), eventual d0<4L,P<20L and S_groups^delta<=2^((4/125)L) pay the robust bad-coordinate bound. Good fixed S0 is used only for a charged hardness restriction; the same total polynomial-time program handles every header/data string. Initial A1 retains its exact rational-exponent field budget. B1 uses a=ceil(log2 K)+e+10 and s=P2(ceil(log2 n)+ceil(log2 K)+a+e+3); its general output bound is supplied without dropping the ambient term.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This fixed total language is in P and NP with empty witnesses on every input. There exist absolute B>0,N0 such that for every actual integer N>=N0, unconditionally in pinned full B2, C_B2(F_N)>=4*N-B*(log2 N)^11*(log2(log2 N))^9. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^11*(log2(log2 N))^(9+epsilon), hence also4*N-(log2 N)^(11+epsilon) and4*N-N^epsilon. One fixed ordinary header S0 gives hardness. Exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data; P<=20L eventually, hence P=O(L)=o(k). The supplied finite4n-8d theorem covers all16 B2 tables, constants and sharing. The robust moment proof needs O(r^2*u) independence and log-error. Layout loses only a factor2^O_S0(log r), preserving actual bad-coordinate accounting. No numerical B, efficient search for S0 or unpaid weak-design construction is assumed.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
         "proof.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "finite-audit",
+      "source": "audit.py",
+      "purpose": "Bounded exact checks of the actual merged evaluator, scalar extraction plans, fixed-seed linearity, multi-bit hash collision distributions, weak-design conditional expectations and block truncation, field towers/PV maps, header and zero-data offsets, refreshed index mocks, robust-function arithmetic and full-B2 local sharing patterns. Obsolete optional gate-lemma and extractor-tree fixtures are omitted. These checks do not establish the universal theorem or instantiate the eventual enormous family.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }
