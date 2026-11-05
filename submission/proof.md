@@ -1,90 +1,285 @@
-# Published coefficient 31/10: construction and proof
+# One fixed uniform family with lower bound 4N-O((log N)^25/loglog N)
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+The supplied evaluator defines one fixed total language in P, hence NP,
+with the following unconditional theorem in the full pinned B2 model:
+there exist fixed K>0 and N0 such that for EVERY integer N>=N0,
 
-## Fixed total family
+    C_B2(F_N)>=4N-K*(log_2 N)^25/(log_2 log_2 N).
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+Both structured claims assert this same complete theorem, its exact
+version-2 Big-O declaration and its joint projection (4,1). The seven
+evidence files supply every material construction and gate argument.
+There is one family, not a separately chosen language for each length,
+coefficient, exponent or source subspace. Every N is actual input length.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+## Provenance and mathematical organization
 
-## Uniform P and NP membership
+The construction, primitive evaluator and full component arguments derive
+from fbadbf8d-fdb1-495b-a11f-2aba6ad4a9d2, source commit
+41f5c012ad9745b26125b387924c77861d873995. Their authorship is not claimed
+here. Prior verdicts, score records and attribution decisions are not
+premises. The inherited kernel traces to 11e8b36d-cbd4-44f6-810f-7a7f875b4ad0
+and its fair-state framework to 237016f9-ece3-4a05-9933-dfcf6056e787.
+The supplied manuscripts preserve the underlying literature attribution.
+All arguments needed here are supplied anew with the changed parameters.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+The new parameter allocation increases the short-extractor output,
+uses a degree-64 orbit extension and degree floor(k^(1/32)) polynomial
+encoding, and pays formerly strict logarithmic exponent margins with
+explicit fixed constants. It also retains the saving in the number
+of advice stages, which is order log N/loglog N. The proof below audits
+the resulting borderline transcript budget rather than treating equal
+powers as asymptotically separated.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+The short extractor is a folded affine condenser followed by the basic
+Shaltiel--Umans orbit construction (seeded.md). Fixed-seed maps are
+linear, giving exactly uniform good rows on every affine source.
+Indexed alternating extraction supplies approximately independent bounded
+marginals (correlation.md), and a monotone polynomial-graph resilient
+disperser handles arbitrary bad rows (resilient.md). The full-B2 kernel
+4N-8(d+1) is reproduced in elimination.md. These are proof obligations,
+not consequences of the finite primitive audit.
 
-## Every integer length and the lower bound
+## 1. Exact total family
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+At N<2 return zero. Otherwise let
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+    L=floor(log_2 N), J=ceil(log_2(L+2)),
+    k=floor(2^10000*L^25/J).
 
-## Conservative remainder, with source discrepancy retained
+These are integer computations: L is N.bit_length()-1 and J uses integer
+bit lengths. If k>N, return zero. In all remaining shapes put
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+    m=floor(k/(2^300*L^2)),
+    h=the least power of two >=2^200*L^2,
+    ell=2^500*L^4, C_L=2^4110,
+    Qlen=(16h^2+16C_L)*ell,
+    d=2^64*(h^3*ell+L)^2,
+    E=2^200*L^2, E_1=2^20*h^3*ell+E.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+For the short extractor, q1 is the least power of two at least N^16*k;
+q2 is the least power of two at least N^128. Write w1=log_2 q1 and
+w2=log_2 q2. Its orbit extension has dimension 64 over F_(q2), polynomial
+encoding degree below floor(k^(1/32)), output length m, and total seed
+length s=w1+65w2. Put M=2^s, l=log_2 h and b=ceil(s/l).
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+FamilyShape.build lists exact coefficient-capacity, reconstruction-advice,
+rank-budget, code/design entropy and seed guards, the guard M<=N^16384,
+and the resilient-order/error guards. Any failure returns zero. Thus
+these conditions are part of a total algorithm, without any claim that
+an unavailable shape is silently used. Section 3 proves they all pass
+through every sufficiently large integer length.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+When they pass, pack ALL N input bits as the payload. Enumerate the M
+short seeds in increasing binary order, obtaining m-bit rows Y_i.
+Their indices have s bits; split them into l-bit blocks and pad the
+last block on the right. Starting with the first d bits of Y_i,
+perform Xrefresh, Yrefresh and the h-slot alternating Xalt/Qalt chain
+at each index block. Select the response at its digit's slot; Ynext
+refreshes the next stage's d-bit seed from the ORIGINAL Y_i. The first
+bit of the final selected response is coordinate i of an M-bit word.
+The code fixes every truncation, ordering, field and fallback.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Apply resilient.md's monotone polynomial-graph function to that word.
+Its fixed bad-coordinate parameter is 1/4096 and graph degree is
+16384. Its field size q is the largest power of two below
+floor(M/ceil(log_2(M+2))); its coordinate grid, selected graph offsets,
+rational approximation to ln 2 and row ordering are fixed by the code.
+The ignored suffix is explicitly accounted for in that component proof.
+No good-set information or source-dependent advice is provided.
 
-## Exact arithmetic and the unchanged LP
+## 2. Uniform P and NP eligibility
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+All metadata operations terminate. The largest numerical constants above
+are fixed integers. Computing L^25 and its constant shift uses a number
+of bits polynomial in log N and a fixed constant; comparison against N
+is effective. Once k<=N, m,h,ell,d,Qlen and code parameters are bounded
+by fixed powers of N. A failed guard returns immediately.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+Small-field searches have degree O(log N), and hence search spaces
+polynomial in N. The degree-64 extension search has at most
+q2^64<=2^64*N^8192 candidates. Generator factorization and enumeration
+also take a fixed polynomial in N. This runtime is charged to original
+N, not to the smaller condensed ambient length. seeded.md proves search
+existence and the exact tests. Large code fields use deterministic
+quadratic towers with polynomial bit arithmetic, not exhaustive searches
+at their larger degrees. Explicit stacks avoid hidden recursion limits.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+The short row enumeration has M<=N^16384 entries. Every row has b<=s
+stages, h alternating slots per stage, and polynomially computable
+linear code bits. The final graph map enumerates q^16384 rows with
+q<=M, polynomially many graph blocks and O(log M) coordinates per block.
+Every exponent and constant is fixed; the entire evaluator has time
+at most c0*(N+1)^c1 for fixed finite c0,c1. Its polynomial exponent
+and nontrivial onset are enormous, and no practical implementation at
+nontrivial asymptotic lengths is claimed.
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+Define V(x,w)=1 exactly when w is empty and this total evaluator returns
+one. Members have that empty witness, and acceptance of an allowed
+witness implies membership by definition. This proves both directions
+with witness bound zero. Witnesses, fields and internal enumerated seeds
+are not extra inputs to the target circuits. No per-length advice,
+truth-table oracle, hard table or sparse-length choice occurs.
 
-## Sources
+## 3. Every sufficiently large integer passes every guard
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+All limits here are through ALL integers N. Then L~log_2 N,
+J~log_2 L, k~2^10000*L^25/J and eventually k<=N. Floors change only
+factors tending to one. We have
+
+    m=Theta(L^23/J), h=Theta(L^2), ell=Theta(L^4),
+    Qlen=Theta(L^8), d=Theta(L^20), E=2^200*L^2,
+    s=Theta(L), b=Theta(L/log L).
+
+The hidden constants are fixed. The following explicit bounds pay the
+equal-power comparison B_0=O(L^23/log L) versus m=Theta(L^23/J).
+
+Since k<=N, w1<=17log_2 N+1, w2<=128log_2 N+1. Therefore
+s<=8337log_2 N+66<=2^15*L eventually, and M<=N^16384 eventually.
+Also log_2 h>=2log_2 L, so b<=2^15*L/log_2 L eventually.
+The rounding of h gives
+
+    2^200*L^2<=h<=2^201*L^2.
+
+Eventually h^2>=C_L. Then
+Qlen<=32h^2*ell<=2^907*L^8. Also
+h^3*ell<=2^1103*L^10, so d<=2^2272*L^20.
+The sum d+Qlen+h*ell is at most 2d eventually. Consequently
+
+    B_0=2^20*C_L*b*h*(d+Qlen+h*ell)
+        <=2^6619*L^23/log_2 L.
+
+On the other hand k>=2^9999*L^25/J and
+m>=k/(2^301*L^2)>=2^9698*L^23/J eventually. Since
+J<=2log_2 L eventually,
+
+    m>=2^9697*L^23/log_2 L >4B_0.
+
+The input joint budget has fixed slack as well:
+h*m<=2^-99*k by the upper bound on h and the exact floor defining m.
+Furthermore B_0/k=O(L^-2), so k>=4h*m+4B_0 eventually.
+The remaining rank guards follow from m/d~constant*L^3/J tending to
+infinity, and d having order L^20 while
+4h*(Qlen+(h+1)ell) has order at most L^10. All constants are fixed.
+
+For the short polynomial encoder, its coefficient capacity has order
+k^2 log N, exceeding n'=k*w1. Its reconstruction advice is
+O(m*k^(1/32)*log N). Dividing by k gives order
+L^(-7/32)*J^(-1/32), up to fixed factors, which tends to zero.
+Thus the exact advice guard passes. Its q-ary reconstruction errors
+remain smaller than 1/(16q2^64): m<=N, the encoded degree is at most
+N^(1/32), and rho=N^-8/(2m)>=N^-9/2 give per-curve bounds
+O(N^(-119*128)) and O(N^(27-(4095/32)*128)). Both are much smaller
+than N^-8192. seeded.md supplies the full counting and hybrid argument.
+
+For every ordinary long call, requested output bit length is O(log L),
+so its exact code w_target<=3E eventually. Code-field rounding gives
+w<=6E; its index length is at most 12E, design-field size at most 24E,
+and seed D<=288E^2<2^409*L^4. The supplied ell=2^500*L^4 pays D by
+a fixed factor exceeding 2^91. The design capacity is at least a fixed
+positive multiple of L^8194, exceeding every requested output, whose
+largest order is L^20. Its fixed degree 4096 is eventually below the
+code index length. The entropy threshold's dominant term is 2^4100
+times output, D is far below the smallest output ell, and all other
+terms are lower order. Therefore H_call<=C_L times output eventually.
+
+For Xrefresh, E_1=(2^20+o(1))*h^3*ell. Its w_target<=4E_1 eventually,
+so D<=512E_1^2<=2^51*h^6*ell^2. The supplied d>=2^64*h^6*ell^2
+pays it by a fixed factor of at least 8192. Its actual larger entropy
+threshold is charged to C_L*d. Its graph capacity also has ample
+power slack. All exact internal contracts therefore pass.
+
+The resilient shape has q=Theta(M/log M), z=Theta(log M),
+w=Theta(log M) and q_0=Theta(q), so its basic shape guards pass.
+For its actual integer moment order R=2^20*(16384z+1)+4 we have
+z,w<=s<=2^15*L and R<=2^50*L eventually. Thus
+
+    Rw<=2^65*L^2 < h.
+
+Its exact coded error charge is
+
+    20+2ceil_log2(b+1)+4ceil_log2(h+1)+ceil_log2(R+1)
+    +R*(1+ceil_log2(q_0+1))+10*16384*z+100.
+
+Since q_0<=2^z, its R term is at most 2^66*L^2. The remaining terms
+are eventually below 2^40*L^2. Hence the whole charge is at most
+2^67*L^2<E. These explicit fixed-factor bounds replace any unsupported
+assertion that equal logarithmic exponents have a strict power margin.
+
+There are finitely many guards, each covered above by a fixed positive
+factor or a strictly lower growth order. Therefore one fixed finite
+onset makes every guard pass at EVERY integer N beyond it. No field-
+compatible length, prime-degree subsequence or sampled input is used.
+
+## 4. Universal affine dispersal
+
+Let X be uniform on ANY affine subspace of F_2^N of dimension at least
+k. At sufficiently large N all source-independent guards pass.
+seeded.md proves strong error at most 2N^-8 for Short, which is linear
+for every fixed seed. On an affine source, a rank-deficient output
+image has distance at least 1/2 from uniform. Thus a FIXED fraction at
+least 1-4N^-8 of its M rows are exactly uniform m-bit images. Their
+good set depends on the source direction, not its sample or offset.
+
+correlation.md proves for every at-most-h subset of good indices that
+their selected ell-bit responses are close to independent uniform
+rows, with joint error at most
+
+    gamma=2^20*b^2*h^4*2^-E.
+
+It supplies the affine residual decomposition, seed-before-linear-output
+ordering, deficient-seed bound, equal-prefix treatment, retained target
+transcripts, and lexicographic first-difference argument. Xrefresh pays
+its larger entropy threshold; no near-full extraction is assumed. The
+final bounded-marginal assertion does not assert that all M rows are
+independent or that their full nonlinear matrix is an affine source.
+
+The remaining at most 4M*N^-8 coordinates may be arbitrary functions
+of X. Since M<=N^16384, M^(-1/4096)>=N^-4; hence eventually
+4N^-8<=M^(-1/4096). Their count is therefore at most M^(1-1/4096).
+The fixed-factor rank and error guards just proved give precisely the
+bounded-marginal hypotheses of resilient.md. That proof uses monotone
+zero/one extremes, graph packing, explicit two-row moments and bounded
+inclusion-exclusion; it allows arbitrary dependence of the bad bits.
+Both output values have positive probability. Therefore this SAME F_N
+is nonconstant on EVERY affine subspace of dimension at least k.
+The source and affine offset were arbitrary, and no finite experiment
+is used to infer this universal statement.
+
+## 5. Gate count, exact length and full remainder
+
+Apply elimination.md with n=N and d=k-1, a nonnegative integer at all
+sufficiently large lengths. Its complete full-B2 argument gives
+
+    C_B2(F_N)>=4N-8k.
+
+It permits every binary truth table, unrestricted sharing and fan-out,
+constant and unary effects, repeated pins and single terminal outputs.
+It converts W=s+4I+2q back to original gate count; it does not confuse
+a potential with gates or presume direct-sum additivity.
+
+Every N bit is actual payload. No witness input, certificate prefix,
+field encoding prefix or padded replacement length is charged. Since
+L<=log_2 N and L+2>log_2 N, we have J>=log_2 log_2 N whenever that
+quantity is positive. Thus the EXACT definition implies
+
+    8k<=2^10003*(log_2 N)^25/(log_2 log_2 N).
+
+Take fixed K=2^10003 and a common finite onset from Section 3. This
+proves the complete declared version-2 Big-O guarantee through all
+integer lengths. No bounded rational coefficient for this very large
+K is claimed. The loss divided by N tends to zero, yielding the same
+joint projection (4,1). The particular loss is proved directly rather
+than inferred from the leading liminf.
+
+## 6. Finite evidence and limitations
+
+family.py's declared audit takes exactly {}. It checks bounded integer,
+field, orbit, rank, graph, covariance and Bonferroni predicates, and
+actual small-length zero guards. No nontrivial asymptotic instance is
+claimed to have run. The universal source, transcript, resilient-output,
+all-length and gate-elimination assertions are mathematical arguments
+in the supplied evidence. A finite check or prior review cannot replace
+them. The adaptive transcript induction is especially intricate and
+requires independent scrutiny; neither a local audit nor a simulation
+is an authority to accept it.
