@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "One fixed total scale-header language in family.py and engine.py PolyPlan/PolyEngine. At large actual N, L=ceil(log2 N) input bits encode S-1. Every scale1<=S<=2^L is evaluated; rejected large plans give zero and the fixed finite small cutoff uses the legacy evaluator. With z=ceil(log2 L), exact parameters are k=P2(S^13 L^15 z^22),h=e=P2(S L^2 z^2),ell=P2(S^3 L^4 z^7),eprime=P2(S^5 L^6 z^9),d=P2(S^9 L^10 z^18),Y=P2(S^11 L^13 z^20). Independence order h is separate from binary index alphabet2 with d0 rounds. Initial dimension10000 is fixed and five internal dimensions equal z. The robust map has m=floor(delta*r), w=ceil(log2 r), b=floor(floor(sqrt(S))*w^2/(30*10^24)), u=2b+2w+10. B5 uses field degree1000w, a one-bit polynomial-hash extractor, and a deterministic lexicographic weak-design search in a universe100*(2000w)^2. The complete table-hybrid proof and2^O(w log(w+1)) construction cost are supplied, polynomial in actual N since r=O(log N). Only the hash modulus is design data; no design A1 matrix or weak-design table is supplied. Every header and construction datum is an actual input bit, not advice or witness. Good S0 is used only for a charged hardness restriction; eligibility holds on every header and field string.",
+  "theorem": "This fixed total language is in P and NP with empty witnesses on every input. There exist absolute B>0,N0 such that for every actual integer N>=N0, unconditionally in pinned full B2, C_B2(F_N)>=4*N-B*(log2 N)^15*(log2(log2 N))^22. For the SAME family and every fixed epsilon>0, eventually C_B2(F_N)>=4*N-(log2 N)^15*(log2(log2 N))^(22+epsilon), hence also4*N-(log2 N)^(15+epsilon) and4*N-N^epsilon. One fixed ordinary header S0 gives hardness. Exact loss is4*P(N,S0)+8*k(N,S0), including the ENTIRE header and all data; P=L+O(S0^5 L^6 z^11)=o(k). The supplied finite4n-8d theorem covers all16 B2 tables, constants and sharing. The robust moment proof needs O(r^2*u) independence and log-error. Layout loses only a factor2^O_S0(log r), preserving actual bad-coordinate accounting. No numerical B, efficient search for S0 or unpaid weak-design construction is assumed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
