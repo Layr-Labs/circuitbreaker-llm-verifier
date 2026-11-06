@@ -1,36 +1,62 @@
 {
-  "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "Fixed total P family defined by proof.md and its five included companions; empty-witness NP verifier; L=floor(log2 n), S=floor(L/(149851/50000)), S>=2^40; affine-only three-condenser/kernel BASE with K_B=ceil((6749/20)d+2362rho), b=ceil((200148511/100000000)rho), d=263215424595L, rho=r_F+274+2lg S; s=8S, r_F=S+8lg(s+255), q_walk=20, C=84, s_tag=3(s+40r_F); direct AB+C incidence support and 256*2^-r_F neighborhood cutoff, affine sampler failure<=1/128; ACTUAL degree335/j9 correlated-right all-original-seeds-retained outer affine breaker, all nine unchanged general-source PXT vectors, original NB77a/89h/15s and five-round antichain; H=88834184986766; all16-table native full-B2 bridge with sharing and zero terminal loss; one uniform polynomial evaluator with explicit exceptional zero branches at every integer actual length.",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "coefficient": {
+        "denominator": "1",
+        "numerator": "4"
+      },
+      "exponent": {
+        "denominator": "1",
+        "numerator": "1"
+      },
+      "kind": "polynomial_log",
+      "log_exponent": {
+        "denominator": "1",
+        "numerator": "0"
+      },
+      "loglog_exponent": {
+        "denominator": "1",
+        "numerator": "0"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "explicit",
+      "terms": [
+        {
+          "coefficient": {
+            "denominator": "1",
+            "numerator": "355336739947064"
+          },
+          "exponent": {
+            "denominator": "1",
+            "numerator": "0"
+          },
+          "log_exponent": {
+            "denominator": "1",
+            "numerator": "1"
+          },
+          "loglog_exponent": {
+            "denominator": "1",
+            "numerator": "0"
+          }
+        }
+      ]
     }
   },
   "projection": {
-    "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "denominator": "1",
+      "numerator": "4"
     },
     "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    }
-  }
+      "denominator": "1",
+      "numerator": "1"
+    },
+    "kind": "finite"
+  },
+  "theorem": "There exists one fixed total language in P (hence NP with empty witnesses) such that for every sufficiently large integer actual n its characteristic function has unrestricted full-B2 complexity at least 4n-4*88834184986766*floor(log2 n), hence at least 4n-355336739947064*log2 n; ZERO additive remainder and joint projection(4,1).",
+  "version": "circuitbreaker-expression-v2"
 }
