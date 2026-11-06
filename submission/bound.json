@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total weighted-selection certificate-prefix family defined at every length in proof.md Sections1--2 and family.py. Enumerate all prime2<=k<N, r=ceil((N-k)/k) with r>=3 and k>r+1, and2<=t<r. Use d=H+max(T,floor(F_r))+1 when k>=2r+1 and2k>=(t+1)^2, where H=r(r+3)/2,T=(t-1)k-t(t+1)/2+1,h=ceil(2r/(t+1)),F_r=r(2k-2r-1+h)/(2(t+1)); otherwise use d_old=H+max(T,floor(U/(t+1)))+1, U=rk-r(r+1)/2. Require B=t(t+3)/2<=d<N-k and select the lexicographically least(4k+8d-4B-3,k,t), with zero output if none exists. Read the paid degree-k polynomial prefix, reject invalid prefixes, and evaluate the descending-power order-t BK symmetric payload polynomial with zero padding.",
+  "theorem": "This one fixed total language is in uniform P, hence NP with empty witnesses. For every actual integer length N, C_B2(F_N)>=4N-L_N, with L_N the exact selected loss or4N when no pair is admissible. Every sufficiently large integer length is admissible and L_N=O(N^(4/5))=o(N). The guarded weighted marked-subset selection theorem supplies degree>=B on every dimension-d affine payload space and the retained full-B2 theorem supplies4m-8d+4B+3. Therefore for every epsilon>0 there is N_epsilon such that C_B2(F_N)>=(4-epsilon)N for every integer N>=N_epsilon in the full Li-Yang B2 model.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
