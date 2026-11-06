@@ -1,40 +1,58 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Sharper elementary11.536 remainder at every length",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total deterministic-field family defined by proof.md and family.py. At actual length N enumerate primes2<=k<=N, r=ceil(N/k) and r-1 with r>=3,k>r+1, m=min(N,rk), ignored p=N-m, and2<=t<r. Use d=H+E0+1 from disperser.md Sections12--13, B=t(t+3)/2<=d<m, and choose the minimum(4p+8d-4B-3,k,t,p) including the zero option(4N,0,0,0). Construct Q_k by the supplied deterministic prime-degree specialization of Shoup in field.md and irreducible_prime(k), ignore p actual input bits, and evaluate the descending-power order-t symmetric polynomial on the remaining m bits over F2[Z]/Q_k with zero padding. No field-polynomial bits or advice are inputs.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This ONE fixed total language is in uniform P, hence NP with empty witnesses. The complete supplied deterministic prime-degree field constructor, PRIME-DEGREE coefficient-isolation/zero-deficit theorem and full-B2 elimination establish C_B2(F_N)>=4N-L_N at every actual integer N>=0 for the exact total selector in family.py. Section9 proves for EVERY integer N>=0 that L_N<=(1442/125)N^(4/5), hence C_B2(F_N)>=4N-(1442/125)N^(4/5). Section8 supplies the elementary explicit prime interval for every real x>=2^23. Section9 supplies all guards, analytic tail N>=2^39, zero range0..199, and a complete generated finite73969-row cover of200..2^39-1 with exact endpoint checks and concavity/selector inclusion. Therefore for every epsilon>0 and every sufficiently large integer N, C_B2(F_N)>=(4-epsilon)N. The four finite six-entry loss tuples compare numeric certified losses only. No prior verdict, accepted-result catalog, external prime-gap theorem, circuit upper bound or untested infinite search success is a premise.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "field.md",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total deterministic-field family defined by proof.md and family.py. At actual length N enumerate primes2<=k<=N, r=ceil(N/k) and r-1 with r>=3,k>r+1, m=min(N,rk), ignored p=N-m, and2<=t<r. Use d=H+E0+1 from disperser.md Sections12--13, B=t(t+3)/2<=d<m, and choose the minimum(4p+8d-4B-3,k,t,p) including the zero option(4N,0,0,0). Construct Q_k by the supplied deterministic prime-degree specialization of Shoup in field.md and irreducible_prime(k), ignore p actual input bits, and evaluate the descending-power order-t symmetric polynomial on the remaining m bits over F2[Z]/Q_k with zero padding. No field-polynomial bits or advice are inputs.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"This ONE fixed total language is in uniform P, hence NP with empty witnesses. The complete supplied deterministic prime-degree field constructor, PRIME-DEGREE coefficient-isolation/zero-deficit theorem and full-B2 elimination establish C_B2(F_N)>=4N-L_N at every actual integer N>=0 for the exact total selector in family.py. Section9 proves for EVERY integer N>=0 that L_N<=(1442/125)N^(4/5), hence C_B2(F_N)>=4N-(1442/125)N^(4/5). Section8 supplies the elementary explicit prime interval for every real x>=2^23. Section9 supplies all guards, analytic tail N>=2^39, zero range0..199, and a complete generated finite73969-row cover of200..2^39-1 with exact endpoint checks and concavity/selector inclusion. Therefore for every epsilon>0 and every sufficiently large integer N, C_B2(F_N)>=(4-epsilon)N. The four finite six-entry loss tuples compare numeric certified losses only. No prior verdict, accepted-result catalog, external prime-gap theorem, circuit upper bound or untested infinite search success is a premise.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "field.md",
         "proof.md"
+      ]
+    },
+    "For every ODD PRIME k>=3, the exact irreducible_prime(k) algorithm in family.py terminates in polynomial time in k and outputs a monic irreducible binary polynomial of degree k. field.md supplies the complete prime-degree construction and proof, including binary factor extraction, cyclotomic nonresidue lifting, Kummer extension and trace descent. This specializes a known Shoup construction and does not claim a new general irreducible-construction algorithm.",
+    "The complete finite certified losses(original,weighted,positive-exact,zero-deficit,compressed,new) are(1461,1437,1429,1413,1393,1257) at N=500,(2533,2493,2485,2485,2465,2265) at N=1000,(4513,4449,4433,4417,4397,4061) at N=2000,and(16809,16601,16577,16521,16501,15365) at N=10000. These compare certified losses, not actual optimal circuit sizes.",
+    "For EVERY integer N>=0 this SAME fixed total uniform P family satisfies C_B2(F_N)>=4N-(1442/125)N^(4/5). proof.md Sections8--9 provide the complete elementary prime-interval proof, analytic tail, zero range and finite-cover/concavity transfer. The declared computation generates and independently verifies the complete73969-row finite cover of200..2^39-1; universal mathematical premises are supplied as proofs."
+  ],
+  "experiments": [
+    {
+      "id": "finite-audit",
+      "source": "audit.py",
+      "purpose": "Generate and independently check the73969-row finite cover, prime-floor and rational analytic constants, and all retained bounded field/threshold/reference/evaluator predicates. No infinite conclusion is extrapolated from finite samples.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": []
 }
