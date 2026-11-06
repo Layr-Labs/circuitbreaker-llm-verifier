@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total deterministic P family family.evaluate defined by proof.md, with exact integer tree padding, fixed source/extractor parameters, supplied field construction and numerical fallback0. At actual N it zero-pads into n=t^J>=N, t=2^ceil((ceil(log2 N))^(3/10)), uses k=floor(sqrt n), Kmin=floor(sqrt k), the supplied linear code/design extractors, affine row and block-source extractors, and the stated challenge-response tree. Every input bit is charged. No program prefix, field input, advice or witness is used.",
+  "theorem": "For this ONE fixed total uniform P language, hence NP with empty witnesses, there exists N0 such that for EVERY integer N>=N0, C_B2(F_N)>=4N-N^(3/5). Thus liminf over ALL integer N of C_B2(F_N)/N>=4. The supplied arguments prove prime-degree fields, a trace-cubic extractor, linear strong seeded extraction, affine somewhere-random and block-source extraction, the recursive challenge-response disperser at padded threshold floor(sqrt n), and the unrestricted full-B2 gate transfer at actual length N. Finite small lengths use the fixed total numerical fallbacks; no explicit N0 or practical running time at every asymptotically large input length is claimed. All helper algorithms and hypotheses are supplied, not admitted by prior verdict or external retrieval.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
