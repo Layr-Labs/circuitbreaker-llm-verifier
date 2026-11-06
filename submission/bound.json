@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total certificate-prefix family defined at every length in proof.md Sections1--2 and family.py. Select the least prime k at least the least positive integer b with b^5>32N^3; put m=N-k, r=ceil(m/k), t=ceil(sqrt(r)), with the exact exceptional guards and d from proof.md. Read a paid k-bit irreducible-polynomial prefix, reject invalid prefixes, and evaluate the descending-power elementary symmetric payload polynomial of order t with zero padding.",
+  "theorem": "This one fixed total language is in uniform P, hence NP with empty witnesses. At every sufficiently large actual integer input length N, all guards pass and C_B2(F_N)>=4N-(4k+8d), where 4k+8d=O(N^(4/5))=o(N). Therefore for every epsilon>0 there is N_epsilon such that C_B2(F_N)>=(4-epsilon)N for every integer N>=N_epsilon in the full Li-Yang B2 model.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
