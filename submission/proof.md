@@ -1,90 +1,147 @@
-# Published coefficient 31/10: construction and proof
+# Exact-weight class: strengthened finite lower bound
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## Joint theorem and model
+For all n>=0 let f_n(x)=1 iff the Hamming weight of x is floor(n/2),
+including f_0(empty)=1. One fixed polynomial-time procedure counts the
+input bits and compares the count to floor(n/2). A fixed verifier accepts
+exactly the empty witness and the inputs satisfying this test. Therefore the
+family is in NP in both directions, with witness bound zero, while the
+circuit receives only x. We prove C_B2(f_n)>=2n-2 for every n>=3. The
+joint score is coefficient 2 and exponent 1 with explicit constant loss 2.
 
-## Fixed total family
+The full B2 model has a single output, acyclic circuits, all 16 binary
+Boolean tables, arbitrary sharing and depth, free wires, constant and input
+nodes, and one unit of cost per retained gate. Repeated pins and degenerate
+gates are allowed. The normalization proof below handles them.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+## Normalization
+A gate whose output is a constant, a parent literal or a complemented parent
+literal can be removed while preserving the represented function whenever that
+function depends on at least two distinct input variables. Constants and
+uncomplemented literals are rewired directly. For a complemented literal,
+rewire to its uncomplemented parent and complement the corresponding input
+of every child truth table. This works with shared descendants and repeated pins:
+transform every occurrence. If the removed gate is the output and its parent is
+another gate, complement the parent's truth table, and complement the input
+positions of all other children using that parent, preserving their values; the
+parent itself becomes the output. If the output parent is a primary input, the
+whole function would depend on at most one input, contrary to the hypothesis.
+Constant outputs contradict the same hypothesis. A gate depending on at most
+one distinct nonconstant parent has one of the four unary tables, hence is
+removable by this rule. Each removal reduces the gate count by one. A surviving
+previously degenerate gate remains degenerate: its new truth table is obtained
+by complementing some inputs, and at most one effective parent remains. Thus
+any k initially distinct degenerate gates can be removed in at least k steps;
+if another removal already deletes one, it has already been counted.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
 
-## Uniform P and NP membership
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+## Four-gate base for the three-bit exact-one function
+Write E(x,y,z) for exact-one on three bits. Every variable is essential.
+Fixing any one variable to zero gives XOR of the other two, with two 1s in
+its truth table; fixing it to one gives NOR of the other two, with one 1.
+Also, fixing any two variables gives the three pairwise distinct residuals
+identity, negation, and constant zero (the pair weights 0, 1, and 2).
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Consider a circuit with at most three gates. Delete irrelevant gates and
+normalize degenerate gates as above. A direct input cannot be the output.
+If two inputs of the first gate each occur nowhere else, all restrictions of
+those inputs affect the output through a single bit, giving at most two
+residual functions, a contradiction. This also excludes circuits with at
+most two gates: if the second gate uses the first, its only other pin must
+be the third variable because the target depends on all three. Both parents
+of the first gate then occur nowhere else. If the second gate does not use
+the first, a single-output circuit cannot use both gates. Thus a
+three-gate candidate must use all three gates.
 
-## Every integer length and the lower bound
+Let the last gate be H. First suppose one input of H is a primary variable
+x, and its other input is the output of a two-gate subcircuit G. If H uses
+no two-gate subcircuit, at most two gates are relevant, already excluded.
+For each fixed x=b, H is a unary function of G_b. Since both E_0=XOR(y,z)
+and E_1=NOR(y,z) are nonconstant, that unary function is identity or
+negation; G_0 must therefore be XOR or XNOR, and G_1 must be NOR or OR.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+Write G as a binary gate of a first gate A and a primary input v; a direct
+input, repeated A, or constant as the other pin cannot yield an essential
+three-variable subcircuit. If v=x, A must depend only on y,z to make both
+essential, and G_0 and G_1 are unary functions of the same A. Nonconstant
+ones must be equal or complementary, but XOR/XNOR cannot equal NOR/OR.
+If v is, say, z, then A must use y. If A does not use x, both G cofactors
+are identical, again impossible. If A uses x and y, then for each b the
+unary map A(b,y) must be nonconstant because G_b depends on y. It is hence
+y or not-y. As z enters directly, the two truth tables G_0 and G_1 differ
+only by a possible negation of the y input, so they have the same number of
+ones. XOR and XNOR have two ones; NOR and OR have one or three. Contradiction.
+This covers permutations of x,y,z and all 16 truth tables.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+Now suppose H takes the outputs A and B of the first two gates. If B uses A,
+its other pin must be a primary input v. The other two primary variables can
+affect the output only through A, giving at most two residual functions when
+that pair is fixed, contradicting the three residuals above. If B does not
+use A, each of A and B is a gate on two primary inputs. All three variables
+must be covered, so their input pairs overlap in exactly one variable x;
+after renaming let A=A(x,y) and B=B(x,z). For each x=b, both E_b depend on
+y and z, so A(b,y) and B(b,z) must both be nonconstant unary maps, hence
+identity or negation. The two tables E_0 and E_1 are therefore obtained
+from the same truth table H by independently permuting its rows and columns,
+and have equal numbers of ones. But E_0 has two and E_1 has one, a
+contradiction. The output cannot use constants, repeated pins or unary gates
+in a normalized minimum circuit. Thus C_B2(F_3)>=4.
 
-## Conservative remainder, with source discrepancy retained
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+## Stronger class theorem
+For integers n>=3 and 1<=k<=n-1, E(n,k) is the function which is one iff
+the n-bit input has weight k. Every input is essential: choose k-1 ones
+among the other n-1 inputs and flip the selected input.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+At n=3 the only nontrivial exact-weight functions are E(3,1) and E(3,2).
+The preceding section proves C_B2(E(3,1))>=4. E(3,2)(x) equals
+E(3,1)(not x_1,not x_2,not x_3). Complementing every primary input does
+not change B2 circuit complexity for a function depending on at least two
+inputs: at each input pin of each consuming gate replace its truth table
+by the table with that argument flipped, simultaneously for repeated pins.
+If the output is a primary input or a constant this transformation needs
+special handling, but neither is possible for these essential three-input
+functions. Repeated fan-out merely applies the same replacement at each
+consumer. The transformation is reversible and adds no gates. Thus the
+same four-gate lower bound holds for E(3,2).
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+For n>=4, fix any two distinct input bits. The assignments 00,01,10,11
+induce E(n-2,k), E(n-2,k-1), E(n-2,k-1), E(n-2,k-2), treating an
+out-of-range weight as the constant-zero function. The three functions
+with consecutive weights k,k-1,k-2 are distinct: at least two weights
+lie in [0,n-2], because 1<=k<=n-1. Each in-range weight has an input
+accepted only by its corresponding function, and the remaining function
+is either a different in-range weight or the zero function.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+Let S(n) be the minimum gate count over 1<=k<=n-1. Take a minimum circuit
+for a minimizing k, trim unused gates and normalize it. Every input is
+essential, so the first topological gate has two distinct primary inputs.
+If each occurs only as an input of that gate, the other gates can observe
+the pair only through its one output bit, allowing at most two distinct
+residual functions. This contradicts the three distinct pair restrictions.
+The output cannot be a primary input because every one of n>=4 variables
+is essential. Hence one of the two parents also feeds a distinct gate.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Choose its fixed value b so that the restricted weight stays nontrivial:
+take b=1 if k=n-1, and b=0 otherwise. The remaining function is
+E(n-1,k-b) with 1<=k-b<=n-2, so it still depends on every input. Each
+of the two distinct gates now has a constant pin; normalization removes
+both without adding gates, including for repeated pins, sharing, and
+terminal negations. Thus S(n)>=S(n-1)+2. Since S(3)>=4, induction yields
+S(n)>=2n-2 for every n>=3 and all 1<=k<=n-1.
 
-## Exact arithmetic and the unchanged LP
+The middle-weight function is E(n,floor(n/2)), which is in that class for
+every n>=3. This establishes the full explicit lower bound. For each
+epsilon>0 and n>=max(3,ceil(2/epsilon)), it implies
+C_B2(f_n)>=(2-epsilon)n, proving the all-integer-length liminf claim.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
-
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
-
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
-
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
-
-## Sources
-
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+## Provenance and limits
+This work combines and generalizes our exact-one and exact-middle-weight
+proofs, using the former's four-gate base and the latter's choice of fixed
+input in the induction. It also uses the MOD3 normalization template and
+its public predecessor. These are declared attribution dependencies.
+The complete proof is repeated here: no prior model judgment is assumed.
+The improvement over our earlier exact-middle-weight theorem is in its
+explicit constant loss, from 3 to 2; the asymptotic pair remains (2,1),
+which is below the challenge frontier. No novelty or reward is guaranteed.
