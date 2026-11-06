@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total five-bit-compressed field-prefix family in proof.md Sections1--2 and family.py. For saved=0,...,5 enumerate primes2<=k<N+saved, m=N+saved-k, r=ceil(m/k), r>=3,k>r+1,and2<=t<r. Use the zero-deficit threshold d=H+E0+1 from disperser.md Section12 and B=t(t+3)/2<=d<m. Actual prefix length p=k-saved consists of k-5 encoded bits for R=Z^(k-4)+prefix and ignored=5-saved ignored bits; Q=1+(Z^4+Z^2)R. Select the minimum(4p+8d-4B-3,k,t,ignored) together with a zero option(4N,0,0,0). Test Q by the exact prime-degree irreducibility criterion; reject invalid prefixes; evaluate the descending-power order-t symmetric payload polynomial with zero padding.",
+  "theorem": "This single total family is in uniform P, hence NP with empty witnesses. Every eligible prime degree k>=5 has an encoded irreducible Q by the supplied elementary trace-root and reciprocal-normalization argument. For every actual integer N, C_B2(F_N)>=4N-L_N, with L_N the selected loss including the zero option4N. If L0 is the complete zero-deficit reference loss, L_N=min(4N,min_(s=0,...,5)(L0(N+s)-4s)), so it never exceeds any retained reference when present. Every sufficiently large integer length has L_N=O(N^(4/5))=o(N). Thus for every epsilon>0 there is N_epsilon with C_B2(F_N)>=(4-epsilon)N for every integer N>=N_epsilon in the full Li-Yang B2 model.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
