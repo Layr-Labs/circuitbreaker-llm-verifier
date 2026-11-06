@@ -1,90 +1,691 @@
-# Published coefficient 31/10: construction and proof
+# A tighter explicit coefficient-four bound at every integer length
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+For the unchanged fixed evaluator, Sections10--11 prove at EVERY integer
+N>=0 that C_B2(F_N)>=4N-(609/50)N^(4/5). This improves the retained
+25/2 coefficient fromd10eb869-1eef-4324-8c54-6dffb8b79020. The new proof
+combines a refined Bertrand comparison with a generated and independently
+checked finite interval cover. No untested infinite range is inferred
+from samples. The native leading pair remains(4,1), and no actual circuit
+upper bound or optimality over other constructions is claimed.
 
-## Fixed total family
+## 1. One fixed total language at every actual length
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+At integer N>=0 enumerate every prime2<=k<=N. Let r0=ceil(N/k) and
+consider r=r0 and r=r0-1, retaining only r>=3,k>r+1. Put
+m=min(N,rk) and p=N-m. Then r=ceil(m/k),0<=p<=k, and all eligible
+k are odd primes at least5. Enumerate every integer2<=t<r and put
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+    H=r(r+3)/2, T=(t-1)k-t(t+1)/2+1, B=t(t+3)/2.
 
-## Uniform P and NP membership
+For each positive count s=t,...,r and A=t-1,...,k-s-2 define
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+    X=min(floor(A/(t-1)),floor((k-t-A)/2),
+          floor(((t-1)k-t(t-1)/2-tA)/(t-1))).
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Skip X<1; otherwise set C=k-A,J=min(s,C-2X), and
 
-## Every integer length and the lower bound
+    e_(s,A)=A+(J-t+1)X+floor((C-J-1)^2/4)-floor((C-s-1)^2/4).
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+For1<=s<t put
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+    a_s=min(k-s-1,floor((2sk-s(s+1))/(2(s+1)))),
+    M_0=max(0,T-r+t-1).
 
-## Conservative remainder, with source discrepancy retained
+Let E0 be the maximum of M_0, every a_s with a_s>=s, and all the listed
+e_(s,A). Empty ranges add nothing. Let d=H+E0+1. Require B<=d<m.
+Select the least key(4p+8d-4B-3,k,t,p), together with the explicit zero
+option(4N,0,0,0). Let L_N be its first component. The zero option returns0
+on the whole length; in particular N=0 is defined. Other choices ignore
+the first p actual bits and use the remaining m bits as the payload.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+The threshold calculation in family.py uses the equivalent one-A scan
+proved in disperser.md Section13. Its small-positive branches are exactly
+as above. The selector skips only pairs with lower dimension H+M_0+1>=m
+or a lower loss key already at least its incumbent; both follow from
+E0>=M_0. These exact skips do not alter the minimum or tie rule.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+For a nonzero choice construct Q_k by family.py's irreducible_prime(k),
+whose complete deterministic algorithm and correctness are proved in
+field.md Sections1--3. Use K=F2[Z]/Q_k in its polynomial basis. Pad the
+m payload bits by rk-m zeros, obtaining blocks a_i in K, first bit the
+constant coordinate. Put y_i=a_i^(2^(r+2-i)-1), and output the constant
+coordinate of the order-t elementary symmetric polynomial in the y_i.
+Its division-free recurrence starts E_0=1, all other E_j=0, and updates
+E_j<-E_j+y_i E_(j-1) in descending j. Splitting subsets by whether they
+contain i proves this recurrence. The field is a deterministic function
+of the selected degree, independent of every target input bit.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+The two r choices are an exact optimization over all ignored prefixes
+0<=p<=k. For any such prefix, m=N-p lies in[N-k,N], so its ceiling
+block count is r0 or r0-1. At fixed k,r,t, the threshold and degree do
+not depend on m within((r-1)k,rk]. Taking m=min(N,rk) maximizes m, preserves
+admissibility and minimizes p and the loss4p+8d-4B-3. Thus no other prefix
+length can improve the selected key. Every pair with r>=3 has N>=m>2k,
+so k<=N does not omit any eligible choice.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+## 2. Uniform P, elementary field facts and NP
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+In an algebraic closure of F2, the polynomial Z^(2^u)-Z has exactly2^u
+distinct roots, since its derivative is1. Those roots are closed under
+addition, multiplication and nonzero inversion, and form a field.
+Frobenius z->z^2 permutes them. A Frobenius orbit gives a monic irreducible
+polynomial over F2 by taking the product of its linear factors: the
+coefficients are fixed by Frobenius, and a proper binary factor would
+require a proper invariant subset of the orbit. Conversely the roots of
+an irreducible polynomial form one orbit. These elementary facts apply
+to every degree u and underlie the supplied constructor.
 
-## Exact arithmetic and the unchanged LP
+field.md gives every additional algorithmic argument: binary fixed-space
+factor extraction with a Chinese-remainder proof; bounded-degree
+cyclotomic root lifting and a nonresidue; the prime Kummer extension;
+a concrete relative trace whose positive basis coefficients prove it has
+degree k; and its binary minimal polynomial. No factoring, nonresidue,
+or irreducible-construction oracle is left as an external premise.
+Every factor matrix has fewer than k^2 rows and columns. A generous
+O((k+1)^12) bit bound covers the constructor, whose represented extension
+has fewer than k^2 binary coordinates. It does not enumerate that field.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+Parameter selection scans polynomially many prime/order choices with
+trial primality and exact integer loops. k,r,t<=N+1, and all threshold
+integers have O(log(N+1)) bits. The represented field constructor is
+performed only for the selected k, followed by schoolbook field arithmetic
+and the polynomial-time symmetric recurrence. A coarse O((N+1)^12) bound
+covers the complete evaluator, including all exceptional lengths. No
+practical runtime at every large N is asserted. Cache entries memoize
+pure functions and are unnecessary to this cold-start polynomial bound.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+Let A be this single deterministic evaluator and L={x:A(x)=1}. The NP
+verifier accepts exactly empty witnesses w when A(x)=1. The empty witness
+exists exactly for members of L, establishing both directions uniformly.
+Witnesses are never target-circuit inputs. No field coefficients are
+advice or existential witnesses: Q_k is constructed by the stated code.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+For retained finite audits, the old paid-prefix irreducibility criterion
+is exact at prime degree k: Z^(2^k)=Z modQ makes Q divide a squarefree
+polynomial whose irreducible factors have degrees dividing k, and
+ gcd(Q,Z^2+Z)=1 removes both linear factors. All remaining factors have
+degree k, hence a monic degree-k Q passing both tests is irreducible.
+Conversely irreducible Q passes. This test is not needed to choose the
+new field; it independently checks finite constructor outputs.
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+## 3. Prime-degree affine payload degree
 
-## Sources
+For every selected PRIME k, disperser.md proves the required field and
+integer threshold statements. Section12 permits t selected blocks of
+nonnegative deficits delta_i=d_i-w_i, at least one positive, provided
+sum_positive delta_i+max_positive d_i>k+1. Positive sources kill every
+unwanted trace shift; zero-deficit sources supply nonzero minors by the
+linearized root bound. Triangular mixing, symmetric noncancellation and
+Section9 then prove Boolean degree>=B=t(t+3)/2 on each such affine space.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+The integer optimization in Sections11--12 is separate: H+E0 is exactly
+the largest dimension of an integer vector0<=d_i<=k failing the enlarged
+selection predicate. This combinatorial maximum holds for the stated
+integers; its FIELD consequence requires prime k. Fewer than t eligible
+indices give excess T-r+t-1. With s<t positive indices but enough
+eligible indices, all positives can be padded with zeros, giving precisely
+a_s via individual upper bounds and their integer sum. With s>=t, replacing
+selected zeros by unused positives gives the positive-only top/tail
+formula. Every branch has an attaining failed vector. Section13's count
+monotonicity computes the identical maximum in fewer steps.
+
+Consequently every affine payload dimension at least d=H+E0+1 has degree
+at least B. The guard k>r+1 keeps all exponent weights below k. No
+composite-degree coefficient assertion is made; the rejected extra claim
+of provider bf5b6832 is not reused. Predicate optimality does not assert
+optimal affine dispersers, circuit sizes or limits of other methods.
+
+## 4. Full B2 and the finite actual-length inequality
+
+Fix the p ignored actual input bits in any circuit for F_N. Constant
+normalization cannot add gates. The remaining circuit computes the
+payload over the deterministically constructed field K. The m actual
+payload bits embed by zero padding into rk bits; that map is affine and
+injective, preserving every affine dimension. Therefore the payload has
+degree>=B on every dimension-d affine space.
+
+The supplied elimination.md Section6 proves that this hypothesis with
+1<=B<=d gives C_B2(g)>=4m-8d+min(5B-1,4B+3). Its complete charged
+representation covers all sixteen binary truth tables, constants, unary
+gates, repeated pins, arbitrary sharing and fanout, pair promises,
+closure and terminal cases. No free affine basis or formula restriction
+is assumed. Since t>=2 gives B>=5, its offset is4B+3. Hence
+
+    C_B2(F_N)>=4(N-p)-8d+4B+3=4N-L_N.
+
+For the zero option L_N=4N and the same assertion is the zero bound.
+All ignored bits are counted in actual N. No input bits specify the field.
+
+## 5. Every sufficiently large integer length
+
+The new search contains every old zero-deficit certificate: its old p=k
+and m=N-k belong to the allowed prefix range, and the two-r reduction
+only increases m within the same block count and decreases p. The new
+threshold also satisfies d<=d_old, where the original sufficient dimension
+is H+max(T,floor((rk-r(r+1)/2)/(t+1)))+1. Sections10--12 prove this
+inclusion using explicit failed vectors and sufficient subset bounds,
+not any source verdict.
+
+Take the least prime k at least the least integer b with b^5>32N^3,
+and t=ceil(sqrt(r)) at the old payload m=N-k. Bertrand gives
+k=Theta(N^(3/5)),r=Theta(N^(2/5)),t=Theta(N^(1/5)) at every large integer
+N. Eventually all guards hold and B<=H<d<=d_old=O(N^(4/5))<N-k.
+Thus the new selected loss is at most O(N^(4/5)). It is nonnegative,
+since p>=0,B<=H and d>=H+1, including the nonnegative zero option.
+Therefore L_N=o(N) over ALL integer lengths. For each epsilon>0 there
+is N_epsilon such that C_B2(F_N)>=(4-epsilon)N for every integer
+N>=N_epsilon, with one fixed uniform language and verifier throughout.
+
+## 6. Complete reference comparisons
+
+The original, weighted, positive-exact and zero-deficit references use the
+same old prime/order loops and unconstrained k-bit prefix, differing only
+in their explicitly supplied thresholds. Write their losses L_old,
+L_weighted,L_exact,L0, with4n on empty searches. The compressed reference
+has L_comp(N)=min(4N,min_(s=0,...,5)(L0(N+s)-4s)), with ties(loss,k,t,5-s).
+Its k-5-bit affine decoder and existence proof are retained in family.py
+and field.md Section4; the ignored bits make its actual prefix p=k-s.
+Every such prefix has0<=p<=k, so the new optimum satisfies L_N<=L_comp(N).
+It also dominates each earlier reference whenever present. These are
+numeric certified-loss comparisons, not actual optimal circuit sizes.
+
+Complete exact searches give
+
+    N      original  weighted  positive-exact  zero-deficit  compressed  new
+    500      1461      1437         1429           1413        1393     1257
+    1000     2533      2493         2485           2485        2465     2265
+    2000     4513      4449         4433           4417        4397     4061
+    10000   16809     16601        16577          16521       16501    15365.
+
+Finite experiments check these and the declared bounded algebraic
+predicates. Universal constructor correctness, circuit coverage and
+asymptotics rest on the written proofs. No strict improvement at every
+length or new leading coefficient is claimed.
+
+## 7. Provenance and claim scope
+
+The field payload and full-B2 degree-sensitive theorem originate in
+8eef1799-c27f-46f3-8e61-3c4e0d28d145, with the supplied complete arguments
+retained. The compact proof and audit patterns build on2309de11-70f3-4d9d-99be-be46178f7983.
+The marked-subset reference is retained from8d0d93b5-9da6-405e-98f3-aef47d9b9c09,
+positive-only integer optimization from673f938b-d06e-4423-9514-ed84afe6b13f,
+and prime-only zero-deficit extension frombf5b6832-24d7-4ceb-9d64-abd59ca97414.
+That provider was rejected on an overbroad extra composite-degree field
+claim; this package explicitly does not reuse that assertion. The separate
+integer maximum and prime-only proof material remain supplied and credited.
+The compressed-prefix reference and its audit are retained from
+705a962d-524f-424b-8fe1-28e2f3f1cb37. None of their judgments supplies a premise.
+
+The deterministic field construction is a prime-degree specialization of
+Shoup1990, with the needed algorithm and elementary proof supplied in
+field.md. It is not claimed as a new irreducible-construction algorithm.
+The field constructor, its proof, ignored-prefix optimizer and Section13
+count-loop reduction are retained from37b2928a-14a5-4e21-a621-12723a6848ff.
+The explicit25/2 bound in Sections8--9 and its finite certificate are
+retained fromd10eb869-1eef-4324-8c54-6dffb8b79020. The current contribution
+is the tighter609/50 bound in Sections10--11.
+Its proof uses the original sufficient dimension and a supplied finite
+certificate, without a sharp-asymptotic-constant theorem as a premise. Literature for the retained construction and gate argument
+remains BK and Mishra--Santhanam ECCC TR26-260 revision1. Unfamiliar
+arguments needed for the theorem are reproduced; ordinary field algebra,
+root counting, Euclid, Gaussian elimination and Bertrand are used as stated.
+
+
+## 8. A fully explicit all-length bound without PNT
+
+For the same unchanged evaluator we also prove the concrete guarantee
+
+    N>=2^18 implies L_N<(25/2)N^(4/5),
+    C_B2(F_N)>=4N-(25/2)N^(4/5).                         (8.1)
+
+Here N is every integer at least262,144. This section uses only
+Bertrand's postulate for its prime comparison. The result gives an explicit threshold; it
+does not assert that this threshold is the smallest possible one.
+
+Let b be the least integer with b^5>=N^3, and choose the least prime
+k>=b. Bertrand gives b<=k<2b<=2N^(3/5)+2. Put
+
+    u=k/N^(3/5), r=ceil(N/k), t=ceil(sqrt(r)), p=0,m=N.
+
+For N>=2^18,
+
+    1<=u<2+2N^(-3/5)<=2+2/1024<1001/500.                 (8.2)
+
+These are eligible base parameters. First k<N since N^(2/5)>144
+and k/N<(1001/500)N^(-2/5). Also r>=N/k>(500/1001)144>3.
+We have r+1<=N^(2/5)+2<N^(3/5)<=k: set x=N^(1/5)>12 and use
+x^2+2<x^3. Therefore k>r+1, and k is an odd prime at least5.
+For integer r>=3,2<=ceil(sqrt(r))<r, so the order guard holds.
+
+Let d be the exact dimension for this candidate. The retained original
+sufficient threshold, with its proved dominance, gives
+
+    d<=H+max(T,floor(U/(t+1)))+1<=H+k sqrt(r)+1,
+
+since t-1<sqrt(r), T<k sqrt(r), and U/(t+1)<=rk/(t+1)<k sqrt(r).
+Using r<=N/k+1 and sqrt(1+z)<=1+z/2 for z>=0,
+
+    H<=N^2/(2k^2)+(5/2)N/k+2,
+    k sqrt(r)<=sqrt(Nk+k^2)
+                 <=sqrt(Nk)+k^(3/2)/(2sqrt(N)).
+
+Consequently
+
+    d/N^(4/5)<=f(u)+g(u)N^(-2/5)+3N^(-4/5),
+    f(u)=1/(2u^2)+sqrt(u),
+    g(u)=5/(2u)+u^(3/2)/2.                              (8.3)
+
+On the interval[1,1001/500], f is convex, since
+
+    f''(u)=u^(-4)(3-u^(5/2)/4)>0.
+
+For example u<9/4 and (9/4)^5<144 prove the strict inequality.
+Its maximum is therefore at an endpoint. At1 it equals3/2;
+at1001/500 it is strictly less than
+
+    1/8+283/200=77/50,
+
+because1001/500>2 and sqrt(1001/500)<283/200. The function g is also convex, since g''(u)=5/u^3+3/(8sqrt(u))>0.
+Its endpoint values satisfy g(1)=3 and
+
+    g(1001/500)<5/4+(1001/500)(283/200)/2<3.
+
+Thus g(u)<=3 throughout the interval. For N>=2^18,
+N^(2/5)>=2^(36/5)>144: raising to the fifth power reduces this last
+comparison to2^16>9^5. Hence N^(-2/5)<1/144 and N^(-4/5)<1/144^2.
+Substitution in(8.3) gives
+
+    d/N^(4/5)<77/50+3/144+3/144^2
+              =77/50+1/48+1/6912<25/16.
+
+Indeed25/16-77/50-1/48=1/600>1/6912. In particular d<N, because
+N^(1/5)>12>25/16. Also B<=H<d, so the candidate is admissible in
+the selector's full-payload r0 branch. Its loss is8d-4B-3, strictly
+less than(25/2)N^(4/5). The global minimum is no larger, and the finite
+circuit inequality from Section4 proves(8.1).
+
+All ceilings and prime choices in this comparison have exact integer
+definitions and are contained in the fixed selector. The elementary
+real inequalities above supply a proof for the entire infinite range;
+no finite numerical scan is used to infer an untested interval. Field
+and coefficient consequences continue to apply only to the selected
+PRIME degree. This explicit
+threshold does not change the evaluator or asserts an actual circuit upper bound.
+
+
+## 9. Finite interval certificate extends the bound to every N
+
+For every integer N>=0, the same evaluator satisfies
+
+    L_N<=(25/2)N^(4/5),
+    C_B2(F_N)>=4N-(25/2)N^(4/5).                        (9.1)
+
+For0<=N<=298 the zero option gives L_N<=4N, which is at most the
+stated loss: for positive N raise the inequality to the fifth power
+and use8^5*N<=8^5*298<=25^5. The N=0 case is equality. Section8 covers
+all N>=2^18. It remains to certify the finite range299,...,2^18-1.
+
+The literal FINITE_LOSS_COVER list in audit.py supplies220 integer rows
+(left,right,k,r,t), in increasing consecutive intervals, beginning at299
+and ending at262143. For each row the declared audit verifies primality
+of k, r>=3,k>r+1,2<=t<r, and puts
+
+    H=r(r+3)/2, B=t(t+3)/2,
+    d_ref=H+max(T,floor(U/(t+1)))+1,
+    A=8d_ref-4B-3, cost(N)=A+4max(0,N-rk).
+
+It checks left>(r-1)k, right<=rk+k, d_ref<min(left,rk), B<=d_ref,
+and verifies at BOTH endpoints v in{left,right} the exact integer test
+
+    (2cost(v))^5<=25^5*v^4.                             (9.2)
+
+All costs are nonnegative. Thus(9.2) is equivalent to
+cost(v)<=(25/2)v^(4/5), without floating-point arithmetic.
+
+For every N in the row interval, m=min(N,rk) has ceil(m/k)=r,
+p=N-m lies in[0,k], and d_ref<m. The selector's two-count reduction
+therefore includes this parameter choice. Its actual threshold obeys
+d_new<=d_ref, with B<=H<d_new, so it is admissible and
+
+    L_N<=4p+8d_new-4B-3<=cost(N).
+
+This comparison is numeric; it does not substitute a row's function
+for the fixed selected evaluator. The finite selected-family circuit
+bound of Section4 still uses that evaluator's own L_N.
+
+On the positive real interval[left,right], the function
+
+    g(x)=(25/2)x^(4/5)-A-4max(0,x-rk)
+
+is concave: its power term is concave, and minus the maximum of two
+affine functions is concave. Nonnegative endpoint values therefore imply
+nonnegative values throughout that interval. The two integer tests prove
+the required inequality for every integer in the row, not just endpoints.
+The audit verifies that each row begins exactly one above its predecessor's
+right endpoint, so the220 rows cover the entire remaining finite range.
+Together with the zero-option range and Section8 this proves(9.1).
+
+The finite certificate does not claim optimal intervals, optimal reference
+parameters, or that numerical samples prove an untested infinite range.
+Every finite endpoint check is reproduced by the declared credential-free
+experiment, while concavity, exact candidate inclusion and the analytic
+tail argument provide the stated mathematical coverage. The field degree
+of every row is PRIME, with the same supplied construction and full-B2
+proof; no rejected composite-degree claim is reused.
+
+## 10. A tighter analytic tail
+
+For every integer N>=2^30, the unchanged selector satisfies
+
+    L_N<(609/50)N^(4/5).                               (10.1)
+
+Let a=961/1000. Choose h as the least integer such that
+(1000h)^5>=961^5 N^3, and let k be the least prime at least h.
+By Bertrand, aN^(3/5)<=k<2h<=2aN^(3/5)+2. Set
+
+    u=k/N^(3/5), u_hi=192201/100000,
+    p=0,m=N,r=ceil(N/k),t=ceil(sqrt(r)).
+
+Since N^(3/5)>=2^18,
+
+    a<=u<2a+2N^(-3/5)<=1.922+1/131072<u_hi.             (10.2)
+
+All base guards hold. In fact k<N since u<2 and N^(2/5)>=4096;
+r>=N/k>2048; and, putting x=N^(1/5)>=64,
+
+    k>=a x^3>(9/10)x^3,
+    r+1<=a^(-1)x^2+2<(10/9)x^2+2<(9/10)x^3.
+
+The last inequality follows from x>=64. Thus k>r+1 and k is an odd
+prime at least5. Also2<=ceil(sqrt(r))<r.
+
+The same dimension estimate used earlier is valid for any positive u:
+
+    d<=H+k sqrt(r)+1,
+    H<=N^2/(2k^2)+(5/2)N/k+2,
+    k sqrt(r)<=sqrt(Nk)+k^(3/2)/(2sqrt(N)).
+
+Consequently, writing delta=N^(-2/5),
+
+    d/N^(4/5)<=f(u)+g(u)delta+3delta^2,
+    f(u)=1/(2u^2)+sqrt(u),g(u)=5/(2u)+u^(3/2)/2.        (10.3)
+
+Both functions are convex on[a,u_hi]. As previously,
+f''(u)=u^(-4)(3-u^(5/2)/4)>0 because u<9/4 and(9/4)^5<144;
+g''(u)=5/u^3+3/(8sqrt(u))>0.
+
+Here are explicit rational bounds for their endpoints. Squaring shows
+
+    sqrt(a)<98031/100000,
+    sqrt(u_hi)<138637/100000.
+
+Since a^2=923521/1000000 and u_hi>2a, these imply
+
+    f(a)<500000/923521+98031/100000<152173/100000,
+    f(u_hi)<125000/923521+138637/100000<152173/100000,
+    g(a)<2500/961+a*(98031/100000)/2<31/10,
+    g(u_hi)<1250/961+u_hi*(138637/100000)/2<31/10.
+
+Every displayed strict comparison is a rational cross-multiplication;
+the declared computation also reproduces these finite arithmetic checks.
+Convexity therefore gives f(u)<152173/100000 and g(u)<31/10 throughout
+the interval. With delta<=1/4096, (10.3) yields
+
+    d/N^(4/5)<152173/100000+31/40960+3/16777216
+              <152173/100000+76/100000+1/1000000
+              =1522491/1000000<609/400.
+
+In particular d<N because N^(1/5)>=64>609/400. Since B<=H<d, this is
+an admissible full-payload candidate in the exact selector. Its loss
+8d-4B-3 is below(609/50)N^(4/5). The global minimum proves(10.1).
+Only Bertrand, not a short-prime-gap hypothesis, is used here.
+
+## 11. Finite generated certificate and the bound at every length
+
+For the same fixed evaluator, for EVERY integer N>=0,
+
+    L_N<=(609/50)N^(4/5),
+    C_B2(F_N)>=4N-(609/50)N^(4/5).                     (11.1)
+
+For0<=N<=261 the zero option suffices:200^5*N<=609^5, and raising
+4N<=(609/50)N^(4/5) to the fifth power proves the inequality for N>0;
+N=0 is equality. Section10 treats every N>=2^30.
+
+The remaining finite range262,...,2^30-1 is covered by the deterministic
+certificate-generating program supplied in audit.py. It has no external
+data or oracle: an integer fifth-root routine, a bounded prime sieve,
+and a finite search for reference parameter choices produce consecutive
+rows(left,right,k,r,t). Generation is a way to supply a finite witness,
+not an assumption that a heuristic succeeds over an untested range.
+The declared bounded run completes that exact fixed range and separately
+checks every generated row. Anyone can reproduce the entire certificate
+from the supplied source. The observed certificate has6482 intervals.
+
+The independent row verifier checks the same mathematical conditions as
+in Section9: primality and guards, d_ref<m at the left endpoint,
+left>(r-1)k, right<=rk+k, and consecutive integer coverage. It computes
+d_ref using the ORIGINAL sufficient threshold, independently of the
+generator's closed-form calculation. Writing
+
+    A=8d_ref-4B-3,cost(N)=A+4max(0,N-rk),
+
+it checks A>=0 and at both endpoints v the exact integer inequality
+
+    (50cost(v))^5<=609^5 v^4.                           (11.2)
+
+Thus cost(v)<=(609/50)v^(4/5). For each interior integer the actual
+selector includes the same k,r,t with m=min(N,rk),p=N-m in[0,k],
+d_new<=d_ref<m and B<=H<d_new. Hence L_N<=cost(N).
+The function (609/50)x^(4/5)-cost(x) is concave on the positive row
+interval, so nonnegative endpoints imply nonnegative values throughout.
+The checked first left endpoint262, consecutive adjacency, and final
+right endpoint2^30-1 exhaust the finite middle range. Along with the
+zero-option range and the analytic tail, this proves(11.1).
+
+No claim about generation's optimality is needed, and the generator is
+not part of the target evaluator. The actual family and its polynomial
+runtime remain unchanged. Finite execution establishes the supplied
+finite certificate's checks; the concavity and inclusion arguments
+establish each interval interior, and Section10 establishes the entire
+infinite tail. Every coefficient/field assertion continues to require
+the selected PRIME degree, and the full-B2 circuit proof is unchanged.
+
+
+## 12. A still smaller explicit constant at every length
+
+The same fixed family satisfies, for EVERY integer N>=0,
+
+    L_N<=(487/40)N^(4/5),
+    C_B2(F_N)>=4N-(487/40)N^(4/5).                    (12.1)
+
+This coefficient12.175 improves Section11's12.18. It retains the same
+Section10 prime construction, a=961/1000 and u_hi=192201/100000,
+and the already proved f(u)<152173/100000 and g(u)<31/10.
+For N>=2^36, delta=N^(-2/5)<1/21504: indeed
+2^22=4194304>3^5*7^5=4084101, so2^(72/5)>3*7*2^10=21504.
+The previous guard estimates remain valid. Equation(10.3) gives
+
+    d/N^(4/5)<152173/100000+31/215040+3/21504^2
+              <487/320.
+
+This is a strict rational inequality, also checked by the declared
+computation. Thus8d-4B-3<(487/40)N^(4/5), proving the infinite tail.
+
+For0<=N<=261 the zero option suffices:160^5*261<=487^5<160^5*262.
+The new finite generator in audit.py supplies a complete cover of
+262,...,2^36-1 with32845 rows. It uses a bounded sieve through5000000
+and the same finite witness search pattern as Section11; its separate
+verifier checks all guards, primality, consecutive coverage, and
+
+    (40cost(v))^5<=487^5*v^4
+
+at both endpoints of every row. Here cost(x)=8d_ref-4B-3+4max(0,x-rk),
+with the ORIGINAL sufficient dimension. The verifier computes H as
+(r+1)(r+2)/2-1, T as the literal sum of k-j for2<=j<=t,
+and U as r(2k-r-1)/2. These are exactly the defining sums:
+H=sum_(j=2)^(r+1)j and U=sum_(j=1)^r(k-j), by the arithmetic-series
+identity. This uses a different algebraic form from the generator's
+H=r(r+3)/2 and U=rk-r(r+1)/2, avoiding long repeated summations.
+All arithmetic is exact integer arithmetic. The older bounded literal
+sum comparisons and original certificate checks are still executed.
+
+The first row starts262, the rows are adjacent, and the final row ends
+68719476735=2^36-1. Each includes the same actual-selector candidate
+with d_new<=d_ref<m; Section11's inclusion and concavity argument
+therefore proves(12.1) on every interval interior. No external certificate,
+prime-gap assumption, heuristic extrapolation, or circuit upper bound
+is used. All three explicit coefficients refer to this same evaluator.
+
+The generated-certificate pattern and retained609/50 theorem are credited
+to5ec6176f-1d81-4d1b-98db-aae266b67d76. The present contribution is
+this487/40 theorem with its longer finite cover and exact analytic tail.
+
+## 13. An elementary explicit prime interval, with proof
+
+For every real x>=2^18 there is a prime p with x<p<=5x/4.
+Here is a complete proof, using elementary factorial accounting rather
+than an external explicit prime-gap theorem. The classical Chebyshev
+factorial combination is used; no novelty of that combination is claimed.
+
+Write L(z)=log(floor(z)!) for z>=0 (natural logarithms), and
+psi(z)=sum_(p^j<=z) log p, theta(z)=sum_(p<=z)log p. Put
+
+ T(z)=L(z)-L(z/2)-L(z/3)-L(z/5)+L(z/30),
+ A=(14log2+9log3+5log5)/30.
+
+The elementary factorial estimate
+
+ |L(z)-(z log z-z)|<=1+log^+(z)                       (13.1)
+
+holds also0<=z<1 with0log0=0. For z>=1, integrate the increasing
+function log t between1 and n=floor z to bound log(n!) between
+nlog n-n+1 and nlog n-n+1+log n. The change in zlog z-z between
+n and z is between0 and log z. These bounds imply(13.1).
+For0<=z<1, L=0 and |zlog z-z|<=1. The coefficients of zlog z
+and z cancel in T, so for z>=1,
+
+ |T(z)-Az|<=5(1+log z).                              (13.2)
+
+Legendre's factorial valuation formula, obtained by counting the
+multiples of each prime power, gives
+
+ T(z)=sum_(p^j<=z) log p * M(z/p^j),
+ M(v)=floor v-floor(v/2)-floor(v/3)-floor(v/5)+floor(v/30).
+
+M is30-periodic: its increment is30-15-10-6+1=0. It is constant
+on each interval between consecutive integers, takes only0 and1,
+and equals1 throughout1<=v<6. Checking its30 values proves these
+finite facts; the declared computation repeats that exact floor check.
+It follows that
+
+ psi(z)-psi(z/6)<=T(z)<=psi(z).
+
+Iterating the first inequality until the argument is below1 and using
+(13.2), the geometric series, and at most1+log z nonzero terms gives
+
+ Az-5(1+log z)<=psi(z)
+       <=(6/5)Az+5(1+log z)^2,                       (13.3)
+
+for z>=1. The term count bound uses log6>1. The geometric sum of
+arguments is at most6z/5. No estimate for prime counts is assumed.
+
+We also need theta(z)<4z for z>=1. For completeness, the elementary
+primorial induction gives product_(p<=n)p<=4^n. For n=2m the
+primes m<p<=2m divide binomial(2m,m)<=4^m; multiply by the induction
+hypothesis at m. For n=2m+1, the primes m+1<p<=2m+1 divide
+binomial(2m+1,m)<=4^m; multiply by the induction hypothesis at m+1.
+The latter binomial bound holds at m=1 and its ratio from m to m+1
+is(2m+3)(2m+2)/((m+2)(m+1))<4. Base cases n<=2 are immediate.
+Thus theta(z)<=floor(z)log4<4z. Consequently,
+
+ 0<=psi(z)-theta(z)
+       <=4sqrt(z)+4(log2 z)z^(1/3).                  (13.4)
+
+Indeed separate the exponent j=2, and bound all j>=3 by z^(1/3);
+there are at most log2 z exponents, since p>=2.
+
+Let y=5x/4. Equations(13.3)--(13.4) give
+
+ theta(y)-theta(x)>=Ax/20-E(x),
+ E(x)=5(1+log y)+5(1+log x)^2
+                       +4sqrt(y)+4(log2 y)y^(1/3).
+
+A>9/10. One fully rational way to see this is to use the positive
+series log q=2sum_(j>=0) ((q-1)/(q+1))^(2j+1)/(2j+1): its first
+three terms for q=2 and3 and first five terms for q=5 imply
+(14log2+9log3+5log5)/30>9/10. The declared computation checks the
+rational partial sums. This series follows by integrating the geometric
+series for2/(1-t^2) from0 to(q-1)/(q+1); only lower bounds are used.
+
+At x0=2^18, y0=327680, we have
+
+ log x0<13, log y0<13, log2 y0<19,
+ sqrt(y0)<576, y0^(1/3)<69,
+ E(x0)<70+980+2304+5244=8598<(9/200)x0.
+
+For the logarithm comparisons, log2<7/10 follows from the same series
+and its geometric tail bound; thus log x0=18log2<12.6. Also
+log(5/4)<1/4 by integrating1/t<1 over[1,5/4], so log y0<12.85.
+The other bounds follow by squaring, cubing and y0<2^19.
+Each summand of E(x)/x decreases for x>=x0: direct differentiation
+reduces this to log x>1 and log y>3/2. Both hold since x0>9>e^2;
+for example e<3 follows from its factorial series. Therefore
+E(x)<(9/200)x<Ax/20 for all x>=x0. We obtain theta(5x/4)>theta(x),
+which is possible only if a prime lies in(x,5x/4]. This proves the
+stated prime interval for every real x in the range.
+
+## 14. Universal remainder58/5=11.6 for the same family
+
+For EVERY integer N>=0 the unchanged fixed evaluator satisfies
+
+ L_N<=(58/5)N^(4/5),
+ C_B2(F_N)>=4N-(58/5)N^(4/5).                         (14.1)
+
+For N>=2^30 choose h=ceil((6/5)N^(3/5)), and the least prime k>=h.
+Here h>=2^18, so Section13 implies k<=5h/4. Hence, for
+u=k/N^(3/5),
+
+ 6/5<=u<=3/2+(5/4)N^(-3/5)<150001/100000.
+
+The last inequality uses N^(3/5)>=2^18 and5/(4*2^18)<1/100000.
+Take r=ceil(N/k),t=ceil(sqrt(r)),p=0. All Section10 guards continue
+to hold:1<u<2,N^(1/5)>=64,r>2048, and k>r+1. Its dimension
+bound(10.3) holds with the same functions f and g, now convex on
+[6/5,150001/100000]. Exact endpoint bounds are
+
+ sqrt(6/5)<109545/100000,
+ sqrt(150001/100000)<122475/100000,
+ f(6/5)<25/72+109545/100000<1447/1000,
+ f(150001/100000)<2/9+122475/100000<1447/1000,
+ g(6/5)<25/12+(6/5)(109545/100000)/2<3,
+ g(150001/100000)<5/3+(150001/100000)(122475/100000)/2<3.
+
+Squaring and rational arithmetic verify these bounds; the computation
+repeats them. With delta<=1/4096, convexity and(10.3) give
+
+ d/N^(4/5)<1447/1000+3/4096+3/16777216<29/20.
+
+Thus d<N, the candidate is admissible, and8d-4B-3<(58/5)N^(4/5).
+This proves the analytic tail of(14.1).
+
+The zero option covers0<=N<=205 because20^5*205<=58^5<20^5*206.
+The remaining206,...,2^30-1 has a complete generated6483-row finite
+certificate in audit.py. Its separate verifier checks original sufficient
+dimensions, primality, all guards and coverage, plus the exact predicate
+
+ (5cost(v))^5<=58^5*v^4
+
+at both endpoints of every row. It uses the arithmetic-series identities
+already justified in Section12. The first row starts206, consecutive
+rows meet with no omitted integer, and the last ends2^30-1. The
+concavity/selector-inclusion proof of Sections11--12 transfers those
+endpoint checks to every interior N. Thus the finite middle, zero range,
+and analytic tail prove(14.1). The finite generator is fully supplied,
+with no external data or infinite search-success premise. Earlier
+certificates remain checked and all prior bounds remain true.
+
+This new contribution is the supplied explicit elementary prime-interval
+proof and its use for the58/5 bound. The487/40 theorem and its finite
+certificate pattern are retained from2dc9a80c-6f8b-4734-b3fe-eb28cd9e0d2f.
+Classical provenance of the factorial combination is Chebyshev's method;
+no unfamiliar external result is invoked in place of the proof above.
