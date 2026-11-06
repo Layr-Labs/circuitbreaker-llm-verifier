@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total certificate-prefix language specified in proof.md and family.py. For actual length N, choose k as the least prime at least the least positive B with B^5>4*N^3; read k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2, reject invalid Q by the exact Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial on the remaining N-k bits with zero padding, r=ceil((N-k)/k), t chosen from floor(sqrt(r)) and ceil(sqrt(r)) to minimize the exact integer 8*d_t-4*B_t-1, with ties toward smaller t, d_t and B_t as in proof.md Sections5,12,13. Output 0 for N=0 or the explicit failed guards in proof.md. The output is the constant coefficient in F_2[Z]/Q. All k prefix bits are included in N; Q is input, not advice.",
+  "theorem": "This fixed total language is in P, hence in NP with empty witnesses. For every sufficiently large integer N=|x| in the full pinned B2 model, C_B2(F_N)>=4*N-L, where L=4*k+8*d_N-4*B_deg-1, B_deg=t*(t+3)/2, and the parameters and sharp dimension are defined in proof.md. The fixed-prefix payload, not the whole prefix language, has algebraic degree at least B_deg on every d_N-dimensional affine subspace. The generic degree-sensitive finite gate theorem gives4*m-8*d+min(5*B-1,4*B+1) for1<=B<=d under that hypothesis. This improves the supplied preceding same-family +4 ledger lower bound by4*B_deg-3 gates eventually. L/N^(4/5)->10*2^(1/5), so C_B2(F_N)>=4*N-(10*2^(1/5)+o(1))*N^(4/5) and liminf C_B2(F_N)/N>=4. At fixed current parameters the supplied original/base threshold comparison has loss ratio tending to1/2; the sharper loss retains that limit. Relative to the explicitly supplied two-stage degree reference k_pre in proof.md Section9.1, L/L_pre has limit strictly below19/20. Among degree rules with k/N^(3/5)->a in(0,infinity), the supplied leading certificate expression8*(sqrt(a)+1/(2*a^2)) is uniquely minimized at a=2^(2/5); this is not optimality of actual circuit complexities or other constructions. The fully specified upward-order reference F_up in proof.md Section13 always uses ceil(sqrt(r)) with the same degree rule and earlier degree-gate certificate. The current complete loss satisfies L<=L_up at every sufficiently large integer length. Infinitely many actual lengths have r=u^2+1 tending to infinity; on those lengths eventually L_up-L=8*k-12*u-16 and (L_up-L)/k tends to8. This is a comparison of complete certified losses for DIFFERENT fixed languages, not actual minimum circuit sizes; no strict saving at every length is claimed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
