@@ -1,90 +1,205 @@
-# Published coefficient 31/10: construction and proof
+# Coefficient 4 for one uniform certificate-prefix family
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## Result and provenance
 
-## Fixed total family
+We prove that the single total language F defined below satisfies, at its
+actual input length N,
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+    C_B2(F_N) >= 4N - R(N),       R(N)=O(N^(4/5)).
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+Thus its complete finite projection is (4,1). This is an application of
+published mathematics, not a claim to have discovered a new circuit lower
+bound. The gate-elimination argument is Mishra--Santhanam, ECCC TR26-260,
+Revision 1, November 3, 2026, Sections 2--4 and Theorem 4.1. Their newer
+4n-10d theorem is deliberately distinguished from the original report's
+3.5n-7d statement; only Revision 1 is used for the coefficient 4.
 
-## Uniform P and NP membership
+The hard function is a certificate-prefix wrapper around the descending-power
+Ben-Sasson--Kopparty (BK) symmetric-polynomial construction. The complete
+algebraic disperser argument is supplied in `disperser.md`, and the complete
+gate argument in `elimination.md`. The prefix wrapper makes the field
+polynomial part of the input rather than nonuniform advice and charges all of
+its bits. The whole function is not asserted to be an affine disperser; only
+an explicitly fixed valid-prefix restriction is.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+## 1. Definition at every input length
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Bits are indexed in their written order, and the first bit of each field block
+is its constant coefficient. On an input x of length N, the fixed evaluator A
+performs the following steps.
 
-## Every integer length and the lower bound
+1. If N=0, return 0. Otherwise compute, by integer binary search, the least
+   positive integer B with B^5>32N^3. Let k be the least prime at least B,
+   found by incrementing and trial division.
+2. If k>=N, return 0. Otherwise set m=N-k, r=ceil(m/k), and
+   t=ceil(sqrt(r)). If t>=r or kt<r(r+1), return 0.
+3. Read the first k bits b_0,...,b_(k-1) and form the monic polynomial
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+       Q(Z)=Z^k+sum_(j=0)^(k-1)b_j Z^j over F_2.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+   Test both Z^(2^k)=Z (mod Q) and gcd(Q,Z^2+Z)=1. Return 0 if either
+   fails. These computations use repeated squaring and polynomial Euclid.
+4. Let K=F_2[Z]/(Q), represented in the basis 1,Z,...,Z^(k-1). Append
+   rk-m zero bits to the remaining m input bits, split the result into r
+   blocks of k bits, and let a_1,...,a_r in K be their images. This is an
+   injective F_2-linear embedding of the payload.
+5. For 1<=i<=r put w_i=r+2-i and
 
-## Conservative remainder, with source discrepancy retained
+       y_i=a_i^(2^(w_i)-1).
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+   Return the constant coefficient of the elementary symmetric polynomial
+   of order t in y_1,...,y_r, taking the representative of degree below k.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+Evaluate the symmetric polynomial without division in characteristic two.
+Initialize E_0=1 and E_1=...=E_t=0. After reading y_i, update
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+    E_j <- E_j+y_i E_(j-1)
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+in decreasing order j=min(i,t),...,1. Splitting t-subsets according to
+whether they contain i proves the recurrence; the answer is the constant
+coefficient of E_t. Binary exponentiation computes each y_i. Consequently
+`family.py` is only an executable restatement of this definition, not an extra
+source of choices.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Every length and every bit string is covered, including invalid prefixes and
+small or otherwise guarded lengths. Q is read from x, never supplied as
+per-length advice.
 
-## Exact arithmetic and the unchanged LP
+## 2. The prefix test is exact and a valid prefix exists
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+Work in an algebraic closure of F_2. The polynomial Z^(2^k)-Z is squarefree,
+since its derivative is 1. Its roots are closed under addition,
+multiplication, and nonzero inversion, so they form a field of size 2^k.
+Frobenius z->z^2 permutes this field. The product of the linear factors in a
+Frobenius orbit is fixed by Frobenius and hence lies in F_2[Z]. A proper
+factor over F_2 would select a proper invariant subset of the orbit, so this
+orbit polynomial is irreducible. Conversely, the roots of an irreducible
+factor form one orbit.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+Every irreducible factor degree therefore divides the orbit length k. For
+prime k, the only possibilities are 1 and k. The fixed points are exactly 0
+and 1, while there are 2^k>2 roots. Hence an irreducible degree-k polynomial
+exists for every prime k.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+The first test says that Q divides the squarefree polynomial Z^(2^k)-Z.
+The second excludes its factors Z and Z+1. All remaining irreducible factors
+have degree k. As Q itself has degree k, these tests hold exactly when Q is
+irreducible. In particular, some input prefix passes at each length for which
+the other guards pass; no algorithm for finding that prefix is needed by the
+uniform evaluator or the lower-bound argument.
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+## 3. One polynomial-time evaluator and empty-witness NP verifier
 
-## Sources
+By definition of B, B^5>32N^3, hence B>2N^(3/5). The previous integer has
+fifth power at most 32N^3, giving B<=2N^(3/5)+1. Bertrand's postulate gives
+k<2B. Therefore
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+    2N^(3/5)<k<4N^(3/5)+2.
+
+The prime search and trial division are polynomial in the input length. So
+are binary search, polynomial Euclid, repeated field squaring, schoolbook
+field multiplication, and the O(rt) symmetric-polynomial recurrence. The
+exponents have bit length O(r), and a coarse polynomial bound covering all
+accepted and rejected inputs is immediate; the exact exponent is irrelevant.
+
+Let L={x:A(x)=1}. Define the witness bound W(N)=0 and the fixed verifier
+V(x,w)=1 exactly when w is empty and A(x)=1. If x is in L, its empty witness
+is accepted. Conversely, every accepted permitted witness certifies A(x)=1,
+so x is in L. This proves both directions and L in P, hence NP. Witness bits
+are not circuit inputs, and circuits remain unrestricted nonuniform full-B2
+circuits.
+
+## 4. All sufficiently large lengths pass the guards
+
+The estimates for k imply
+
+    m=N-k=Theta(N),   r=Theta(N^(2/5)),   t=Theta(N^(1/5)).
+
+Consequently k<N and t<r eventually. For the last guard, use
+r<N/k+1<(1/2)N^(2/5)+1 and t>=sqrt(r). Then
+
+    r(r+1)/t <= sqrt(r)(r+1)
+              <= sqrt((1/2)N^(2/5)+1)*((1/2)N^(2/5)+2).
+
+Dividing this expression by N^(3/5) gives limit 1/(2*sqrt(2)), whereas
+k/N^(3/5)>2. Thus kt>=r(r+1) eventually. These limits range over every
+sufficiently large integer N, not over a sparse subsequence.
+
+## 5. Hard prefix restriction and exact input-length accounting
+
+For each sufficiently large N, fix any irreducible degree-k polynomial Q and
+fix the first k circuit inputs to its low coefficients. Such Q exists by
+Section 2. The restricted function G_Q has m=N-k actual input bits. Define
+
+    d_N=floor(kr/t)+kt+r(r+1)+1.
+
+For prime k, 1<=t<r, and kt>=r(r+1), `disperser.md` proves that
+
+    (a_i) -> pi(sum_(|I|=t) product_(i in I) a_i^(2^(r+2-i)-1))
+
+is nonconstant on every affine subspace of K^r whose dimension is strictly
+greater than kr/t+kt+r(r+1), for every nonzero F_2-linear functional pi.
+Our pi is the constant coefficient, which is nonzero because pi(1)=1. The
+zero-padded payload embedding is injective and linear, so G_Q is an affine
+disperser for dimension d_N on its m input bits. Padding is part of this
+embedding and adds no circuit inputs.
+
+The growth estimates above give
+
+    kr=O(N),   kt=O(N^(4/5)),   r(r+1)=O(N^(4/5)),
+
+and also kr/t=O(N^(4/5)); hence d_N=O(N^(4/5)). We use this explicit BK
+dimension rather than assuming any later logarithmic-dimension construction.
+
+Fixing inputs of any full-B2 circuit for F_N yields a full-B2 circuit for G_Q
+with no additional gates. `elimination.md` proves the size bound
+
+    |C| >= 4m-10d
+
+for every affine disperser of dimension d on its m input bits, including
+arbitrary sharing, repeated pins, constants, degenerate tables, and terminal
+outputs. Applying it to the restricted circuit, or its no-larger normalized
+form, yields
+
+    C_B2(F_N) >= 4(N-k)-10d_N = 4N-R(N),
+    R(N)=4k+10d_N=O(N^(4/5)).
+
+The lower bound fixes Q only to exhibit a restriction that every circuit for
+F_N must compute. It is not advice to A, which reads and tests every prefix.
+
+For any epsilon>0, choose N_epsilon beyond the eventual guard threshold and
+large enough that R(N)/N<=epsilon for all N>=N_epsilon; this is possible
+because N^(4/5)/N tends to zero. Then C_B2(F_N)>=(4-epsilon)N for every such
+integer N. This proves the declared liminf guarantee and the joint pair
+(4,1) for this one language and one theorem.
+
+## 6. Evidence boundary and source identity
+
+`elimination.md` reproduces the required affine-system invariant, all four
+parameter operations, all deletions, all five cases, the terminal-output
+argument, termination, and the final potential summation. `disperser.md`
+reproduces the coefficient-isolation, block-decomposition, and block-mixing
+arguments. `audit.py` checks only bounded Boolean, rational, prefix, and
+executable-family predicates; it is not a substitute for either universal
+proof. No checker result, earlier judgment, leaderboard row, or retrieved
+review is a mathematical premise.
+
+Sources used for the stated theorem:
+
+* Om Swostik Mishra and Rahul Santhanam, *An Explicit 4n-O(log(n)) Size Lower
+  Bound against General Boolean Circuits*, ECCC TR26-260, **Revision 1**,
+  2026-11-03, Sections 2--4, Lemma 2.2, Lemma 4.2, and Theorem 4.1.
+  https://eccc.weizmann.ac.il/report/2026/260/revision/1/download/
+  SHA256 a123943ed05c9569385d3b9d98c695630a110559f33a4c990ec44e2a22b4d921.
+  The original 2026-10-19 PDF and its 3.5 result are not used for this bound.
+* Eli Ben-Sasson and Swastik Kopparty, *Affine Dispersers from Subspace
+  Polynomials*, author version 2010-03-12, Lemmas 3.7, 3.10, 3.13, Theorem
+  6.1, Lemma 7.2, Theorem 7.3, and Claim 7.4. The needed arguments are
+  specialized and supplied in `disperser.md`.
+  https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf
+  SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf.
+* Jiatu Li and Tianqi Yang, ECCC TR21-023, 2021-02-20, Sections 1.1, 2.1,
+  2.4 (including footnotes 3--4), and 3.3, only for the protected full-B2
+  normalization conventions. Their 3.1 lower-bound case analysis is not used.
+  https://eccc.weizmann.ac.il/report/2021/023/download/
+  SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062.
