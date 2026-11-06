@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total deterministic P family family.evaluate in proof.md. At actual N>=2 set n=N, L=ceil(log2 N), B=ceil(log2(L+1)), U=ceil(L^(3/4)), E=2^24*U*ceil(sqrt B), Kmin=2^ceil(E/2), k=Kmin^2, t=2^(ceil(L^(1/4))*ceil(sqrt B)), q=ceil(sqrt L), Pmax=2^U. Use the supplied seed-aware SU-style linear strong extractor, affine block-source reduction and challenge-response tree on exact intervals[floor(i*N/t^j),floor((i+1)*N/t^j)). All field/Singer-cycle constructions, integer guards and total fallback0 are explicit. Every input bit is charged, without outer padding, ignored target bits, advice, program prefix or field input.",
+  "theorem": "For this ONE fixed total uniform P language, hence NP with empty witnesses, there exists N0 such that for EVERY integer N>=N0, C_B2(F_N)>=4N-8*2^(2ceil(2^24*ceil((ceil(log2 N))^(3/4))*ceil(sqrt(ceil(log2(ceil(log2 N)+1))))/2))+4. The loss is2^((2^24+o(1))*(log2 N)^(3/4)*sqrt(log2(log2 N)))=N^o(1). For this SAME fixed family, for EVERY fixed real epsilon>0 there exists N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Thus liminf over ALL integer N of C_B2(F_N)/N>=4. Complete supplied proofs establish the deterministic fields, Singer-cycle construction, seed-aware linear strong extractor with logarithmic seed at subpolynomial entropy, small-error transfer extractor, cubic extractor, affine row/block-source extraction, recursive tree dispersion and unrestricted full-B2 transfer at actual length. No explicit threshold, practical asymptotically large evaluator time, literature record, prior verdict or external retrieval premise is claimed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
