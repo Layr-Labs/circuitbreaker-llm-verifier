@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total deterministic-field family defined by proof.md and family.py. At actual length N enumerate primes2<=k<=N, r=ceil(N/k) and r-1 with r>=3,k>r+1, m=min(N,rk), ignored p=N-m, and2<=t<r. Use d=H+E0+1 from disperser.md Sections12--13, B=t(t+3)/2<=d<m, and choose the minimum(4p+8d-4B-3,k,t,p) including the zero option(4N,0,0,0). Construct Q_k by the supplied deterministic prime-degree specialization of Shoup in proof.md Appendix A and irreducible_prime(k), ignore p actual input bits, and evaluate the descending-power order-t symmetric polynomial on the remaining m bits over F2[Z]/Q_k with zero padding. No field-polynomial bits or advice are inputs.",
+  "theorem": "This ONE fixed total deterministic-field language is in uniform P, hence NP with empty witnesses. The complete prime-degree field construction is supplied in proof.md Appendix A. PRIME-DEGREE coefficient isolation/zero-deficit selection and full-B2 elimination establish C_B2(F_N)>=4N-L_N at EVERY actual integer N>=0 for the exact selector in family.py. Sections8--10 prove L_N<=(574443/50000)N^(4/5) for EVERY integer N>=0, and L_N<(574443/50000)N^(4/5)-3N^(3/5) for EVERY integer N>=2^30. Thus C_B2(F_N)>=4N-(574443/50000)N^(4/5)+3N^(3/5) at every integer N>=2^30. The universal nearest-integer square-root estimate saves k/3 in the original sufficient threshold. The retained nu8kernel(all30030cells) and two supplied rational kernels(all720720cells each and tails) prove simultaneous explicit17/20-power-error psi bounds and a prime in(x,(648/625)x] for EVERY real x>=2^180. Full coverage uses zero0..195,6484checked intervals196..2^30-1,4102independently certified primes covering EVERY real h in2^18..2^181 for the ENTIRE middle2^30<=N<2^300, and analytic tailN>=2^300. Every emitted prime has independent trial division or a supplied proved Proth witness. Universal transfers are supplied proofs, not sample extrapolation. Consequently for every epsilon>0 and all sufficiently large integer N, C_B2(F_N)>=(4-epsilon)N. The four six-entry tuples compare numeric certified losses only. No prior verdict, floating-point optimum or unsupported nonstandard external theorem is a premise.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
