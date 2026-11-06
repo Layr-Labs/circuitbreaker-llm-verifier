@@ -1,32 +1,58 @@
 {
-  "version": "circuitbreaker-expression-v1",
+  "version": "circuitbreaker-expression-v2",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "Fixed total uniform NP family;L=floor(log2n),S=floor(L/(1289241750833685114036041/7516194560000000000000));taglengthpS>=2L with fulltwoLbitblockcoverage,p>3Q; fractionalbeta2886/7,actualevenvertexs=2ceil(betaS/2),delta_v=s-betaS;walkrF=S+8lg(s+1),q=7beta/2-8,actualrowlength3m=pS+48q*lg(s+1)+3delta_v,endpoint9m/16-8,native/baseerror2^-rF; same actual four-row AB+C map with direct set-to-incidence support proof finiteendpoint9m/16-8,mguard134217728,complete polynomial multiplicity/incidence lemmas;five-round8-labelantichainMC14copy known-A89h77a76eps atmost2copies/otherlabel,all15originalseedsretained;PXT7gMC9/9/2/2,NB21/6,outer14/16/6+AGHP,ceil(Aw)withchargedceilings,cap128;CZfinite(92+2^-20)eta,eta268435456/1975781445633,theta268435456/13830470119431;walkbeta2886/7,M22976/7,q1435,p68928/7,C5744,t22975;base21levelswithordered21ratevector16outer+4nearleaf+last,BV1/BV4directproof,rate2^22,floor/nativefullB2/all-lengthPNP,outer seed coefficient 1298484670;H10342434697908336.",
+  "theorem": "For every sufficiently large integer actual n,one fixed total eligible uniform NP family has unrestricted full-B2 complexity>=4n-Klog2n,ZEROadditive remainder,K=41369738791633344;jointprojection(4,1).",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "kind": "polynomial_log",
+      "coefficient": {
+        "numerator": "4",
+        "denominator": "1"
+      },
+      "exponent": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "explicit",
+      "terms": [
+        {
+          "coefficient": {
+            "numerator": "41369738791633344",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "log_exponent": {
+            "numerator": "1",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        }
+      ]
     }
   },
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
