@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total deterministic P family family.evaluate in proof.md. At actual N>=2 use n=N, Kmin=ceil(N^(1/100)), k=Kmin^2, and the supplied extractor/challenge-response tree on intervals[floor(i*N/t^j),floor((i+1)*N/t^j)). Unequal child lengths partition actual inputs exactly. All source/extractor parameters, fields, integer roots, numerical fallback0 and tree choices are specified by code and supplied proofs. No outer input padding, ignored target bits, program prefix, field input, advice or witness is used.",
+  "theorem": "For this ONE fixed total uniform P language, hence NP with empty witnesses, there exists N0 such that for EVERY integer N>=N0, C_B2(F_N)>=4N-8*ceil(N^(1/100))^2+4, hence C_B2(F_N)>=4N-8*N^(1/50)-16*N^(1/100)-4. In particular C_B2(F_N)>=4N-9*N^(1/50) eventually. Thus liminf over ALL integer N of C_B2(F_N)/N>=4. Supplied arguments prove deterministic prime-degree fields, a trace-cubic extractor, linear strong seeded extraction at a fixed polynomial entropy exponent1/100, affine row and block-source extraction, the recursive tree disperser at threshold ceil(N^(1/100))^2, and unrestricted full-B2 transfer at actual length N. All input bits are charged. No explicit N0, practical asymptotically large evaluation time or literature record is claimed; no prior verdict or external retrieval is a proof premise.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
