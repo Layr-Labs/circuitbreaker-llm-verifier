@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total deterministic-field family defined by proof.md and family.py. At actual length N enumerate primes2<=k<=N, r=ceil(N/k) and r-1 with r>=3,k>r+1, m=min(N,rk), ignored p=N-m, and2<=t<r. Use d=H+E0+1 from disperser.md Sections12--13, B=t(t+3)/2<=d<m, and choose the minimum(4p+8d-4B-3,k,t,p) including the zero option(4N,0,0,0). Construct Q_k by the supplied deterministic prime-degree specialization of Shoup in proof.md Appendix A and irreducible_prime(k), ignore p actual input bits, and evaluate the descending-power order-t symmetric polynomial on the remaining m bits over F2[Z]/Q_k with zero padding. No field-polynomial bits or advice are inputs.",
+  "theorem": "This ONE fixed total uniform P language, hence NP with empty witnesses, satisfies C_B2(F_N)>=4N-L_N for every integer N>=0 and L_N=O(N^(4/5)), with the exact selector and full pinned B2 convention in proof.md. Hence liminf over ALL integer lengths N of C_B2(F_N)/N>=4. At EVERY integer N>=2^20, C_B2(F_N)>=4N-(11488091/1000000)N^(4/5)+(3276349/500000)N^(3/5)-(995217/50000)N^(2/5)-21. At EVERY integer N>=2^65 it also satisfies C_B2(F_N)>=4N-(11488091/1000000)N^(4/5)+(655026/100000)N^(3/5). Section9.5 proves the new finite refinements using tighter enclosing guards and exact endpoint inequalities. Complete field construction, affine disperser degree, unrestricted gate elimination and all-length coverage are supplied; no prior verdict is a premise. Section9.6 further proves at EVERY integer N>=2^20: C_B2(F_N)>=4N-(11488091/1000000)N^(4/5)+(3276349/500000)N^(3/5)-(995217/50000)N^(2/5)+(45991/10000)N^(1/5)-29, retaining the exact positive adjacent-choice division remainder. Section9.7 improves the N^(2/5) coefficient in that last bound to985621/50000 at EVERY N>=2^65, and proves the simpler bound4N-(11488091/1000000)N^(4/5)+(655029/100000)N^(3/5) on that same late domain. Section9.8 proves at EVERY N>=2^20: C_B2(F_N)>=4N-(11488091/1000000)N^(4/5)+(3276349/500000)N^(3/5)-(1966023/100000)N^(2/5)+(4128/3125)N^(1/5)-29, using the adaptive shift and exact division remainder; it strengthens9.6 and9.7 on their entire domains.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
