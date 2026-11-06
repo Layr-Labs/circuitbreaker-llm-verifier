@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total deterministic-field family defined by proof.md and family.py. At actual length N enumerate primes2<=k<=N, r=ceil(N/k) and r-1 with r>=3,k>r+1, m=min(N,rk), ignored p=N-m, and2<=t<r. Use d=H+E0+1 from disperser.md Sections12--13, B=t(t+3)/2<=d<m, and choose the minimum(4p+8d-4B-3,k,t,p) including the zero option(4N,0,0,0). Construct Q_k by the supplied deterministic prime-degree specialization of Shoup in field.md and irreducible_prime(k), ignore p actual input bits, and evaluate the descending-power order-t symmetric polynomial on the remaining m bits over F2[Z]/Q_k with zero padding. No field-polynomial bits or advice are inputs.",
+  "theorem": "This one fixed total deterministic-field family is in uniform P, hence NP with empty witnesses. The complete prime-degree constructor, coefficient isolation/degree theorem, zero-deficit threshold and full-B2 elimination are supplied in field.md, disperser.md and elimination.md. They give C_B2(F_N)>=4N-L_N at EVERY actual integer N>=0, where family.py exactly minimizes the declared loss including zero and both prefix counts. All selected fields have PRIME degree. Uniform prime construction is polynomial time and uses no external oracle. The four finite comparison tuples concern numeric certified losses only. The supplied all-length proofs show L_N=o(N), hence for every epsilon>0 and EVERY sufficiently large integer N, C_B2(F_N)>=(4-epsilon)N. Stronger explicit bounds for EVERY integer N>=0 are C_B2(F_N)>=4N-C*N^(4/5), for C=25/2 (Sections8--9),609/50 (Sections10--11) and487/40 (Section12). Their zero ranges, analytic tails, supplied finite certificates and concavity/selector-inclusion proofs completely cover all lengths. Declared computations reproduce the finite predicates, not the infinite mathematical premises. No sharp-constant theorem, prior acceptance or accepted-results catalog supplies a premise. Further, C_B2(F_N)>=4N-(58/5)N^(4/5) for EVERY integer N>=0 for the SAME fixed family. proof.md Sections13--14 supply a self-contained elementary prime interval proof for x>=2^18, an analytic tail N>=2^30, a reproduced6483-row finite cover of206..2^30-1 with endpoint/concavity transfer, and the zero option at0..205.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
