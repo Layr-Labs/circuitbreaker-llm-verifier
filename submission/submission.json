@@ -1,40 +1,40 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Tight inclusive NB slots and an exact retuned base",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. Let L(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee.leading. Let R(n) be the sum of the monomials in guarantee.remainder.terms, each coefficient times n^exponent*(log2 n)^log_exponent*(log2 log2 n)^loglog_exponent; an empty sum is zero. There exists N such that C_B2(f_n)>=L(n)-R(n) for every integer n>=N. All remainder coefficients are the exact declared constants. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"Fixed total uniform NP family;L=floor(log2n),S=floor(L/(10561510975580033054902333/61572665835520000000000));taglengthpS>=2L with fulltwoLbitblockcoverage,p>3Q; fractionalbeta2886/7,actualevenvertexs=2ceil(betaS/2),delta_v=s-betaS;walkrF=S+8lg(s+1),q=7beta/2-8,actualrowlength3m=pS+48q*lg(s+1)+3delta_v,endpoint9m/16-8,native/baseerror2^-rF; same actual four-row AB+C map with direct set-to-incidence support proof finiteendpoint9m/16-8,mguard134217728,complete polynomial multiplicity/incidence lemmas;five-round8-labelantichainMC14copy known-A89h77a76eps atmost2copies/otherlabel,all15originalseedsretained;PXT7gMC9/9/2/2,NB21/6,outer14/16/6+AGHP,ceil(Aw)withchargedceilings,cap128;CZfinite(92+2^-20)eta,eta268435456/1975781445633,theta268435456/13830470119431;walkbeta2886/7,M22976/7,q1435,p68928/7,C5744,t22975;baseAllowance2^-30;outerAllowance2^-20;base21levelswithordered21ratevector16outer+4nearleaf+last,BV1/BV4directproof,rate2^22,floor/nativefullB2/all-lengthPNP,tightinclusiveNBslots17287/899874044/outerk19050665372;retuned21rates;outer seed coefficient 1298461693;H10342210358304769.\",\"guarantee\":{\"kind\":\"eventual_lower_bound\",\"leading\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"remainder\":{\"kind\":\"explicit\",\"terms\":[{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"41368841433219076\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}}]}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For every sufficiently large integer actual n,one fixed total eligible uniform NP family has unrestricted full-B2 complexity>=4n-Klog2n,ZEROadditive remainder,K=41368841433219076;jointprojection(4,1).\",\"version\":\"circuitbreaker-expression-v2\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "affine-and-standard-wrappers.md",
         "bound.json",
-        "proof.md"
+        "linear-and-bilinear-primitives.md",
+        "proof.md",
+        "restricted-nonmalleability-and-breaking.md",
+        "sampler-and-disperser.md",
+        "sum-product-and-ordinary-condensation.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. Let L(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee.leading. Let R(n) be the sum of the monomials in guarantee.remainder.terms, each coefficient times n^exponent*(log2 n)^log_exponent*(log2 log2 n)^loglog_exponent; an empty sum is zero. There exists N such that C_B2(f_n)>=L(n)-R(n) for every integer n>=N. All remainder coefficients are the exact declared constants. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"Fixed total uniform NP family;L=floor(log2n),S=floor(L/(10561510975580033054902333/61572665835520000000000));taglengthpS>=2L with fulltwoLbitblockcoverage,p>3Q; fractionalbeta2886/7,actualevenvertexs=2ceil(betaS/2),delta_v=s-betaS;walkrF=S+8lg(s+1),q=7beta/2-8,actualrowlength3m=pS+48q*lg(s+1)+3delta_v,endpoint9m/16-8,native/baseerror2^-rF; same actual four-row AB+C map with direct set-to-incidence support proof finiteendpoint9m/16-8,mguard134217728,complete polynomial multiplicity/incidence lemmas;five-round8-labelantichainMC14copy known-A89h77a76eps atmost2copies/otherlabel,all15originalseedsretained;PXT7gMC9/9/2/2,NB21/6,outer14/16/6+AGHP,ceil(Aw)withchargedceilings,cap128;CZfinite(92+2^-20)eta,eta268435456/1975781445633,theta268435456/13830470119431;walkbeta2886/7,M22976/7,q1435,p68928/7,C5744,t22975;baseAllowance2^-30;outerAllowance2^-20;base21levelswithordered21ratevector16outer+4nearleaf+last,BV1/BV4directproof,rate2^22,floor/nativefullB2/all-lengthPNP,tightinclusiveNBslots17287/899874044/outerk19050665372;retuned21rates;outer seed coefficient 1298461693;H10342210358304769.\",\"guarantee\":{\"kind\":\"eventual_lower_bound\",\"leading\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"remainder\":{\"kind\":\"explicit\",\"terms\":[{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"41368841433219076\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}}]}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For every sufficiently large integer actual n,one fixed total eligible uniform NP family has unrestricted full-B2 complexity>=4n-Klog2n,ZEROadditive remainder,K=41368841433219076;jointprojection(4,1).\",\"version\":\"circuitbreaker-expression-v2\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "affine-and-standard-wrappers.md",
         "bound.json",
-        "proof.md"
+        "linear-and-bilinear-primitives.md",
+        "proof.md",
+        "restricted-nonmalleability-and-breaking.md",
+        "sampler-and-disperser.md",
+        "sum-product-and-ordinary-condensation.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": [],
+  "experiments": []
 }
