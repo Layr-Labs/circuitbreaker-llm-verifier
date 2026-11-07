@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "One fixed total P language F_N=family.evaluate on all actual N bits,NP with empty witnesses. L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)). If13Z>floor(log2 N),output0. Otherwise enumerate BASE then the seven-coordinate rational grid with denominators<=B in family.py,using its exact compact ranges and analytic_prefilter. Coordinates(h,a,wm,w0,X,p,D) specify local rational rates clamp(aZ/W_j,3/20,13/25),height and arity multiplier h,declining W_j=max(ceil(wmZ),ceil(w0Z)-ceil(.25001jB)),active spacing ceil(XZ),matrix width2^ceil(pZ) and dimension2^ceil(DZ). All local SU/helper/row/block constructors and context bounds are explicit in family.py and extractors.md;Q,hfield^degree<=(n+1)^6. The exact parameters_for_config retains primitive,tuple-row,confidence and interval guards,requires ell*P<=N,dimension<=N,Amax<gap. finite_certificate additionally checks all integer geometry and exact dyadic block-error/output-event inequalities supplied in proof.md. Select an accepted tuple with smallest integer dimension;ties retain first enumerated. No accepted tuple means output0 and d_N=N+1;otherwise d_N is its dimension and the specified tree challenge-response evaluator returns the output bit. BASE compatibility functions serve the scoped component audit only. Parameters depend solely on actual length,without advice,epsilon,witness,oracle,ignored input bits or target padding. Complete field,prime,cubic,strong extractor,interleaved source and full-B2 proofs are supplied. H is the last planned active level; no entropy-based terminal-leaf criterion is used. SU threshold uses2^30;field_cap(beta)=2,3,4,5,6 on successive bins ending.19,.3,.4,.48,.52;accepted Q,hfield^degree<=(n+1)^field_cap(beta).",
+  "theorem": "For this SAME fixed total uniform P language and every integer N>=0,C_B2(F_N)>=4N-8d_N+4,where d_N is defined by the exact public controller in family.py. Let S be the rational set defined by the compact ranges,strict analytic_prefilter and existence of a finite increasing-potential box certificate greater than1,exactly as specified and proved in proof.md;let Cstar=inf{D:(h,a,wm,w0,X,p,D) in S}. Then limsup over all integer N of log2(d_N)/Z<=Cstar<=8821/2000=4.4105. In particular there is N0 such that for EVERY integer N>=N0,C_B2(F_N)>=4N-8*2^ceil(88211Z/20000)+4. For this SAME family,for EVERY fixed real epsilon>0 there is N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Thus liminf C_B2(F_N)/N>=4 at actual length in the unrestricted pinned full-B2 model. The program and its fixed polynomial time exponent do not depend on epsilon or on a chosen feasible tuple. Safety is proved by finite certificates,while eventual acceptance is proved separately for each fixed feasible tuple before taking the infimum;no unproved uniform threshold over shrinking grid margins is assumed. All input bits,ranks,context sizes,searches and exact rational arithmetic are charged. No explicit threshold,numerical optimality,literature record,practical accepted full-tree execution or prior judgment is claimed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
