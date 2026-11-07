@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "Fixed total P family family.evaluate on actual N bits, full definition in proof.md. L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)),base=ceil(L^(1/4))*ceil(B^(3/4)),k=2^(13Z). Wmin=ceil(191Z/50),Wmax=ceil(4589Z/1000),W_j=max(Wmin,Wmax-ceil(25001jB/100000)),K_j=2^W_j,Lpad=ceil(Wmax^(20/19)). V0=0,n_j=max(ceil(N/2^V_j),2^Lpad),Lj=ceil(log2 n_j),DISTINCT Lc_j=ceil(log2(n_j+1)). A_j=max(1,floor(31W_jbaseL/(800ZLj)));append V_(j+1)=V_j+A_j iff<=floor(log2 N). t_j=2^A_j. Active levels first cross multiples X=ceil(1587Z/500);last leaf H has floor(N/2^V_H)^1000>=k. Guard1000(X+Amax)<=3175Z. ell=2^(ceil(sqrt L)*ceil(sqrt B)),P=2^ceil(3151Z/5000). Actual intervals partition exactly; injective component prefix padding only. SU at(n_j,K_j):degreeceil147059Lc_j/(50000floor(log2 K_j)),outputK_j^(33/50),fullseedguard109559Lj/12500,fieldQ,h^d<=(n_j+1)^12. Groupg=floor(K_j^(17/50)),slice=floor(K_j^(659999/1000000)),raw source retained;rank(2g+ceil(log2 g))*slice<=floor(K_j/4). Precision164999/1000000,helperm=r^(999999/1000000),designseedexponent2000001/1000000,near seed329999164999/1000000000000,finalBEerrorK_j^(8249949/50000000). Sum_j binom(t_j,b_j)<=ell. Same local E_j for every confidence of a node; differing K_j/maps across depths. Unitceil(log2 ell/2000000),p1=2^(4000002(Hprime-u)unit),p2=p1*2^(2000001unit). Discrete potential depth<=(769/250)L^(3/4)/B^(3/4),ordinarycost.7691Z; interleaved left-sibling forcing preserves per-node entropy above K_j. dstar=2^ceil(1553Z/200). Complete fields/extraction/source/confidence/full-B2 proofs supplied. Numerical fallback0,empty NP witness;no advice,oracle,target padding or ignored bits.",
+  "theorem": "For this ONE fixed total uniform P language, hence NP with empty witnesses, there exists N0 such that for EVERY integer N>=N0, C_B2(F_N)>=4N-8*2^ceil(1553Z/200)+4, where L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)). The loss is2^((1553/200+o(1))*(log2 N)^(3/4)*(log2(log2 N))^(1/4)). For this SAME fixed family, for EVERY fixed real epsilon>0 there exists N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Thus liminf C_B2(F_N)/N>=4 over ALL integer lengths. Complete supplied arguments prove deterministic fields/Singer construction, seed-aware SU strong extraction, precision164999/1000000 transfer extraction, affine row/block-source reduction with errorK^(8249949/50000000), adaptive-entropy independent-gap tree dispersion with interleaved source restrictions and unrestricted full-B2 transfer at actual length. All input bits and affine deficiencies are charged. No explicit threshold, practical full asymptotic evaluation, literature record, prior verdict or external retrieval premise is claimed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
