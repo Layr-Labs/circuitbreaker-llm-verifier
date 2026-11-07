@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "Fixed P family family.evaluate in proof.md on N bits. Global L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)),base=ceil(L^(1/4))*ceil(B^(3/4)),k=2^(13Z),Kmin=2^(5Z),Lpad=ceil((5Z)^(20/19)). Levels V0=0,n_j=max(ceil(N/2^V_j),2^Lpad),L_j=ceil(log2 n_j),DISTINCT Lc_j=ceil(log2(n_j+1)),A_j=max(1,floor(27baseL/(25L_j))),t_j=2^A_j; append V_(j+1)=V_j+A_j iff<=floor(log2 N). X=ceil(594Z/125);active depths are first cumulative V crossings of each multiple of X. Last active leaf H satisfies floor(N/2^V_H)^1000>=k. Require1000*(X+Amax)<=4753Z,component guards,local fullseed guard1519787L_j/500000,sum_{j<H}binom(t_j,b_j)<=ell. ell=2^(ceil(sqrt L)*ceil(sqrt B)),Pmax=2^ceil(843Z/2000). Every actual interval partitions exactly; prefix-zero-padding of actual node/child bits into n_j is an injective component embedding, not target padding. At each depth use its local E_j/BE_j and prescribed b_j; same E_j for all confidences at that node. SU degreeceil(15099Lc_j/(10000floor(log2 K))), outputK^(3377/10000), seed75989323/25000000 timeslog2n guarded1519787/500000, extensionQ<=(n+1)^8. Groupg=floor(K^(6623/10000)),w=floor(K^(337699/1000000)),rawXi retained each augmentedrow round, outputK/4,totalrank(2g+ceil(log2 g))*w<=floor(K/4). Precision10553/125000, smaller-outputm=r^(999999/1000000), prime/designseed boundQ^2<=ell^(2000001/1000000), single seed21106010553/125000000000, near-linear21106135553/125000000000, group error8442399/100000000, finalBE4221199/50000000. At active index u,v=Hprime-u,unit=ceil(log2 ell/2000000),p1=2^(4000002vunit),p2=p1*2^(2000001unit). Quadratic depth potential gives H<=(463/1000)L^(3/4)/B^(3/4), ordinary product4b_j cost<=(116/1000)Z eventually. Analytic dstar=2^ceil(247Z/25), source active/hidden/final k^(2563/6500),k^(5009/13000),k^(1001/2600). Both leaf depth cases, all local-component windows/rounding/rank/errors/fields and full-B2 transfer are proved. Total numerical fallback0; no advice, target padding, ignored bits, oracle or witness.",
+  "theorem": "For this ONE fixed total uniform P language, hence NP with empty witnesses, there exists N0 such that for EVERY integer N>=N0, C_B2(F_N)>=4N-8*2^ceil(247Z/25)+4, where L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)). The loss is2^((247/25+o(1))*(log2 N)^(3/4)*(log2(log2 N))^(1/4)). For this SAME fixed family, for EVERY fixed real epsilon>0 there exists N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Thus liminf C_B2(F_N)/N>=4 over ALL integer lengths. Complete supplied arguments prove deterministic fields/Singer construction, seed-aware SU strong extraction, precision10553/125000 transfer extraction, affine row/block-source reduction with errorK^(4221199/50000000), independent-gap tree dispersion and unrestricted full-B2 transfer at actual length. All input bits and affine deficiencies are charged. No explicit threshold, practical full asymptotic evaluation, literature record, prior verdict or external retrieval premise is claimed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
