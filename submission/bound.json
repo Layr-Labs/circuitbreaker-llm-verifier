@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "One fixed total P language family.evaluate on ALL actual N bits,NP with empty witnesses. For N<2 output0 and d_N=N+1. Otherwise L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4));global13Z guard gives the explicit small-length fallback. The controller enumerates BASE then the SIX public rational coordinates(h,a,wm,w0,X,p) with denominators<=B in the exact ranges/prefilter in family.py. No trial D coordinate is searched. Each tuple uses W0=ceil(w0Z),Wnext=max(ceil(wmZ),W-ceil_log2(2b)) with actual public b,and the supplied local tree; H is the last planned active level. All primitive/context/row/confidence guards remain. The pure minimum_geometry_dimension computes the exact least integer d satisfying the finite geometry predicates,using C=1+sum_u(2^(active log gap_u)-1),S=ceil(d/C),ordinary factors2b/2t with products starting at the first positive active depth,and d_min=1+C*(Q-1) for the closed integer maximum Q proved in proof.md. Reject d>N; otherwise check the independent geometry predicate and exact dyadic primitive-error/output-event inequalities. Choose smallest accepted d,ties first enumerated; set d_N=d and evaluate the supplied challenge-response tree. No accepted tuple means output0,d_N=N+1. SU defining threshold is2^30;public mode caps2,3,4,5,6 apply on successive rate bins ending.19,.3,.4,.48,.52. All fields,Singer/code/design/row/block procedures and complete correctness/runtime proofs are supplied. Context bits and exact arithmetic are charged. No advice,epsilon,witness,oracle,ignored target bits or target padding selects the parameters. BASE compatibility interfaces serve scoped audit witnesses only.",
+  "theorem": "For this SAME fixed total uniform P language and EVERY integer N>=0,C_B2(F_N)>=4N-8d_N+4,with exact integer-additive minimum-certificate integer d_N defined by family.py. Define S6 by the six rational ranges,strict analytic_prefilter and existence of a finite increasing-potential box certificate>1,exactly specified in proof.md. Let Cstar6=inf_(h,a,wm,w0,X,p in S6)(w0+X). Then limsup over all integer N of log2(d_N)/Z<=Cstar6<=88189/20000=4.40945. There is N0 such that for EVERY integer N>=N0,C_B2(F_N)>=4N-8*2^ceil(8819Z/2000)+4. For this SAME family,for EVERY fixed real epsilon>0 there is N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Thus liminf C_B2(F_N)/N>=4 at actual length in the unrestricted pinned full-B2 model. The exact dimension is least for its supplied geometry predicates,and its certified finite lower bounds dominate those from the counterfactual seven-coordinate and global-product controllers on the SAME plans at every N,as proved directly from the predicates;this does not compare actual complexities of different languages or assume a previous judgment. The six-axis grid,all rejected paths and exact arithmetic have fixed polynomial time in N. Eventual acceptance is proved separately for each fixed feasible tuple before taking infima;no uniform threshold over shrinking grid margins is assumed. No eventual boundary4.40945 bound,explicit threshold,numerical optimality beyond the stated certificate,literature record or practical accepted full-tree execution is claimed.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
