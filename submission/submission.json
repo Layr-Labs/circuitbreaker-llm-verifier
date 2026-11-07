@@ -1,40 +1,55 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Declining entropy thresholds and interleaved forcing: loss7763/1000",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"Fixed total P family family.evaluate on actual N bits, full definition in proof.md. L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)),base=ceil(L^(1/4))*ceil(B^(3/4)),k=2^(13Z). Wmin=ceil(191Z/50),Wmax=ceil(4589Z/1000),W_j=max(Wmin,Wmax-ceil(25001jB/100000)),K_j=2^W_j,Lpad=ceil(Wmax^(20/19)). V0=0,n_j=max(ceil(N/2^V_j),2^Lpad),Lj=ceil(log2 n_j),DISTINCT Lc_j=ceil(log2(n_j+1)). A_j=max(1,floor(31W_jbaseL/(800ZLj)));append V_(j+1)=V_j+A_j iff<=floor(log2 N). t_j=2^A_j. Active levels first cross multiples X=ceil(6347Z/2000);last leaf H has floor(N/2^V_H)^1000>=k. Guard10000(X+Amax)<=31736Z. ell=2^(ceil(sqrt L)*ceil(sqrt B)),P=2^ceil(2521Z/4000). Actual intervals partition exactly; injective component prefix padding only. SU at(n_j,K_j):degreeceil147059Lc_j/(50000floor(log2 K_j)),outputK_j^(33/50),fullseedguard109559Lj/12500,fieldQ,h^d<=(n_j+1)^12. Groupg=floor(K_j^(17/50)),slice=floor(K_j^(659999/1000000)),raw source retained;rank(2g+ceil(log2 g))*slice<=floor(K_j/4). Precision164999/1000000,helperm=r^(999999/1000000),designseedexponent2000001/1000000,near seed329999164999/1000000000000,finalBEerrorK_j^(8249949/50000000). Sum_j binom(t_j,b_j)<=ell. Same local E_j for every confidence of a node; differing K_j/maps across depths. Unitceil(log2 ell/2000000),p1=2^(4000002(Hprime-u)unit),p2=p1*2^(2000001unit). Discrete potential depth<=(769/250)L^(3/4)/B^(3/4),ordinarycost.7691Z; interleaved left-sibling forcing preserves per-node entropy above K_j. dstar=2^ceil(7763Z/1000). Complete fields/extraction/source/confidence/full-B2 proofs supplied. Numerical fallback0,empty NP witness;no advice,oracle,target padding or ignored bits.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this ONE fixed total uniform P language, hence NP with empty witnesses, there exists N0 such that for EVERY integer N>=N0, C_B2(F_N)>=4N-8*2^ceil(7763Z/1000)+4, where L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)). The loss is2^((7763/1000+o(1))*(log2 N)^(3/4)*(log2(log2 N))^(1/4)). For this SAME fixed family, for EVERY fixed real epsilon>0 there exists N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Thus liminf C_B2(F_N)/N>=4 over ALL integer lengths. Complete supplied arguments prove deterministic fields/Singer construction, seed-aware SU strong extraction, precision164999/1000000 transfer extraction, affine row/block-source reduction with errorK^(8249949/50000000), adaptive-entropy independent-gap tree dispersion with interleaved source restrictions and unrestricted full-B2 transfer at actual length. All input bits and affine deficiencies are charged. No explicit threshold, practical full asymptotic evaluation, literature record, prior verdict or external retrieval premise is claimed.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "cubic.md",
+        "elimination.md",
+        "extractors.md",
+        "family.py",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"Fixed total P family family.evaluate on actual N bits, full definition in proof.md. L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)),base=ceil(L^(1/4))*ceil(B^(3/4)),k=2^(13Z). Wmin=ceil(191Z/50),Wmax=ceil(4589Z/1000),W_j=max(Wmin,Wmax-ceil(25001jB/100000)),K_j=2^W_j,Lpad=ceil(Wmax^(20/19)). V0=0,n_j=max(ceil(N/2^V_j),2^Lpad),Lj=ceil(log2 n_j),DISTINCT Lc_j=ceil(log2(n_j+1)). A_j=max(1,floor(31W_jbaseL/(800ZLj)));append V_(j+1)=V_j+A_j iff<=floor(log2 N). t_j=2^A_j. Active levels first cross multiples X=ceil(6347Z/2000);last leaf H has floor(N/2^V_H)^1000>=k. Guard10000(X+Amax)<=31736Z. ell=2^(ceil(sqrt L)*ceil(sqrt B)),P=2^ceil(2521Z/4000). Actual intervals partition exactly; injective component prefix padding only. SU at(n_j,K_j):degreeceil147059Lc_j/(50000floor(log2 K_j)),outputK_j^(33/50),fullseedguard109559Lj/12500,fieldQ,h^d<=(n_j+1)^12. Groupg=floor(K_j^(17/50)),slice=floor(K_j^(659999/1000000)),raw source retained;rank(2g+ceil(log2 g))*slice<=floor(K_j/4). Precision164999/1000000,helperm=r^(999999/1000000),designseedexponent2000001/1000000,near seed329999164999/1000000000000,finalBEerrorK_j^(8249949/50000000). Sum_j binom(t_j,b_j)<=ell. Same local E_j for every confidence of a node; differing K_j/maps across depths. Unitceil(log2 ell/2000000),p1=2^(4000002(Hprime-u)unit),p2=p1*2^(2000001unit). Discrete potential depth<=(769/250)L^(3/4)/B^(3/4),ordinarycost.7691Z; interleaved left-sibling forcing preserves per-node entropy above K_j. dstar=2^ceil(7763Z/1000). Complete fields/extraction/source/confidence/full-B2 proofs supplied. Numerical fallback0,empty NP witness;no advice,oracle,target padding or ignored bits.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this ONE fixed total uniform P language, hence NP with empty witnesses, there exists N0 such that for EVERY integer N>=N0, C_B2(F_N)>=4N-8*2^ceil(7763Z/1000)+4, where L=ceil(log2 N),B=ceil(log2(L+1)),Z=ceil(L^(3/4))*ceil(B^(1/4)). The loss is2^((7763/1000+o(1))*(log2 N)^(3/4)*(log2(log2 N))^(1/4)). For this SAME fixed family, for EVERY fixed real epsilon>0 there exists N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Thus liminf C_B2(F_N)/N>=4 over ALL integer lengths. Complete supplied arguments prove deterministic fields/Singer construction, seed-aware SU strong extraction, precision164999/1000000 transfer extraction, affine row/block-source reduction with errorK^(8249949/50000000), adaptive-entropy independent-gap tree dispersion with interleaved source restrictions and unrestricted full-B2 transfer at actual length. All input bits and affine deficiencies are charged. No explicit threshold, practical full asymptotic evaluation, literature record, prior verdict or external retrieval premise is claimed.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "cubic.md",
+        "elimination.md",
+        "extractors.md",
+        "family.py",
         "proof.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "component-audit",
+      "source": "audit.py",
+      "purpose": "Exact field/root/linear-code/support/total-fallback checks for supplied components. Universal entropy, asymptotic error and full circuit claims rest on the written proofs; no nontrivial asymptotically large tree execution is claimed.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }
