@@ -1,40 +1,55 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Shared exhaustive terminal cover transfers +6 to the unchanged tree family",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total public rational-grid tree-disperser language family.evaluate on all actual N input bits, defined completely in family.py and proof.md. Its unchanged exact public controller selects the least accepted certificate dimension d_N, or sets d_N=N+1 and outputs0 on fallback. No field-polynomial prefix or advice is added. Component fields, primitive maps, six-coordinate rational grid, clipping guards and all ties are fixed by the supplied implementation.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this single total uniform polynomial-time language in the pinned full B2 model, C_B2(F_N)>=4N-8d_N+6 for EVERY integer N>=0, with exact selected certificate dimension d_N from family.py and fallback d_N=N+1. At every sufficiently large integer length d_N<=2^ceil(8818127579Z/2000000000), where Z=ceil(L^(3/4))*ceil(B^(1/4)), L=ceil(log2 N), B=ceil(log2(L+1)). For EVERY fixed real epsilon>0 there exists N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Hence liminf C_B2(F_N)/N>=4 for this same eligible family. The exact convex-midpoint certificate proves limsup log2(d_N)/Z<=Cstar6<=440906378851/100000000000=4.40906378851, strictly below the inherited4.4090644. The supplied new analytic argument converts the midpoint lower sum to the original left-box certificate. The finite offset is one gate stronger than the supplied previous +5 certificate for this identical evaluator; no higher leading coefficient or record claim is made.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "cubic.md",
+        "elimination.md",
+        "extractors.md",
+        "family.py",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total public rational-grid tree-disperser language family.evaluate on all actual N input bits, defined completely in family.py and proof.md. Its unchanged exact public controller selects the least accepted certificate dimension d_N, or sets d_N=N+1 and outputs0 on fallback. No field-polynomial prefix or advice is added. Component fields, primitive maps, six-coordinate rational grid, clipping guards and all ties are fixed by the supplied implementation.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this single total uniform polynomial-time language in the pinned full B2 model, C_B2(F_N)>=4N-8d_N+6 for EVERY integer N>=0, with exact selected certificate dimension d_N from family.py and fallback d_N=N+1. At every sufficiently large integer length d_N<=2^ceil(8818127579Z/2000000000), where Z=ceil(L^(3/4))*ceil(B^(1/4)), L=ceil(log2 N), B=ceil(log2(L+1)). For EVERY fixed real epsilon>0 there exists N_epsilon such that C_B2(F_N)>=4N-N^epsilon for EVERY integer N>=N_epsilon. Hence liminf C_B2(F_N)/N>=4 for this same eligible family. The exact convex-midpoint certificate proves limsup log2(d_N)/Z<=Cstar6<=440906378851/100000000000=4.40906378851, strictly below the inherited4.4090644. The supplied new analytic argument converts the midpoint lower sum to the original left-box certificate. The finite offset is one gate stronger than the supplied previous +5 certificate for this identical evaluator; no higher leading coefficient or record claim is made.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "cubic.md",
+        "elimination.md",
+        "extractors.md",
+        "family.py",
         "proof.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "finite-cover-and-potential",
+      "source": "audit.py",
+      "purpose": "Exact exhaustive full-B2 read-once terminal lemma over all79781760 normalized representative/assignment combinations and both supplied rational potential witnesses. Universal reductions and tree eligibility rest on the complete supplied proofs; no full accepted tree execution is claimed.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }
