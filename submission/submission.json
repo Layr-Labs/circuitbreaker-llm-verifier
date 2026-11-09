@@ -1,40 +1,53 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Global exact selection with recovered-prefix and padding-aware certificates",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total certificate-prefix language specified in proof.md and audit.py. At actual length N, enumerate every prime 2<=k<N and order 2<=t<r=ceil((N-k)/k) with r>=3,k>r+1 and the padding-aware B_c<=D_c<N-k. Choose the lexicographically least (3k+8D_c-4B_c-3,k,t), or output0 if none exists. Read k input bits as the lower coefficients of monic Q, reject invalid Q by the exact prime-degree Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial of order t on the remaining N-k bits with zero padding. Output the constant field coordinate. All prefix bits are in N; Q is input, not advice. Exact capacities and tie breaks are in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this single total uniform polynomial-time family in the pinned full B2 model at actual length N, C_B2(F_N)>=4N-L_N at every length with admissible parameters, and L_N/N^(4/5) tends to 10*2^(1/5) over all integer N. This is the minimum possible leading value within the explicit admissible certificate class, not a claim about optimal circuit sizes. Eventually L_N<=L_old-k_old, where the exact previous full-block selector is defined in proof.md Section6 and k_old=Omega(N^(3/5)). Consequently liminf C_B2(F_N)/N>=4.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "algebra.md",
+        "audit.py",
         "bound.json",
+        "degree.md",
+        "elimination.md",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total certificate-prefix language specified in proof.md and audit.py. At actual length N, enumerate every prime 2<=k<N and order 2<=t<r=ceil((N-k)/k) with r>=3,k>r+1 and the padding-aware B_c<=D_c<N-k. Choose the lexicographically least (3k+8D_c-4B_c-3,k,t), or output0 if none exists. Read k input bits as the lower coefficients of monic Q, reject invalid Q by the exact prime-degree Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial of order t on the remaining N-k bits with zero padding. Output the constant field coordinate. All prefix bits are in N; Q is input, not advice. Exact capacities and tie breaks are in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this single total uniform polynomial-time family in the pinned full B2 model at actual length N, C_B2(F_N)>=4N-L_N at every length with admissible parameters, and L_N/N^(4/5) tends to 10*2^(1/5) over all integer N. This is the minimum possible leading value within the explicit admissible certificate class, not a claim about optimal circuit sizes. Eventually L_N<=L_old-k_old, where the exact previous full-block selector is defined in proof.md Section6 and k_old=Omega(N^(3/5)). Consequently liminf C_B2(F_N)/N>=4.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "algebra.md",
+        "audit.py",
         "bound.json",
+        "degree.md",
+        "elimination.md",
         "proof.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "finite-audit",
+      "source": "audit.py",
+      "purpose": "Check213 small isolated irreducible prefixes, seven zero inputs and eight exact global parameter minima against the previous full-block selector, plus closed capacity formulas against explicit width/weight sums. Universal circuit, algebra, eligibility, optimization and asymptotic conclusions rest on supplied proofs.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }
