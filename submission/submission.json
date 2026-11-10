@@ -10,6 +10,7 @@
       },
       "evidence": [
         "bound.json",
+        "elimination-appendix.md",
         "proof.md"
       ]
     },
@@ -21,6 +22,7 @@
       },
       "evidence": [
         "bound.json",
+        "elimination-appendix.md",
         "proof.md"
       ]
     }
