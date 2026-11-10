@@ -1,40 +1,55 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Sharper binomial capacity and smaller advice reserves",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The ONE fixed total family.py evaluate algorithm. N<128,malformed bounded gamma S,empty joint search or failed guards outputs0. Decode positive U,V,T from interleaved bits of S-1 and run the complete C32 scalar/header/extraction algorithm in proof.md and PolyPlan,with Cw9412,Cy29080,Dint=max(2,ceil(10z/7)). Keep its conservative reference-prefix readiness guard. The ACTUAL shared reader is C33: for degree t>=128 form C5 small-factor modulus M,degree d,unit count Phi,q=t-d,J=floor(q/2),A=2^(q-1)-2^(q-J-1). Read w=ceil_log(Phi*A) bits. Out-of-range indices give zero maps; otherwise split unit/quotient indices by division by A,decode the unit remainder by CRT,and solve the explicitly encoded first unequal outer-pair constraints. C3 compiles that polynomial once. Below128 use legacy C5. Other scalar/seed/field ports and PolyEngine are unchanged. Prefix P counts the entire gamma header plus actual w bits; payload has N-P bits padded by P zeros into N coordinates. Every header/data string uses one bounded polynomial algorithm. Good primitive data are paid restrictions,not runtime advice or promises. NP witnesses are empty. Seeded height is leastpositiveh with binomial(h+D-1,D)>=n,by bounded binarysearch.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this ONE fixed total uniform polynomial-time language there are absolute B>0,N0 and one fixed good paid gamma header S0 such that every integer N>=N0 satisfies C_B2(F_N)>=4N-4P_new-8k+7. C35 uses minimal monomial height; C34 uses C_W=9412,C_Y=29080 with positive exact advice gaps. All scalars are the supplied C32 plans; with shared degree t and legacy saving a(t), P_ref=H(S0)+t-a(t),P_new=H(S0)+w(t). C33 proves w(t)<=t-a(t)-1 and existence of a suitable encoded primitive polynomial at EVERY t>=128,without a primitive search. Thus at all sufficiently large lengths the explicit remainder is at most the reference encoding certificate4P_ref+8k-7 minus4. This compares certified resources,not actual circuit complexities of distinct languages. The old prefix guard is retained before new O(t) work,ensuring total polynomial runtime on all inputs. All prefix bits remain charged. P_new=O_S0(L^2*(ceil_logL)^2)=o(k),L=ceil_logN,and C_B2(F_N)>=4N-B*(log2 N)^9*(log2(log2 N))^5/log2(log2(log2 N)) at every sufficiently large N. For the SAME family each fixed epsilon>0 gives the eventual losses (log2 N)^9*(log2(log2 N))^(5+epsilon),(log2 N)^(9+epsilon),N^epsilon; hence liminf C_B2(F_N)/N>=4. No prior judgment is a premise.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
-        "proof.md"
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "proof.md",
+        "seeded.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The ONE fixed total family.py evaluate algorithm. N<128,malformed bounded gamma S,empty joint search or failed guards outputs0. Decode positive U,V,T from interleaved bits of S-1 and run the complete C32 scalar/header/extraction algorithm in proof.md and PolyPlan,with Cw9412,Cy29080,Dint=max(2,ceil(10z/7)). Keep its conservative reference-prefix readiness guard. The ACTUAL shared reader is C33: for degree t>=128 form C5 small-factor modulus M,degree d,unit count Phi,q=t-d,J=floor(q/2),A=2^(q-1)-2^(q-J-1). Read w=ceil_log(Phi*A) bits. Out-of-range indices give zero maps; otherwise split unit/quotient indices by division by A,decode the unit remainder by CRT,and solve the explicitly encoded first unequal outer-pair constraints. C3 compiles that polynomial once. Below128 use legacy C5. Other scalar/seed/field ports and PolyEngine are unchanged. Prefix P counts the entire gamma header plus actual w bits; payload has N-P bits padded by P zeros into N coordinates. Every header/data string uses one bounded polynomial algorithm. Good primitive data are paid restrictions,not runtime advice or promises. NP witnesses are empty. Seeded height is leastpositiveh with binomial(h+D-1,D)>=n,by bounded binarysearch.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this ONE fixed total uniform polynomial-time language there are absolute B>0,N0 and one fixed good paid gamma header S0 such that every integer N>=N0 satisfies C_B2(F_N)>=4N-4P_new-8k+7. C35 uses minimal monomial height; C34 uses C_W=9412,C_Y=29080 with positive exact advice gaps. All scalars are the supplied C32 plans; with shared degree t and legacy saving a(t), P_ref=H(S0)+t-a(t),P_new=H(S0)+w(t). C33 proves w(t)<=t-a(t)-1 and existence of a suitable encoded primitive polynomial at EVERY t>=128,without a primitive search. Thus at all sufficiently large lengths the explicit remainder is at most the reference encoding certificate4P_ref+8k-7 minus4. This compares certified resources,not actual circuit complexities of distinct languages. The old prefix guard is retained before new O(t) work,ensuring total polynomial runtime on all inputs. All prefix bits remain charged. P_new=O_S0(L^2*(ceil_logL)^2)=o(k),L=ceil_logN,and C_B2(F_N)>=4N-B*(log2 N)^9*(log2(log2 N))^5/log2(log2(log2 N)) at every sufficiently large N. For the SAME family each fixed epsilon>0 gives the eventual losses (log2 N)^9*(log2(log2 N))^(5+epsilon),(log2 N)^(9+epsilon),N^epsilon; hence liminf C_B2(F_N)/N>=4. No prior judgment is a premise.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
-        "proof.md"
+        "disperser.md",
+        "elimination.md",
+        "family.py",
+        "proof.md",
+        "seeded.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "r84-q7-scalar-codec",
+      "source": "audit.py",
+      "purpose": "Regenerate all four R84 refutations,cover all4082400 Q7 assignments,check one bounded modern shared-port scalar case,and exhaust toy quotient-code classes plus bounded degree128..512 edge codes. Universal construction/codec existence and gate arguments are supplied analytically.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }
