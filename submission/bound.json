@@ -1,13 +1,13 @@
 {
   "version": "circuitbreaker-expression-v1",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "Fixed total family.py;N<128,empty joint search or failed guards outputs0. Let L=ceil_logN,z=ceil_logL,Dint=max(2,ceil(10z/7)),Cw=31500,Cy=86000,P2 upwardpower2. Paid gamma S<=2^L has H=2floor_logS+1;bits3j,3j+1,3j+2 ofS-1 decode U-1,V-1,T-1. Set h=P2(UL\u00b2),e=P2(VL\u00b2z),ell=P2(8ze). Enumerate a=2^j<=h,B=ceil(L/j)..ceil(5L/j),initial E0=ceil_sqrtL+ceil(L/125)..L. Each has ep=100haell+e+2,q=(2h(a-1)+Cw ez\u00b2)ell,d=max(q,(2ha+10)ell,2P2(8(ell+ep+L+10))),Y=4Bhd+Cy ez\u00b2P2(d),k=hY+100Bhaell+10d+Cw ez\u00b2ell. Skipceil_logk>floor_logN. Initial AffineSeedPlan(N,k,P2(Y),E0,D10,canonicalTrue) must be valid with actual d0<=5L,ceil(d0/j)<=B,125E0-d0>=125ceil_sqrtL. Select lexmin(k,j,B,E0),first feasible E0 per(a,B);no field bound until selected. Take explicit Y-bit initial prefix. All selection uses N,S only. Ordered padded base-a index words;four internal DyadicPrefixPlans Dint,K=Cw ez\u00b2P2(M) forW/T andCy ez\u00b2P2(M) forE2/E3,fullP2(M) request and explicitM-bit output prefix,ONE eventualcall,seedell. C6 raises fielddegree to maxs_star,rechecks own metadata/seed/advice;ONE paid C5 package t_star-a(t_star),t_star=Dint*s_star. C5/C3 compile once;bad data ring/zero maps. Good primitive tuple works universally. ShortE1 directB2.3,no data. Initial/B5canonical searches C1 polynomial under5L cap. B5 uses supplied A2sampler,A1D4helper,weakhash,exactboundedfreshseedrounds;prefixdegree1000w/output250w. CompleteG nonlinear. Layoutdelta1/125,m=floor(r/125),b=floor(Tw/(30*125\u00b2)),u=2b+2w+10,w=ceil_logr;scaleT\u00b2. One fixed goodS0 is paid. Allheaders/data handled by one polynomial algorithm;NP emptywitness. Exact margin gives badgroup product<=2^(-sqrtL+O_S0(z));prefixP=O_S0(L\u00b2z\u00b2)=o(k),includingALLheader/data bits.",
+  "theorem": "For the ONE fixed total uniform language evaluated by family.py, there are absolute B>0,N0 and one fixed good gamma header S0 such that at every actual integer N>=N0 in full B2, C_B2(F_N)>=4N-R_N, R_N=4P(N,S0)+8k(N,S0)-7. P counts the ENTIRE gamma header and shared construction-data package; P=O_S0(L^2*(ceil(log2 L))^2)=o(k), L=ceil(log2 N). The fixed good package at each length is a charged input restriction, not advice defining the language. The evaluator and full extraction proofs are unchanged from the supplied construction provider. The complete additive-seven theorem for affine dispersers at d>=3, with all16 B2 tables, sharing, constants, affine rows and output literals, applies to the k-dimensional hard payload restriction. It uses exactly the four regenerated R84 refutations and complete Q7 coverage executed by audit.py, with full normalization and unrestricted transfer supplied. Hence C_B2(F_N)>=4N-B*(log2 N)^9*(log2(log2 N))^5/log2(log2(log2 N)) at every sufficiently large integer length. For the SAME family and each fixed epsilon>0 the eventual weaker bounds with losses (log2 N)^9*(log2(log2 N))^(5+epsilon), (log2 N)^(9+epsilon), and N^epsilon hold, giving liminf C_B2(F_N)/N>=4. Compared with the unchanged provider family, the exact certified lower bound increases by7 at every sufficiently large length; no pointwise ordering between different functions or actual complexity equality is asserted. All construction, uniformity, field, prefix, entropy, robustness, gate and all-length arguments are supplied; no prior judgment is a premise.",
   "guarantee": {
     "kind": "polynomial_log",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
@@ -25,8 +25,8 @@
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
