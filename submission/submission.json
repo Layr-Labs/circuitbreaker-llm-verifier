@@ -1,40 +1,53 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Joint block selection removes the dispersion average branch eventually",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total certificate-prefix language specified in proof.md and family.py. For actual length N, choose k as the least prime at least the least positive B with B^5>32*N^3; read k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2, reject invalid Q by the exact Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial on the remaining N-k bits with zero padding, r=ceil((N-k)/k), t=ceil(sqrt(r)). Output 0 for N=0 or the explicit failed guards in proof.md. The output is the constant coefficient in F_2[Z]/Q. All k prefix bits are included in N; Q is input, not advice.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For the single total uniform polynomial-time certificate-prefix family defined in proof.md and family.py, C_B2(F_N)>=4N-3k-8d_N+7 for all sufficiently large integer N, where W=r(r+3)/2, H=(t-1)(t+2)/2, A0=(t-1)k-H-(r-t+1), L=floor(t*k/(t+1)-t/2), q=floor(L/t), a=L-t*q, B_int=r*q+a, B_joint=r*(2k-r-1)/(2*(t+1)), d_N=1+W+max(A0,min(B_int,floor(B_joint))), k=O(N^(3/5)), and d_N=O(N^(4/5)). The additional k>=t(t+1)/2 holds eventually. At every sufficiently large length, d_N<=d_boundary=1+W+max(A0,floor(r(k-1)/(t+1))); when r=t^2 and t>=3, d_boundary-d_N>=floor(t^2*(t-1)/(2*(t+1)))>=2. Infinitely many such actual lengths occur because k(N) is nondecreasing, r(N+1)<=r(N)+1, and r(N) tends to infinity. Every prefix bit is essential at sufficiently large lengths; fixing an accepted prefix with nonconstant payload removes at least k gates in the strengthened signed-wire/output-literal model. Consequently liminf over ALL integer N of C_B2(F_N)/N>=4 in the pinned full B2 model at actual input length N. Moreover (3k+8d_N-7)/(4k+8d_old-5) tends to1/2, where d_old=floor(kr/t)+kt+r(r+1)+1; this compares proved remainder certificates, not actual circuit complexities. The supplied generic additive-seven theorem for d>=3 uses exactly the four normalized R84 refutations and complete Q7 read-once formula coverage executed by audit.py, with complete normalization and unrestricted-sharing transfer in elimination.md. The exact integer-balancing argument in disperser.md Section13 gives d_N<=d_sharp=1+W+max(A0,floor(r*(2k-t-1)/(2*(t+1)))) for every tuple in scope; at N=565701 d_N=56119, versus d_int=56458 and d_sharp=56528. No strict improvement over d_sharp at all lengths is asserted. Section14 joint selection gives d_N<=d_int at every tuple in scope and eventually d_N=1+W+A0=(t-1)k+(r*(r+1)-t*(t-1))/2+1. At infinitely many sufficiently large actual square-block lengths, d_int-d_N>=floor(k/(t+1)-t/2)+1>=1. The main theorem still holds at every sufficiently large integer length.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "4",
+        "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total certificate-prefix language specified in proof.md and family.py. For actual length N, choose k as the least prime at least the least positive B with B^5>32*N^3; read k input bits as the lower coefficients of a monic degree-k polynomial Q over F_2, reject invalid Q by the exact Frobenius/gcd test, and evaluate the descending-power BK symmetric polynomial on the remaining N-k bits with zero padding, r=ceil((N-k)/k), t=ceil(sqrt(r)). Output 0 for N=0 or the explicit failed guards in proof.md. The output is the constant coefficient in F_2[Z]/Q. All k prefix bits are included in N; Q is input, not advice.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"4\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For the single total uniform polynomial-time certificate-prefix family defined in proof.md and family.py, C_B2(F_N)>=4N-3k-8d_N+7 for all sufficiently large integer N, where W=r(r+3)/2, H=(t-1)(t+2)/2, A0=(t-1)k-H-(r-t+1), L=floor(t*k/(t+1)-t/2), q=floor(L/t), a=L-t*q, B_int=r*q+a, B_joint=r*(2k-r-1)/(2*(t+1)), d_N=1+W+max(A0,min(B_int,floor(B_joint))), k=O(N^(3/5)), and d_N=O(N^(4/5)). The additional k>=t(t+1)/2 holds eventually. At every sufficiently large length, d_N<=d_boundary=1+W+max(A0,floor(r(k-1)/(t+1))); when r=t^2 and t>=3, d_boundary-d_N>=floor(t^2*(t-1)/(2*(t+1)))>=2. Infinitely many such actual lengths occur because k(N) is nondecreasing, r(N+1)<=r(N)+1, and r(N) tends to infinity. Every prefix bit is essential at sufficiently large lengths; fixing an accepted prefix with nonconstant payload removes at least k gates in the strengthened signed-wire/output-literal model. Consequently liminf over ALL integer N of C_B2(F_N)/N>=4 in the pinned full B2 model at actual input length N. Moreover (3k+8d_N-7)/(4k+8d_old-5) tends to1/2, where d_old=floor(kr/t)+kt+r(r+1)+1; this compares proved remainder certificates, not actual circuit complexities. The supplied generic additive-seven theorem for d>=3 uses exactly the four normalized R84 refutations and complete Q7 read-once formula coverage executed by audit.py, with complete normalization and unrestricted-sharing transfer in elimination.md. The exact integer-balancing argument in disperser.md Section13 gives d_N<=d_sharp=1+W+max(A0,floor(r*(2k-t-1)/(2*(t+1)))) for every tuple in scope; at N=565701 d_N=56119, versus d_int=56458 and d_sharp=56528. No strict improvement over d_sharp at all lengths is asserted. Section14 joint selection gives d_N<=d_int at every tuple in scope and eventually d_N=1+W+A0=(t-1)k+(r*(r+1)-t*(t-1))/2+1. At infinitely many sufficiently large actual square-block lengths, d_int-d_N>=floor(k/(t+1)-t/2)+1>=1. The main theorem still holds at every sufficiently large integer length.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
+        "audit.py",
         "bound.json",
+        "disperser.md",
+        "elimination.md",
+        "family.py",
         "proof.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "r84-q7-exact",
+      "source": "audit.py",
+      "purpose": "Regenerate/refute all four normalized R84 CNFs and cover every one of4082400 normalized Q7 read-once assignments by checked legal flats. These predicates support only the two finite lemmas; universal normalization and gate transfer are supplied in elimination.md.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }
