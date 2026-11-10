@@ -1,32 +1,58 @@
 {
-  "version": "circuitbreaker-expression-v1",
+  "version": "circuitbreaker-expression-v2",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "MOD3 zero-residue family defined in proof.md: for every n>=0 and x in {0,1}^n, f_n(x)=1 iff x_1+...+x_n is congruent to 0 modulo 3 (so f_0(empty)=1). The language L={x : the number of ones in x is divisible by 3} is decided by one fixed linear-time counting algorithm at every length; it is in P and hence in NP with the empty-witness verifier V(x,w)=1 iff w is empty and x is in L, witness bound W(n)=0. No advice, no per-length choices, and witnesses are not circuit inputs.",
+  "theorem": "For this one fixed total uniform family and EVERY integer n>=2, every circuit in the full Li-Yang B2 model (all 16 binary gates, unrestricted fan-out and depth, repeated pins allowed, zero-cost inputs, wires, constant nodes and output selection, every gate counted) computing f_n has at least 2n-3 gates: C_B2(f_n)>=2n-3. Hence there exists N (N=2) with C_B2(f_n)>=2n-3 for every integer n>=N, and liminf C_B2(f_n)/n>=2. Proof: self-contained Schnorr-type gate elimination with explicit normalization, in proof.md.",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "kind": "polynomial_log",
+      "coefficient": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "exponent": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "explicit",
+      "terms": [
+        {
+          "coefficient": {
+            "numerator": "3",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        }
+      ]
     }
   },
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "2",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
