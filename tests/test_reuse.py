@@ -66,8 +66,12 @@ class ReuseTests(unittest.TestCase):
         return {"policies": json.loads((root / "verifier.json").read_text())["policies"],
                 "fields": {"scores": True, "validity": True}, "admission": admission}
 
-    def test_enabled_prior_intake_current_checks_and_selected_audit_export(self):
+    def test_enabled_override_prior_intake_current_checks_and_primary_export(self):
         source, bound, manifest = self.package("source", 9)
+        # Historical override acceptance remains reusable under the new judge.
+        source_config = json.loads((source / "verifier.json").read_text())
+        source_config["judging"]["mode"] = "override"
+        write_json(source / "verifier.json", source_config)
         source_record = synthetic_dossier(source, bound, manifest, valid=False, audit_valid=True)
         source_bundle = pipeline.export_results(source_record)
         self.assertEqual(projection(source_record)["scores"], [9, 1])
@@ -111,7 +115,7 @@ class ReuseTests(unittest.TestCase):
             verify_intake(intake)
             initial = pipeline.execute(intake)
             checker.assert_called_once()
-            review = synthetic_review(intake, initial, valid=False, audit_valid=True, reference="prior:" + SOURCE_ID)
+            review = synthetic_review(intake, initial, valid=True, audit_valid=False, reference="prior:" + SOURCE_ID)
             record = pipeline.finalize(intake, initial, review, consumer / "native-score.json",
                                        consumer / "dossier.json", results_path=consumer / "accepted-results.json")
             with patch.object(HttpTransport, "request", side_effect=AssertionError("No inference during export")):
@@ -125,8 +129,8 @@ class ReuseTests(unittest.TestCase):
         self.assertEqual(accepted["source"]["manifest"]["text"].encode(), original_manifest)
         self.assertEqual(accepted["source"]["review_sha256"], review["sha256"])
         self.assertEqual(record["data"]["selected_review_sha256"], review["sha256"])
-        self.assertEqual(review["data"]["authority"]["judge"], "escalation")
-        self.assertEqual(review["data"]["decision"], review["data"]["escalation"]["review"]["decision"])
+        self.assertEqual(review["data"]["authority"]["judge"], "primary")
+        self.assertEqual(review["data"]["decision"], review["data"]["primary"]["review"]["decision"])
         self.assertEqual(json.loads((consumer / "accepted-results-receipt.json").read_text()),
                          {"version": 1, "snapshot_id": "synthetic-frozen-snapshot"})
 

@@ -65,7 +65,7 @@ class PromptBudgetTests(unittest.TestCase):
         old_intake = self.intake()
         old_initial = pipeline.execute(old_intake)
         # Test the planner material directly without invoking another review;
-        # the configured override cannot score if this audit prompt fails.
+        # the audit must retain its full-evidence budget even in record-only mode.
         committee = old_intake["data"]["effective"]["judging"]["committee"]["escalation"]
         _, context = request_parts(planner)
         member = next(m for m in committee["members"] if m["id"] == "planner")
