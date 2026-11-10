@@ -108,7 +108,7 @@ class EscalationTests(unittest.TestCase):
     def test_exact_profile_and_shared_resource_contract(self):
         configured = json.loads((ROOT / 'verifier.json').read_text())
         self.assertEqual(configured['judging'], {
-            'profile': 'builtin:probabilistic-escalation-v1', 'probability': 1, 'mode': 'override',
+            'profile': 'builtin:probabilistic-escalation-v1', 'probability': 1, 'mode': 'record-only',
             'primary': {'profile': 'builtin:single-v1'},
             'escalation': {'profile': 'builtin:math-decomposed-v1'}})
         effective = load_config(ROOT, 'verifier.json', 'submission')
@@ -131,9 +131,9 @@ class EscalationTests(unittest.TestCase):
         requests = []
         first = synthetic_review(intake, initial, valid=True, audit_valid=False, blocking=True, requests=requests)
         record = pipeline.dossier(intake, initial, first)
-        self.assertIsNone(projection(record)['scores'])
-        self.assertFalse(projection(record)['valid'])
-        self.assertEqual(first['data']['authority']['judge'], 'escalation')
+        self.assertEqual(projection(record)['scores'], [3.1, 1])
+        self.assertTrue(projection(record)['valid'])
+        self.assertEqual(first['data']['authority']['judge'], 'primary')
         self.assertTrue(first['data']['comparison']['valid_disagreement'])
         self.assertEqual(set(audit_review(first)['region_plan']['sources']), set(intake['data']['files']))
         self.measure('baseline', record, requests)
@@ -156,7 +156,9 @@ class EscalationTests(unittest.TestCase):
         self.assertEqual([p['data']['provenance']['attempts'] for p in (first, final)], [11, 12])
         result = self.measure('candidate', record, requests)
         self.assertEqual((result['calls'], result['reserved_completion_tokens'], result['score']),
-                         (23, 753664, [3.5, 1]))
+                         (23, 753664, None))
+        self.assertFalse(projection(record)['valid'])
+        self.assertEqual(final['data']['authority']['judge'], 'primary')
 
     def test_actual_candidate_starts_all_ready_calls_without_four_worker_waves(self):
         intake, initial = self.prepare(candidate=True)
@@ -195,7 +197,7 @@ class EscalationTests(unittest.TestCase):
         final = synthetic_review(intake, initial, first, followup, audit_valid=False, requests=requests)
         self.assertTrue(final['data']['primary']['carried'])
         self.assertEqual(sum(request_parts(w)[0]['id'] == 'reviewer' for w in requests), 1)
-        self.assertIsNone(projection(pipeline.dossier(intake, initial, first, followup, final))['scores'])
+        self.assertEqual(projection(pipeline.dossier(intake, initial, first, followup, final))['scores'], [3.1, 1])
 
     def test_only_primary_followup_carries_audit_without_repeating_region_work(self):
         intake, initial = self.prepare()

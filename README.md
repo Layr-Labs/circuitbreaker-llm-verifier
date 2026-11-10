@@ -55,12 +55,14 @@ is retained only for transport regression and is not an accepted proof. The proo
 checker and scientific family/model conventions are preserved.
 
 Review uses `builtin:probabilistic-escalation-v1` with probability **1 (100%)**
-and `override` mode. Its explicit children are `builtin:single-v1` (primary)
-and `builtin:math-decomposed-v1` (Moonshot audit), with no child provider overrides.
-Both run for every submission. **The Moonshot decision controls acceptance and
-scores**, including when the two judges disagree. Their decisions and comparison
-remain in the dossier. An audit failure retains diagnostics but cannot yield a
-score from a successful primary. A failed primary also prevents a judgment.
+and `record-only` mode. Its explicit children are `builtin:single-v1` (Simple,
+the primary judge) and `builtin:math-decomposed-v1` (Moonshot audit), with no child
+provider overrides. Both run for every submission. **Simple's decision controls
+acceptance and scores**, including when the two judges disagree. Both decisions
+and their comparison remain in the dossier when the audit completes. An audit
+failure retains diagnostics and allows a successful primary to produce its
+judgment and score. A failed primary still prevents a judgment. Review waits for
+the audit to finish or fail, so record-only does not remove its latency or cost.
 
 The audit adapts the offline UCLA Moonshot Math Verifier pattern: a planner
 partitions all source into at most eight regions, a whole-proof reviewer and
@@ -82,8 +84,8 @@ limit applies despite the generic `max_files` ceiling of 32. The baseline uses
 three files; the existing candidate uses seven. The planner schema enforces the
 same one-to-eight range as runtime validation. Separate failure artifacts
 (`llmv-initial-review-failure` or `llmv-final-review-failure`) are diagnostics,
-not judgments. Failed-audit diagnostics can retain a successful primary, but the
-configured override requires the Moonshot audit to complete before scoring.
+not judgments. In record-only mode, a failed Moonshot audit does not prevent
+scoring a successful primary; its diagnostics remain available in the dossier.
 Overdeep malformed audit output is retained as bounded diagnostic text with its
 attempts charged.
 
