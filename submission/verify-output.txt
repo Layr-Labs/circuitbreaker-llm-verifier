@@ -1,0 +1,21 @@
+# Exact transcript of one complete execution of verify.py
+# command: python3 -I verify.py
+# platform: Darwin arm64, python 3.15.2
+# date (UTC): 2026-11-11T14:29:07.538253+00:00
+# sha256(verify.py at execution time) = 19aff3e357d626ebbae42533cc97fa7a3fe4ac6fe0dfaa50229e9e9457b7ea40
+
+PASS 1: 16 operations classify as 2 constant, 4 unary, 2 XOR-type (x+y+c), 8 AND-type ((x+a)(y+b)+g).
+PASS 2: the stated Delta W bounds of deletions D1-D4 and of Cases 2-10 (Case 8 swept exhaustively over deg(x) in [2,12], k in [1,12], k1 in [0,k], the bottleneck tuple (2,1,1) verified as the unique exception, handled by Cases 9-10) and the final assembly arithmetic hold exactly in integer and Fraction arithmetic.
+PASS 3: disperser parameter envelopes verified at n = 10^12 and 10^24 with 60-digit decimal arithmetic (all margins strict).
+PASS 4: k=  3  ord_k(2)=m=  2  s=1  deg f^(s)=ms=  2  output irreducible of degree 3 (coeffs 1011)
+PASS 4: k=  5  ord_k(2)=m=  4  s=1  deg f^(s)=ms=  4  output irreducible of degree 5 (coeffs 100101)
+PASS 4: k=  7  ord_k(2)=m=  3  s=1  deg f^(s)=ms=  3  output irreducible of degree 7 (coeffs 10001001)
+PASS 4: k= 13  ord_k(2)=m= 12  s=1  deg f^(s)=ms= 12  output irreducible of degree 13 (coeffs 10010101100011)
+PASS 4: k= 17  ord_k(2)=m=  8  s=1  deg f^(s)=ms=  8  output irreducible of degree 17 (coeffs 100010011110001011)
+PASS 4: k= 41  ord_k(2)=m= 20  s=1  deg f^(s)=ms= 20  output irreducible of degree 41 (coeffs 100000111100111011000011100101101111100101)
+PASS 4: field.md construction (Berlekamp subalgebra kernel with idempotent-basis and factor-count dimension checks, cyclotomic chain, nonresidue, X^k-alpha, trace gamma, minimal polynomial) executes as specified on the listed odd primes; each has s = v_k(2^ord_k(2)-1) = 1, so the cyclotomic chain has length one (its extension loop runs zero steps); every intermediate assertion of field.md's Lemmas 1.1-2.3 checkable on these instances holds.
+PASS 4b: berlekamp_factor agrees with a trial-division oracle on 397 pseudo-random squarefree inputs (degrees 2-8).
+PASS 5: at n = 10^12, d(n) = 23886430234, 7*d(n) = 167205011638 <= 49*n^(4/5) = 1.951e+11; the corollary's remainder envelope holds.
+ALL CHECKS PASSED
+exit code: 0
+# sha256(everything above this line) = d02d3e86d57edca3ed3ce68e6016852ed20516e3f99d593269e2500506340b2a
