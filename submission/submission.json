@@ -1,40 +1,38 @@
 {
-  "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
-  "claims": [
-    {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "31",
-        "denominator": "10"
-      },
-      "evidence": [
-        "bound.json",
-        "proof.md"
-      ]
-    },
-    {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "1",
-        "denominator": "1"
-      },
-      "evidence": [
-        "bound.json",
-        "proof.md"
-      ]
-    }
-  ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+ "version": 1,
+ "title": "Complete proof of (7/2, 1) with explicit remainder 49*n^(4/5) for the fixed BK-type family: the Mishra-Santhanam 3.5n - 7d gate elimination fully reproduced and instantiated",
+ "claims": [
+  {
+   "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. Let L(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee.leading. Let R(n) be the sum of the monomials in guarantee.remainder.terms, each coefficient times n^exponent*(log2 n)^log_exponent*(log2 log2 n)^loglog_exponent; an empty sum is zero. There exists N such that C_B2(f_n)>=L(n)-R(n) for every integer n>=N. All remainder coefficients are the exact declared constants. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total family fixed in field.md and used in proof.md: f_0=0; for n>=1 let k be the least prime strictly above 2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); build the field F_(2^k) by the one fixed deterministic algorithm of field.md (Berlekamp factoring, cyclotomic nonresidue chain, irreducible X^k-alpha, trace element); pad x with zeros into r blocks, interpret each block in F_(2^k) (first bit = constant coefficient), set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r).\",\"guarantee\":{\"kind\":\"eventual_lower_bound\",\"leading\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"remainder\":{\"kind\":\"explicit\",\"terms\":[{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"49\"},\"exponent\":{\"denominator\":\"5\",\"numerator\":\"4\"},\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}}]}},\"projection\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one fixed total uniform polynomial-time family, hence one NP language with empty witnesses, at actual input length n=|x| in the full Li-Yang B2 model: C_B2(f_n) >= (7/2)n - 49*n^(4/5) for every integer n >= 10^12, and therefore liminf C_B2(f_n)/n >= 7/2.\",\"version\":\"circuitbreaker-expression-v2\"}",
+   "score": {
+    "numerator": "7",
+    "denominator": "2"
+   },
+   "evidence": [
+    "bound.json",
+    "disperser.md",
+    "field.md",
+    "proof.md"
+   ]
+  },
+  {
+   "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. Let L(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee.leading. Let R(n) be the sum of the monomials in guarantee.remainder.terms, each coefficient times n^exponent*(log2 n)^log_exponent*(log2 log2 n)^loglog_exponent; an empty sum is zero. There exists N such that C_B2(f_n)>=L(n)-R(n) for every integer n>=N. All remainder coefficients are the exact declared constants. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total family fixed in field.md and used in proof.md: f_0=0; for n>=1 let k be the least prime strictly above 2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); build the field F_(2^k) by the one fixed deterministic algorithm of field.md (Berlekamp factoring, cyclotomic nonresidue chain, irreducible X^k-alpha, trace element); pad x with zeros into r blocks, interpret each block in F_(2^k) (first bit = constant coefficient), set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r).\",\"guarantee\":{\"kind\":\"eventual_lower_bound\",\"leading\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"remainder\":{\"kind\":\"explicit\",\"terms\":[{\"coefficient\":{\"denominator\":\"1\",\"numerator\":\"49\"},\"exponent\":{\"denominator\":\"5\",\"numerator\":\"4\"},\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}}]}},\"projection\":{\"coefficient\":{\"denominator\":\"2\",\"numerator\":\"7\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one fixed total uniform polynomial-time family, hence one NP language with empty witnesses, at actual input length n=|x| in the full Li-Yang B2 model: C_B2(f_n) >= (7/2)n - 49*n^(4/5) for every integer n >= 10^12, and therefore liminf C_B2(f_n)/n >= 7/2.\",\"version\":\"circuitbreaker-expression-v2\"}",
+   "score": {
+    "numerator": "1",
+    "denominator": "1"
+   },
+   "evidence": [
+    "bound.json",
+    "disperser.md",
+    "field.md",
+    "proof.md"
+   ]
+  },
+  "Unscored lemma (image dimension): for every state of the gate elimination in proof.md, the image of the injective parameter map Phi contains an affine subspace of dimension a = m - q; hence, for an affine disperser f for dimension d, the restricted function f composed with Phi is nonconstant whenever a >= d. Proof: proof.md, Proposition 2.1.",
+  "Unscored lemma (output forms): while a > d, the output of the current circuit in proof.md is neither a constant, nor a nonconstant affine function of the parameters, nor a literal of an AND-type gate whose two parents are unpaired parameters. Proof: proof.md, Lemma 2.3.",
+  "Unscored lemma (deterministic irreducible polynomials of odd prime degree over F_2): for every odd prime k there is a single fixed deterministic algorithm, running in time polynomial in k, that outputs a monic irreducible polynomial of degree exactly k over F_2. Proof: field.md, Proposition 2.4 (Berlekamp factoring, Lemma 1.1; cyclotomic chain, Lemma 1.2; nonresidue, Lemma 2.1; binomial irreducibility, Lemma 2.2; trace element, Lemma 2.3). The script verify.py reproduces the construction exactly for k in {3, 5, 7, 13, 17, 41} and checks irreducibility of each output; the file verify-output.txt is the complete transcript of one execution of verify.py (command: python3 -I verify.py), recording exit code 0 and ALL CHECKS PASSED.",
+  "Unscored lemma (arithmetic of the assembly): with W = 2s + 3q + sum of unpaired weights, the ten gate-elimination cases of proof.md each satisfy Delta W <= 14*Delta a with Delta a in {0,-1,-2}; hence for every B_2 circuit C computing an affine disperser for dimension d, 2|C| + 7n >= 14(n-d), i.e. |C| >= (7/2)n - 7d; and for d = floor(6*n^(4/5))+1 <= 6*n^(4/5)+1 this gives C_B2(f_n) >= (7/2)n - 42*n^(4/5) - 7 >= (7/2)n - 49*n^(4/5) for every n >= 1 where the disperser property holds (all n >= 10^12 by disperser.md Theorem A). The integer arithmetic of every case inequality and of this chain is machine-checked in verify.py."
+ ],
+ "experiments": [],
+ "checks": []
 }

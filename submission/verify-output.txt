@@ -1,0 +1,20 @@
+# Exact transcript of one complete execution of verify.py
+# command: python3 -I verify.py
+# platform: Darwin arm64, python 3.15.2
+# date (UTC): 2026-11-11T07:36:41.839887+00:00
+# sha256(verify.py at execution time) = fa67c220adf32c4ad39dc2709e8470a12f0a6a37782db34dc314eaa5bf5338e0
+
+PASS 1: 16 operations classify as 2 constant, 4 unary, 2 XOR-type (x+y+c), 8 AND-type ((x+a)(y+b)+g).
+PASS 2: every case inequality and the final assembly arithmetic hold exactly (integer and Fraction arithmetic).
+PASS 3: disperser parameter envelopes verified at n = 10^12 and 10^24 with 60-digit decimal arithmetic (all margins strict).
+PASS 4: k=  3  ord_k(2)=m=  2  s=1  deg f^(s)=ms=  2  output irreducible of degree 3 (coeffs 1011)
+PASS 4: k=  5  ord_k(2)=m=  4  s=1  deg f^(s)=ms=  4  output irreducible of degree 5 (coeffs 100101)
+PASS 4: k=  7  ord_k(2)=m=  3  s=1  deg f^(s)=ms=  3  output irreducible of degree 7 (coeffs 10001001)
+PASS 4: k= 13  ord_k(2)=m= 12  s=1  deg f^(s)=ms= 12  output irreducible of degree 13 (coeffs 10010101100011)
+PASS 4: k= 17  ord_k(2)=m=  8  s=1  deg f^(s)=ms=  8  output irreducible of degree 17 (coeffs 100010011110001011)
+PASS 4: k= 41  ord_k(2)=m= 20  s=1  deg f^(s)=ms= 20  output irreducible of degree 41 (coeffs 100000111100111011000011100101101111100101)
+PASS 4: field.md construction (Berlekamp/cyclotomic chain/nonresidue/X^k-alpha/trace gamma/minpoly) runs exactly as specified on the listed odd primes; every intermediate assertion of field.md's Lemmas 1.1-2.3 that is checkable on these instances holds.
+PASS 5: at n = 10^12, d(n) = 23886430234, 7*d(n) = 167205011638 <= 49*n^(4/5) = 1.951e+11; the corollary's remainder envelope holds.
+ALL CHECKS PASSED
+exit code: 0
+# sha256(everything above this line) = b3085cba5f018389c6dad565b8a228e7b086bfd63167f205572ce446bde52d71
