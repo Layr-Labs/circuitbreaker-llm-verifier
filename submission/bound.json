@@ -1,32 +1,112 @@
 {
-  "version": "circuitbreaker-expression-v1",
+  "version": "circuitbreaker-expression-v2",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total certificate-prefix language defined by the fixed evaluator in proof.md. At actual length N<2^20 output 0. Otherwise let b be the least positive integer with b^5>=N^3, let ell be the least prime strictly greater than b, put r=floor(N/ell)-1 and t=ceil(sqrt(r)). Read the first ell input bits as the coefficients below the leading term of a monic degree-ell polynomial P over F_2; output 0 unless X^(2^ell)=X mod P and gcd(P,X^2-X)=1. For a valid prefix read the next r*ell bits as x_1,...,x_r in K=F_2[X]/(P), in the polynomial basis with constant coefficient first; set y_i=x_i^(2^(r+2-i)-1) and output the absolute trace of the order-t elementary symmetric polynomial in y_1,...,y_r. Ignore the final N-(r+1)*ell bits. All prefix, payload and ignored bits count in N. One fixed polynomial-time evaluator and the empty-witness verifier define every length.",
+  "theorem": "For the one fixed total polynomial-time family defined in proof.md, in the full pinned B2 model at actual input length N, C_B2(F_N)>=4N-R(N) for every integer N>=2^20, where R(N)=(431/35)N^(4/5)+16N^(3/5)+(198/35)N^(1/5)+16. Hence the explicit eventual lower bound holds and liminf over all integer N of C_B2(F_N)/N>=4, with one fixed empty-witness NP verifier.",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "kind": "polynomial_log",
+      "coefficient": {
+        "numerator": "4",
+        "denominator": "1"
+      },
+      "exponent": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "explicit",
+      "terms": [
+        {
+          "coefficient": {
+            "numerator": "431",
+            "denominator": "35"
+          },
+          "exponent": {
+            "numerator": "4",
+            "denominator": "5"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        },
+        {
+          "coefficient": {
+            "numerator": "16",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "3",
+            "denominator": "5"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        },
+        {
+          "coefficient": {
+            "numerator": "198",
+            "denominator": "35"
+          },
+          "exponent": {
+            "numerator": "1",
+            "denominator": "5"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        },
+        {
+          "coefficient": {
+            "numerator": "16",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        }
+      ]
     }
   },
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
