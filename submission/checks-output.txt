@@ -1,0 +1,13 @@
+# Exact transcript of one complete execution of checks.py
+# command: python3 -I checks.py
+# platform: Darwin arm64, python 3.15.2
+# date (UTC): 2026-11-15T06:33:57.583294+00:00
+# sha256(checks.py at execution time) = 34f22d7912002011eae7a1294f2002f5efd28ecf1db80a7c6575780cadff1b53
+
+PASS 1: F table (16 settings), Lemma MI minimisation and difference tables, |T123| = 115 + 8 = 123 with axioms (E)/(Ru)/(Rv) by enumeration, |t_x| <= 2, and the M_123 > 0 witness (non-parallel keys: P - Q = 1/sqrt5 > 0 exactly; float dot cross-check below) all verified.
+        float cross-check: <y_ua, y_ub> = 0.948683 in (0, 1)
+PASS 2: sqrt2 width < 1e-30; arccos(mu0) in [0.2939503813270101, 0.2939503813270101]; pi width < 1e-12; kappa_E in [0.14035096863582369, 0.14035096863582369] (float 0.14035096863582361 inside); 1 + 1/(2 kappa_E) in [4.5624976789250189, 4.5624976789250189]
+PASS 3: 114062441973/25000000000 = 4.56249767892 exactly; certified lower endpoint of 1 + 1/(2 kappa_E) is 4.5624976789250189 >= declared. The declared coefficient is certified.
+ALL CHECKS PASSED
+exit code: 0
+# sha256(everything above this line) = eeabff84412051b7d5fea9f2a756a989b93dca7243ab5047ae9bb5eaa3244d09

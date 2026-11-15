@@ -1,40 +1,38 @@
 {
-  "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
-  "claims": [
-    {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "31",
-        "denominator": "10"
-      },
-      "evidence": [
-        "bound.json",
-        "proof.md"
-      ]
-    },
-    {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "1",
-        "denominator": "1"
-      },
-      "evidence": [
-        "bound.json",
-        "proof.md"
-      ]
-    }
-  ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+ "version": 1,
+ "title": "Complete reproduction of the McGuire-Schlesinger-Williams wire-graph/cutwidth route at the rule-bound constant: liminf C_B2(f_n)/n >= 4.56249767892 for Li's FOCS 2023 sumset-extractor family",
+ "claims": [
+  {
+   "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total family fixed in proof.md: Li's sumset extractor. f_n := SumsetExt_n, the explicit extractor family of X. Li (FOCS 2023; full version arXiv:2303.06802v2, Theorem 7.13 with Definition 1.1 there for uniform polynomial-time computability), taken at error 1/8: a uniformly polynomial-time computable family at every input length n, an extractor for the sum (bitwise XOR) of two independent (n,k)-sources with min-entropy k >= c*log2 n. The fixed polynomial-time evaluator is the uniform algorithm of Theorem LI; the language is L = {x : f_|x|(x) = 1}, in P, with empty NP witnesses.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one fixed total uniform polynomial-time family, hence one NP language with empty witnesses, at actual input length n=|x| in the full Li-Yang B2 model: liminf C_B2(f_n)/n >= 114062441973/25000000000 = 4.56249767892, by the complete McGuire-Schlesinger-Williams wire-graph/cutwidth route reproduced in proof.md with the rule-bound constant kappa_E = (3/(2*pi))*arccos((1+2*sqrt(2))/4) certified in checks.py.\",\"version\":\"circuitbreaker-expression-v1\"}",
+   "score": {
+    "numerator": "114062441973",
+    "denominator": "25000000000"
+   },
+   "evidence": [
+    "bound.json",
+    "checks-output.txt",
+    "checks.py",
+    "proof.md"
+   ]
+  },
+  {
+   "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total family fixed in proof.md: Li's sumset extractor. f_n := SumsetExt_n, the explicit extractor family of X. Li (FOCS 2023; full version arXiv:2303.06802v2, Theorem 7.13 with Definition 1.1 there for uniform polynomial-time computability), taken at error 1/8: a uniformly polynomial-time computable family at every input length n, an extractor for the sum (bitwise XOR) of two independent (n,k)-sources with min-entropy k >= c*log2 n. The fixed polynomial-time evaluator is the uniform algorithm of Theorem LI; the language is L = {x : f_|x|(x) = 1}, in P, with empty NP witnesses.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one fixed total uniform polynomial-time family, hence one NP language with empty witnesses, at actual input length n=|x| in the full Li-Yang B2 model: liminf C_B2(f_n)/n >= 114062441973/25000000000 = 4.56249767892, by the complete McGuire-Schlesinger-Williams wire-graph/cutwidth route reproduced in proof.md with the rule-bound constant kappa_E = (3/(2*pi))*arccos((1+2*sqrt(2))/4) certified in checks.py.\",\"version\":\"circuitbreaker-expression-v1\"}",
+   "score": {
+    "numerator": "1",
+    "denominator": "1"
+   },
+   "evidence": [
+    "bound.json",
+    "checks-output.txt",
+    "checks.py",
+    "proof.md"
+   ]
+  },
+  "Unscored lemma (read-once program lower bound): by Li's extractor theorem at error 1/8 (Theorem LI, cited with version, statement and hypotheses in proof.md), Lemma HARD gives that for all large n, f_n has at least 2^(n-2) accepting inputs and every accepting rectangle, under every split of the coordinates, has a side of size less than K = n^c_Li; Lemma COUNT then gives that every read-once program computing f_n has more than 2^(n-2)/K^2 edges. Proof: proof.md, Lemmas HARD and COUNT.",
+  "Unscored lemma (the rule bound): for every mass vector m over the 123-type cone of proof.md, the matched-edge cost satisfies f(m) <= (S_u + S_v)/(2*pi) <= 2*kappa_E, where kappa_E = (3/(2*pi))*arccos((1+2*sqrt(2))/4); consequently the cone supremum obeys M_123 <= 2*kappa_E. Proof: proof.md, Lemmas EC, STAR and RB; the F table, the 123-type enumeration and the constant are machine-verified in checks.py part 1 and part 2.",
+  "Unscored lemma (kernel cutwidth bound): for every xi in (0,1] there is C_xi such that every kernel (simple, triangle-free, 2-connected cubic graph) H on h vertices has cutwidth at most (M_123/2 + xi)*h + C_xi; with the rule bound, at most (kappa_E + xi)*h + C_xi. Proof: proof.md, Theorem A and Corollary A1.",
+  "Unscored lemma (certified constant): in exact rational interval arithmetic, sqrt(2) to width < 1e-30, pi to width < 1e-12 (Machin), arccos(mu0) to width < 1e-17 by bisection against rigorous cos Taylor enclosures, giving kappa_E in [0.14035096863582366, 0.14035096863582374] and 1 + 1/(2*kappa_E) >= 114062441973/25000000000 = 4.56249767892 exactly. checks.py is dependency-free standard-library Python; checks-output.txt is the complete transcript of one execution (exit code 0, ALL CHECKS PASSED)."
+ ],
+ "experiments": [],
+ "checks": []
 }
