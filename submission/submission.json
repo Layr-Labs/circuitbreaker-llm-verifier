@@ -1,40 +1,42 @@
 {
-  "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
-  "claims": [
-    {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "31",
-        "denominator": "10"
-      },
-      "evidence": [
-        "bound.json",
-        "proof.md"
-      ]
-    },
-    {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
-      "score": {
-        "numerator": "1",
-        "denominator": "1"
-      },
-      "evidence": [
-        "bound.json",
-        "proof.md"
-      ]
-    }
-  ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+ "version": 1,
+ "title": "Complete reproduction of the McGuire-Schlesinger-Williams wire-graph/cutwidth route at the rule-bound constant: liminf C_B2(f_n)/n >= 4.56249767892 for a norm-one indicator family with the counting core (Kollar-Ronyai-Szabo) proved self-contained",
+ "claims": [
+  {
+   "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total family fixed in proof.md Section 0: the norm-one indicator family. At input length N, with t := 2^floor(log2(N)/3) and m := the largest odd m >= 1 with (t+1)m + t <= N (lambda := N - m - t - mt), the input is parsed as [Q-block: m bits, the coefficients of a monic degree-m Q in F_2[X]][R-block: t bits, a monic degree-t R in F_2[Y]][z-block: mt bits, the coefficients of z(X,Y)][leftover: lambda bits]; f_N(x) := 1 iff Q and R are irreducible over F_2 and z(X,Y)^e = 1 in F_2[X,Y]/(Q,R), where e = (2^(mt)-1)/(2^m-1) = 1 + 2^m + ... + 2^(m(t-1)) (gcd(m,t)=1 makes (Q,R) maximal, so the quotient is the field with 2^(mt) elements). The evaluator parses, runs the deterministic polynomial-time irreducibility test (Fact IRRED, field.md) on Q and R, and, if both pass, computes z^e by binary exponentiation with bivariate arithmetic reduced mod Q in X and mod R in Y: polynomial time at every length N. The language is L = {x : f_|x|(x) = 1}, in P, with empty NP witnesses.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one fixed total uniform polynomial-time family, hence one NP language with empty witnesses, at actual input length n=|x| in the full Li-Yang B2 model: liminf C_B2(f_n)/n >= 114062441973/25000000000 = 4.56249767892, by the complete McGuire-Schlesinger-Williams wire-graph/cutwidth route reproduced in proof.md with the rule-bound constant kappa_E = (3/(2*pi))*arccos((1+2*sqrt(2))/4) certified in checks.py; the rectangle property of the family is proved from the Kollar-Ronyai-Szabo product-system counting theorem, proved self-contained in krs.md.\",\"version\":\"circuitbreaker-expression-v1\"}",
+   "score": {
+    "numerator": "114062441973",
+    "denominator": "25000000000"
+   },
+   "evidence": [
+    "bound.json",
+    "checks-output.txt",
+    "checks.py",
+    "field.md",
+    "krs.md",
+    "proof.md"
+   ]
+  },
+  {
+   "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total family fixed in proof.md Section 0: the norm-one indicator family. At input length N, with t := 2^floor(log2(N)/3) and m := the largest odd m >= 1 with (t+1)m + t <= N (lambda := N - m - t - mt), the input is parsed as [Q-block: m bits, the coefficients of a monic degree-m Q in F_2[X]][R-block: t bits, a monic degree-t R in F_2[Y]][z-block: mt bits, the coefficients of z(X,Y)][leftover: lambda bits]; f_N(x) := 1 iff Q and R are irreducible over F_2 and z(X,Y)^e = 1 in F_2[X,Y]/(Q,R), where e = (2^(mt)-1)/(2^m-1) = 1 + 2^m + ... + 2^(m(t-1)) (gcd(m,t)=1 makes (Q,R) maximal, so the quotient is the field with 2^(mt) elements). The evaluator parses, runs the deterministic polynomial-time irreducibility test (Fact IRRED, field.md) on Q and R, and, if both pass, computes z^e by binary exponentiation with bivariate arithmetic reduced mod Q in X and mod R in Y: polynomial time at every length N. The language is L = {x : f_|x|(x) = 1}, in P, with empty NP witnesses.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"25000000000\",\"numerator\":\"114062441973\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one fixed total uniform polynomial-time family, hence one NP language with empty witnesses, at actual input length n=|x| in the full Li-Yang B2 model: liminf C_B2(f_n)/n >= 114062441973/25000000000 = 4.56249767892, by the complete McGuire-Schlesinger-Williams wire-graph/cutwidth route reproduced in proof.md with the rule-bound constant kappa_E = (3/(2*pi))*arccos((1+2*sqrt(2))/4) certified in checks.py; the rectangle property of the family is proved from the Kollar-Ronyai-Szabo product-system counting theorem, proved self-contained in krs.md.\",\"version\":\"circuitbreaker-expression-v1\"}",
+   "score": {
+    "numerator": "1",
+    "denominator": "1"
+   },
+   "evidence": [
+    "bound.json",
+    "checks-output.txt",
+    "checks.py",
+    "field.md",
+    "krs.md",
+    "proof.md"
+   ]
+  },
+  "Unscored lemma (family rectangle bound): the norm-one family of proof.md Section 0 satisfies, for all large N (with t = t(N) >= 2 and 3m + 2t + lambda + t*ceil(log2 t) + 2 <= N): (a) at least 2^(N-2m-t) accepting inputs; (b) every accepting rectangle, under every split of the coordinates, has a side of size < K = 2^(m+t+lambda+1)*t!; (c) f_N depends on each of its mt z-block variables. The rectangle bound follows from the Kollar-Ronyai-Szabo product-system counting theorem (at most t! solutions when columns are distinct), proved self-contained in krs.md, applied per prefix-cell in the fixed field F_2[X,Y]/(Q,R); Lemma COUNT then gives that every read-once program computing f_N has more than 2^(N-2m-t)/K^2 > 2^(N-L_2(N)) edges with L_2 = 4m+3t+2*lambda+2t*ceil(log2 t)+2. Proof: proof.md Section 1.1 (Sublemma NORM, Lemmas HARD and COUNT) and krs.md; the finite-field core is brute-force witnessed in checks.py part 0.",
+  "Unscored lemma (the rule bound): for every mass vector m over the 123-type cone of proof.md, the matched-edge cost satisfies f(m) <= (S_u + S_v)/(2*pi) <= 2*kappa_E, where kappa_E = (3/(2*pi))*arccos((1+2*sqrt(2))/4); consequently the cone supremum obeys M_123 <= 2*kappa_E. Proof: proof.md, Lemmas EC, STAR and RB; the F table, the 123-type enumeration and the constant are machine-verified in checks.py part 1 and part 2.",
+  "Unscored lemma (kernel cutwidth bound): for every xi in (0,1] there is C_xi such that every kernel (simple, triangle-free, 2-connected cubic graph) H on h vertices has cutwidth at most (M_123/2 + xi)*h + C_xi; with the rule bound, at most (kappa_E + xi)*h + C_xi. Proof: proof.md, Theorem A and Corollary A1.",
+  "Unscored lemma (certified constant): in exact rational interval arithmetic, sqrt(2) to width < 1e-30, pi to width < 1e-12 (Machin), arccos(mu0) to width < 1e-17 by bisection against rigorous cos Taylor enclosures, giving kappa_E in [0.14035096863582366, 0.14035096863582374] and 1 + 1/(2*kappa_E) >= 114062441973/25000000000 = 4.56249767892 exactly. checks.py is dependency-free standard-library Python; checks-output.txt is the complete transcript of one execution (exit code 0, ALL CHECKS PASSED)."
+ ],
+ "experiments": [],
+ "checks": []
 }

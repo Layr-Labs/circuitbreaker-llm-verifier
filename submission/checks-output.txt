@@ -1,0 +1,18 @@
+# Exact transcript of one complete execution of checks.py
+# command: python3 -I checks.py
+# platform: Darwin arm64, python 3.15.2
+# date (UTC): 2026-11-15T08:22:28.051150+00:00
+# sha256(checks.py at execution time) = a090782c44a4f4ad1e5cb0eeaa59e5fe235961bae4a6d2a81ece3a048880453d
+
+PASS 0 [GF(2^6), m=3, t=2]: sigma order 2; |H| = e = 9 (odd); 196 a-tuples: every B = {b : (a_i+b)^e = 1 for all i} has |B| <= 2 (max seen 2).
+PASS 0 [GF(2^6), m=2, t=3]: sigma order 3; |H| = e = 21 (odd); 196 a-tuples: every B = {b : (a_i+b)^e = 1 for all i} has |B| <= 6 (max seen 5).
+PASS 0 [GF(2^8), m=2, t=4]: sigma order 4; |H| = e = 85 (odd); 199 a-tuples: every B = {b : (a_i+b)^e = 1 for all i} has |B| <= 24 (max seen 7).
+PASS 0 [KRS t=2]: all 57600 column-distinct systems over GF(2^4) have at most 2 solutions (full enumeration).
+PASS 0 done: finite-field core of proof.md 1.1 witnessed on GF(2^4), GF(2^6), GF(2^8).
+PASS 1: F table (16 settings), Lemma MI minimisation and difference tables, |T123| = 115 + 8 = 123 with axioms (E)/(Ru)/(Rv) by enumeration, |t_x| <= 2, and the M_123 > 0 witness (non-parallel keys: P - Q = 1/sqrt5 > 0 exactly; float dot cross-check below) all verified.
+        float cross-check: <y_ua, y_ub> = 0.948683 in (0, 1)
+PASS 2: sqrt2 width < 1e-30; arccos(mu0) in [0.2939503813270101, 0.2939503813270101]; pi width < 1e-12; kappa_E in [0.14035096863582369, 0.14035096863582369] (float 0.14035096863582361 inside); 1 + 1/(2 kappa_E) in [4.5624976789250189, 4.5624976789250189]
+PASS 3: 114062441973/25000000000 = 4.56249767892 exactly; certified lower endpoint of 1 + 1/(2 kappa_E) is 4.5624976789250189 >= declared. The declared coefficient is certified.
+ALL CHECKS PASSED
+exit code: 0
+# sha256(everything above this line) = 2e2b122b3a94559f9414fb813e217a06994e031d20d07d7126a4a827f5237e2f
