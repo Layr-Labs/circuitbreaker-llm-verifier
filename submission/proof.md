@@ -1,90 +1,411 @@
-# Published coefficient 31/10: construction and proof
+# A full-B2 eventual lower bound with relaxed terminal stars
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+For the single language defined in `family.md`, the theorem is
 
-## Fixed total family
+    C_B2(L_N) >= (12068021772463199324341408323933/
+                  2500000000000000000000000000000) N
+                =4.82720870898527972973656332957320 N
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+at EVERY sufficiently large integer actual bit length N. The explicit
+eventual remainder is zero; its starting threshold is unspecified.
+The model permits all sixteen two-input Boolean truth tables, unrestricted
+sharing and depth, repeated input pins and constant/unary/terminal cases.
+`family.md` supplies one fixed polynomial-time evaluator, hence an NP
+verifier with empty witness, at every length. No advice or certificate
+bits are given to the circuit.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+The argument is self-contained in the seven listed scientific files.
+`graph.md` proves Gaussian comparison, the conversion from crossing
+matchings to cutwidth, a finite J47 path bound and the physical multigraph
+reduction. `curvature.md` pays three disjoint pair sets in one covariance
+budget. `source.md` pays the actual-base ordering probabilities and two
+different threshold deficits. This file proves one simultaneous ordering
+and population/energy comparison. `family.md` proves its circuit and
+norm-graph consumers. `certify.py` replays the finite inequalities; code
+execution does not replace any of the general arguments.
 
-## Uniform P and NP membership
+Scientific provenance: the norm-one/circuit route builds on
+McGuire--Schlesinger--Williams, the full B2 normalization of Li--Yang,
+and the norm-graph algebra of Kollár--Rónyai--Szabó, with the exact forms
+proved in `family.md`. The Gaussian matching-cut/cover method is due to
+the public CircuitBreaker lineage including galarnon42, Arthur Ostapenko,
+mooselumph and DarkWingMcQuack. The positive radial and random-strip
+construction is recorded at Puthranps/cubic-cutwidth-retiming commits
+`a901153f78d426225407c02dec82995e51192f6d` and
+`6b299fde41307ff47eb4a699e140fd009e61a51d`. The one-pass weak exposure
+principle also appears in public CircuitBreaker proof
+`2ce5e00ab57185fbf7bfdb504b316eb8738e9fda`. All mathematical premises used
+here are expressed and proved in these supplied files. Public availability,
+past verdicts and numerical screens are not proof premises. The text and
+standalone implementation in this release are independently authored.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+## Fixed inputs and objective
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+For a simple cubic base on n vertices let F(B) be the full maximum
+matching size of the crossing graph of B, equivalently its minimum
+vertex cover number. The original keys Y are the actual finite radial
+source from `graph.md`; excess E is the sum of its complete-alpha
+adjacent excesses, used only for marking and covariance accounting.
+The relevant exact inputs are
 
-## Every integer length and the lower bound
+    U=26129513284633533/200000000000000000,
+    eta=19/40000, theta=eta/2,
+    K=28238380378679347/10^18,
+    p=247011/10^12, u=3/10^8, w=9/(2*10^9),
+    q_inner=283/10^9, q_annulus=273249/10^12,
+    b=451347/20000000000,
+    delta=4051/10^9.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+Here U bounds the reference zero-threshold matching expectation per
+vertex; K E is the original-base zero-threshold covariance gain.
+The p,q,u,w are probabilities on the ORIGINAL actual base field, rather
+than on a retimed or independent reference field.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+## One safe ordering, with a disjoint neutral-group saving
 
-## Conservative remainder, with source discrepancy retained
+Use every seven- and nine-key positive support defined in `source.md`,
+including the relaxed-ending variant proved there. Seven-key lightness
+uses eta; original nine-key lightness uses theta throughout. For the
+relaxed variant the four terminal child edges may use eta; all other
+edges retain theta. Each strict
+support gives a one-unit decrease when its outside root is added to B.
+Also allow a weak support: a neighbor a of a root r together with both
+of a's other neighbors. If all three are in B, a is an isolated vertex
+of the crossing graph after r is deleted. The original crossing edge ra
+therefore adds one to the matching optimum of that graph; after flipping
+r at most one can be added. This proves the root marginal is nonpositive,
+with no condition on the exterior.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+For every root v replace its key by the minimum of its original key and
+the maxima of all eligible strict and weak supports. This is a single
+radius-three function of the original keys. At any threshold every newly
+added root has its support entirely in the ORIGINAL B, so no other added
+root lies in that support. Submodularity preserves the nonpositive
+marginal of every weak proposal and the -1 marginal of every strict
+proposal as other roots are added. Thus the whole update is safe.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+There is an extra gain from original zero marginals. Let m and all its
+neighbors be originally outside B. Qualify a neighbor r if its two
+other neighbors are inside B and the lower-key one, a, has both its
+other neighbors inside B. This chooses a canonical private crossing
+leaf a. Write R_m for the qualified roots, k_m=|R_m|<=3. Each r has
+unique original outside neighbor m, so the moving sets R_m are disjoint
+between centers. Their private leaves are distinct as well: a crossing
+leaf cannot attach to a second outside root.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Remove the k_m private leaf edges by their constant perfect matchings.
+Originally m is isolated. After flipping R_m its k_m roots become
+leaves at m, adding one matching edge if k_m>0. Consequently
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+    F(B)-F(B+R_m)=(k_m-1)_+,
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+and every individual member had original marginal zero. A fixed disjoint
+addition set's total marginal decreases as the initial B grows, by
+summing its singleton marginals. Therefore these group gains persist
+after earlier disjoint groups. Strict roots cannot belong to any R_m
+because their original marginal is -1, not zero. Process the groups,
+then all strict roots, then the remaining safe proposals to obtain
 
-## Exact arithmetic and the unchanged LP
+    F(B)-F(updated B)
+      >=number of original strict roots+sum_m(k_m-1)_+.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+Choose an unordered pair r,s among m's neighbors and one private candidate
+at each root: twelve canonical names. Each successful name selects its
+private candidate as the lower-key child. A center with k_m qualified
+roots has exactly binomial(k_m,2) successful pair names. Weight each by
+2/3, since `(2/3)binomial(k,2)<=(k-1)_+` for k=0,1,2,3. The nominal
+weight per center is eight. Its eleven-edge light event is precisely
+the actual-source cone of (S10); the negative guards enforce original
+neutrality and disjointness from the strict flags.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+Let L7,L9,LR,LW be the eligible naming weights, with LR the relaxed
+nine-key count and LR>=L9. At |t|<=.03, the expected
+ordering saving is therefore at least
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+    q L7+(p-u)L9+u LR+w LW,                                 (P1)
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+with q=q_inner on |t|<=.02 and q=q_annulus otherwise. The same actual
+keys are used by every part of the update, and no independence of
+successful events is assumed.
 
-## Sources
+## Naming counts from inspected stars
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+An edge is high if D>eta, medium if theta<D<=eta, and low otherwise.
+Let n_ab count vertices incident to a high and b medium edges, a+b<=3.
+Let s_H count non-high edges with two high-marked endpoints, and s_S
+low edges with two endpoints marked by high or medium edges. At one
+cutoff, write N for its number of marked vertices and r for its marked-
+unmarked boundary. Then
+
+    r=sum_(d>0)(3-d)n_d-2s.
+
+For an inspected naming, either its root is marked or the first marked
+star on a branch follows an unmarked predecessor. In a named tree of
+nominal weight W, any one directed predecessor position hits every
+directed base edge with total weight W/3: fix that directed image and
+extend the two remaining parts by locally injective choices. The number
+depends only on the tree. Remote projection collisions are allowed
+in this upper count; lightness supplies faithfulness afterwards.
+
+The seven-key inspection has three nonroot complete stars and W=6.
+Its loss is at most 6N+6r, giving
+
+    L7>=6n-sum c7(a)n_ab+12s_H,
+    c7=(0,18,12,6).                                 (P2)
+
+The weak-pair inspection has four nonroot complete stars and W=8.
+At the lower cutoff it gives
+
+    LW>=8n-sum cW(a+b)n_ab+(64/3)s_S,
+    cW=(0,88/3,56/3,8).                             (P3)
+
+Negative right sides are harmless; the true counts are nonnegative.
+
+A stronger nine-key count uses the unmarked induced graph. Let U_i be
+the number of unmarked vertices with i marked neighbors, U=sum U_i,
+and J the number of U_1--U_1 edges. At a U_0 root all three first
+neighbors are unmarked. If j are of type U_1 and k of type U_2, their
+available child counts are 1,0,2 respectively. The eligible count is
+the sum of the three pairwise products of those child counts. For k=0
+the values at j=0,1,2,3 are 12,8,5,3. In particular they dominate both
+`9-2j-17k` and `11-3j-23k`. If k>0 their simultaneous surpluses are:
+
+| (j,k) | eligible | first surplus | second surplus |
+|---|---:|---:|---:|
+| (0,1) | 4 | 12 | 16 |
+| (1,1) | 2 | 12 | 17 |
+| (2,1) | 1 | 13 | 19 |
+| (0,2) | 0 | 25 | 35 |
+| (1,2) | 0 | 27 | 38 |
+| (0,3) | 0 | 42 | 58 |
+
+The extra is at least 12k and 16k respectively. Write E01,E02 for
+U_0--U_1 and U_0--U_2 edges. There are at most two U-stubs at U_1
+and one at U_2, with `2U_1-E01>=2J`. Retaining those missing-stub
+terms together with the table, rather than bounding them separately,
+proves the simultaneous inequalities
+
+    L9>=9U-13r+12U_2+30U_3+4J,
+    L9>=11U-17r+16U_2+40U_3+6J.                    (P4)
+
+For example the first residual is
+`2(2U_1-E01)+17(U_2-E02)+12E02>=4J+12U_2`; the second uses
+`3(2U_1-E01)+23(U_2-E02)+16E02>=6J+16U_2`.
+Since `N+r=sum_(a+b>0)(4-a-b)n_ab-2s_S`, the main parts of (P4)
+are equivalently
+
+    9n-sum w9(a+b)n_ab+26s_S,
+    11n-sum w11(a+b)n_ab+34s_S,
+    w9=(0,35,22,9), w11=(0,45,28,11).
+
+Both inequalities refer to the SAME naming count, so they are combined
+only with nonnegative weights whose sum is p-u.
+
+The relaxed count additionally satisfies
+
+    LR>=12n-sum cR(a,b)n_ab+24s_S+12U_2+24U_3,
+    cR(a,b)=(0,36,24,12)[a+b]+8(3-a-b)1[a>0].       (P4R)
+
+At a U_0 root all four core stars are unmarked, so all twelve names
+exist before terminal testing. A candidate ending vertex incident to
+a high edge deletes at most four names: choose the other selected
+branch and one of its two children. A high vertex of type (a,b) has
+at most 3-a-b unmarked neighbors, and each intermediate neighbor
+belongs to at most two U_0 roots. Thus at most
+`8 sum_(a>0)(3-a-b)n_ab` names are lost from 12U_0. Using
+`U_0=n-|S|-r+U_2+2U_3` and the marked-boundary identity gives (P4R).
+Repeated rejection reasons only weaken this incidence upper bound.
+
+## Unmarked excess pays a capped boundary improvement
+
+Normalize x_e=D_e/eta and put A=eta K. In this section all finite-alpha
+root debits from (S3) are collected as an arbitrarily small multiple
+of n. This means source resources are chosen first to achieve that
+accuracy; a fixed nonzero root debit is not said to decay with n.
+
+At a U_1 vertex let x be its low boundary excess and y,z its two U--U
+edge excesses. The first constraint (S3) gives `y+z>=x/2` up to the
+uniform debit. Put `Bcap=sum_(S--U_1 edges)min(x,1/4)` and let L_UU
+be the total U--U excess. Counting at most two visits per edge gives
+`L_UU>=Bcap/4`. Alternatively cap each visited y,z at 1/8. Their sum
+is at least min(x,1/4)/2. A twice visited edge contributes at most
+`2min(x_e,1/8)<=x_e+1/8`; these are exactly the J edges. Thus
+`L_UU>=Bcap/2-J/8`. Averaging these two bounds for the SAME energy gives
+
+    L_UU>=beta Bcap-J/16, beta=3/8.                 (P5)
+
+Choose nonnegative v9,v11 with v9+v11=p-u and set
+
+    z_s=13v9+17v11+12u+(32/3)w.
+
+The shared-edge terms in (P3)-(P4R) supply exactly `2z_s s_S`.
+We now give one explicit allocation of `K E+2z_s s_S`. Keep the high
+and medium baselines `A sum(a/2+b/4)n_ab`. Allocate half the medium
+surplus above 1/2 to each endpoint of type 02 or11, at most two such
+payments per edge. At eligible low endpoints of type 10,01,02, a
+shared S--S low edge pays `A x/2+z_s`; a boundary S--U edge pays
+`A x+beta A min(x,1/4)`. Type11 receives just A x/2.
+Other low endpoint payments may be discarded.
+
+All the extra boundary payments landing at U_1 fit (P5), except its
+debit A J/16. At U_2 and U_3 there are two and three boundary edges,
+each capped at beta A/4. Thus these formal payments fit the ONE amount
+
+    K E+2z_s s_S+(3A/16)U_2+(9A/32)U_3+(A/16)J
+                         +arbitrarily_small_error*n. (P6)
+
+No high, medium or shared-low energy is recharged by the U--U allocation.
+For total eligible low incidence l, the formal endpoint payment is at least
+
+    F_beta(l)=A l/2+min(A l/2+beta A min(l,1/4),z_s). (P7)
+
+To verify it, first sum the half-energy baseline. The remaining edge
+payments are bounded below by minima of z_s and
+`A x/2+beta A min(x,1/4)`. The sum of these minima is at least the
+minimum of the sum and z_s, and clipped incidences satisfy
+`sum min(x_i,1/4)>=min(sum x_i,1/4)`.
+
+The exact constants below satisfy
+`(7/32)A<z_s<(11/32)A`. Therefore
+
+    F_beta(1/4)=(1+beta)A/4,
+    F_beta(1/2)=A/4+z_s,
+    F_beta(11/20)=11A/40+z_s.
+
+The function is increasing and concave with slope at least A/2
+everywhere. Also `F_beta(l)>=A min(l,1/20)`: on [0,1/20] its first
+branch has slope (1+beta)A and the cap exceeds the amount needed;
+beyond it use monotonicity.
+
+## Paired endpoint payments, with shared endpoints included
+
+By (S3), a high edge joining types 10 or11 has off-edge incidence at
+least 8/5. Their baseline incidences total one, and each extra low or
+medium-surplus unit receives at least A/2. Such a pair therefore pays
+bonus 3A/10. These high pairs are vertex-disjoint. Their number is at
+least half of n10+n11 minus half of the high stubs at all other types.
+
+A medium 01--01 pair has low incidence at least 1/4 at each end and
+sum at least 4/5. Monotonicity and concavity of (P7) put the smallest
+sum at `(1/4,11/20)`. Above the two 01 local baselines its bonus is
+
+    Delta=z_s+c0-beta A/4, c0=A/40.
+
+A medium 01--02 edge also pays c0, with no hidden duplication when
+two such edges share a 02 endpoint. Write y=l01-1/4, l for the 02
+low incidence and s_e,s_f for its two medium surpluses above 1/2.
+The paired inequality gives
+
+    y+l+s_f>=1/20+(8/5)s_e.
+
+With two 01 neighbors sum the two inequalities to get
+`y1+y2+2l>=1/10+(3/5)(s_e+s_f)`. The available low payments are (P7) at 02, at least `A min(l,1/20)`,
+and the 01 increments, at least `Ay/2` each, plus `A(s_e+s_f)/2`.
+If l>=1/20, the 02 payment alone supplies A/20, enough for two edges.
+Otherwise one neighbor is paid by `Ay/2+Al+A(s_e+s_f)/2`, at least
+half its constraint. For two neighbors, `A(y1+y2)/2+Al` is at least
+half their summed constraint. Thus the same A/40 per edge is paid
+within the SAME allocation, without assuming slope A at 01.
+The type01 leaves of these mixed pairs cannot belong to a 01--01 pair,
+and no medium-pair endpoint belongs to the high-pair type set {10,11}.
+
+Let P,Q count medium 01--01 and 01--02 edges, and let R count medium
+stubs at other types. Then `2P+Q>=n01-R` and
+`P>=(n01-2n02-R)/2`. Since Delta>=2c0, for xi=2/3 the combined bonus
+is at least
+
+    c0(n01-R)+(g/2)(n01-2n02-R),
+    g=(2/3)(Delta-2c0), B=c0+g/2.
+
+This uses `(Delta-2c0)P` once, interpolating its signed count with
+P>=0. Together with the high pairs the local formal-payment coefficients
+are exactly:
+
+| (a,b) | G_ab |
+|---|---|
+| 00 | 0 |
+| 01 | A(1/2+beta/4)+B |
+| 02 | A/2-g |
+| 03 | 3A/4-3B |
+| 10 | 9A/10+z_s |
+| 11 | 9A/10-B |
+| 12 | 17A/20-2B |
+| 20 | 7A/10 |
+| 21 | 19A/20-B |
+| 30 | 21A/20 |
+
+This table is a lower bound for the same sum of formal endpoint payments
+in (P6), rather than a second independent energy estimate.
+
+## Exact dual and nested thresholds
+
+At the fixed inputs choose
+
+    v11=((31/20+beta/2)A-92p-4u-(232/3)w)/26,
+    v9=p-u-v11.
+
+Both weights are positive. The exact arithmetic also checks the stated
+range of z_s, g>0 and all ten type comparisons below. For the inner
+range |t|<=.02 put q=q_inner,d=0. For the annulus
+`.02<=|t|<=.03` put q=q_annulus and `d=b(.02)^2`.
+By (S13) the extra actual-base threshold credit is at least
+`d(6n-28h7)`. Replacing the positive part by this weaker expression
+permits linear accounting. Since `h7=sum a n_ab/2`, its type debit is
+14da. The comparisons are
+
+    G_ab >= q c7(a)+v9 w9(a+b)+v11 w11(a+b)
+                                      +u cR(a,b)+w cW(a+b)+14da. (P8)
+
+They bind at 00,01,02 and have strictly positive slack at the other
+seven types. The simultaneous naming surpluses in (P4) also exceed
+all three overlap costs of (P6):
+
+    12v9+16v11+12u>3A/16,
+    30v9+40v11+24u>9A/32,
+    4v9+6v11>A/16.                                  (P9)
+
+Sum (P8)-(P9), (P2)-(P4) and (P6). The shared-edge allowance cancels
+exactly once; the favorable 12q s_H may be dropped. Equations (P1)
+and (S13), telescoped after the original zero-threshold Price comparison,
+give total central saving per vertex at least
+
+    6q+9v9+11v11+12u+8w+6d.
+
+Each exact range gains `(35/13)u` over the respective values
+`165359242580092155427/41600000000000000000000000` and
+`165178517204092155427/41600000000000000000000000`.
+The annular floor exceeds `4051/10^9`, with strict gap greater
+than `4/10^10`.
+All these are direct rational comparisons reproduced by `certify.py`.
+
+For |t|>=.03, the same-threshold cover estimate (S11) pays
+`67/10^7>delta`. The combined rule is pointwise safe. Choose the
+finitely many source, conditioning, cover and mesh errors strictly
+inside the smallest available gap, uniformly before graph size.
+The radius-three inheritance, finite-range concentration, tail and
+tie treatment and (G4) in `graph.md` now imply the uniform simple-cubic
+bound with
+
+    gamma=U-delta=26128703084633533/200000000000000000.
+
+Its physical reduction supplies one nonnegative nondecreasing h=o(D)
+for all cubic multigraphs with the same gamma.
+
+## Actual input length and final rounding
+
+Apply the circuit/norm-graph theorem proved in `family.md` to this physical
+graph hypothesis. It uses the same one total validated-prefix norm-one
+language, charges every prefix and leftover bit, and gives at all large
+integer lengths a uniform sublinear loss below
+`c0=1+1/(2gamma)`. Its fixed evaluator supplies the empty-witness NP
+verifier; constants, degenerate truth tables, shared gates, repeated pins
+and terminal outputs are included in its circuit normalization.
+
+The declared c* is the strict downward 10^-32 rounding of c0. In particular
+
+    0<c0-c*<10^-32.
+
+The same sublinear loss divided by actual N tends to zero along EVERY
+integer length, so some fixed N0 absorbs that positive rounding gap
+for all N>=N0. This gives the exact declaration with identically zero
+eventual remainder, without asserting an explicit value of N0.
