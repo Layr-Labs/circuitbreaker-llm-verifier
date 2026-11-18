@@ -1,40 +1,55 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Certified cubic cutwidth 0.1306475664231677 and circuit coefficient 6306475664231677/1306475664231677",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total language L of proof.md section 1, decided at every length N by one fixed evaluator A. If N<16 output 0. Else k is the largest integer with 4^k<=N, t=2^k, m0=floor((N-t)/(t+1)), m=m0 if m0 is odd and m=m0-1 otherwise, l=N-t-m-t*m; if m<1 output 0. Bits 1..t define R(W)=W^t+sum_{v<t} x_{v+1}W^v and bits t+1..t+m define Q(Z)=Z^m+sum_{u<m} x_{t+u+1}Z^u over F_2; if R or Q fails the exact irreducibility test of proof.md (X^(2^d)=X mod P, and gcd(P,X^(2^d')-X)=1 for every divisor d' of d=deg P with d'<d) output 0. Otherwise the next t*m bits c_{u,v} (bit number t+m+v*m+u+1) give z=sum c_{u,v}Z^uW^v in the field E=(F_2[Z]/(Q))[W]/(R) with 2^(tm) elements, the last l bits are ignored, and the output is 1 iff z^e=1 for e=sum_{j=0}^{t-1} 2^(m*j). All t+m+l prefix and leftover bits are counted in N; R and Q are input, not advice.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1306475664231677\",\"numerator\":\"6306475664231677\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1306475664231677\",\"numerator\":\"6306475664231677\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For the single fixed total language L defined in proof.md Section 1, its evaluator A runs in polynomial time on every input, and L is in NP with witness bound zero and the verifier accepting exactly empty witnesses with A(x)=1. In the full Li-Yang B2 model at entire input length N, liminf over all integers N tending to infinity of C_B2(L_N)/N is at least 6306475664231677/1306475664231677. Equivalently, for every epsilon>0 there exists N_epsilon such that every integer N>=N_epsilon satisfies C_B2(L_N)>=(6306475664231677/1306475664231677-epsilon)N. Proof: proof.md, circuit.md, cutwidth.md, krs.md, certificate.md and the locally executed Python interval certificate certify.py. No explicit remainder rate is claimed.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "6306475664231677",
+        "denominator": "1306475664231677"
       },
       "evidence": [
         "bound.json",
+        "certificate.md",
+        "certify.py",
+        "circuit.md",
+        "cutwidth.md",
+        "krs.md",
         "proof.md"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total language L of proof.md section 1, decided at every length N by one fixed evaluator A. If N<16 output 0. Else k is the largest integer with 4^k<=N, t=2^k, m0=floor((N-t)/(t+1)), m=m0 if m0 is odd and m=m0-1 otherwise, l=N-t-m-t*m; if m<1 output 0. Bits 1..t define R(W)=W^t+sum_{v<t} x_{v+1}W^v and bits t+1..t+m define Q(Z)=Z^m+sum_{u<m} x_{t+u+1}Z^u over F_2; if R or Q fails the exact irreducibility test of proof.md (X^(2^d)=X mod P, and gcd(P,X^(2^d')-X)=1 for every divisor d' of d=deg P with d'<d) output 0. Otherwise the next t*m bits c_{u,v} (bit number t+m+v*m+u+1) give z=sum c_{u,v}Z^uW^v in the field E=(F_2[Z]/(Q))[W]/(R) with 2^(tm) elements, the last l bits are ignored, and the output is 1 iff z^e=1 for e=sum_{j=0}^{t-1} 2^(m*j). All t+m+l prefix and leftover bits are counted in N; R and Q are input, not advice.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"1306475664231677\",\"numerator\":\"6306475664231677\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"1306475664231677\",\"numerator\":\"6306475664231677\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For the single fixed total language L defined in proof.md Section 1, its evaluator A runs in polynomial time on every input, and L is in NP with witness bound zero and the verifier accepting exactly empty witnesses with A(x)=1. In the full Li-Yang B2 model at entire input length N, liminf over all integers N tending to infinity of C_B2(L_N)/N is at least 6306475664231677/1306475664231677. Equivalently, for every epsilon>0 there exists N_epsilon such that every integer N>=N_epsilon satisfies C_B2(L_N)>=(6306475664231677/1306475664231677-epsilon)N. Proof: proof.md, circuit.md, cutwidth.md, krs.md, certificate.md and the locally executed Python interval certificate certify.py. No explicit remainder rate is claimed.\",\"version\":\"circuitbreaker-expression-v1\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
         "bound.json",
+        "certificate.md",
+        "certify.py",
+        "circuit.md",
+        "cutwidth.md",
+        "krs.md",
         "proof.md"
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
+  "experiments": [
     {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
+      "id": "gaussian-certificate",
+      "source": "certify.py",
+      "purpose": "Certify the finite Gaussian path sum Gamma_39 < 1306475664231677/10000000000000000 using 101-node tensor Gauss-Legendre quadrature on [0,3], directed 100-digit Decimal initialization, verified nodes and weights, the fully proved Gaussian even-moment quadrature error with exact precision diagonals, and the positive-completion tail bound. Contractions use exact arbitrary-size integers on the 2^128 grid with outward floor and ceiling. The complete written evidence separately proves every graph, algebraic, uniformity and circuit reduction.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false,
+        "required": []
+      },
+      "initial_inputs": [
+        {}
+      ]
     }
-  ]
+  ],
+  "checks": []
 }
