@@ -1,90 +1,48 @@
-# Published coefficient 31/10: construction and proof
+# Three local passes for crossing-matching width
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+For a finite cubic multigraph and a strict vertex order, let the peak be the maximum matching number among the bipartite crossing graphs of all prefixes. The forward, reverse and forward nonbacktracking exposure passes specified below, with radii 3, 3 and 4, produce a strict order with peak at most the original peak. Their keys read at most ten additional hops. The second claim concerns submodularity of matching at a completed threshold after these same three passes; the explicit cube violates it. These are unscored graph lemmas for CircuitBreaker.
 
-## Fixed total family
+## Crossing matching and local moves
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+For $B\subseteq V(G)$ write $D_B$ for its bipartite crossing graph and $F(B)=\nu(D_B)$ for its matching number. A loop never crosses. Multiplicities leave matching numbers unchanged. The function $F$ is symmetric and submodular. One proof gives each edge an auxiliary bit and charges a vertex one if its bit and the incident edge bits are not all equal. The minimum total charge over edge bits equals the minimum vertex cover of $D_B$, hence equals $F(B)$. Indeed the charged vertices cover the crossings. Conversely, for a given cover each uncovered vertex can prescribe its bit on its incident edges without conflicting with another uncovered vertex. The charge is a sum of submodular not-all-equal terms. Partial minimization preserves submodularity by applying its defining inequality to two minimizing assignments and then taking their intersection and union. Flipping a vertex bit changes $F$ by at most one, since deleting that vertex gives the same crossing graph in both cases. [Jeong, Sæther and Telle, IPEC 2015](https://drops.dagstuhl.de/storage/00lipics/lipics-vol043-ipec2015/LIPIcs.IPEC.2015.212/LIPIcs.IPEC.2015.212.pdf)
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+Consider an advance pass in a strict order. A threshold means all vertices up through a specified old key, including that key. Fix its early set $B$. For $v\notin B$, delete $v$ and let $K$ be the crossing graph on the remaining vertices. Call a vertex *exposable* if some maximum matching leaves it unmatched. Let $E$ and $L$ indicate the existence of an exposable neighbor of $v$ in $K$ on the early or late side, respectively. Before adding $v$ the optimum is $\nu(K)+E$. Afterwards it is $\nu(K)+L$. This follows by removing the edge incident to $v$ from any matching that increases the optimum, and in the other direction by extending a matching that exposes the neighbor. Thus
 
-## Uniform P and NP membership
+$$F(B\cup\{v\})-F(B)=L-E.$$
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+To certify a nonpositive marginal it suffices to certify $E=1$ or $L=0$. Having both conditions certifies a strict saving of one. Submodularity implies that adding other vertices first can only reduce a still-unadded vertex's marginal. In particular, any subset of the certified additions is safe. If $s$ distinct vertices have strict certificates at the original cut, making all the additions saves at least $s$.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+## The finite-radius certificate
 
-## Every integer length and the lower bound
+In any crossing graph $H$, a vertex $u$ is exposable exactly when none of its crossing neighbors is exposable in $H-u$. This follows from $\nu(H)\in\{\nu(H-u),\nu(H-u)+1\}$ by the same extension argument. Recursing uses a self-avoiding path of deleted vertices. This deletion is important on short cycles.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+For each path from $v$ to a current vertex $u$, compute a lower bound on “early and exposable” and an upper bound on “late and exposable”. Express them by two old keys $a,b$: early exposure is guaranteed whenever the threshold is at least $a$, and late exposure is possible only at thresholds strictly below $b$. At the radius horizon take $(a,b)=(+\infty,k_u)$, where $k_u$ is the old key. At an interior vertex, take
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+$$a=\max\bigl(\{k_u\}\cup\{b_w\}\bigr),\qquad
+b=\min\bigl(\{k_u\}\cup\{a_w\}\bigr).$$
 
-## Conservative remainder, with source discrepancy retained
+Here $w$ ranges over neighbors after deleting every earlier vertex on the path and $u$ itself. Repeated incidences are immaterial. If the threshold is at least $a$, the current vertex is early and has no exposable late child. If it is at least $b$ and the current vertex is late, a guaranteed early child is exposable. The exposure identity proves both conclusions by induction. A branch uses only the vertex labels and incidences within its radius. The horizon case does not read its outward neighbors.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+At a root with neighbors, let $a_* =\min_w a_w$ and $b_* =\max_w b_w$. Advance the root to the earliest of $k_v,a_*,b_*$. Keep an isolated vertex fixed. At threshold $t$ every new addition has $t\ge a_*$ or $t\ge b_*$. The preceding certificate proves safety. The update is defined at all thresholds by one pivot key. A delay pass is an advance in the reversed order. Complement symmetry gives the same peak-matching guarantee.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+**Every prefix, including ties.** The new strict key is the lexicographic pair (old key of pivot, old key of vertex), in the original ascending order. In an advance, group vertices by pivot. At the event for old vertex $x$, either $x$ has already moved earlier or it occurs first within its group. Once it is present, that old prefix $B$ is fully present. Every extra vertex then present was certified for $B$ or an earlier prefix. Its marginal at $B$ is nonpositive by submodularity. Every partial group therefore has matching number at most $F(B)$. A prefix before the group is handled at the previous event. In the reverse traversal of a delay, the same tie convention places the old pivot first. Apply this passwise to prove $M(\pi')\le M(\pi)$. Summing the three read radii gives $3+3+4=10$. This also proves the radius-nine version with schedule $(3,3,3)$.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+## Cover-compatible singleton passes
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+The rule in the theorem uses the same two message bounds but excludes only the reverse of the incoming edge at each step. Distinct half-edge slots distinguish parallel edges and both ends of a loop. This computes the recursion on the nonbacktracking walk tree. An incident-edge bijection in a graph cover carries the messages at one level to the messages at the next. Thus, with repeated input bits, every fiber has the same output bit as its base vertex after each pass. This statement concerns completed thresholds and needs no tie-breaking on the cover.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Here is why these messages are safe even when the base has short cycles. Take a finite cover of girth greater than $2r+1$, where $r$ is the pass radius. Such covers can be constructed by labeling the non-tree edges of a spanning tree with free generators and using a finite quotient in which all nontrivial reduced words up to the required length survive. The same construction treats parallel edges as separate edges and a loop as a generator with its two directions inverse. For an explicit finite quotient, take all reduced free-group words of length at most $2r+1$. Right multiplication by each generator, where both words stay in the ball, is a partial bijection. Extend it to a permutation by bijecting the equally large complements, and use its inverse for the inverse generator. Each nonempty reduced word of the stated length moves the empty word, since its successive prefixes stay in the ball. Use the regular action of the finite group generated by these permutations as the sheet action. No nonidentity voltage has a fixed sheet. A reduced closed walk in a graph represents a nonidentity free-group element after contracting a spanning tree, so no such walk of length at most $2r+1$ closes in the lift. Each component may be handled separately. A nonbacktracking walk of length at most $r$ in the resulting cover is a simple path. The previous exposure proof therefore holds for each lifted vertex, including when its input bits are copies from the base.
 
-## Exact arithmetic and the unchanged LP
+For a degree-$m$ cover and repeated bits the crossing matching upstairs is exactly $mF(B)$. Lifting a base matching gives $m$ edges per matched base edge. Lifting a base minimum vertex cover gives $m$ vertices per cover vertex, providing the reverse bound. If a base vertex $v$ is proposed, every vertex above $v$ has a nonpositive marginal at the lifted cut. Submodularity permits adding the entire fiber. Exact lifting then gives $F(B\cup\{v\})\le F(B)$. Apply the same argument to each strict certificate to obtain a saving of one on the base. The all-prefix proof above now applies directly downstairs, including any empty pivot group. Iterating the argument proves exact descent on every cubic multigraph.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+## A counterexample to direct Gaussian comparison
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+For the second claim, Number the cube by the two cycles $0,1,2,3$ and $4,5,6,7$, with rungs $i$ to $i+4$. Let $H(B)$ be the maximum matching at the *completed* threshold obtained by the three cover-compatible passes. On the four inputs $\{0\},\{0,1\},\{0,2\},\{0,1,2\}$ the output sets are respectively $\varnothing,\varnothing,\varnothing,\{0,1,2,5\}$. Their matching sizes are $0,0,0,3$. The last set has three disjoint crossing edges $03,26,54$. Vertex 1 has no crossing neighbor. The mixed difference is $+3$, which contradicts submodularity.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+## Checking the four cuts
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+At the radius horizon every early neighbor has lower early-exposure bit 0 and every late neighbor has upper late-exposure bit 1. At an inner early vertex the lower bit is 1 exactly if all eligible children have upper late bit 0. At a late vertex the upper bit is 1 exactly if no eligible child has lower early bit 1. Missing bits are zero. Add a late root when some neighbor has lower early bit 1 or all neighbors have upper late bit 0. Complement before and after the middle pass. Numbering cuts by the bit sum of their vertices, the inputs 1, 3, 5, 7 have final bit sums 0, 0, 0, 39. The self-contained Lean file checks those four images by kernel reduction and computes exact maximum matching on the resulting cuts. On the last cut the three specified disjoint edges attain the bound, since only three vertices of the four-vertex side see a crossing edge. The sets corresponding to 1 and 7 are the intersection and union of the sets corresponding to 3 and 5.
 
-## Sources
+## Scope and attribution
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+The deterministic claim uses maximum-cardinality crossing matching and applies to any strict input order. It gives no absolute circuit coefficient. The crossing-matching layout approach was developed by galarnon42 and the earlier CircuitBreaker contributors. The local retiming framework builds on Puthranps's preceding submission. König's matching–cover theorem for finite bipartite graphs is used in the proof above. The Lean file uses the Lean 4.35.0 standard library. Its covered steps include the incidence-charge identity, submodularity, certified batches, the strict-prefix argument given the marginal certificates, exposure recursion, and the four cube masks. The finite-cover argument and the use of König's theorem are given in this manuscript. The prose proves both original claims independently of the availability of a Lean installation.
