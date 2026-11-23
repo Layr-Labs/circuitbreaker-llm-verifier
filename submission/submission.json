@@ -1,40 +1,53 @@
 {
   "version": 1,
-  "title": "Published coefficient/exponent pair (31/10, 1) for the fixed BK/Shoup family",
+  "title": "Softened crossing covers give an eventual 4.89253 N gate lower bound",
   "claims": [
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. Let L(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee.leading. Let R(n) be the sum of the monomials in guarantee.remainder.terms, each coefficient times n^exponent*(log2 n)^log_exponent*(log2 log2 n)^loglog_exponent; an empty sum is zero. There exists N such that C_B2(f_n)>=L(n)-R(n) for every integer n>=N. All remainder coefficients are the exact declared constants. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The total norm-one language defined in the section From cubic layouts to the norm-one language in proof.md, including invalid headers, small lengths and the ignored tail. Its witness is empty.\",\"guarantee\":{\"kind\":\"eventual_lower_bound\",\"leading\":{\"coefficient\":{\"denominator\":\"100000\",\"numerator\":\"489253\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"remainder\":{\"kind\":\"explicit\",\"terms\":[]}},\"projection\":{\"coefficient\":{\"denominator\":\"100000\",\"numerator\":\"489253\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"At every sufficiently large actual length N this fixed language requires at least (489253/100000)N gates in the full B2 model with zero explicit remainder.\",\"version\":\"circuitbreaker-expression-v2\"}",
       "score": {
-        "numerator": "31",
-        "denominator": "10"
+        "numerator": "489253",
+        "denominator": "100000"
       },
       "evidence": [
         "bound.json",
-        "proof.md"
+        "cavity.py",
+        "certify.py",
+        "proof.md",
+        "reference.py"
       ]
     },
     {
-      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. For g(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee, liminf over all integer n of C_B2(f_n)/g(n) >= 1. Equivalently, for every epsilon>0 there is N_epsilon such that C_B2(f_n)>=(1-epsilon)*g(n) for every integer n>=N_epsilon. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.\",\"guarantee\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"projection\":{\"coefficient\":{\"denominator\":\"10\",\"numerator\":\"31\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li\\u2013Yang B2 model.\",\"version\":\"circuitbreaker-expression-v1\"}",
+      "statement": "Joint CircuitBreaker theorem under rules.md: the following declaration defines ONE fixed eligible total uniform NP family in the pinned full B2 model at actual input length n. Its full guarantee and its declared projection both hold unconditionally, for all sufficiently large integer lengths with the quantifiers specified by the theorem kinds. Both score source claims assert this ENTIRE declaration, not separate lemmas. Let L(n)=c*n^p*(log2 n)^q*(log2 log2 n)^r with the exact parameters in guarantee.leading. Let R(n) be the sum of the monomials in guarantee.remainder.terms, each coefficient times n^exponent*(log2 n)^log_exponent*(log2 log2 n)^loglog_exponent; an empty sum is zero. There exists N such that C_B2(f_n)>=L(n)-R(n) for every integer n>=N. All remainder coefficients are the exact declared constants. Declaration: {\"convention\":\"uniform-np-full-b2-actual-length-all-lengths-v1\",\"family\":\"The total norm-one language defined in the section From cubic layouts to the norm-one language in proof.md, including invalid headers, small lengths and the ignored tail. Its witness is empty.\",\"guarantee\":{\"kind\":\"eventual_lower_bound\",\"leading\":{\"coefficient\":{\"denominator\":\"100000\",\"numerator\":\"489253\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"polynomial_log\",\"log_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"},\"loglog_exponent\":{\"denominator\":\"1\",\"numerator\":\"0\"}},\"remainder\":{\"kind\":\"explicit\",\"terms\":[]}},\"projection\":{\"coefficient\":{\"denominator\":\"100000\",\"numerator\":\"489253\"},\"exponent\":{\"denominator\":\"1\",\"numerator\":\"1\"},\"kind\":\"finite\"},\"theorem\":\"At every sufficiently large actual length N this fixed language requires at least (489253/100000)N gates in the full B2 model with zero explicit remainder.\",\"version\":\"circuitbreaker-expression-v2\"}",
       "score": {
         "numerator": "1",
         "denominator": "1"
       },
       "evidence": [
         "bound.json",
-        "proof.md"
+        "cavity.py",
+        "certify.py",
+        "proof.md",
+        "reference.py"
+      ]
+    },
+    "For every simple cubic graph on n vertices, if all prefixes of a vertex ordering have softened anchor cost at most M at penalty 1/2, then its edge cutwidth is at most M + o(n), uniformly over graphs and anchor orderings.",
+    "For every simple cubic graph on n vertices and penalty lambda in [3/8, 1], if all prefixes of a vertex ordering have softened anchor cost at most M, then its edge cutwidth is at most R(lambda) M + o(n) uniformly, where R(lambda) = 1 + 9 (1 - 2 lambda)_+^2 / (16 lambda (3 - 2 lambda)) and R(35/71) = 80089/80080."
+  ],
+  "experiments": [
+    {
+      "id": "softened-crossing-cover",
+      "source": "certify.py",
+      "purpose": "Enclose the alternating crossing-path sum, verify all scalar bounds, replay the four local gain integrals, and compare the resulting width with the declared gate coefficient by exact fractions.",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "initial_inputs": [
+        {}
       ]
     }
   ],
-  "experiments": [],
-  "checks": [
-    {
-      "check": "lp-certificate",
-      "inputs": {
-        "alpha_I": "48/5",
-        "alpha_Q": "9/5",
-        "alpha_phi": "1/5",
-        "delta": "64/5"
-      }
-    }
-  ]
+  "checks": []
 }
