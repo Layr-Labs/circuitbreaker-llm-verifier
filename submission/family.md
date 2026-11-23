@@ -1,0 +1,742 @@
+# Supporting estimates for the Gaussian ordering
+
+The language, rectangle bound and circuit transfer are proved in the final section of `proof.md`. The following lemmas give the estimates used in the graph proof. Section numbers retain their references from the main argument.
+
+## 4. Scalar source certificates behind the guarded probabilities
+
+The interval calculation below supplies k2,k3,k4 and the sharper opposite-branch bounds.
+
+Partition one physical fiber by nearest named-tree vertex j; x_j is
+its f_0-squared mass.
+At criticality set `c_ij=2^((dist(0,j)-dist(i,j))/2)`. Exactly,
+`P_i=sum_j x_j c_ij^2`, `I_ih=sum_j x_j c_ij c_hj` and
+`d_ih=sqrt(P_i P_h)-I_ih`. Include all atoms/off-tree branches.
+Summing d_ih gives the covariance excess.
+
+Here are the required inequalities `target<=sum_e weight_e*d_e`.
+
+```
+edges                   target             weights
+01,12,13                d03-d02            1.48,0,2.18
+01,12,23,24             d04-d03            1.40,3.49,0,2.94
+01,12,23,24             2d03-d01-d04       3.30,8.60,5.85,0
+01,12,23,34,35          d05-d04            2.21,3.33,5.07,0,4.17
+01,12,23                d03-d01            3.5,3.5,3.5
+01,12,23,34,45,46       d06-d05            2.86,5.65,4.15,7.26,0,6.05
+```
+
+Critical light costs are
+`3.66,7.83,17.75,14.78,10.5,25.97`. Their paid costs are
+`3.67,7.85,17.8,14.8,10.53,26`. In the last row only edge01
+can have doubled cutoff, giving cost `28.83<28.9` instead of25.97.
+Rows mean root-Q, support-Q, private-R, private-Q, ending-Q. Last tree:
+`w1-w-b-o-u-{z,z'}`. Apply both sibling labelings and then take
+the half-difference of w1,w2 to obtain the nine-key opposite-ending
+bounds `sqrt(3)*26theta` and `sqrt(3)*28.9theta`.
+
+Normalize P0=1 and fix target-endpoint Pt. The slack's only negative
+square root is a constant multiple of sqrt(P0 Pt), hence constant.
+The slack is concave on this compact polytope. Its vertices have at
+most two nonzero masses; one-class fibers have zero defects.
+For classes j,l, put `a_i=dist(0,j)-dist(i,j)` and similarly b_i.
+With masses 1-p,p define
+
+```
+N_i=(1-p)2^a_i+p2^b_i,
+J_ih=(1-p)2^((a_i+a_h)/2)+p2^((b_i+b_h)/2),
+B_ih=sqrt(N_i N_h)+J_ih,
+Delta_ih=(2^((a_i+b_h)/2)-2^((a_h+b_i)/2))^2.
+```
+
+Rationalization gives `d_ih=p(1-p)Delta_ih/B_ih`; Delta is rational.
+Cancel p(1-p); at0,1 defects vanish and canceled expressions extend
+continuously. On rational [u,v], affine endpoint extrema enclose N,J.
+Round each root outward on the binary grid of the checker, using
+`floor(S sqrt(r))=isqrt(floor(S^2 r))`.
+With denominator bounds Bminus,Bplus, bound target above via Bminus,
+subtractions and weighted energy below via Bplus. Accept only when
+the clamped-nonnegative target/energy upper ratio is below1.
+If energy vanishes, positive-weight edges connect the target endpoints,
+so the target determinant vanishes and the inequality follows directly.
+Bisect [0,1] dyadically; require disjoint accepted widths summing to1.
+
+The six retained covers have
+`315,2102,719,2027,117,7301` accepted intervals. The same radical engine for a d-path has
+`target=d0d`, `C2=2.18,C3=3.73,C4=5.85`. Check endpoint classes
+for spans<=d; outside their span rows are proportional.
+Strict gaps and compact coefficient convergence give paid per-edge constants
+`2.18,3.74,5.86`, hence k2=4.36,k3=11.22,k4=23.44.
+
+For signed R-Q let U be the u-branch mass, `c=sqrt(1+3U)`,
+`d=sqrt(1+15U)`, `J=sqrt(10-6U)`. The fiber contrast is
+`E=Delta-kappa*(p-q)`, with `Delta=d_uw'-d_uw`,
+`p=sqrt(c^2/4+3x'),q=sqrt(c^2/4+3x)`, x+x'<=U.
+For other root-branch masses A+B<=1-U,
+`kappa=(sqrt(1+3A)+sqrt(1+3B)-c)/sqrt(2)`. Concavity gives `0<=kappa<=(J-c)/sqrt(2)`.
+For p>=q, E<=d_uw'+d_uw. Convexity in p on [c/2,d/2] bounds
+`kappa*(p-q)-2d_uw'` by
+`T=((d-c)*(J-3c)/2+4U)/sqrt(2)`. Divide by
+`F=(c-1-U)/sqrt(2)=d_ou`; the ratio extends to0,1 and equals
+
+```
+L=2(c+1+U)/(d+c)*(27/(J+c)-6/(d+2c)).
+```
+
+Use endpoint root enclosures on 22 panels with endpoints `0,1/2048,1/1024,1/512,1/256,3/512,1/128,3/256,
+1/64,3/128,1/32,3/64,1/16,3/32,1/8,3/16,1/4,3/8,1/2,
+5/8,3/4,7/8,1`. Their upper bounds are below8.994921.
+Consequently `|Cov(R,Q)|/sqrt(3)<=9D_ou+D_uw+D_uw'`, giving
+critical cost11eta and paid cost11.05eta. The nine R-Q cost is
+instead `1+3*7.85=24.55`, directly from the support-Q row.
+
+For mixed nine Q-Q put
+`F(B)=(sqrt(1+3B)-1-B)/sqrt(2)` and
+`H(B)=(sqrt(1+15B)-sqrt(1+3B))/2`.
+Disjoint child contrasts give absolute fiber covariance at most3H(B)H(U),
+B+U<=1. Use H(x)<=3x/(1+2x) and
+F(x)>=x(1-x)/(sqrt(2)*(2+5x/2)). With C=147/25 these imply
+`H(B)H(U)<=C(F(B)+F(U))`: put P=B+U,Q=BU; after positive
+denominators, the remainder is a nonnegative term plus Q times
+`G=9C-36sqrt(2)+(31C/2-45sqrt(2))P-5CP^2+
+(36C-225sqrt(2)/4-10CP)Q`.
+The Q-free part is concave in P, positive at0,1; its Q coefficient
+is at least `26C-225sqrt(2)/4>0`. Thus the critical light cost is
+6C=35.28, paid as35.3.
+
+Finite-profile coefficients converge uniformly on the compact mass
+simplices, including zero masses. Sum vanishing violations using
+sum_fiber P0=1. Strict paid gaps and truncation/jitter convergence
+give simultaneous inequalities before graph size.
+
+## 5. Eligible name counts
+
+Write S for vertices incident to D>theta, U for the others,
+r=e(S,U), and E0i=e(U0,Ui). At an unmarked root with no marked
+neighbors all four core stars pass. For a branch through v, let
+i(v) count its marked neighbors. The strict ending has 2-i(v)
+choices, so the root count sums products over distinct branch pairs.
+For j neighbors in U1 and k in U2, the cases j=0..3 at k=0,
+j=0..2 at k=1, j=0..1 at k=2, and j=0 at k=3 give counts
+12,8,5,3; 4,2,1; 0,0; 0. These exceed or equal both 9-2j-5k
+and 11-3j-7k. With 2U1-E01>=2J and U2>=E02, summing gives
+P9>=9U-13r+12U2+30U3+4J and P9>=11U-17r+16U2+40U3+6J.
+
+For relaxed endings a branch has 2-i+g options, where g counts
+medium-only-marked neighbors. For x=2-i+g the minimum of
+(0,2,5)[i]-2g is (5,2,0)[x]. Add these minima to the three pair
+products on triples 000,001,002,011,012,022,111,112,122,222
+to obtain 15,12,10,10,9,9,9,9,10,12, all at least 9.
+Thus R9>=9U0-2E01-5E02+2 sum_(v in U) g(v)d0(v), where d0
+counts U0 neighbors. At i=1 use d0<=2,g<=1 to get
+2(2-d0)+2g*d0>=2g+(2-d0). At i=2 use d0<=1,g<=2 to get
+5(1-d0)+2g*d0>=2g. At i=3 use 2g-6<=0.
+Summing gives R9>=9U-13r+12U2+24U3+2rM+2J, with rM the
+medium-only-marked to unmarked boundary. Also
+R9>=12U0-8 sum_(a>0)(3-a-b)n_ab, since each high ending removes
+at most four names and each eligible intermediary serves at most
+two U0 roots. Substitute r=sum(3-a-b)n_ab-2sS,
+U0=U-r+U2+2U3 and rM>=2n01+n02-2sS.
+
+The first inspected marked star for seven-key names costs at most
+6 per root or per boundary edge in total: 4 for first-depth and
+2 for second-depth stars. At cutoff eta this gives
+L7>=6(n-NH-rH), where NH,rH count eta-marked vertices and their
+boundary. Drop the positive shared-edge term. No weak-move
+probability is used in this packet (WEAK_WEIGHT=0).
+
+## 6. Marked energy payments
+
+Use the notation of proof.md §12, x=D/eta, a0=sigma-3/2,
+f(l)=l/2+g0(l), g0(l)=min(l/2+rho min(l,1/4),z/A).
+Give high ends A/2, medium ends Ax/2, shared low ends Ax/2+z,
+and boundary marked ends Ax+rho A min(x,1/4). All these payments
+have disjoint sources. The U2,U3 bonuses cost at most X,3X/2.
+For U1 put Bcap=sum_(S--U1) min(x,1/4). Split U--U energy into
+LJ on U1--U1, Lout on edges with one U1 end, and the rest. Let
+L0 be Lout at U1 ends not touching U1 and Vt the number that touch.
+The proof.md §7 law gives Bcap<=(5/2)LJ+2Lout+o(n). Capping
+touching ends gives Bcap<=Vt/4+2L0+o(n), Vt<=2J.
+Weight the two bounds by 2/5,rho-2/5 to pay rho Bcap from L_UU
+plus (rho-2/5)J/2. Concavity gives at least Af(l) per marked end
+of total low incidence l, with f(1/4)=(1+rho)/4, f(1/2)=1/4+z/A,
+slope >=1/2, and f(l)>=(1+rho)min(l,a0).
+
+H1 denotes 10 and 11. At 10, l>=1/2 by the one-vertex law.
+The half-low payments at 10 and 11 beyond their baselines, with
+medium half-surplus at 11, pay 2h and AR_e/2 on an H1--H1 high
+edge, where R_e=sum_off x-sigma*x_e>=-o(1).
+A 20 with two H1 leaves has low l and leaf off-sums 1/2+y_i.
+For the original high surpluses s_i the paired law gives
+sum y_i+2l>=2a0+(sigma-1)sum s_i-o(1). The pool
+A[sum y_i/2+f(l)] pays Aa0. If l<a0 its remainder is at least
+rho A(R_e+R_f+l)-o(1); otherwise it is at least rho Aa0.
+The current mixed-star proof in proof.md gives
+R_e+R_f+l>=2*.059599-o(1).
+
+Let P,Q1,Q2,R count high H1--H1, H1--20 at one/two-leaf centers,
+and H1--other respectively. Put H=n10+n11, T=n20,
+M=n12+2n21+3n30, Q=Q1+Q2. Then H=2P+Q+R and R<=M.
+The fixed payment 2hP+Aa0 Q2/2 exceeds h(H-M)-A(2-sigma)T/2
+by h(M-R)+A(2-sigma)(2T-Q)/4-Aa0 Q1/2. Its center terms
+for zero, one, two H1 leaves are A(2-sigma)/2,A(5-3sigma)/4,0.
+The separate star reserve handles two leaves. Thus the E bonus fits
+all cases using only capped high energy and the stated low payments.
+
+For medium edges put Delta=z+c-rho A/4. On 01--01 the paired law
+gives total low incidence >=sigma/2, each >=1/4, so concavity
+gives Delta beyond baselines. On a 01--02 group the paired bounds
+have form y_i+l+s_j>=a0/2+sigma*s_i-o(1) for leaf low 1/4+y_i,
+center low l and medium surpluses s. Two leaves use their sum
+and f(l)>=min(l,a0/2); one uses the other medium half-surplus.
+This pays c per leaf. Let Pm,Qm,Rm count 01--01,01--02, and the
+remaining medium 01 edges, and Mm=3n03+n11+2n12+n21. Since
+n01=2Pm+Qm+Rm, the excess over B(n01-Mm)-g*n02 equals
+g*Pm/2+g*(n02-Qm/2)+B*(Mm-Rm)>=0. Adding these payments to
+the high and low baselines gives the table in `proof.md` §§12–13.
+
+## 7. The bilateral medium factor
+
+At a critical root-free fibre with mass P_v the three incident ratios
+r,t,l lie in [1/2,2] and sum to three. Across m=uv the mass is rP_v
+and its ratio becomes 1/r. Put c=5/2, a=sqrt(2)/3,
+
+```
+C=9sqrt(6)+12sqrt(3)-15sqrt(2)-20 > sigma=2021/1250,
+phi(t)=sqrt(t)-a(1+t),
+G(t)=sqrt(c-t)+sqrt(ct^2-t)-C sqrt(t)+a(C-c)(1+t).
+```
+
+The paired fibre formula gives R_h>=sum P_v G(t), with
+R_h=sum_off D-sigma D_h. Define
+M(r)=min_[1/2<=t<=c-r][G(t)+phi(3-r-t)]. Integrating both endpoints
+reduces the claim to M(r)+rM(1/r)>=(33/100)phi(r).
+Since phi(r)=r phi(1/r), restrict r to [1/2,1].
+
+Here is the analytic gap needed near 1/2. Set s=3/sqrt(2),
+y=sqrt(t)+1/sqrt(t), w=sqrt((c+1)^2-cy^2), R=sqrt(c^2-(w-1)^2).
+Let u,ell be their endpoint chords on [2,s], of slopes -h,m.
+Then h=1/[2(s-2)],
+
+```
+w^2-u^2=(c+h^2)(y-2)(s-y),
+R^2-ell^2=2(w-u)-(c-m^2)(y-2)(s-y).
+```
+
+Using w+u<=3, R+ell<=5 and G/phi=s(R-ell)/(s-y) gives
+G/phi>=(16/15)(t-1)^2/t>=0. Indeed h>41/10,
+53/25<s<87/41 give coefficient
+1690594/1584375>16/15 after dividing by y+2; endpoints follow by continuity.
+
+For f_r(t)=G(t)+phi(3-r-t), f_r''<C/(4t^(3/2))<2 and |phi'|<1/4.
+Thus minimum node value at step <=1/100, with exact right endpoint,
+minus 1/40000 bounds M below. Call this B. A cell [a,b] has lower bound
+max(0,B(a)-(b-a)/4)+a max(0,B(1/b)-(1/a-1/b)/4).
+The portable function checks 2250 cells on [.55,1], subtracting
+(33/100)phi(b), using directed integers and 10^-12 radical intervals.
+Its minimum is 6754637/200000000000>0.
+
+On [.5,.55], put P(t)=(t-.5)(2-t). The bounds
+P/(9sqrt(2))<=phi<=2P/(9sqrt(2)) and concavity of the resulting
+numerator give factor
+(16/15)[D(r)F(r)+D(1/r)F(1/r)]/(2sqrt(2)),
+D(r)=sqrt(r)+a(1+r), F(r)=(3/2-r)^2/(5/2-r).
+Twenty endpoint-product checks give >.40637>.33; at .5 use phi=0.
+Finite profiles retain both root atoms; reciprocal clamping and the
+weighted ratio-sum error give a uniform vanishing debit before graph size.
+No independent fibre noise or additional resource is assumed.
+
+## 12. Residual type10 payment
+
+Use normalized quantities s=z/A, a0=sigma-3/2 and
+g0(l)=min(l/2+rho*min(l,1/4),s). The marked source in Section 6
+already allocates Af(l) with f(l)=l/2+g0(l). Its concavity
+residue allows a type10 payment beyond the old low baseline
+and half-low surplus. Every type10 has one high neighbor.
+
+For high 10--10, the two low incidences at leaf i sum to
+1/2+y_i, with 0<=y_i<=1/2 up to the uniform source error.
+Concavity gives g0(x)+g0(y)>=g0(1/2)+g0(x+y-1/2) when x+y>=1/2
+and x,y<=1/2. After the baseline and half-surplus, this leaves
+A*g0(y_i). The paired law implies y_1+y_2>=sigma-1-o(1).
+The minimum at that total is attained at 1/2 and a0 by
+concavity. Here g0(1/2)=s, g0(a0)=(1/2+rho)*a0 from the
+checked s and rho range. Thus each endpoint can receive at
+least A*(s+(1/2+rho)*a0)/2. Payment on shared physical low
+edges uses the original distinct endpoint shares.
+
+## 13. Distance-four outer floor
+
+Use the no-arm cylinder of `proof.md` §9 with middle magnitudes
+on [.01,.49]^3. At w4=7/12 its threshold shifts at the two
+ends and center are b1=b3=14sqrt(2)/19-1 and b2=1/19. The
+off-path shifts are -2/19 at the ends and 12sqrt(2)/19-1 at
+the center. Times .03, their magnitudes are less than .01,
+so all middle and off-path signs follow their alternating residuals.
+The end sibling shift is (2-24sqrt(2)/19)s, of magnitude less
+than .0065. The two independent contrasts within x-.0065 and
+z-.0065 give the required opposite signs. The middle precision
+determinant is 10260 by §9. Including both orientations the
+density factor is greater than 64/5. The replay uses 12 cells
+of width .04 in each coordinate and the same weighted Jensen
+bound as D3. Its sum 11210710030473/12500000000000000 exceeds
+89/100000. The arm terms require an explicitly removed same-color
+root, so the no-arm floor and the existing D4 arm floor are disjoint.
+The D4 drift and residual density use 52/125 and 49/100 with
+variance 95/144, checked at |s|<=.03. All three floors have
+strict gaps under the limiting law, which supplies the uniform
+finite-cover transfer in §9.
+
+## A. Joint Q regression on the same physical fibers
+
+This appendix supplies the new source comparison used by `proof.md`
+Section10. It includes every physical image and root atom. It uses
+the complete positive radial rows of Section4, before the uniform
+truncation and independent physical noise of the graph proof.
+
+For the seven-key tree put `Delta_v=D(v,w')-D(v,w)`, and let c0=w_d
+be the critical root covariance for a score at depth d. With sign s=+
+for a below-threshold score and s=- for a guard, the following weights
+pay `s(Delta_v-c0 Delta_o)` on the indicated original tree edges.
+Weights and row totals in this display are the critical coefficients.
+
+```
+score   s    ou    uw   uw'   other edges                  total
+a,b     +   2.15  2.15 1.10   oa(or ob):1.60                7.00
+a1,a2   +   3.43  1.48 2.63   oa:3.64, aa1(or aa2):2.18   13.36
+w       +   1.52  4.88  .50                                6.90
+w1,w2   +   1.20  5.70 2.39   ww1(or ww2):1.88            11.17
+u       -   2.14   .36 1.14                                3.64
+w'      -   1.52   .50 4.88                                6.90
+```
+
+The paid totals add .02 to each row: 7.02,13.38,6.92,11.19,3.66,6.92.
+Sibling swaps supply both private/ending children. Swapping w,w'
+negates the full contrast including Delta_o and exchanges its charged
+edges; thus the private-root/child bounds apply with either score sign.
+
+The `cover` and `replay` routines in `certify.py` verify this scalar proof. Partition
+one physical fiber by its nearest vertex in the finite tree of a row.
+The squared restricted norms P_i and restricted inner products I_ij
+are linear in these nonnegative attachment masses. Put
+`d_ij=sqrt(P_i P_j)-I_ij`. Subtract the target signed expression from
+the displayed weighted sum of adjacent defects. Normalize P_score=1
+and fix the other squared norm of its first negative geometric mean.
+That mean is now constant. The other negative geometric mean is
+`-c0 sqrt(P_o P_h)`, where h=w for sign+ and h=w' for sign-.
+
+For a variation z_i=dP_i/P_i, weighted Cauchy on o--u--h pays its
+negative Hessian from the two positive edge terms whenever
+
+```
+c0[ sqrt(P_h/P_u)/k_ou + sqrt(P_o/P_u)/k'_uh ]<=1.
+```
+
+Here k'_uh=k_uh, except for score u where the expanded slack contains
+an additional +d_uh and k'_uh=k_uh+1. Every pure attachment has
+`P_o+P_h<=(5/2)P_u` at criticality, and so does any mixture.
+The square of the bracketed expression is therefore at most
+`(5/2)c0^2(k_ou^(-2)+(k'_uh)^(-2))`, checked strictly below1 for
+every displayed row. The remaining slack is concave on its mass
+polytope. There are two fixed affine norms, including P_score=1;
+each vertex consequently has at most two nonzero attachment classes.
+
+For two such classes with normalized row squares a_i,b_i, put
+P_i(p)=(1-p)a_i+p b_i and
+I_ij(p)=(1-p)sqrt(a_i a_j)+p sqrt(b_i b_j). The exact rationalization is
+
+```
+d_ij(p)/[p(1-p)]
+ = (sqrt(a_i b_j)-sqrt(a_j b_i))^2
+      /[sqrt(P_i(p)P_j(p))+I_ij(p)].
+```
+
+The a_i,b_i are powers of2 determined by the two attachment distances.
+For each class pair the checker bounds affine norms on a dyadic
+interval, encloses square roots with rational isqrt endpoints at
+scale10^24, and bounds each positive term downward using an upper
+denominator and each negative term downward using a lower denominator.
+It bisects every unresolved interval, checks nonnegative total slack,
+and checks that disjoint accepted widths sum EXACTLY to1. Endpoints
+p=0,1 have zero original defects and follow by continuity. This is a
+complete cover of each closed mass interval, not sampled ratios.
+Summing the concave nonnegative slacks over physical fibers proves
+the limiting source inequality.
+
+All row ratios remain positively bounded on the common compact
+attachment simplex. Finite-alpha expressions converge uniformly there;
+undoing P_score=1 and using its total physical mass1 makes the error
+uniform over graphs. The paid .02eta in every row absorbs this and
+the separately uniform finite-row/noise errors after one common choice
+of alpha, truncation and noise, before graph size.
+
+The actual precision-coordinate mean uses c_v instead of c0. The
+additional cost is bounded by
+`|c_v-c0| |Delta_o|<=3.67 k_d eta^2+o(1)` on a depth-d light path.
+Thus multiply the paid row total by eta, add this quadratic term,
+and then multiply by sqrt3. No inverse-K error is added: the mean
+in precision coordinates is exactly `c_v O+(Cov(Y_v,D)-c_v g^T)xi`.
+
+For the first nine-key driver sqrt3(Y_w'-Y_w), the same seven-key
+trees supply the following rows: a,u use the private-root row;
+a1,a2,z,z' use the private-child row; b uses the middle guard;
+w,w' use the selected/reflected child; w1,w2 use its child row.
+The second driver uses the branch reflection. Opposite terminal
+scores z1,z2 retain Section4's old depth-three bound. Strict edges
+have cap theta. Relaxed names double only four terminal-edge caps.
+Among the reused rows only w1,w2 sees such an edge; its extra cost
+is1.88theta. Its depth-three root-covariance error is multiplied by4/3
+in the quadratic regression term. The root contrast still costs
+3.67theta because all its edges are core. Both old and new bounds
+are simultaneous; the replay takes their minimum for each score.
+
+The older Section8 private pair constants, calibrated at eta=.0009,
+are not reused at eta=.00114. The current graph Section10 proves
+its folded three-variable private regions with recomputed diagonals,
+Schur bounds and integrated bins at the new parameters.
+
+## B. Certified reference expectation for the graph proof
+
+For odd J, half the directed crossing nonbacktracking j-walk counts
+N_j give cover upper bound sum_(j<=J)(-1)^(j+1)N_j on paths/cycles.
+Deleting each degree3 crossing vertex changes this by O_J(1).
+At the critical Gaussian wave, sum_(u~v)X_u=2sqrt2 X_v, so its three-edge
+crossing star is impossible; its probability tends uniformly to0.
+Thus the reference expectation per vertex is at most
+Gamma_J=sum_(j<=J)(-1)^(j+1)3*2^(j-2)p_j+o(1), with p_j the alternating
+j-path sign probability.
+
+The checker proves Gamma_25<U using60-point Gauss--Legendre tensors on
+[0,3],42-digit directed decimals, root brackets of radius1e-34 and
+fixed scale2^96. The path AR(2)
+recurrence is (sqrt2,-1/2), innovation variance1/12. The positive pair
+density is3/(2pi)*exp[-9(x^2+y^2)/2-6sqrt2*xy], and extension density
+sqrt(6/pi)*exp[-6(z+sqrt2*y+x/2)^2]. Anchor reversal permits each tail
+coordinate to be charged with one/two-step completion bounds1/2,1/10.
+The resulting tail at coordinate i, anchor h=min(i,m-2), is
+c2*exp(-9L^2/2)/(54sqrt2*L^2)*H(h)H(m-2-h), L=3,
+H(r)=10^(-floor(r/2))*2^(-(r mod2)); sum over i and both orthants.
+The Gaussian Fourier moment bounds coordinate2N derivatives by
+f_m(0)*q_i^N*(2N)!/(2^N*N!). Multiply by the Gauss remainder
+L^(2N+1)(N!)^4/[(2N+1)((2N)!)^3], telescope coordinates, and use unchanged
+interior exp(-39x^2/2) integral/quadrature masses<=1/4 for long paths.
+
+Legendre roots have disjoint checked sign brackets; the derivative
+identity and |P_N''|<=N^4 enclose weights. The positive transition
+A_ij B_ik C_jk has A,B<=1,sum_k C_jk<=1. At scale S its per-step
+rounding loss is at most(D_A+D_B+N*D_C+2N^2)/S. Contraction propagates
+this explicit loss; the integer shifts are exact at S=2^96.
+Apply lower or upper endpoints according to each alternating sign.
+The mandatory replay checks every bound and returns Gamma_25<U.
+This is the published path-certificate argument with independently
+checked roots, tails, tensor error and rounding at the stated scale.
+
+
+## C. Outer derivative witnesses and Price transport
+
+For endpoints at distance d>=2, alternate the middle colors and match
+each middle third-neighbor color. At an endpoint require both outside
+roots opposite its adjacent middle, or delete a same-colored closed
+EVEN crossing arm with its boundary fixed. Its matching size is a
+constant in all four endpoint flips. Let A,B be the separate exterior
+matching increases and C the joint increase. For odd d the attachments
+are in opposite bipartition classes; symmetric differences allow both
+to be exposed when A=B=1, so C>=A+B. For even d they are in the same
+class: C=2 forces A=B=1, while A=B=0 implies C=0 by the augmenting-path
+criterion; hence C<=A+B. The alternating path contributes
+floor((d-1+x+y)/2) in relative flips. Combining parities gives physical
+mixed difference<=-1 for every exterior.
+
+Under critical tree conditioning X0=Xd=s, write the centered middle
+block J. Its score shifts are J_i+b_i*s,
+b_i=(w_i+w_(d-i))/(1+w_d)-1. Third-neighbor shifts are
+lambda0*J_i-J_(i-1)-J_(i+1)
+ +(lambda0*b_i-b_(i-1)-b_(i+1)-(3-lambda0))*s.
+Endpoint sibling midpoints are -(J_1+(b_1+3-lambda0)*s)/2 and its
+reverse. Their contrasts are independent of J and each other by subtree
+swaps. The AR(2) path law gives middle precision diagonals36 at the
+ends,39 inside, first off-diagonal -18sqrt2, second6, determinant
+9*12^(d-1)(1-w_d^2). For d=2 the exponent is33*x^2/2.
+Both global signs are included. Alternating magnitudes make all density
+cross terms positive. The checker contracts the JOINT middle density.
+
+Even arms of sizes2,4,6 alternate along their closed component; each
+complete star fixes all boundary signs. Independent ideal branch
+contrasts give continuation density at b from
+b+sqrt2*a+p/2 plus the directed threshold offset. Root/closing strips
+use the exact midpoint shifts above. Freeze their sufficient corners,
+then average the entire density exponent by Jensen with every shared
+coordinate variance included. Arm lengths are distinguished by their
+first closing sign; endpoint root signs distinguish baseline and arms.
+Thus all retained arm/sign classes are disjoint before addition.
+At distance2 its one-arm reflection is counted once. No-arm D4 keeps
+its separately checked precision/stencil in family Section13.
+The adjacent witness uses its two disjoint oriented private sign cases.
+Every moving-mean offset is checked on its declared inner interval,
+including the adjacent responses at .02 and .01. All omitted derivatives
+are nonpositive.
+
+The current OUTER baseline pairs the two global middle orientations
+before charging endpoint displacement. For P(x)=x-x^3/2 the sibling
+strip is at least(69/50)P(x), by integrating
+exp(-3z^2/2)>=1-3z^2/2. If its two reflected radii are x+d,x-d, put
+
+```
+m_x=P(x)-3x*d^2/2,
+h_x=d*(1-3x^2/2-d^2/2).
+```
+
+Their averaged endpoint product is m_x*m_y+h_x*h_y at even distance
+and m_x*m_y-h_x*h_y at odd distance. All retained radii lie in(0,.61).
+The checks x^2<1/2 give m_x>=(1-2d^2)P(x), and |h_x|<=|d|.
+For |d|<=delta and left cell endpoints a,b, the old ZERO-offset
+weighted-Jensen cell mass may therefore be multiplied by
+`(1-2delta^2)^2` at even distance, or by
+`(1-2delta^2)^2-delta^2/[P(a)P(b)]` at odd distance. Every multiplier
+is checked positive. At distance2 the same midpoint appears twice,
+so integrate P(x)^2. The both-orientation density normalizer is used
+ONCE; reversal of the middle path is only the separate cell grouping.
+
+Distances2--5 use12 cells per middle coordinate, left endpoint.01,
+width.049 at distance2 and.04 otherwise. Their displacement constants
+delta/T are respectively
+`2-14sqrt2/11, 7/3-3sqrt2/2, 2-24sqrt2/19, (61-39sqrt2)/28`.
+The exact affine middle/third-neighbor shifts above stay below the
+retained sign margins through T. For the new even distances6,8,10
+use12 cells of width1/40 on[.01,.31]. For d=8,10 the checker verifies
+`T|b_i|<.01` and
+`T|lambda0*b_i-b_(i-1)-b_(i+1)-c|<lambda0*.01` at EVERY middle
+position. Alternating residual magnitudes therefore preserve both
+the middle and third-neighbor signs. Use delta=T|b_1+c| for endpoint
+strips; d=6 has delta=T(2-14sqrt2/11). The normalizer is rounded
+below the square root of
+`36*12^(d-1)*(1-w_d^2)/(2pi)^(d-1)`, including both signs once.
+The same banded two-coordinate contraction evaluates the full joint
+middle density, with every shared-coordinate variance in its Jensen
+exponent. Distance7 retains its earlier.0225 horizon and offset.0043.
+
+At the current join the no-arm response floors at d=2,3,4,5,6,7,8,10
+are respectively
+`103649/2000000,236543/50000000,50473/50000000,1251/6250000,
+30681/10^9,59/10^7,203/200000000,31/10^9`.
+The adjacent full response1201473/12500000 extends through T;
+the stronger responses at .02 and .01 are integrated by their successive differences as established below.
+Closed-arm classes retain their old horizons and are disjoint from
+these no-arm classes. Integrate each baseline to its declared horizon
+and the same join using the following formula.
+
+For pair correlation w let r=(1-w)/(1+w). The density in(2) is
+sqrt(r)/(2pi)*exp(-t^2/2-r*s^2/2). With w<=a rational upper evaluation w_d^+ of w_d plus1e-9, use
+r_d=(1-w_d^+)/(1+w_d^+): sqrt(r)exp(-r*s^2/2) increases in r for
+|s|<1. A response valid through b0 pays to T via d=min(T,b0) and
+
+```
+J(T,d)=d^2/2-(1/8+r_d/24)d^4+r_d*d^6/72
+ +(T-d-(T^3-d^3)/6)*(d-r_d*d^3/6).
+```
+
+This integrates (1-t^2/2)(1-r_d*s^2/2) on0<=s<=min(t,d),0<=t<=T.
+Multiply by directed multiplicity3*2^(distance-1), its checked response
+floor and sqrt(r_d)/(2pi). Add a shorter-range improvement only as its
+floor DIFFERENCE on that range. The exact total is
+O(T)=8972227755337/250000000000000000. Evenness/monotonicity extend it
+to |t|>=T. Compare physical and reference fields at the SAME threshold,
+then apply safe advances. This does not spend the central Price budget.
+
+### Nested adjacent thresholds
+
+Let $T=277/10000$. For the adjacent-pair pivotal response in Appendix C, the same conditional Gaussian integration gives the following uniform lower bounds. Each applies on the entire interval shown, including both endpoints.
+
+| Absolute conditioned threshold | Response floor |
+|---|---|
+| At most $T$ | $p_T=1201473/12500000$ |
+| At most $1/50$ | $p_M=4936649/50000000$ |
+| At most $1/100$ | $p_S=638739/6250000$ |
+
+For the middle row use exactly the adjacent-pair cells, conditional density, and arm constraints of the full row with horizon $1/50$. In each of the three depth comparisons take the upper absolute coefficient of the threshold, multiply by $1/50$, and round up to the next multiple of $10^{-6}$. This gives sufficient margins throughout that interval. The remaining directions, disjoint cells, moment bounds, and downward rounding are unchanged. The finite sum in `adjacent_certificate(1/50)` certifies its tabulated value.
+
+For $0\le s\le T$ the valid lower envelope is
+\[
+p_T+(p_M-p_T)\mathbf1_{s\le1/50}
+   +(p_S-p_M)\mathbf1_{s\le1/100}.
+\]
+The floors increase as the horizon decreases. At any $s$ this envelope equals one proved lower bound for the original pivotal response. Integrating each summand with the same nonnegative Gaussian lower kernel therefore counts the original pivotal event once. Write $J(T,b)$ for the moment in Appendix C and use the existing adjacent prefactor. The payments additional to the full row, after flooring individually at scale $10^{18}$, are $18955362523/250000000000000000$ and $64426976367/10^{18}$, respectively. Their sum replaces the previous payment for the single transition from the full row to the shortest horizon. Every other distance and arm term uses its original horizon. The resulting outer credit is
+\[
+O=8972227755337/250000000000000000 .
+\]
+All three estimates refer to the same ideal adjacent class, and physical comparison at the same threshold and the subsequent safe advances are unchanged. The finitely many fixed horizons therefore impose only finitely many simultaneous approximation requirements when choosing the source radius, noise, and mesh.
+
+### Price transport
+
+Set Z=sqrt(1-s)X+sqrt(s)Y, r=s/(1-s), and condition both pivots zero.
+Ideal whitened middle/sibling drivers g remain independent standard,
+independent of X_end,Y. Apply the same linear maps to Y to define H.
+Drivers are g+sqrt(r)H(Y), with
+proof.md Section7's impulse errors. Conditional Y is centered. Fix sizes/labels
+and both reflections; pairing g,-g uses cosh>=1, leaving
+exp(-r||H||^2/2), of mass det(I+rV)^(-1/2), V=Cov(H|Z_end=0).
+The centered tilt decreases error variances; Gaussian correlation
+pays strip products. Only ideal coordinates factor; Y may repeat.
+At zero the exact arm root/continuation densities are 2fD(x+2a) and
+2phi_(1/sqrt(12))(b+sqrt(2)a+p/2), fD=density of |N(0,1/3)|.
+Use the preceding zero-offset closing margins and proof.md Section7 impulses.
+Pivot density is >=1/[2pi sqrt(1-w_d^2)].
+
+For d>=3 let Q be full path precision, CE the endpoint covariance,
+and S the conditional middle covariance with regression L. For
+Bx=x_mid-L*x_end, M=B^T S^-1 B=Q-embed(CE^-1) is PSD and
+tr(M Cov(X))=d-1.
+Its adjacent entries are -12sqrt(2) at ends,
+-18sqrt(2) inside; second neighbours have entry6; endpoint subtraction
+adds w_d/(1-w_d^2). The source bound is
+D2<=C*(D_left+D_right), C*=(sqrt(10)+3)/(2sqrt(2)). For fibre ratios
+u,v>=1/2, u+v<=5/2 put A=sqrt(2u),B=sqrt(2v),S=A+B,P=AB,
+z=(sqrt(10)+3)/2, psi=sqrt(uv)-(u+v+.5)/3. Then
+6[C*(phi(u)+phi(v))-psi] equals
+z(3S-4-S^2)+(2z-5)P+S^2+1. Min P gives
+(z-1)(S-2)(3-S) on [2,3], or 3(S-3)[z-(S+3)/2] on [3,sqrt(10)],
+both >=0. Use D2<=1/6 with alternating cap weights
+0,chi,0,chi,..., chi=38-12sqrt(10). Adjacent terms cancel, giving
+the actual trace <=(d-1)+2floor((d-1)/2)chi+2w_d/(1+w_d).
+Schur/AM-GM/Hadamard bound the inverse determinant by
+(1-s)^(1+(n+m)/2)/(1+mu_d*r)^((d-1)/2) for arm sizes n,m.
+Use mu3,...,mu7=1.467,1.281,1.213,1.152,1.129.
+For d2 H0=sqrt(33)[Y_w-(4sqrt(2)/11)(Y_u+Y_v)].
+Var(H0)=1+(192/11)D2-24sqrt(2)(D_left+D_right)
+<=571/11-16sqrt(10)<1.313. Clean means:
+
+```
+1+48H2(4sqrt(5)-5sqrt(2))/11 <528201/500000,
+1+24H2(C*-sqrt(2)) <1126601/10^6,
+1+H2(24C*-2008sqrt(2)/95) <57727/50000,
+1+H3(24C*-123sqrt(2)/7) <122363/100000,
+1+(2/5)[4H3(12C*-18sqrt(2))+3/11] <139759/125000.
+```
+
+Joint root cases use Var(H)+3Var(R)/(2c^2)<=3/2, c=3-2sqrt(2),
+H=sqrt(3)(Y_a-Y_b) at an endpoint.
+Indeed for branch square roots A,B,W>=1/sqrt(2), sum squares3,
+f=A+B+W-2sqrt(2) in [0,c], one has 2(A-B)^2+f^2/c^2<=1.
+For f<=2c/5 use
+(A-B)^2<=1/2-sqrt(2)f; otherwise use
+(A-B)^2<=6-2(2sqrt(2)+f)^2/3 and convexity, with endpoint values
+1 and (160-96sqrt(2))/25<1. Integrate. Choose h=Var(H) before tilt:
+h<=p gives gain g=[1-(1-p)s]^(-1/2); otherwise use root variance
+c^2 min(h0(s),1-2p/3). Baseline2 uses p=3/4 and min(gA,B)^2,
+A,B the low/high side convolutions. Arms2 uses p=2/3 and the minimum
+of LL,LH,HH EXTRA polynomials. D3 uses p=2/3 and minimum of four
+complete middle integrals. Never add cases.
+
+### D7–D10 and interfaces
+
+Distance adjacency on a high-girth cubic cover obeys
+`P1=t,P2=t^2-3,Pd=t*P_(d-1)-2P_(d-2)`. Put L=2sqrt(2).
+For P7=t^7-13t^5+48t^3-44t its tangent residual at L is
+(t-L)^2R(t), R=t^5+2Lt^4+11t^3+6Lt^2+56t+64L.
+Here R'=5(t^2+4Lt/5)^2+(37/5)(t+30L/37)^2+632/37>0
+and R(-3)=280L-708>0.
+For z=t^2-8 the next polynomials are
+
+```
+P8=88+184z+94z^2+17z^3+z^4,
+P9=t(48+120z+72z^2+15z^3+z^4),
+P10=208+640z+508z^2+158z^3+21z^4+z^5.
+```
+
+Their tangent residuals are respectively
+
+```
+184(t-L)^2+z^2[(z+17/2)^2+87/4],
+(t-L)^2[120(t+2L)+t(t+L)^2(z^2+15z+72)],
+640(t-L)^2+z^2[76+t^2((t^2-3/2)^2+47/4)].
+```
+
+The odd expression is nonnegative for t>=0. For -3<=t<=0,
+expanding P9/t at t^2=9/2 gives coefficients
+`271/16,-17/4,-12,1,1`. Thus `|P9|<=9363/4<1920L`,
+whereas its tangent `1968t-1920L<=-1920L`.
+Let Sd be half the sum of excesses over directed distance-d pairs;
+S1=sum_e D_e. All four residuals are nonnegative on [-3,3]. Pairing their
+positive-semidefinite matrices with the physical row Gram matrix,
+using unit diagonal and Pd(L)=3*2^(d-1)w_d, gives
+`Sd>=multiplier*S1-o(n)` with multipliers 532,1040,1968,3620.
+The last three are bounded by derivatives 368L,1968,1280L.
+Finite-reference replacement has uniform o(n) error.
+
+Use the alternating-path witness above, two endpoint contrasts and
+optional size-two arms. All sign/arm classes and all distances are
+disjoint. The common banded precision and trace formula give:
+
+```
+d   precision determinant   both-sign normalizer   pair density   mu
+7   24541056                39.94                  .1665          1.129
+8   305550144               56.2                   .1635          1.106
+9   3748902912              78.3                   .1616          1.091
+10  45586457856             109.2                  .1606          1.074
+```
+
+Endpoint determinants are 263/288,2183/2304,31/32,9047/9216.
+The checker derives every entry from `9*12^(d-1)*(1-w_d^2)`,
+the pi enclosure and the trace bound, without marginal factorization.
+
+For D7--D10 use36 amplitude cells of width1/80 and a positive
+banded two-coordinate state. Each insertion includes its new square,
+adjacent and distance2 density products and strip; copy and close at
+each retained distance, then continue the interior state. Nonnegative
+sums are divided downward at scale10^18. Time endpoints are
+(j/24)^2,j=2,3,4,5,6,7,8,10,12,14,17,20,23, with the tangent power
+integration described below. All factors and determinants are derived
+from the stated precision, pi enclosure and trace bound.
+The current exact sums pay the retained global floors. Multiplication
+by their spectral constants adds the checked global increment
+65797/200000000 to K. No dirty-window debit is introduced.
+
+The positive cell contractions use only ideal independent coordinates;
+physical residuals are centered, correlated and paid by Gaussian
+correlation after the common quadratic tilt. No independence between
+physical fibre images is assumed.
+
+On each spatial box freeze every strip at a sufficient corner. For the
+remaining joint density exp(-Q), Jensen gives its integral at least the
+box volume times exp(-E_uniform Q). For an affine form, E_uniform Q is
+the squared form at the cell means plus its coefficient-squared cell
+variances. This is applied to the WHOLE sum of density exponents even
+when their factors share coordinates. Only then factor the scalar
+exponential for contraction. The adjacent convolution has two independent
+uniform coordinates; both variances are included. Endpoint reflection
+and all old label multiplicities remain unchanged.
+
+D2 no-arm uses640 cells of width1/800 on [0,4/5], time endpoints
+(j/160)^2,j=1,...,159, and the original sign margins. On a time panel
+[L,R], freeze its spatial row at R. For the global joint side minimum
+min(g(t)A_t,B_t), g(t)=(1-t/4)^(-1/2), its squared row loses at most
+(4-R)/(4-t) relative to R. Above1/2 the root cases coincide and no
+compensation is needed. With Delta=R-L, a=3/[2(1-R)],
+k=(mu-1)/[2(1+(mu-1)R)] and b=1/(4-R) below1/2 (otherwise0),
+the exact lower panel multiplier over the old right rectangle is
+
+    1+(a+k-b)Delta/2+(ak-ab-bk)Delta^2/3-abkDelta^3/4.
+
+It integrates the product of the two positive convex tangents and
+1-b(R-t). Clean D2 has b=0,mu=528201/500000; global mu=1.313.
+Every spatial floor and division precedes the joint min/square as
+before. Carry-free integer convolution only evaluates those exact sums.
+
+For D3--D10 and larger even arms, each 2j-arm supplies (1-t)^j.
+Freeze strip rows at R; integrate the positive powers of1-t exactly.
+The tangent of (1+(mu-1)t)^(-nu) at R is a lower bound. Under each
+positive decreasing power weight, mean(R-t)>=(R-L)/2, giving the
+checked positive tangent improvement. Integer/half-integer powers use
+exact antiderivatives and directed square roots. Global/local arms of
+size6 at D2/D3 use the same first-step clean window and global defect
+bounds thereafter, hence unchanged dirty counts. Their six extra
+contrast diagonals are <=1 and the same determinant payment applies.
+The checker keeps baseline, size2, and at-least-one-size4/6 classes
+disjoint; it never adds the baseline twice.
+
+The D3--D6 contraction may first round strip/endpoint weights downward
+at binary scale2^60; all sums stay positive and this only lowers the
+certified integral. Its paid floors remain the same.
+
+All time endpoints are below1. Omitted tails pay zero. Source errors,
+atomless boundaries and strict floor gaps permit the uniform finite transfer.
+
