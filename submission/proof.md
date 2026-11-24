@@ -1,90 +1,107 @@
-# Published coefficient 31/10: construction and proof
+# A 313682898707/63682898707 asymptotic full-B2 lower bound for one uniform norm-one predicate
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+This proves the single all-length liminf statement in bound.json. The certified limiting graph energy ceiling is e_0=63682898707/500000000000. For every fixed cap c>e_0 the graph-to-circuit proof gives the coefficient 1+1/(2c) for this same family. The numerical experiment re-derives all material Gaussian and graph numerical premises in graph.md from stated rational covariance, exact witness parameters and directed enclosure arithmetic.
 
-## Fixed total family
+## 1. Fixed family and eligibility
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+The argument uses a sufficiently dense accepting set with no large accepting rectangles. Use the classical norm-graph idea of Kollár, Rónyai and Szabó, *Norm-graphs and bipartite Turán numbers*, Combinatorica 16 (1996), 399–406, DOI 10.1007/bf01261323. Norm-one languages also precede this work in the CircuitBreaker competition (including Arthur Ostapenko's November 2026 entries). No novelty of that family is claimed. We reproduce all the required family properties, using a weaker elementary common-neighbor bound; no external norm-graph theorem, extractor, correlation breaker, sampler, or irreducible-polynomial algorithm is assumed. The graph-side estimate is proved in graph.md.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+### 1.1 A fixed uniform evaluator at every actual input length
 
-## Uniform P and NP membership
+For n<64 define f_n=0, including n=0. For every integer n>=64 put
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+```
+L=floor(log2 n), B=ceil(log2(L+1)), a=L-B, p=2^a,
+ell=floor(n/p), m=p*ell, d=2^floor(a/2), k=m/d, Q=2^k.
+```
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Here a>=3, d>=2 and d divides m. From 2^L<=n<2^(L+1) we get 2^B<=ell<2^(B+1)<4(L+1). Further, 0<=n-m<p<=n/(L+1), and p>=n/(4(L+1)). Thus m/n tends to 1, d is of order sqrt(n/log n), and k and d*log2 d are O(sqrt(n log n))=o(n).
 
-## Every integer length and the lower bound
+Construct a field F of size 2^m with an ordered binary basis by the following fixed deterministic procedure. Enumerate monic binary polynomials of degree ell in order of their coefficient encodings; choose the first having no monic divisor of degree 1 through floor(ell/2), by polynomial division. This is exactly the irreducibility test. Existence: in a splitting field the 2^ell distinct roots of X^(2^ell)-X (derivative -1) form a field by closure under addition, multiplication and inversion. An element of degree j<ell over F2 generates a proper subfield, with j dividing ell by the dimension formula and hence j<=ell/2. Such elements belong to the roots of X^(2^j)-X. Their union has cardinality at most sum_{j=1}^{floor(ell/2)} 2^j<2^ell, so an element of degree ell exists. The case ell=1 is immediate. Take the quotient by the selected irreducible polynomial with its ordered polynomial basis. Since ell=O(log n), exhaustive enumeration and division require n^{O(1)} bit operations.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+Repeat the following extension exactly a times. In the current field K of size 2^r define T(z)=sum_{j=0}^{r-1} z^(2^j). This is binary-linear and takes values in F2 since T(z)^2=T(z), using z^(2^r)=z. Its defining polynomial is nonzero of degree 2^(r-1)<2^r, so it is not identically zero. Choose the first basis vector u with T(u)=1. The map z->z^2+z has kernel {0,1} and image of size 2^(r-1); its image has trace zero by telescoping, and is therefore precisely the trace-zero space. Hence X^2+X+u has no root and is irreducible. Adjoin a root beta using the quotient, retaining the old basis followed by beta times the old basis. The final binary dimension is ell*2^a=m. Addition is XOR; a multiplication at one extension level uses at most five multiplications and finitely many additions in the preceding level (reduce beta^2=beta+u). The depth a is O(log n); trace evaluations and a search of at most m basis vectors per level use polynomially many field operations. All field operations and the entire field construction are uniform polynomial time. No advice, random choices, oracle, or large field search is used.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+Map the first m bits of x to z in F in the resulting ordered binary basis; ignore the remaining n-m bits. Define
 
-## Conservative remainder, with source discrepancy retained
+```
+e=(2^m-1)/(Q-1)=1+Q+...+Q^(d-1),
+f_n(x)=1 iff z^e=1 in F.
+```
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+The exponent is a positive integer with at most m bits, so repeated squaring evaluates the predicate in polynomial time. All small lengths, field choices, and rounding are fixed by this algorithm. The language {x:f_|x|(x)=1} belongs to P and hence NP with the single verifier V(x,w)=1 iff w is empty and f_|x|(x)=1, and witness bound W(n)=0. Both directions of the verifier equivalence follow from the definition.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+### 1.2 Accepting density and essential input count
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Write g for the restriction to the m active bits. By the finite group order, every nonzero field element is a root of X^(2^m-1)-1; there are exactly 2^m-1 such roots and they are distinct. Because e divides 2^m-1, the polynomial X^e-1 divides that split squarefree polynomial and has exactly e roots in F. Here e is odd since Q is even. The uniform accepting density delta=e/2^m is at least 2^(-k), since e>=Q^(d-1)=2^(m-k). Each of the m active bits is essential: otherwise the involution flipping that bit pairs all accepting inputs without fixed points, contradicting the odd count e. An arbitrary circuit for f_n can be restricted by fixing its tail bits to zero and normalized without increasing its gate count, as in the circuit normalization of the companion proof. The restricted circuit for g therefore reads all b=m active bits. All asymptotic conclusions still use the original actual length n, with b/n tending to one.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+### 1.3 Elementary common-neighbor lemma
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Let K be any field and a_{ij} in K for i,j=1,...,d, pairwise distinct down each fixed column j. The system
 
-## Exact arithmetic and the unchanged LP
+```
+product_{j=1}^d (z_j-a_{ij}) = 1   (i=1,...,d)
+```
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+has at most d^d solutions in K^d. The classical sharper d! bound is not required. Here is a direct argument for the weaker bound.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+In the polynomial ring on d pairs (X_j,Y_j) let L_{ij}=X_j-a_{ij}Y_j, W=product_j Y_j, and I be the ideal generated by H_i=product_j L_{ij}-W. All H_i have degree one in each pair. For each column j, the d forms Q_{ij}=product_{r != i} L_{rj} form a basis of homogeneous degree d-1 in that pair: evaluation at (a_{ij},1) is zero on every Q_{rj} except Q_{ij}, which is nonzero. The space has dimension d. For any degree E>=d-1, products of these forms with monomials of degree E-(d-1) span homogeneous degree E, because every degree-E monomial factors as monomials of those two degrees.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+For any D>=d, every polynomial P homogeneous of degree D in each pair is congruent modulo I to W times a polynomial homogeneous of degree D-1 in each pair. Process columns j=1,...,d. At the start of column j, P is congruent to (product_{h<j}Y_h)R, where R has degree D-1 in processed pairs and D in the rest. Terms divisible by Y_j already have the next desired factor. Each remaining term contains X_j^D. Expand its coefficient in the other d-1 pairs using the spanning products above; the degrees there are at least D-1>=d-1. In each resulting summand one Q_{r,h} is selected in each other column h. Each excludes only its own row r, so a row i among the d rows is excluded by none of the d-1 selections. That summand contains L_{ih} for all h!=j. Write
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+```
+X_j^D = L_{ij} X_j^(D-1) + a_{ij}Y_j X_j^(D-1).
+```
 
-## Sources
+The second term is divisible by Y_j. The first term has the full product of the L_{ih}, including column j; replacing that product by W modulo I supplies Y_j as well. The old outside factors Y_h are retained, and each pair degree is unchanged. This proves the induction, and after column d yields the claimed common factor W.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+Dehomogenize by setting every Y_j=1. Let J be the ideal generated by the original affine equations with their right sides subtracted. Any polynomial of maximum individual degree D>=d can first be homogenized separately to degree D in all pairs. The preceding argument and dehomogenization give a representative modulo J of maximum individual degree D-1. Iterate. The quotient ring is therefore spanned over K by the d^d monomials with every individual exponent in {0,...,d-1}. For any finite collection of s distinct solutions, evaluation induces a surjective linear map from that quotient onto K^s: for a chosen point and each other point choose a differing coordinate, use the linear factor in that coordinate vanishing at the other point, normalize it to one at the chosen point, and multiply the factors. These polynomials give all unit vectors on the finite collection. Therefore s<=d^d. This applies to every finite subset of the solution set and proves the lemma, with no algebraic-geometry or multiplicity assumption.
+
+### 1.4 Additive sumset exclusion on the entire field
+
+Let A,B be subsets of F such that (u+v)^e=1 for every u in A and v in B. If |A|>=d choose distinct u_1,...,u_d. For any v in B, repeated binary Frobenius gives
+
+```
+product_{j=0}^{d-1} (v^(Q^j)+u_i^(Q^j))=1   (i=1,...,d).
+```
+
+In each column j the u_i^(Q^j) are distinct, because Frobenius is injective on a field. Apply the lemma with z_j=v^(Q^j) and a_{ij}=-u_i^(Q^j). Since the coordinate with j=0 equals v, different v give different solution tuples. Thus |B|<=d^d. Consequently for K_0=d^d+1 it is impossible that both sides have size at least K_0. For any partition of the m binary coordinates, identify each side assignment with its element of F supported on that side of the fixed basis. Each map is injective, and their field sum is the full input. Every accepting monochromatic rectangle is therefore thin on at least one side (cardinality <K_0). This conclusion is uniform over all coordinate partitions, without any independence or balance requirement on the zero-inputs.
+
+We have log2 K_0=O(d log d)=o(n) and log2(1/delta)<=k=o(n); hence the active accepting set is subexponentially dense, and every accepting rectangle on every coordinate partition is thin on one side.
+
+## 2. Elementary finite-local almost-perfect matching and edgewise transfer
+
+On the infinite 3-regular tree T, start with the empty matching. Fix integer l>=1 and J=2l+1. At each round independently mark every vertex low/high with probability 1/2. Simultaneously augment every alternating path of length at most J with unmatched endpoints and whose vertices form a whole connected component of the low-induced subgraph. (Equivalently require all its vertices low and every neighboring vertex outside the path high.) An augmenting path starts and ends with unmatched edges and alternates with matched edges; toggling all its edges matches the endpoints without unmatching any vertex. Selected paths are disjoint: two selected paths sharing a vertex would be the same low component. The rule after any fixed number of rounds depends on a finite radius of independent vertex labels, with no orientation or global random coin.
+
+For fixed l the unmatched probability u_r decreases. A vertex whose matching partner changes belongs to a selected path. Each changed vertex sends half a unit to each endpoint of that path, at most (J+1)/2 units received per selected endpoint. On T, for invariant nonnegative transports expected sent mass equals expected received mass: for each vertex v an automorphism swaps v and the root, so E mass(root,v)=E mass(v,root), and sum using monotone convergence. Thus the sum over rounds of the probabilities the root changes partner is at most (J+1)/2, by telescoping the endpoint-removal probabilities u_r-u_(r+1). The union bound on the tails of this summable series implies almost-sure eventual stabilization at each vertex, and hence simultaneously at all vertices since T is countable. The limiting matching has no augmenting path of length <=J almost surely. Indeed, if a fixed finite path is augmenting in the limit, all its matching statuses stabilize and it is augmenting at every sufficiently late round; conditional on any earlier state in which it is augmenting, the fresh low/high marks select it with probability at least 2^{-4(J+1)}. The probability of remaining augmenting forever from any specified round is zero by iteration; take the countable union over rounds and paths.
+
+For this limiting matching let U be its unmatched set, of invariant density u. Define X_i as vertices reachable from U by an alternating simple path of even length <=2i (including length zero), and Y_i=N_T(X_i). For i<=l, every vertex y in Y_i is matched. To see this, take an even alternating path to its neighbor x in X_i. If y is the preceding vertex of that path, it is already matched to x. Otherwise y is outside the path, by the tree property, and xy is unmatched (x is unmatched only in the length-zero case; otherwise its matched partner is its predecessor). An unmatched y would complete an augmenting path of length <=2i+1. If y is matched, its partner is in X_(i+1): either it is x, or append the unmatched xy and its matching edge; neither new vertex can revisit the path because T has no cycle. The matching gives an injection from Y_i to X_(i+1) minus U. Their densities therefore satisfy Pr(root in X_(i+1))>=Pr(root in Y_i)+u by the same transport identity. Sending one unit along each of the three edges from X_i to Y_i gives Pr(root in Y_i)>=Pr(root in X_i). Consequently (l+2)u<=1. Since u_r converges to u, for any prescribed epsilon>0 choose l and then finitely many rounds so the resulting finite-local invariant matching has unmatched density <=epsilon.
+
+The fair marked-tree bit law in graph.md can be chosen for any fixed c>e_0 with expected crossing count per physical vertex c_* strictly below c (each physical edge counted once); its matching and line edge probabilities a_M,a_C satisfy a_M/2+a_C=c_*. Now let R be a fixed sufficient radius for the finite marked bit rule, enlarged to include both endpoints of each matching edge needed by the rule. On a vertex whose R-ball is fully matched (all required matched partners are included in the enlarged ball), run the marked rule using fresh independent labels. On a bad vertex use a fresh independent fair coin. A good finite decorated ball has a perfect-matching extension to T: keep its interior matched edges, continue from each free outer branch away from the ball, matching an unpaired frontier vertex to one of its children and repeating, never revisiting a vertex. The same holds for the union of the two neighboring balls if both are good, since the union is a connected subtree. Conditional on the partial matching, independent anchor marks can be generated from fresh endpoint uniforms U,V by 1-(1-min(U,V))^2; disjoint matched pairs use disjoint independent labels. Use separate coordinates for each required independent mark, and vertex coins as needed. The marked rule has exactly the same one-vertex law on any good ball as on a fixed perfect matching; all deterministic perfect matchings of T are locally isomorphic as marked trees by the recursive two edge-type branching counts. Thus every marginal is fair, good or bad.
+
+For a fixed edge e the probability it belongs to the partial matching is (1-u_r)/3 by invariance. Conditional on a good union of balls its crossing probability is a_M or a_C according to its actual type. On a bad union bound by one. A union bound gives bad probability at most C_R u_r, for a constant depending only on the fixed radius. Therefore
+  Pr(e crosses) <= (a_M+2*a_C)/3 + (C_R+1)*u_r.
+Choose u_r small enough using c_*<c. This is now an unmarked equivariant, finite-radius iid bit rule on T with fair marginals and each edge crossing probability <=2c/3. This elementary approximation is enough; no exact FIID perfect matching is asserted or required. The classical Lyons-Nazarov matching approach to isotropization used in the predecessor is credited but is not an assumed theorem here.
+
+For any finite cubic multigraph, including parallel incidences, its universal covering tree is T (construct by reduced nonbacktracking walks with incidences distinguished; lifts over a vertex are permuted transitively by deck transformations). For each lifted vertex, start with the bit rule on independent lifted labels. Process the finite list of base vertices one at a time: condition on all remaining labels outside the fiber being processed and all earlier replacement uniforms; replace every lifted bit by the Bernoulli quantile of its conditional law in one common new independent uniform for that base fiber. Every row retains its conditional marginal. For any two bits with given probabilities p,q, the least possible disagreement is |p-q| (difference of means is a lower bound), attained by nested quantiles, so this replacement cannot increase disagreement on any lifted edge. A row not using a fiber stays unchanged; finite supports stay within the projected original radius. Deck equivariance is preserved, since permutations within untouched fibers preserve the integrated iid law. After all fibers are processed, deck-equivalent rows are equal almost surely; choose a representative for each base vertex. Marginals are fair, disagreement bounds hold edge by edge, and each bit depends only on independent base marks in its bounded projected ball. For degree below three, complete each missing stub with a separate K4 with one edge subdivided, attaching the stub to that degree-two subdivision vertex. Loops count twice toward degree and never cross. Restrict the completed law to the original graph; components and added gadgets have bounded degree and no shortcuts between original vertices.
+
+It follows that for each fixed list of bounded vertex weights and directed nonnegative edge weights, the cut balance and both directional weighted crossing sums can simultaneously be made within o(n) of their expectations on O(n)-size graphs. Indeed bounded local supports give O(n) dependent pairs for each such sum and variance O(n); use Chebyshev and a finite union bound. Constants may depend on fixed radii, bag size and weight bounds, not n. With equal fair endpoint marginals, Pr(u=0,v=1)=Pr(u=1,v=0)<=c/3 on each edge, regardless of its fixed orientation. This proves the edgewise input needed below.
+
+
+## 3. Full binary basis, bounded bags and one exact cut
+
+Restrict the ignored tail bits to zero. Delete gates not reaching the output. Substitute forced constants into consumer truth tables. Repeated pins can be treated as unary dependence, and constants, projections and unary signs can be removed by substitutions into all consumers, without adding gates or a separately charged basis. If the output is a projection or negation of an internal signal, make its producer the output and prune everything no longer reaching it. For a negation, complement that internal gate's allowed truth table; no gate is added. Only a signed projection of a raw input or a constant is excluded by essentiality of all active b=m bits at large n. Continue pruning and substitutions until every retained gate depends on both of its two distinct actual inputs. Its arbitrary truth table remains allowed. At every step keep the function on the active bits unchanged. Bound t, the number of surviving gates, by the original size.
+
+Add bookkeeping copies, not counted gates: for f uses of a signal with f>=1, give it one outgoing edge, followed by a directed binary copy tree with f-1 fork vertices and f consumer leaves (the leaves denote its actual pins; omit the tree for f=1). The output has no outgoing use. An input is a source and has one outgoing edge; each actual nonoutput gate has indegree two and one outgoing edge; each fork has indegree one and two outgoing edges. Repeat incidences retain their multiplicities; at this point there are no loops. The graph is connected since every vertex reaches the output. Its cycle rank r=E−V+1=t−b+1: before inserting copies the original DAG has 2t edges and t+b vertices; each insertion adds equally many vertices and edges. Its graph size is O(b+t).
+
+A circuit with unbounded size ratio has nothing to prove; to refute the lower bound one would have a subsequence t=O(n). With cutoff B>=2, contract a nonloop edge with an endpoint of degree <=2 whenever the combined original vertex count of the two bags is <=B. Contractions preserve the rank and connectedness, and degree remains at most three (loops count twice, parallel edges retain multiplicities). The new degree is the sum of the two degrees minus two; the statement also covers multiple interbag edges becoming loops. After termination, each deficient vertex of the remaining nonsingleton graph either has a bag of size >=B/2 or is adjacent to such a bag. Otherwise an adjacent nonloop edge is eligible. The deficient vertices are thus O((b+t)/B), because there are O((b+t)/B) large bags and each has at most three neighbors. If h=sum(3-degree), the handshaking identity gives E=3r-3+h for a connected quotient; in the singleton case E=r. Consequently E<=3r+O((b+t)/B). There are at most B raw bits per bag, and every gate in a bag is still evaluated in its original topological order.
+
+Apply the fair law of Section 2 to this quotient after the completion for missing degree stubs. Loops do not cross. By the equal-marginal law, each direction of any real oriented edge crosses with probability <=c/3. Both directional crossing sums and the count of raw bits on each side simultaneously differ by o(n) from their expectations with positive probability for fixed B: each is a weighted sum of bounded local-support variables, with O(n) terms and a bounded maximum number of dependent pairs per term, so Chebyshev applies, e.g. with tolerance n^(3/4). The constants in this statement are fixed before n grows. Therefore there exists one cut with both raw counts b/2+o(n) and both directional crossing counts <=c(t-b+1)+O((b+t)/B)+o(n).
+
+Fix this cut independently of the input. Let q be the raw count on side A, r_A the number of arcs A to its complement, and r_B the opposite count. Allocate each raw bit to its own bag side. To evaluate the gate DAG, send each crossing arc bit when available, and announce the final output (one extra bit). Parallel arcs may be counted twice. At each fixed complete transcript the constraints of each party's local checks depend only on that party's raw word and the fixed transcript, by chronological induction. The transcript class is an exact Cartesian rectangle. For a fixed input to party B there are at most 2^(r_A+1) possible transcripts as A varies: A's outgoing arc bits and final bit determine the whole transcript with B's word, regardless of unused possible messages. Each accepting transcript thin on side A covers fewer than K_0 local words. Its total probability under the uniform full cube is therefore <=K_0 2^(r_A+1-q) averaged over the fixed B word. The symmetric bound covers accepting transcripts thin on side B. Thus
+    delta <= 2 K_0 [2^(r_A-q)+2^(r_B-(b-q))].
+No assumption of independent gates or of uniformly random accepting inputs enters this inequality.
+
+Were original gate size <= [1+1/(2c)−eps] n infinitely often, for fixed eps>0, then b/n->1 and t<=original size imply b/2−c(t−b+1)>=c eps n−o(n). Choose fixed B large enough to make the compression error less than c eps n/3 along this subsequence. Both exponents in the last display are then negative of a fixed positive linear amount. This contradicts log2(K_0/delta)=o(n). For every fixed c>e_0 this proves liminf over all integer actual lengths at least 1+1/(2c). The evaluator and norm-one language are independent of c; only the finite approximation radii and thresholds depend on it. Taking the supremum over these fixed-cap conclusions gives liminf at least 1+1/(2e_0)=313682898707/63682898707.
+
+## Provenance
+The norm-one route is credited to Arthur Ostapenko, Yukon submission 808da377-5cc9-463b-ae41-00f19a497368, and to classical norm graphs. The fixed evaluator, elementary d^d bound, and accepting-transcript argument above establish the needed family facts here. The circuit wire accounting is in the tradition of McGuire, Schlesinger and Williams; no external extractor theorem or another entry's numeric guarantee is required. The finite-local matching approximation and all fold, compression, and accepting-rectangle arguments used are supplied above.
