@@ -1,90 +1,120 @@
-# Published coefficient 31/10: construction and proof
+# A fair local cubic cut and a full-basis circuit lower bound above five
+Submission proof for mathematical review. Only the joint theorem in bound.json is scored. The graph proof is computer-assisted; graph-a.md and graph-b.md supply its dependencies and replay.py reconstructs the arithmetic witnesses.
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## 1. Fixed family and eligibility
+Use Xin Li, *Two Source Extractors for Asymptotically Optimal Entropy, and (Many) More*, ECCC TR23-023 revision 1, 30 May 2023 (https://eccc.weizmann.ac.il/report/2023/023/revision/1/download/), Definition 1.1 and Theorem 7.13 (derived from Theorems 7.11 and 7.12). The published theorem supplies a single uniform polynomial-time deterministic one-bit evaluator E on n-bit strings for error 1/8 and min-entropy at least a log_2 n for an absolute constant a>1. Fix one such construction, constants and deterministic choices once for all lengths; define f_n(x)=E(x), with fixed zero completion for any finitely many lengths outside its guarantee and f_0=0. No advice, witness input, seed, sparse length, padding or field-block conversion. L={x:f_|x|(x)=1} is in P and hence NP: V(x,w)=1 iff w is empty and E (or its finite completion) outputs 1; W(n)=0. Both directions follow by definition. The following construction and parameter instantiation identify the published ingredients used here.
 
-## Fixed total family
+**Uniform evaluator.** In Li's Theorems 7.11–7.13, the Chattopadhyay–Liao sampler-and-breaker construction uses a polynomial number of sampler rows and a constant number of seed candidates per row. For each row-index and candidate-index pair, compute the linear sampler value from the input x and use it as the seed of Li's strong affine correlation breaker on x, with the pair encoded as distinct advice. XOR the breaker bits within each row and take the majority of the row outputs with a fixed tie rule. Both primitives are deterministic. The indices, seeds and advice are internal to the evaluator, so its external input has exactly n bits.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+**Parameter check.** Li's Theorem 5.2 supplies a strong seeded correlation breaker with seed length and entropy O(a_adv+log(n/δ)) for advice length a_adv and error δ. Theorem 3.5, instantiated in Theorem 7.12, gives a strong affine breaker against a constant number of possibly correlated seed candidates with distinct fixed advice. With one output bit, O(log n)-bit advice and inverse-polynomial internal error, its seed and entropy requirements are O(log n). The sampler in Chattopadhyay–Liao, ECCC TR21-147 revision 1, Lemma 3.18, then also needs O(log n) source entropy. For any fixed t rows, the parity analysis in their Lemma 5.4 exposes at most O(t) sampler seeds of O(log n) bits before using the remaining independent source and the strong affine breaker. The sampler ensures few exceptional rows and the breaker controls the parities on the remaining rows by inverse-polynomial error. Their Lemma 3.20 converts almost t-wise independence to a nearby t-wise independent law. Lemma 3.23 then gives arbitrarily small fixed majority bias with at most A^0.4 exceptional rows out of A by choosing t sufficiently large and the internal error sufficiently small. Li's Theorem 7.13 applies this argument to the XOR of the two n-bit sources. The entropy multiplier, error allocation and tie conventions can all be fixed for error 1/8 independently of n. This uses the cited published sampler and breaker guarantees.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+For independent uniform X,Y on A,B in {0,1}^n with |A|,|B| >= K=n^a, |Pr[f_n(X xor Y)=1]-1/2|<=1/8. On any coordinate split U,V, pad P subset {0,1}^U and Q subset {0,1}^V by zeros on complementary coordinates. Their xor is uniform on P x Q; hence no monochromatic rectangle has both sides >=K. Taking A=B={0,1}^n gives at least (3/8)2^n accepting inputs. If the function ignored ceil(log_2 K) inputs, take P all assignments there and Q accepting assignments on the remaining coordinates; both sides >=K for large n. Contradiction. Every computing circuit reads b=n-O(log n) inputs.
 
-## Uniform P and NP membership
+## 2. Full B2 normalization and physical graph
+All 16 truth tables on two ordered pins, repeated pins, arbitrary acyclic topology and unrestricted fanout allowed. Prune nodes not reaching the output. Constants/projections/unary gates are allowed as truth tables. If free constant sources arise under substitutions, evaluate constant-only gates, substitute constants into consumer truth tables, fill an unused pin by repeating its other input; no new counted gate is required. Raw variable or constant output cannot compute this hard family at large n. For the remaining pruned circuit of t gates and b raw inputs, a signal used f>=2 times is expanded into a path of f-1 copy vertices. Copies represent wires, not gates. There are 2t uses and t+b-1 nonoutput signals, hence t+1-b copies. The undirected wire multigraph is connected, loopless, subcubic with N=2t+1 vertices, M=3t+1-b edges and cycle rank mu=t-b+1. Every genuine internal gate and copy has degree three, raw inputs degree one, output degree two; parallel edges and repeated pins retain multiplicity.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+Credit McGuire, Schlesinger and Williams (MSW), public proof.md sections 2.1-2.4 in rrwilliams0/circuit-lb-4.6155n (observed blob 63de7d5bf662378bf5921c031f5d70a0cffde4ba). In a bridgeless block contract adjacent vertices if one has degree <=2 or there is a parallel pair; otherwise contract any triangle. Each step reduces vertex count, preserves bridgelessness, cannot increase rank, and has a resulting vertex of degree <=3. The terminal graph is a singleton or simple triangle-free cubic. A cut vertex in a bridgeless cubic graph would have at least two edges into each of two components, impossible. Thus every nonsingleton kernel is 2-connected and has h<=2(mu(B)-1). The perfect-matching consequence of Tutte’s theorem follows directly: for every nonempty vertex set S, each odd component of H−S has odd edge boundary of size at least three by cubicity and bridgelessness. The sum of those boundaries is at most 3|S|. For S empty each component of a cubic graph has even order. This verifies Tutte’s odd-component condition. The binary/ternary contraction forest pieces each have <=3 original block boundary edges. Bridge blocks have tree incidence and additive rank. No MSW numerical Gaussian certificate is imported.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+## 3. Exact graph input
+Graph-a.md supplies the marked-tree score, first-pass cost and directed sign-moment/gain bounds. Graph-b.md supplies fair patches, eleven-pin deletion, the recalibration at T=-7/20, and directed finite probability proofs. The conditional-quantile transfer below folds final physical vertex bits, not the potentially nonsubmodular intermediate costs. Every finite simple cubic graph H with a perfect matching admits a law of vertex bits with fair marginals, uniformly bounded dependence and expected crossing count <=c|V(H)|, c=12405759/100000000. Fix finite shell, window and patch radii using strict margins independent of H. Efficiency of generating the cut is not needed. Numerical gate: first-pass c1<.125645569; gain >=851968/2^29; motif saving >=300311352/2^48; final relaxed majority <=33422386/67108864<.499. Exact arithmetic gives c1-gain-motif<c and starting majority >.5054287. Continuous activation yields exact fair marginals. This is a one-cut theorem, not a cutwidth theorem at c.
 
-## Every integer length and the lower bound
+## 4. All-lengths circuit transfer
+Place W=2*1_raw+indegree-outdegree on each physical vertex; sum 2b and bounded magnitudes. On side A with q inputs, r outgoing and s incoming crossing arcs, w=r+s, directional surpluses q-r and b-q-s have sum b-w and difference W(A)-b. Simulate actual topological circuit evaluation by sending each crossing arc bit and a final output bit. Complete transcripts define monochromatic rectangles by induction on local checks. For fixed opposite-side assignment at most 2^(r+1) transcripts can arise by varying the first side. The uniform mass of transcripts whose first side has <K assignments is <=K*2^(r+1-q); similarly the second side gives <=K*2^(s+1-(b-q)). All transcripts are thin on some side, so min(q-r,b-q-s)<=log_2(4K). Consequently w+|W(A)-b|>=b-2log_2(4K).
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+The detailed block/forest lifting proof below transfers fair kernel laws to the original physical graph: for fixed cutoff d, pieces have O(d) mass, charged overhead O(N/d), and total kernel order <=2mu(G). Expected cut cost <=2c mu(G)+O(N/d), with charge sum b+o(N) with probability tending to one, by bounded dependence and Chebyshev. Conditional expectation of the nonnegative cut size on that event is at most its unconditional expectation divided by 1-o(1), so some outcome attains both. Consider any sequence of computing circuits with bounded t/n; unbounded ratios are automatic. Fix d, then let n grow, then let d grow. The rectangle inequality implies n-o(n)<=2c(t-b+1)+o(n) in this iterated-limit sense, b=n-O(log n). If t<(1+1/(2c)-epsilon)n infinitely often for fixed epsilon>0, that bounded-ratio subsequence contradicts the inequality. Hence liminf C_B2(f_n)/n >= 1+1/(2c)=62405759/12405759. No independence of gate values, direct sum, restricted basis or finite-n exact endpoint assertion.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+## 5. Frozen proofs
+The following sections give the conditional-quantile transfer, signed cut inequality and weighted block/forest lifting in full. The scored statement is the one-cut application in §§1–4, not the ancillary all-prefix corollaries.
 
-## Conservative remainder, with source discrepancy retained
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+---
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+## Evidence P1: conditional-quantile transfer
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+# Conditional-quantile transfer of nonlinear local scores from graph covers
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+**Conditional-quantile transfer theorem.** A bounded-radius equivariant scalar score depending arbitrarily on iid noise on a universal cover can be replaced by one scalar score on the base. All one-score laws are retained. For every common (or separate) threshold, every finite tuple of lifted scores, and every submodular cost of the resulting bits, the base expectation is no greater. This applies to nonlinear edge keys, not just Gaussian linear rows. The key is to compress the **final scalar score**, not to declare a nonlinear composition of Boolean costs submodular.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+## 1. Precise theorem and construction
 
-## Exact arithmetic and the unchanged LP
+Let pi:T->G be the universal cover of a finite connected graph; bounded maximum degree is needed only for uniform layout asymptotics below. A finite or countable regular cover with transitive deck action on each fiber works as well. Lift any supplied deterministic base markings. Vertex noises Z_z on T are iid with a standard Borel law. The score indices may be vertices, edges, or a specified equivariant countable index family over finitely many base orbits. For each lifted index a there is a real-valued Borel score Y_a depending only on a finite set N_a of iid noises, equivariant under deck transformations (up to a common null set). Assume that N_a is likewise chosen equivariantly or enlarged to a bounded ball. Then there exist base scores X_i indexed by the deck orbits, Borel functions of independent standard uniforms U_x on base vertices, with:
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+1. X_[a] uses only U_x for x in pi(N_a) and has exactly the distribution of Y_a.
+2. For arbitrary lifts a_1,...,a_k, thresholds t_1,...,t_k and any submodular function F on {0,1}^k,
+```
+E F(1[X_[a1] <= t1],...,1[X_[ak] <= tk])
+ <= E F(1[Y_a1 <= t1],...,1[Y_ak <= tk]).
+```
+A uniform choice of strict inequalities instead is also valid. The *same* base scores work for all tuples, all thresholds and all costs. F need not be nonnegative, normalized, monotone or complement-symmetric. No covariance matrix, linearity or Gaussian interpolation is assumed. Repeated base indices need not be separated.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+Fix any order of the finitely many vertices of G. At step x let the remaining outside variables be the uniforms already introduced and all as yet unprocessed lifted noises over base vertices other than x. They are mutually independent of the untouched fiber at x and of the new U_x. For every lifted row a replace its current scalar value by **the increasing conditional quantile**, evaluated at the same independent U_x, of its current law over the unprocessed fiber pi^-1(x), with these outside variables held fixed.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+More explicitly, for a rational q integrate the indicator that the current value is <=q against the product of the original iid noise laws in this fiber; each row uses only finitely many of those variables. The resulting CDF values are Borel in its outside arguments. For 0<u<1 take the infimum of rationals q where the conditional CDF is >=u. Assign arbitrary real values on the null endpoints u=0,1. This standard quantile rule has the conditional law, including its atoms. If the row does not use the current fiber, the quantile is its unchanged value for almost all u. Processing never expands its support: none of the Borel operations just described can introduce a variable not already used by that row other than the new U_x for the replaced fiber. One can choose bounded-radius scores literally as orbit translates of a representative, or use Fubini at the finitely many steps and the countably many rows/relevant translate equalities to disregard versions on null sets.
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+The row indexed by a deck translate is still the corresponding translate in the unprocessed coordinates. In fact a deck transformation permutes the original independent coordinates *within each fiber*, preserves the law integrated at x, and fixes the previously introduced base uniforms pointwise. Thus the same conditional quantile recipe is equivariant in the remaining arguments. After all base vertices have been processed there are no remaining lifted coordinates: all rows in the same orbit are equal almost surely. Selecting one representative defines X. Order-independence or canonicity with respect to every automorphism of G is not asserted or needed.
 
-## Sources
+## 2. Why a fiber replacement lowers every submodular bit cost
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+Condition on the outside variables at one step. The old threshold bits are arbitrarily coupled Bernoulli variables of fixed marginal probabilities p_i. The new ones have these same conditional marginal probabilities, but their events are initial intervals of a *single* uniform U_x, hence nested. With atoms and '<=' this holds up to endpoints of uniform measure zero; the analogous strict-threshold event has the corresponding strict CDF mass. The entire real-score quantile is used, so threshold-by-threshold compatibility is automatic.
+
+Here is an elementary proof of the classical minimum-coupling fact. Relabel the coordinates so p_1>=...>=p_k and let S_j={1,...,j}. Put w_j=F(S_j)-F(S_{j-1}). For any A, adding its members in this order and using diminishing returns gives F(A)>=F(empty)+sum_{j in A}w_j. Therefore the expected cost in any coupling is >=F(empty)+sum_j p_j w_j. In the nested coupling only the prefix sets S_j occur, where these inequalities are equalities. Ties between marginal probabilities do not change the value. This is the usual Lovasz-extension/comonotonic coupling statement; it is not a new inequality. Taking the outer expectation proves a decrease at that step. Iteration gives the displayed theorem. Exact preservation of each single-score law follows by the conditional quantile construction at each step. The conclusion holds for all thresholds as a deterministic inequality between expectations; it does not assert that a random outcome simultaneously realizes infinitely many strict comparisons.
+
+## 3. Finite-radius layout implications and limits
+
+For a radius-R vertex score on the cubic tree with a common **atomless** marginal and a uniform per-edge bound p on sign disagreement at **every** threshold, the base ordering by X has physical cutwidth at most (3p/2)n+O_R(sqrt(n log(2n))). For each edge compare its two endpoints using submodular XOR cost at that threshold. Use n equal-marginal quantile windows and all finite grid cutpoints. Crossing indicators depend only on two bounded projected balls; vertex-window indicators each on one such ball. Their dependency graphs have uniformly bounded maximum degree. Dependency coloring, Holder, and independent Hoeffding in each color give simultaneous deviations O_R(sqrt(n log(2n))) with positive probability after a union bound. Each window contains an expected O(1) vertices and can increase the cut by at most three times its vertex count. This also handles ties between distinct scores with atomless marginals (the scores themselves can be identically coupled). Atoms in the marginal are not silently ignored: a window containing an atom of mass alpha may contain order alpha*n vertices; a discrete source needs separately certified tie handling or atomless local tie noise with a valid all-threshold cost analysis. A bisection estimate at one threshold is insufficient.
+
+For matched-pair edge-key layouts more generally take a marked cubic tree/cover with an invariant matching. Suppose scores on nonmatching edges are bounded-radius atomless local factors. For each matching pair take the four exterior edge ports in a single lift and use the submodular function
+```
+F(a,b,c,d) = min_q [NAE(a,b,q)+NAE(c,d,q)].
+```
+The least minimizer q is monotone along the threshold sweep. Its unique switch occurs at a local exterior score. Apply this transfer directly to the *scalar exterior edge keys*, compare at every threshold, and use the finite-radius concentration, ties, inclusive bags and physical middle-edge ordering of the crossing-lines ordering construction in graph-a.md. If marginals have several types, an atomless degree-weighted mixture can be used for the finite quantile grid. A uniform certified bound on the sum of the actual **tree final-cost expectations** therefore gives the same leading bound on the physical graph. The argument applies similarly to bounded free-tree blocks with symmetric submodular endpoint costs. No claim of a polynomial-time implementation of arbitrary conditional integrals, or of an effective new number, follows.
+
+In particular one may first compute a nonlinear monotone local schedule on the universal cover and regard each scheduled exterior edge's switch time as its scalar key, then transfer these final keys and optimize matching pairs on the base. If each switch occurs at one of finitely many atomless local inputs, its law is atomless even when the conditional laws at individual fibers have atoms. Bounded dependence and the actual all-threshold tree estimate must still be proved. A separate obstruction shows the *composite* two-pass Boolean cost is not submodular in the original input matching bits. That obstruction remains true; it is the wrong function to use in this rearrangement. One must not substitute a nonlocal infinite-line argmin without a finite-range approximation and a justified error bound. This source supplies no certificate crossing 0.130648.
+
+## 4. Prior work, controls and assurance
+
+The Gaussian linear common-edge-row fold is recovered transparently: each conditional fiber contribution is a normal with conditional mean the outside sum and standard deviation the l2 norm of the fiber coefficients. A common standard Gaussian quantile produces the norm compression. The nonlinear graph-cover theorem here uses conditional **quantiles**, not a covariance bound on the input of a Boolean circuit.
+
+For classical context compare Francis Bach, *Submodular functions: from discrete to continuous domains*, arXiv:1511.00394, on continuous/distributional submodular extensions; Chernozhukov, Fernandez-Val and Galichon, *Improving point and interval estimates of monotone functions by rearrangement* (Biometrika, 2009), on sequential coordinate rearrangement. Neither the classical nested-Bernoulli coupling fact nor conditional quantile sampling is attributed here as new. Comparison to the exact graph-cover statement is source-relative; exhaustive mathematical novelty remains unverified.
+
+The all-size statement is the written argument, not an inference from finite fixtures.
+
+
+---
+
+## Evidence P2: signed cut inequality
+
+# A single signed cut in place of a nested family of layouts
+
+Let a pruned acyclic Boolean circuit with b input vertices and t binary gates have the exact MSW wire graph: each variable has one outgoing arc, each genuine nonoutput gate indegree two and one outgoing arc, each copy indegree one and two outgoing arcs, and the (gate) output indegree two. Each use distribution is a path. Write N=2t+1, μ=t−b+1. In this note a cut is a partition of the VERTICES and its physical cost counts crossing ARCS with multiplicity, not crossing gates. Li's n-bit function from MSW has no monochromatic coordinate-split product P×Q when |P|,|Q|≥K=n^c, regardless of the split; in particular its b read inputs satisfy b≥n−ceil(log₂ K)+1. Fix unused bits; any product on the read inputs extends by these fixed coordinates, leaving the property at the same K. We use b, not n, for input entropy.
+
+On every vertex v place the integer weight W(v)=2·1_input(v)+indeg(v)−outdeg(v). Thus weights are +1 for an input, +1 for an ordinary binary gate, −1 for a copy and +2 for the output. Total weight is 2b. For a vertex side A carrying q raw inputs and r outgoing, s incoming crossing arcs, w=r+s, cancellation of internal arcs yields
+  (q−r)+(b−q−s)=b−w,      (q−r)−(b−q−s)=W(A)−b.     (1)
+
+**One-cut law.** For every cut in a circuit computing that exact target,
+  w(A)+|W(A)−b| ≥ b−2 log₂ K−O(1).
+In particular a single low-cost signed-charge bisection suffices to contradict exact computation. No interpolation of unrelated cuts into a common ordering is required.
+
+Proof by two-party simulation. One party receives each side's local primary input assignment. Evaluate the DAG in public topological order, sending each crossing bit from its producer to the other party when available (one bit per scheduled arc, no adaptive scheduling). At the end the output party sends the output bit so the transcript is monochromatic. Each nonempty transcript is exactly a product P×Q: prescribing it makes all local validity checks conditions solely on that party's local assignment by induction in topological order. Extra copies of the same producer need not be retransmitted; let r',s' be the number of DISTINCT producer values in each direction if desired. For a fixed assignment on the far side, varying the q local bits enters at most 2^(r+1) transcripts since outgoing bits and the fixed far input determine all replies, including output. At most K·2^(r+1) of those local assignments can lie in transcripts with |P|<K. Likewise the mass weighted by thin Q is ≤K·2^(s+1−(b−q)). For an exactly hard function every transcript is thin on some side, hence
+  1 ≤ 2K·(2^{r−q}+2^{s−(b−q)}).
+This implies min(q−r,b−q−s)≤log₂(4K), giving (1)'s claim. The bound even permits r,s replaced by r',s' in this last directional inequality (not the raw divergence identity). This proof works for arbitrary deterministic acyclic gate semantics with the stated port degrees. For the small-error explicit sumset target, the same partition lower-bounds uniform error by α times (one minus the displayed thin-mass upper bound) when every rich rectangle has target minority density ≥α. This direct fixed-cut statement does not need a read-once branching program or any world-priority claim about communication bounds.
+
+**Ambient normalization.** When a raw input has at least two native uses, its leaf plus first copy has total charge exactly zero. Deleting the leaf and suppressing that copy on the resulting edge preserves a cut cost on the new edge: if endpoints agree, assign both to their side; if different, take either. A singleton leaf plus its first real gate has weight +2 (unless final output). Multiple successive exceptional sites can be retained rather than silently treating them as zero. The weighted assembly in Evidence P3 of proof.md avoids all restrictions on where charge is located.
+
+**Kernel hypothesis sufficient for coefficient.** Suppose, for every η>0, on each simple triangle-free 2-connected cubic H there is a random vertex coloring with each marginal fair, radius or dependence-neighborhood bound D_η independent of h, and expected number of crossing physical edges ≤(c+η)|H|+C_η. Formally a dependency graph of maximum degree D_η for the sign variables suffices; deterministic matching/blocks may be fixed beforehand. No compatibility among cuts at different thresholds is required. Then liminf t_n/n≥1+1/(2c) for this explicit exact target (c>0). Evidence P3 of proof.md proves the assembly needed for arbitrary actual wire graphs. In particular it is not enough for the graph algorithm to output a random complement of ONE possibly skewed unweighted partition: that can have macroscopic signed-weight deviations. Nor is a theorem about edge colors or split vertices enough without a conversion to the required vertex bipartition. We do not establish c<0.130648 here.
+
+
+---
+
+## Evidence P3: weighted block and forest assembly
+
+# From one kernel cut to the actual graph, and the largest-kernel bound
+
+G is any connected loopless subcubic multigraph on N vertices. Use the bridge blocks of MSW §2.4. For each bridgeless block B (singletons allowed), use precisely their COMPRESS contraction forest: every merge has 2 or 3 children and every piece has at most 3 B-edges leaving it; the final contracted graph is a singleton or a simple triangle-free 2-connected cubic kernel H_B with h_B≤2(μ(B)−1). The sum of μ(B) equals μ(G). Select an integer d≥2.
+
+1. Root the bridge-block tree anywhere. Process postorder. A block receives the unfinalized vertices from each child; each such child remainder has <d vertices and its only connection to this block is its parent bridge. Bundle each retained child remainder with its actual attachment vertex in the block. Each such starting bundle has ≤1+3(d−1) original vertices. Finalize this job, consisting of the block plus all these remainders, if its mass is ≥d or it is the root. Otherwise return it unfinalized. Each nonroot finalization incurs at most one severed bridge to its parent, even when that parent is later finalized jointly with other remainders. Finalized jobs are disjoint; except possibly the root each has ≥d vertices, so ≤N/d such bridges suffice. Every nonsevered bridge inside a job belongs to a starting bundle. Every job has one anchor block; the unused child blocks within bundles are intentionally treated as monochrome here.
+2. In the contraction forest of each anchor block, start with its vertex bundles from step 1, successively merging the still-attached original vertices of the children. If the remaining mass of a piece reaches 4d, detach this *residual bundle* as its own part and return zero attached mass to the parent. Starting bundles have mass <4d, so every detached residual bundle has <12d vertices. The sum of the detached sizes is ≤N: at most N/(4d) detachments. Charge at most 3 edges *outside the full corresponding contraction piece* in the anchor block on each detachment. Edges from a new residual bundle to an earlier detached descendant, although potentially numerous in total over all descendants, were already charged when the innermost previously detached endpoint was separated. More explicitly, for an edge with endpoints in differently colored bundles, if at least one endpoint was detached then take its chronologically earliest detached endpoint. If its other endpoint was inside the same full piece at that moment it was either detached earlier or belongs to that same residual bundle; both contradict the choice/separation. Thus the edge is among the at most three originally leaving that full piece. Attachments in step 1 follow their block vertex together and add no new uncharged edge. At termination each vertex of the kernel or singleton carries <4d original vertices; zero masses allowed. Any remaining edge between different final bundles projects to an edge of the contracted kernel (or it has already been charged). Thus total overhead in physical edges is ≤N/d+3N/(4d), before any cuts inside individual bundles.
+3. **Full-layout corollary.** Let Q=max_B cw(H_B), taking the maximum as zero if all blocks collapse to one vertex. Order the detached residual bundles one at a time, and each anchor job's remaining bundles in a minimum-width order of its kernel (singleton: trivial), concatenating the resulting lists. Within a bundle order arbitrarily. Apart from the overhead charged in steps 1–2, a cut sees at most Q edges from a single partially traversed kernel and at most 3·12d edges incident to the one partially traversed bundle. Formally compare with the preceding whole-bundle cut. Hence
+     cw(G) ≤ Q + 36d + 7N/(4d).
+In particular cw(G) ≤ max_B cw(H_B)+O(√N). This is an additive sublinear-error largest-kernel improvement to the coarse rank-sum route, not a better logarithmic error on all sizes. All kernels from the original block family may be included in the maximum, even if their blocks lay in small child remainders. For an admissible global cutwidth coefficient κ, cw(H)≤(κ+η)h+C_η. If a Li circuit family has t=(1+1/(2κ)+o(1))n, the first prefix in any order with integer charge at least b has imbalance at most one, so P2 gives cw(G)≥b−2log₂(4K)−1=n−O(log n), whence max_B h_B=2(t−b)−o(n) (let η→0). All other blocks' combined cycle rank plus the winning block's contraction rank loss is o(n). This does NOT say every physical vertex belongs to the kernel: many raw leaves have zero cycle rank.
+4. **Nonnested bisection corollary.** Give G arbitrary deterministic weights in [−2,2], with total 2b. Color each detached small part by its own fair independent sign; color each final singleton independently the same way. On each nonsingleton kernel independently use the fair sign rule of graph-b.md, Evidence B5 (all vertices carrying their full bundles). The expected cut cost is ≤(c+η)·2μ(G)+C_η(N/d+1)+7N/(4d). The number of kernels used is at most the number of jobs, and their sizes sum to at most 2μ(G). Each independent piece or kernel spin governs at most 12d original vertices, so its total absolute weight ≤24d; the number of terms (including empty kernel carriers) is O(N), and the dependency graph has uniformly bounded degree D_η. The weighted side mass therefore has expectation b and variance O_{η,d}(N). Chebyshev gives imbalance o(N) with probability 1−o(1) for fixed d,η. The nonnegative cut cost conditional on this good event has mean at most its unconditioned expectation divided by 1−o(1); some outcome attains this bound. No variance of the cut cost is needed. For N=O(n), first let n→∞, then d→∞ at fixed η, then η→0. Evidence P2 of proof.md's one-cut law forces b≤2c μ(G)+o(n) in the liminf sense. If t/n is unbounded along a subsequence the claimed lower bound there is automatic. This proves the circuit conclusion under the stated kernel hypothesis, which is required only for the compressed kernels.
