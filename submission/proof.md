@@ -1,90 +1,80 @@
-# Published coefficient 31/10: construction and proof
+# Four gates per data bit, with an explicit all-length loss
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+For the language below, every sufficiently large integer input length $n$ satisfies
+$$C_{B_2}(f_n)\ \ge\ 4n-\tfrac{77}{5}n^{4/5}.$$
+The proof uses a restriction of the input to specify a finite field. All bits used to specify the field are charged to $n$.
 
-## Fixed total family
+## The language
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+Put $f_0=0$. At length $n\ge1$ choose the least prime $k$ with $k^5\ge n^3$. If $k\ge n$, output zero. Otherwise let $h=n-k$, $r=\lceil h/k\rceil$, $t=\lceil\sqrt r\rceil$ and $b_i=r+1-i$ for $1\le i\le r$. Interpret the first $k$ bits, in order of increasing degree, as the low coefficients of a monic binary polynomial $Q$ of degree $k$. In the quotient ring $R=\mathbb F_2[Z]/(Q)$, read the remaining $h$ bits in successive blocks of $k$, appending zeros at the end of the last block and again reading low coefficients first. Denote the resulting elements by $X_i$. With $[Z^0]$ denoting the constant coefficient of the degree-less-than-$k$ representative, define
+$$
+ f_n=[Z^0]\sum_{|I|=t}\prod_{i\in I} X_i^{2^{b_i}-1}.
+$$
+The sum runs over subsets of $\{1,\ldots,r\}$. This prescription also assigns an output when $Q$ is reducible.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+The evaluator can find $k$ by integer comparisons and trial division. The classical Bertrand postulate (a prime lies between $m$ and $2m$ for integers $m>1$) gives $n^{3/5}\le k\le 2\lceil n^{3/5}\rceil$ for large $n$. Ring multiplication by schoolbook convolution and monic long division takes polynomially many bit operations. Repeated squaring and multiplication evaluate each power using $O(b_i)$ ring operations. To compute the sum, initialize $E_0=1$ and $E_1=\cdots=E_t=0$. On adjoining a powered block $Y$, update $E_j\gets E_j+Y E_{j-1}$ in descending order for $j=t,\ldots,1$. Splitting subsets according to whether they contain the new block proves that $E_t$ is the required sum. All bounds are polynomial in the actual length. With witness bound zero, the verifier accepts exactly when the witness is empty and this algorithm returns one. Thus the yes-language is in P and in NP in both directions.
 
-## Uniform P and NP membership
+## A restriction and its affine subspaces
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+At each large length there exists an irreducible monic binary polynomial of degree $k$. For example, in a splitting field the roots of $T^{2^k}-T$ are distinct, closed under addition, multiplication and nonzero inversion, and form a field of size $2^k$. The squaring orbit of any element outside $\mathbb F_2$ in this field has size $k$ since $k$ is prime. The product of the linear factors over that orbit is fixed by squaring on coefficients and is the minimal polynomial (every binary polynomial vanishing at one orbit point vanishes at them all). Fix the header to the coefficients of any one such polynomial in the lower-bound argument. This gives a function $g$ on exactly $h$ data bits, with blocks in a field $K$ of degree $k$ over $\mathbb F_2$. The deterministic evaluator above never has to select an irreducible. A circuit for $f_n$ with constant header computes $g$ with at most the original gate count. The appended zeros in the data blocks give an injective linear embedding of the entire $h$-bit space.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+We show that $g$ takes both bit values on every affine flat of dimension
+$$ d=B+kt+1,\qquad B=\sum_{i=1}^r b_i=r(r+1)/2 $$
+whenever $d\le h$. Write $D$ for the dimension of such a flat, allowing $D\ge d$. All linear dimensions and coefficients of linear maps below are over $\mathbb F_2$ unless otherwise indicated.
 
-## Every integer length and the lower bound
+**Product of subspaces.** For nonzero binary subspaces $A,B'$ of $K$, their products span a space of dimension at least $\min(k,\dim A+\dim B'-1)$. Here is a proof by induction on $\dim B'$. Dimension one and $A=K$ are immediate. Otherwise there exists $z\ne0$ such that $0\ne A\cap zB'\ne zB'$. Indeed, if there were no such $z$, every $z=a/b$ for $a\in A$, $b\in B'$ both nonzero would give $zB'\subseteq A$. Choose independent $b,c\in B'$. Then $(c/b)A\subseteq A$ and $A$ is closed under multiplication by every polynomial in $c/b$. The element $c/b$ is outside the base field and hence generates $K$, by the tower law and primality of $k$. Thus $A=K$, a contradiction. With this $z$ replace the spaces by $A+zB'$ and $B'\cap z^{-1}A$. Their dimensions have the same sum, the second is nonzero and strictly smaller, and the new products are in the span of the old ones. Induction proves the bound. Iteration gives the lower bound $\min(k,1+\sum_i(\dim A_i-1))$ for the span of products from any list of nonzero spaces.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+**Triangular coordinates.** In the translated direction space of our flat, take successive kernels of projections onto the first $i$ blocks. In the kernel for the first $i-1$ blocks let $U_i\subset K$ be the image in block $i$, of dimension $d_i$. Lift a basis of $U_i$ to this kernel and extend the lift linearly. Subtracting these lifts from a vector successively from left to right gives unique independent coordinates $u_i\in U_i$, with $\sum_i d_i=D$. Block $i$ has the form $c_i+u_i+\sum_{j<i}L_{ij}(u_j)$ for fixed binary linear maps. This argument works on the padded flat itself, including when its last ambient block is partly zero.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+Choose $t$ indices $I$ with $d_i>b_i$ and $\sum_{i\in I}(d_i-b_i)\ge k$. To see that this is possible, the total positive excess is at least $D-B>kt$. Each excess is at most $k$, so there are at least $t$ positive ones. The $t$ largest have sum at least $t/r$ times the total positive excess (average over the positive excesses padded with zeros). Since $t^2\ge r$, this gives the assertion.
 
-## Conservative remainder, with source discrepancy retained
+**A Boolean coefficient detecting variation.** For each $i\in I$ use independent formal *bits* $z_{i1},\ldots,z_{ib_i}$ to set $u_i=\sum_j z_{ij}v_{ij}$ with directions $v_{ij}\in U_i$ to be chosen. Set all other $u_i=0$. We calculate the coefficient of the product of all these bits in the unique multilinear representative, reducing $z^2=z$. Its coefficient is also the sum of the values over this Boolean cube, as every proper monomial is counted an even number of times.
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+For a term indexed by $J$ of size $t$, block $j\in J$ supplies $b_j$ factors: the Frobenius powers $X_j^{2^e}$ for $0\le e<b_j$. Each factor is affine in the bits and only reads groups $i\le j$. Give each bit from group $i$ weight $1/b_i$. A factor from block $j$ can supply at most $1/b_j$ because $b_i\ge b_j$ for $i\le j$. Thus total capacity is $t$. The desired monomial has weight exactly $t$. Any constant choice, duplicate bit, or choice from a strictly earlier block leaves strictly too little weight. Consequently the only contributing term is $J=I$, and all its factors must choose bits of their own group, once each. This remains true for arbitrary affine shifts and all off-diagonal block maps.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+The field coefficient before taking $[Z^0]$ is therefore the product over $i\in I$ of determinants of the matrices $(v_{ij}^{2^e})_{0\le e<b_i,1\le j\le b_i}$. The determinant and permanent agree in characteristic two. For any $b$ independent directions the determinant is nonzero: a row dependence would give a nonzero polynomial $\sum_{e=0}^{b-1}a_e T^{2^e}$ vanishing on their $2^b$-element binary span, impossible at degree at most $2^{b-1}$. Dependence of directions conversely gives column dependence. Fix the first $b_i-1$ directions independently. As the last ranges over $U_i$, the determinant is a binary linear map with kernel their span, so its values form a space of dimension $d_i-b_i+1$. This includes the one-row case. The product-of-subspaces bound makes the products of attainable determinants span all of $K$, by the choice of $I$. The nonzero linear functional $[Z^0]$ cannot vanish on all these products. Choose directions yielding coefficient one. A constant Boolean function has zero coefficient on this nonempty full monomial. The restriction is therefore nonconstant and so is $g$ on the original flat.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+## From affine flats to counted gates
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+We give the restriction argument for an arbitrary function on $h$ inputs which varies on every affine $d$-flat, $1\le d\le h$. It yields at least $4h-10d$ gates. The method of disjoint parameter pairs and implicit linear equations is due to Mishra and Santhanam, revision 1, Sections 2–4. Details follow so that the numerical implication can be checked within this proof.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Start from any exact circuit with $s_0$ gates. During the argument use $m$ independent bits $u$, an injective affine map $\Phi$ into the original input space, and $q$ disjoint pairs of parameters. The allowed set consists of assignments satisfying $pr=0$ for each pair $\{p,r\}$. The current computation agrees there with the original output at $\Phi(u)$. Initially $m=h$, $q=0$ and $\Phi$ is the identity. An auxiliary list $v$ is specified by $Av=Nu+c$ with $A$ square invertible. Every row uses at most three distinct variable symbols after cancellation. Initially there are no rows. A residual acyclic circuit takes parameters, auxiliaries and constants as sources. Its wires may carry complemented literals: complements are absorbed in child truth tables. A sign on the final output is recorded for the argument. This only enlarges the model used for the lower bound and associates one object with every originally counted gate, including unary gates. No rewriting step constructs an uncharged gate in the claimed ordinary circuit.
 
-## Exact arithmetic and the unchanged LP
+Count $s$ as rows plus residual gates. A parameter's occurrences count distinct rows mentioning it and distinct gates reading it, including a gate just once for repeated pins. Define $a=m-q$, $I_u$ to be the number of used unpaired parameters, and $W=s+4q+6I_u$. We will reduce while $a>d$, either obtaining a monochromatic $d$-flat or decreasing $m+s$, with $\Delta a=0$ or $-1$ and $\Delta W\le10\Delta a$. Initially $W\le s_0+6h$ and always $W\ge0$.
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+An affine output, or a signed AND of two affine literals, gives a monochromatic flat of dimension at least $a-1$. Set one member per pair to zero, obtaining dimension $a$. An affine output is constant on a level hyperplane or the whole flat. For a product fix a nonconstant factor to its killing value, or simplify if the factors are constant. The image under $\Phi$ preserves dimension. Thus these outputs end the argument whenever $a>d$.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+The following representation operations justify the counts in every case.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+* Delete dead nonoutput gates, or bypass a gate by a constant or a signed parent whenever the gate agrees with it on allowed assignments. Replace all uses together. This applies to constant and unary truth tables, fixed or repeated inputs, and to two affine parents with dependent linear parts (their joint image has at most two values). Each bypass uses an already present source. It cannot make a previously unused parameter used. All essential two-input truth tables are affine parity with a possible sign, or a signed product of signed inputs: the nonlinear algebraic normal form is $xy+bx+cy+e=(x+c)(y+b)+e+bc$.
+* Move an affine gate with parameter, auxiliary or constant parents into a row defining one new auxiliary. This preserves $s$, keeps row width at most three, and extends $A$ by a diagonal one below a zero column. A row with at most two symbols must contain an auxiliary, by invertibility. Solve it for one auxiliary, substitute the resulting literal or constant everywhere and delete the row and its solved variable. Width cannot grow; row addition clears the pivot column, so its complementary minor stays invertible.
+* An auxiliary $v_j$ depending on an unpaired parameter $x$ can replace $x$ as a free coordinate. Its expression is $x+\ell(u_{-x})$. Compose $\Phi$ with the inverse affine coordinate change. Exchange the two symbols' roles in the existing equations and gates. The new auxiliary matrix replaces column $j$ of $A$ by $N_x$; relative to $A$ its determinant is $(A^{-1}N_x)_j=1$. The symbols both occurred in rows, so the used-unpaired count is unchanged. If an unpaired parameter appears only in one row and nowhere else, this exchange is available since $N_x$ is a unit column. After exchange, the old $x$ is an auxiliary confined to that row. Drop the row and $x$, recovering its value from that row if needed; the column has just its pivot, so the residual matrix is invertible. The new free coordinate replaces at most one existing used free coordinate.
+* A parameter can be fixed to a bit. For a pair the three available line restrictions are $p=0$, $r=0$, $p=r+1$; each discards one parameter and the pair. These substitutions preserve row width and the auxiliary matrix. Compose $\Phi$ with the affine inclusion. Another operation imposes $xy=0$ on distinct unpaired parameters, creating a new pair with $\Phi$ unchanged. Both operations keep the required agreement on the new allowed set. Unpaired parameters can first be complemented by changing coordinates and absorbing signs.
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+Each ordinary deletion already constitutes a step at fixed $a$ with $\Delta W\le-1$. We may therefore restart after such a deletion. Make all possible moves of affine bottom gates (each transfers one of finitely many residual gates); if no deletion or output test applies, use the following cases in order.
 
-## Sources
+1. If a paired $p$ is unused, set its partner to zero. The survivor stays unused, $\Delta a=0$ and $\Delta W\le-4$. If $p$ occurs in at least two objects, fix $p=0$. Two distinct objects can be removed: gates reading the constant are unary, and affected rows now have width at most two. Eliminating one shortened row substitutes at most a literal in the other, which stays short; if one object is a gate and the other a row, the fixed input stays fixed. Gate-to-gate sharing likewise leaves the other gate's fixed input intact. Removing the pair costs at most six in new unpaired weight, giving $\Delta W\le-4-2+6=0$ at fixed $a$.
+2. Now all partners occur once. If two partners occur together in one gate, its one-bit output agrees on two of $00,01,10$. Restrict to the line joining those points and delete the gate. If their common object is a row, it must be $p+r+v=c$ with auxiliary $v$; the line $p=r+1$ fixes $v$. Delete the row. In each case the surviving coordinate is unused, $\Delta a=0$, $\Delta W\le-5$.
+3. Suppose $p$ occurs only in a row $E$ and its partner $r'$ has a distinct unique object $H$. Fix $r'=0$, drop the pair and delete $H$ as a unary gate or short row. This cannot introduce a use of $p$ because $H$ did not mention $p$. Its occurrence in $E$ is preserved (a substituted symbol from $H$ cannot introduce or cancel $p$). Eliminate $E$ by the single-occurrence coordinate exchange above, or by the short-row rule. Two objects have been removed; the surviving coordinate or its replacement adds at most six. Again $\Delta a=0$ and $\Delta W\le0$.
+4. Otherwise every paired parameter occurs only in a gate, in a different gate from its partner. Take the earliest residual gate $G$. If there is none the output is affine. The earlier moves, bypasses and output test ensure $G$ is a signed AND with independent affine parents and at least one child. Make its parents free coordinates. For an auxiliary parent select an unpaired pivot it depends on (paired parameters occur in no rows). Keep any other parent that is already a parameter: independence ensures the pivot can be chosen different from that parent. At most two exchanges suffice because independence is invariant under an invertible change of coordinates. Exchanges change no incidences of paired parameters and keep $W,m,s$ fixed. Write $G=(x+\alpha)(y+\beta)+\gamma$.
+   * If neither parent is paired, complement the parents as needed and add their pair, making $G$ constant. Delete $G$ and one distinct child (now unary). Both parents lose their six units, and the new pair adds four. Thus $\Delta a=-1$ and $\Delta W\le-2-12+4=-10$.
+   * If just $y$ is paired, fix its partner to zero and fix $x=\alpha$. Delete the partner's gate and $G$, which are distinct even if one feeds the other. After rerouting $G$ to a constant, $y$ has no uses. Here $\Delta m=-2$, $\Delta q=-1$ and $\Delta W\le-2-4-6=-12$.
+   * If both are paired, their pairs are distinct. Fix both partners to zero, then fix $x=\alpha$. Delete $G$ and the gate reading the partner of $x$. The partners may share a gate, so only one partner gate is counted. The sole use of $y$ disappears. Here $\Delta m=-3$, $\Delta q=-2$, $\Delta W\le-2-8=-10$. In both paired cases $\Delta a=-1$.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+Only newly unpaired coordinates can gain weight in these deletions: a rerouted literal already occurred in the object that supplied it. A designated output that becomes a literal can be tracked directly with its sign even if it has no children. There is no fan-out bound. Every completed nonterminal step decreases the nonnegative integer $m+s$; at most finitely many bottom moves and the two preparatory exchanges intervene per step. If $s_0<4h-10d$, telescoping would give $0\le W\le s_0+6h+10(a-h)<10(a-d)$ at every reached state. In particular $a>d$ persists and termination forces a monochromatic $d$-flat, contradicting the disperser property. This proves the gate inequality.
+
+## Returning to the actual length
+
+Write $u=k/n^{3/5}$, so $1\le u\le 2+o(1)$. Uniformly in this interval,
+$r=n^{2/5}/u+O(1)$, $t=\sqrt r+O(1)$, and therefore
+$$
+ \frac{4k+10d}{n^{4/5}}
+ =10\left(\sqrt u+\frac1{2u^2}\right)+o(1).
+$$
+Indeed $kt=k\sqrt r+O(k)$ and $B=r^2/2+O(r)$; $k=O(n^{3/5})$. In particular $d=o(h)$ and the required range $1\le d\le h$ holds eventually. The derivative of $\sqrt u+1/(2u^2)$ has the sign of $u^{5/2}-2$, so its maximum on $[1,2]$ is at an endpoint. The two values are $3/2$ and $\sqrt 2+1/8$, both strictly below $77/50$ (for the latter, $(283/200)^2>2$). The continuity and strict margin absorb every rounding term. Hence eventually $4k+10d\le(77/5)n^{4/5}$. The restricted circuit gives $C_{B_2}(f_n)\ge4(n-k)-10d$, as claimed for all sufficiently large integer lengths. Dividing by $n$ proves the joint finite projection $(4,1)$.
+
+## Sources and scope
+
+The decreasing block degrees and elementary symmetric combination follow Ben-Sasson and Kopparty, *Affine Dispersers from Subspace Polynomials*, March 12, 2010, Theorem 7.3 and Section 7.2. The argument above uses a product-span induction and Boolean determinants for the coefficient on each flat. [Author preprint](https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf)
+
+The disjoint-pair circuit bound is the size implication of Mishra and Santhanam, ECCC TR26-260, revision 1, November 3, 2026, Lemmas 2.2 and 4.2 and Theorem 4.1. Their logarithmic loss for a different construction is stronger. The theorem here concerns the explicit polynomial-quotient evaluator and the loss proved above. [Revision 1](https://eccc.weizmann.ac.il/report/2026/260/revision/1/)
