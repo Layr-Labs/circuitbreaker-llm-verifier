@@ -1,90 +1,217 @@
-# Published coefficient 31/10: construction and proof
+# Superlinear full-B2 circuits for padded element distinctness
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## Main theorem and attribution
 
-## Fixed total family
+Fix K=10^256-1. One fixed total language L in P satisfies, for every sufficiently large integer N,
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+    C_B2(L_N) >= K N (log_2(log_2 N))^K.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+The coefficient and iterated-log exponent both equal K. The remainder is empty. Its exponent-one projection is
 
-## Uniform P and NP membership
+    lim_(N -> infinity, N integer) C_B2(L_N)/N = +infinity.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+Equivalently, for every real A>0 there is N_A such that every integer
+N>=N_A satisfies C_B2(L_N)>=A*N. Circuits are deterministic, acyclic,
+single-output full B2, allowing all sixteen binary truth tables, arbitrary
+depth and fan-out, repeated pins and shared subcircuits. Gates are counted
+once; inputs, wires, output selection and substituted constant nodes are
+free. N is the entire input bit length.
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+This is a Boolean-circuit corollary of OpenAI, *The matrix multiplication
+exponent is nine fourths*, November 24, 2026 edition, Theorem 2.2 (label
+`thm:many`). The immutable source snapshot is
+`openai/math@92b516ef8e2abf66c3db7aa31438d3010bc7956f`:
 
-## Every integer length and the lower bound
+https://github.com/openai/math/tree/92b516ef8e2abf66c3db7aa31438d3010bc7956f/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+Gal Arnon (galarnon42), Yukon e70d8290-d404-403a-8e48-c77118440d3a,
+gave this padded family, Boolean conversion, all-length argument and proof
+for every fixed iterated-log exponent. Holindauer, Yukon
+449e2336-6ab9-4519-ad1e-22019c89d545, instantiated the exponent at 2
+and restored two source-scope passages. This submission retains the
+original gate conversion and uses Holindauer's scope-complete copies
+of source-4.md and source-5.md. The change to the theorem declaration
+is the simultaneous choice of coefficient and iterated-log exponent K.
+The tensor theorem and its companion results are due to OpenAI.
+The mathematical arguments are supplied below and in the evidence files.
+The supporting source material is supplied in source-*.md with original
+file names, theorem labels, source provenance and attribution. Provenance
+hashes identify versions. The source theorem supplies a fixed positive
+exponent on log N. The declared iterated-log bound works for every such exponent.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+## 1. One explicit total language
 
-## Conservative remainder, with source discrepancy retained
+For each integer w>=1 let n_w=2*w*2^w. On any input x of length N:
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+1. If N<4, output 0.
+2. Otherwise let w be the largest integer with n_w<=N.
+3. Split the first n_w bits into 2^w consecutive records of 2w bits each.
+4. Output 1 iff every pair of records is different. Ignore the suffix.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+There is no advice or promise. In particular, the suffix can be arbitrary.
+A fixed deterministic evaluator finds w by successive integer increments
+and compares every pair of records bit by bit. There are at most N^2
+pairs; even locating each pair by scanning the input uses polynomial time.
+A conservative O((N+2)^4) multitape time bound suffices, including counter
+and parameter arithmetic. Thus L is in P.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+For NP take witness bound W(N)=0 and a fixed verifier V(x,z) that rejects
+nonempty z and otherwise runs the evaluator. If x is in L its empty
+witness is accepted. If V accepts, z is empty and the evaluator accepted x.
+Both directions hold at all lengths, including the small rejecting cases.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+## 2. The exact external theorem and its model
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+A bit tensor of arity u over F2 is a table {0,1}^u -> F2. Each network
+vertex carries a table. Internal wires pair argument positions; each
+unpaired position is a distinct named exterior bit. For fixed exterior
+bits, the represented value is the sum over internal wire assignments of
+the product of the table values. Every vertex of a trivalent network has
+arity at most three. Volume counts vertices and all wires, including
+exterior wires.
 
-## Exact arithmetic and the unchanged LP
+Let D_w:{0,1}^{n_w}->F2 be the distinctness indicator on 2^w records of
+2w bits. The cited Theorem 2.2 states that for every fixed finite field k
+there are sigma>0 and w_* such that, for all integers w>=w_* and
+1<=t<=2^w,
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+    vol_k(D_w^(tensor t)) > t*n_w*w^sigma.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+Sharing between the t lists is allowed. Specializing to k=F2 and t=1 gives
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+    vol_F2(D_w) > n_w*w^sigma.                         (1)
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+There is no hypothesis omega_k<9/4 in this theorem. That assumption
+belongs to the separate compression theorem (Theorem 2.1), which this
+entry does not use. Section 5 of the source, `list.tex`, proves (1)
+by an exhaustive ports/no-ports distinction, using the geometric and
+counting results identified in the supplied evidence. Neither specific
+case for characteristic two is assumed.
 
-## Sources
+## 3. Constant-overhead conversion from arbitrary Boolean circuits
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+**Lemma.** A full-B2 circuit with s gates and q input bits has an exact
+trivalent F2 network for its acceptance predicate of volume at most
+8s+3q+5.
+
+**Proof.** For q>=1 and nonconstant output, discard gates outside the
+output's ancestor subgraph. If a gate has a constant input pin, substitute
+the constant into its binary truth table and reconnect that now-ignored
+pin to x_1. This keeps a legal full-B2 gate at the same cost and preserves
+its Boolean function. It handles constant nodes without charging an
+uncharged extra computational basis.
+
+For each retained binary gate g use the ternary table
+
+    T_g(a,b,c) = 1 if c=g(a,b), and 0 otherwise.
+
+For each logical signal with d>=2 consumers, use a binary distribution
+tree with d-1 equality vertices E(a,b,c)=1 iff a=b=c. For d=1 use a
+direct wire. Count two input-pin occurrences separately even when they
+have the same predecessor. Add one unary output pin P(c)=c. Across all
+signals there are at most 2s+1 consumers, so at most 2s+1 copy vertices.
+Each primary input occurs as one exterior bit. Connect each unused input
+to a unary all-one tensor, requiring at most q additional vertices.
+
+There are at most v=3s+q+2 vertices, every one of arity at most three,
+and exactly q exterior wires. If i is the number of internal wires,
+2i+q<=3v. Therefore
+
+    volume = v+i+q <= (5v+q)/2
+           <= (15s+6q+10)/2 <= 8s+3q+5.
+
+For every fixed input, acyclicity uniquely determines all original
+signals, and each equality tree uniquely determines their copies. The
+gate and equality constraints therefore have exactly one consistent
+internal assignment before imposing the output pin. The pin keeps it
+iff the circuit accepts. The contraction is exactly its zero-one
+predicate over F2, with no cancellation or probabilistic argument.
+Undirected cycles arising from sharing do not change this uniqueness.
+
+If the output is constant, use its scalar tensor and one unary all-one
+table for each input, of total volume 2q+1. This includes q=0. If the
+output is an unnegated primary input, use its unary output pin and the
+other all-one tensors. A retained negated-projection gate is treated as
+one ordinary B2 gate. Thus constants, unary and terminal outputs are
+all included. QED.
+
+This construction covers arbitrary nonuniform wiring, unbounded fan-out,
+repeated pins, shared descendants, all sixteen gates and unrestricted
+depth. It is not a formula, monotone or formal-arithmetic simulation.
+Only the direction Boolean circuit -> tensor network is used.
+
+## 4. The distinguished input lengths
+
+Let s_w=C_B2(D_w). By the lemma and (1), eventually
+
+    8s_w+3n_w+5 > n_w*w^sigma,
+    s_w > (n_w*(w^sigma-3)-5)/8.                      (2)
+
+Since sigma>0, s_w/n_w tends to infinity. In fact
+s_w=Omega(n_w*(log_2 n_w)^sigma), since log_2 n_w=w+log_2(2w)=Theta(w).
+The next step transfers this rate to every sufficiently large input length.
+
+## 5. Every integer input length and every linear coefficient
+
+For N>=4 take the w from the evaluator. Consecutive lengths satisfy
+
+    n_(w+1)/n_w = 2*(w+1)/w <= 4.
+
+Maximality gives n_w<=N<n_(w+1)<=4n_w. Fix the ignored suffix of any
+circuit for L_N to zero. The circuit now computes D_w without increasing
+its gate count; substituting constants and retaining or simplifying
+truth tables is allowed in the pinned B2 model. Hence C_B2(L_N)>=s_w.
+
+For w^sigma>3, (2) and n_w>N/4 give
+
+    C_B2(L_N) > N*(w^sigma-3)/32 - 5/8.              (3)
+
+Since N<4n_w=8w*2^w, we have log_2 N <= 3w for all sufficiently
+large w. Also w tends to infinity with N. Equation (3) implies
+C_B2(L_N)/N >= w^sigma/64 eventually: it is enough that
+w^sigma >= 6+40/N. Dividing this lower bound by the positive
+K*(log_2(log_2 N))^K gives at least
+
+    w^sigma / (64 K (log_2(3w))^K).
+
+The base-two logarithm of this last quantity is
+
+    sigma log_2 w - K log_2(log_2(3w)) - log_2(64 K).
+
+Dividing this expression by log_2 w gives a limit of sigma>0.
+Both occurrences of K are the one fixed integer 10^256-1. Hence
+the expression itself tends to positive infinity. For every
+sufficiently large integer N the displayed ratio therefore exceeds
+one. This proves the coefficient K and the zero remainder together.
+The evaluator is the same for all N and need never compute K.
+
+Fix any real A>0. Choose an integer w_0>=max(1,w_*) with
+w_0^sigma>=32A+8 and put N_A=n_(w_0). For every integer N>=N_A,
+its w is at least w_0, so (3) implies
+
+    C_B2(L_N) > A*N + 5N/32 - 5/8 >= A*N,
+
+using N>=4. The same language, evaluator and empty-witness verifier work
+for every A. Only the threshold varies. This proves exactly the declared
+lane endpoint at exponent 1, with all integer lengths covered.
+
+There is no direct-sum assumption, sparse-length substitution, limsup
+argument, change of family with A, or numerical extrapolation. The first
+score coordinate `positive_infinity` is the required typed endpoint
+transport value, not a numerical gate coefficient. The second is the
+exact rational 1. Both claims assert this entire theorem.
+
+## 6. Evidence and verification scope
+
+The mathematical input is the source theorem, supported by its supplied
+companion arguments. The Boolean conversion and padding proof above
+make the eligible instantiation explicit. Retain the authorship and
+source provenance when reusing this entry.
+
+This is a proof-only candidate with no experiments or checker claims.
+Structural validation and an empty execution plan are not mathematical
+verification. The supplied evidence and every imported material premise
+must be reviewed on their merits. No platform acceptance, novelty of
+the underlying lower bound, or Lean verification of this particular
+Boolean corollary is asserted.
+
