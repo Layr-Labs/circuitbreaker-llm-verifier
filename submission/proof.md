@@ -1,90 +1,307 @@
-# Published coefficient 31/10: construction and proof
+# A 128754752375347193833379/25280633597805000000000 full-B2 lower-bound candidate for one explicit norm-one predicate
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+The fixed total family of Section A has the eventual full-B2 lower bound in the title. We first prove a strictly larger liminf using the fair graph law at c=49252984787/400000000000 and the semantic increment d0=106274984123/3285000000000. All numeric premises are recomputed from source.
 
-## Fixed total family
+## A. Fixed family and eligibility
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+The argument uses a sufficiently dense accepting set with no large accepting rectangles. Use the classical norm-graph idea of Kollár, Rónyai and Szabó, *Norm-graphs and bipartite Turán numbers*, Combinatorica 16 (1996), 399–406, DOI 10.1007/bf01261323. Norm-one languages also precede this work in the CircuitBreaker competition (including Arthur Ostapenko's November 2026 entries). No novelty of that family is claimed. We reproduce all the required family properties, using a weaker elementary common-neighbor bound; no external norm-graph theorem, extractor, correlation breaker, sampler, or irreducible-polynomial algorithm is assumed. The graph-side estimate is proved in graph.md.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+### A.1 A fixed uniform evaluator at every actual input length
 
-## Uniform P and NP membership
+For n<64 define f_n=0, including n=0. For every integer n>=64 put
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+```
+L=floor(log2 n), B=ceil(log2(L+1)), a=L-B, p=2^a,
+ell=floor(n/p), m=p*ell, d=2^floor(a/2), k=m/d, Q=2^k.
+```
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Here a>=3, d>=2 and d divides m. From 2^L<=n<2^(L+1) we get 2^B<=ell<2^(B+1)<4(L+1). Further, 0<=n-m<p<=n/(L+1), and p>=n/(4(L+1)). Thus m/n tends to 1, d is of order sqrt(n/log n), and k and d*log2 d are O(sqrt(n log n))=o(n).
 
-## Every integer length and the lower bound
+Construct a field F of size 2^m with an ordered binary basis by the following fixed deterministic procedure. Enumerate monic binary polynomials of degree ell in order of their coefficient encodings; choose the first having no monic divisor of degree 1 through floor(ell/2), by polynomial division. This is exactly the irreducibility test. Existence: in a splitting field the 2^ell distinct roots of X^(2^ell)-X (derivative -1) form a field by closure under addition, multiplication and inversion. An element of degree j<ell over F2 generates a proper subfield, with j dividing ell by the dimension formula and hence j<=ell/2. Such elements belong to the roots of X^(2^j)-X. Their union has cardinality at most sum_{j=1}^{floor(ell/2)} 2^j<2^ell, so an element of degree ell exists. The case ell=1 is immediate. Take the quotient by the selected irreducible polynomial with its ordered polynomial basis. Since ell=O(log n), exhaustive enumeration and division require n^{O(1)} bit operations.
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+Repeat the following extension exactly a times. In the current field K of size 2^r define T(z)=sum_{j=0}^{r-1} z^(2^j). This is binary-linear and takes values in F2 since T(z)^2=T(z), using z^(2^r)=z. Its defining polynomial is nonzero of degree 2^(r-1)<2^r, so it is not identically zero. Choose the first basis vector u with T(u)=1. The map z->z^2+z has kernel {0,1} and image of size 2^(r-1); its image has trace zero by telescoping, and is therefore precisely the trace-zero space. Hence X^2+X+u has no root and is irreducible. Adjoin a root beta using the quotient, retaining the old basis followed by beta times the old basis. The final binary dimension is ell*2^a=m. Addition is XOR; a multiplication at one extension level uses at most five multiplications and finitely many additions in the preceding level (reduce beta^2=beta+u). The depth a is O(log n); trace evaluations and a search of at most m basis vectors per level use polynomially many field operations. All field operations and the entire field construction are uniform polynomial time. No advice, random choices, oracle, or large field search is used.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+Map the first m bits of x to z in F in the resulting ordered binary basis; ignore the remaining n-m bits. Define
 
-## Conservative remainder, with source discrepancy retained
+```
+e=(2^m-1)/(Q-1)=1+Q+...+Q^(d-1),
+f_n(x)=1 iff z^e=1 in F.
+```
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+The exponent is a positive integer with at most m bits, so repeated squaring evaluates the predicate in polynomial time. All small lengths, field choices, and rounding are fixed by this algorithm. The language {x:f_|x|(x)=1} belongs to P and hence NP with the single verifier V(x,w)=1 iff w is empty and f_|x|(x)=1, and witness bound W(n)=0. Both directions of the verifier equivalence follow from the definition.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+### A.2 Accepting density and essential input count
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Write g for the restriction to the m active bits. By the finite group order, every nonzero field element is a root of X^(2^m-1)-1; there are exactly 2^m-1 such roots and they are distinct. Because e divides 2^m-1, the polynomial X^e-1 divides that split squarefree polynomial and has exactly e roots in F. Here e is odd since Q is even. The uniform accepting density delta=e/2^m is at least 2^(-k), since e>=Q^(d-1)=2^(m-k). Each of the m active bits is essential: otherwise the involution flipping that bit pairs all accepting inputs without fixed points, contradicting the odd count e. An arbitrary circuit for f_n can be restricted by fixing its tail bits to zero and normalized without increasing its gate count, as in the circuit normalization of the companion proof. The restricted circuit for g therefore reads all b=m active bits. All asymptotic conclusions still use the original actual length n, with b/n tending to one.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+### A.3 Elementary common-neighbor lemma
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+Let K be any field and a_{ij} in K for i,j=1,...,d, pairwise distinct down each fixed column j. The system
 
-## Exact arithmetic and the unchanged LP
+```
+product_{j=1}^d (z_j-a_{ij}) = 1   (i=1,...,d)
+```
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+has at most d^d solutions in K^d. The classical sharper d! bound is not required. Here is a direct argument for the weaker bound.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+In the polynomial ring on d pairs (X_j,Y_j) let L_{ij}=X_j-a_{ij}Y_j, W=product_j Y_j, and I be the ideal generated by H_i=product_j L_{ij}-W. All H_i have degree one in each pair. For each column j, the d forms Q_{ij}=product_{r != i} L_{rj} form a basis of homogeneous degree d-1 in that pair: evaluation at (a_{ij},1) is zero on every Q_{rj} except Q_{ij}, which is nonzero. The space has dimension d. For any degree E>=d-1, products of these forms with monomials of degree E-(d-1) span homogeneous degree E, because every degree-E monomial factors as monomials of those two degrees.
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+For any D>=d, every polynomial P homogeneous of degree D in each pair is congruent modulo I to W times a polynomial homogeneous of degree D-1 in each pair. Process columns j=1,...,d. At the start of column j, P is congruent to (product_{h<j}Y_h)R, where R has degree D-1 in processed pairs and D in the rest. Terms divisible by Y_j already have the next desired factor. Each remaining term contains X_j^D. Expand its coefficient in the other d-1 pairs using the spanning products above; the degrees there are at least D-1>=d-1. In each resulting summand one Q_{r,h} is selected in each other column h. Each excludes only its own row r, so a row i among the d rows is excluded by none of the d-1 selections. That summand contains L_{ih} for all h!=j. Write
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+```
+X_j^D = L_{ij} X_j^(D-1) + a_{ij}Y_j X_j^(D-1).
+```
 
-## Sources
+The second term is divisible by Y_j. The first term has the full product of the L_{ih}, including column j; replacing that product by W modulo I supplies Y_j as well. The old outside factors Y_h are retained, and each pair degree is unchanged. This proves the induction, and after column d yields the claimed common factor W.
 
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+Dehomogenize by setting every Y_j=1. Let J be the ideal generated by the original affine equations with their right sides subtracted. Any polynomial of maximum individual degree D>=d can first be homogenized separately to degree D in all pairs. The preceding argument and dehomogenization give a representative modulo J of maximum individual degree D-1. Iterate. The quotient ring is therefore spanned over K by the d^d monomials with every individual exponent in {0,...,d-1}. For any finite collection of s distinct solutions, evaluation induces a surjective linear map from that quotient onto K^s: for a chosen point and each other point choose a differing coordinate, use the linear factor in that coordinate vanishing at the other point, normalize it to one at the chosen point, and multiply the factors. These polynomials give all unit vectors on the finite collection. Therefore s<=d^d. This applies to every finite subset of the solution set and proves the lemma, with no algebraic-geometry or multiplicity assumption.
+
+### A.4 Additive sumset exclusion on the entire field
+
+Let A,B be subsets of F such that (u+v)^e=1 for every u in A and v in B. If |A|>=d choose distinct u_1,...,u_d. For any v in B, repeated binary Frobenius gives
+
+```
+product_{j=0}^{d-1} (v^(Q^j)+u_i^(Q^j))=1   (i=1,...,d).
+```
+
+In each column j the u_i^(Q^j) are distinct, because Frobenius is injective on a field. Apply the lemma with z_j=v^(Q^j) and a_{ij}=-u_i^(Q^j). Since the coordinate with j=0 equals v, different v give different solution tuples. Thus |B|<=d^d. Consequently for K_0=d^d+1 it is impossible that both sides have size at least K_0. For any partition of the m binary coordinates, identify each side assignment with its element of F supported on that side of the fixed basis. Each map is injective, and their field sum is the full input. Every accepting monochromatic rectangle is therefore thin on at least one side (cardinality <K_0). This conclusion is uniform over all coordinate partitions, without any independence or balance requirement on the zero-inputs.
+
+We have log2 K_0=O(d log d)=o(n) and log2(1/delta)<=k=o(n); hence the active accepting set is subexponentially dense, and every accepting rectangle on every coordinate partition is thin on one side.
+
+Write n for the active binary field dimension and N for actual input length, so n/N -> 1. Fix ignored tail bits to zero. The family proof gives the accepting set S in F_2^n, nonempty, density delta_S=2^(-D) with D=o(n), all n active bits essential, and a threshold K=2^{o(n)} such that A+B cannot be contained in S when |A|,|B|>=K, for arbitrary subsets of the entire binary vector space. Set k=ceil(log2 K). All entropy is in bits. The true measure nu throughout the semantic argument is uniform ON S, so H_nu(X)=n-D. It is not an independent input measure. All counting of sets of words uses the full cube, then converts its exponentially small mass to nu by division by delta_S.
+
+Let c=49252984787/400000000000, L=1+1/(2c), d0=106274984123/3285000000000. The graph certificate must supply a finite local matched-cubic-tree bit process, equivariant under automorphisms preserving its matching, fair at each vertex, whose expected crossing count per vertex (each edge counted once) is c_*<c. The two edge types have probabilities a_M,a_C with a_M/2+a_C<c. Finite shell/window parameters and deterministic activation rate are chosen using strict margins, before circuit size tends to infinity. This is the only numeric graph input. The following argument turns it into a weighted-cut law without importing a nontrivial perfect-matching theorem.
+
+## 1. Elementary finite-local almost-perfect matching and edgewise transfer
+
+On the infinite 3-regular tree T, start with the empty matching. Fix integer l>=1 and J=2l+1. At each round independently mark every vertex low/high with probability 1/2. Simultaneously augment every alternating path of length at most J with unmatched endpoints and whose vertices form a whole connected component of the low-induced subgraph. (Equivalently require all its vertices low and every neighboring vertex outside the path high.) An augmenting path starts and ends with unmatched edges and alternates with matched edges; toggling all its edges matches the endpoints without unmatching any vertex. Selected paths are disjoint: two selected paths sharing a vertex would be the same low component. The rule after any fixed number of rounds depends on a finite radius of independent vertex labels, with no orientation or global random coin.
+
+For fixed l the unmatched probability u_r decreases. A vertex whose matching partner changes belongs to a selected path. Each changed vertex sends half a unit to each endpoint of that path, at most (J+1)/2 units received per selected endpoint. On T, for invariant nonnegative transports expected sent mass equals expected received mass: for each vertex v an automorphism swaps v and the root, so E mass(root,v)=E mass(v,root), and sum using monotone convergence. Thus the sum over rounds of the probabilities the root changes partner is at most (J+1)/2, by telescoping the endpoint-removal probabilities u_r-u_(r+1). The union bound on the tails of this summable series implies almost-sure eventual stabilization at each vertex, and hence simultaneously at all vertices since T is countable. The limiting matching has no augmenting path of length <=J almost surely. Indeed, if a fixed finite path is augmenting in the limit, all its matching statuses stabilize and it is augmenting at every sufficiently late round; conditional on any earlier state in which it is augmenting, the fresh low/high marks select it with probability at least 2^{-4(J+1)}. The probability of remaining augmenting forever from any specified round is zero by iteration; take the countable union over rounds and paths.
+
+For this limiting matching let U be its unmatched set, of invariant density u. Define X_i as vertices reachable from U by an alternating simple path of even length <=2i (including length zero), and Y_i=N_T(X_i). For i<=l, every vertex y in Y_i is matched. To see this, take an even alternating path to its neighbor x in X_i. If y is the preceding vertex of that path, it is already matched to x. Otherwise y is outside the path, by the tree property, and xy is unmatched (x is unmatched only in the length-zero case; otherwise its matched partner is its predecessor). An unmatched y would complete an augmenting path of length <=2i+1. If y is matched, its partner is in X_(i+1): either it is x, or append the unmatched xy and its matching edge; neither new vertex can revisit the path because T has no cycle. The matching gives an injection from Y_i to X_(i+1) minus U. Their densities therefore satisfy Pr(root in X_(i+1))>=Pr(root in Y_i)+u by the same transport identity. Sending one unit along each of the three edges from X_i to Y_i gives Pr(root in Y_i)>=Pr(root in X_i). Consequently (l+2)u<=1. Since u_r converges to u, for any prescribed epsilon>0 choose l and then finitely many rounds so the resulting finite-local invariant matching has unmatched density <=epsilon.
+
+Now let R be a fixed sufficient radius for the finite marked bit rule, enlarged to include both endpoints of each matching edge needed by the rule. On a vertex whose R-ball is fully matched (all required matched partners are included in the enlarged ball), run the marked rule using fresh independent labels. On a bad vertex use a fresh independent fair coin. A good finite decorated ball has a perfect-matching extension to T: keep its interior matched edges, continue from each free outer branch away from the ball, matching an unpaired frontier vertex to one of its children and repeating, never revisiting a vertex. The same holds for the union of the two neighboring balls if both are good, since the union is a connected subtree. Conditional on the partial matching, independent anchor marks can be generated from fresh endpoint uniforms U,V by 1-(1-min(U,V))^2; disjoint matched pairs use disjoint independent labels. Use separate coordinates for each required independent mark, and vertex coins as needed. The marked rule has exactly the same one-vertex law on any good ball as on a fixed perfect matching; all deterministic perfect matchings of T are locally isomorphic as marked trees by the recursive two edge-type branching counts. Thus every marginal is fair, good or bad.
+
+For a fixed edge e the probability it belongs to the partial matching is (1-u_r)/3 by invariance. Conditional on a good union of balls its crossing probability is a_M or a_C according to its actual type. On a bad union bound by one. A union bound gives bad probability at most C_R u_r, for a constant depending only on the fixed radius. Therefore
+  Pr(e crosses) <= (a_M+2*a_C)/3 + (C_R+1)*u_r.
+Choose u_r small enough using c_*<c. This is now an unmarked equivariant, finite-radius iid bit rule on T with fair marginals and each edge crossing probability <=2c/3. This elementary approximation is enough; no exact FIID perfect matching is asserted or required. The classical Lyons-Nazarov matching approach to isotropization used in the predecessor is credited but is not an assumed theorem here.
+
+For any finite cubic multigraph, including parallel incidences, its universal covering tree is T (construct by reduced nonbacktracking walks with incidences distinguished; lifts over a vertex are permuted transitively by deck transformations). For each lifted vertex, start with the bit rule on independent lifted labels. Process the finite list of base vertices one at a time: condition on all remaining labels outside the fiber being processed and all earlier replacement uniforms; replace every lifted bit by the Bernoulli quantile of its conditional law in one common new independent uniform for that base fiber. Every row retains its conditional marginal. For any two bits with given probabilities p,q, the least possible disagreement is |p-q| (difference of means is a lower bound), attained by nested quantiles, so this replacement cannot increase disagreement on any lifted edge. A row not using a fiber stays unchanged; finite supports stay within the projected original radius. Deck equivariance is preserved, since permutations within untouched fibers preserve the integrated iid law. After all fibers are processed, deck-equivalent rows are equal almost surely; choose a representative for each base vertex. Marginals are fair, disagreement bounds hold edge by edge, and each bit depends only on independent base marks in its bounded projected ball. For degree below three, complete each missing stub with a separate K4 with one edge subdivided, attaching the stub to that degree-two subdivision vertex. Loops count twice toward degree and never cross. Restrict the completed law to the original graph; components and added gadgets have bounded degree and no shortcuts between original vertices.
+
+It follows that for each fixed list of bounded vertex weights and directed nonnegative edge weights, the cut balance and both directional weighted crossing sums can simultaneously be made within o(n) of their expectations on O(n)-size graphs. Indeed bounded local supports give O(n) dependent pairs for each such sum and variance O(n); use Chebyshev and a finite union bound. Constants may depend on fixed radii, bag size and weight bounds, not n. With equal fair endpoint marginals, Pr(u=0,v=1)=Pr(u=1,v=0)<=c/3 on each edge, regardless of its fixed orientation. This proves the edgewise input needed below.
+
+## 2. Bounded bags and the private-path lower bound
+
+Distribute a native signal with f>=1 uses by a binary copy tree of f-1 vertices if needed. Copies are accounting wires, not counted gates. Count repeated incidences separately. For an ordinary acyclic circuit graph with n raw ports, g surviving binary gates, C connected components and all 2g input uses, the cycle rank r=edges-vertices+C is g-n+C; copy subdivisions preserve it. All vertices have degree <=3 (a final output or a control-only sink may have degree 2), all components contain a raw port by tracing predecessors, and isolated raw ports are allowed. The graph is O(n+g).
+
+General compression: greedily contract a nonloop edge with an endpoint of degree <=2 if the combined original mass of the two bags is <=B, retaining other parallel edges as loops. The resulting degree is at most 3, rank and component count are unchanged, and each bag mass <=B. Any deficient vertex of a nonsingleton component after termination is large (mass >=B/2) or adjacent to a large vertex: otherwise it has an eligible neighbor. There are O(total original mass/B) large vertices and at most three neighbors each. In a nonsingleton component with deficiency sum h=sum(3-deg(v)), the edge count is 3r_component-3+h by handshaking. Singleton components satisfy E<=3r_component even with loops. Summing gives E<=3r+O((n+g)/B). Put each raw port's charge in its containing bag. For any fixed B the edgewise law gives both raw counts n/2+o(n) and both directional crossing counts <=c r+O((n+g)/B)+o(n). Choose B large enough for any fixed desired linear error. Assignment to a bag is not an evaluation order; all gates and copies are evaluated in their original order and internal edges require no messages.
+
+Here is a stronger exact structural inequality. Choose any family of disjoint gate paths starting at different degree-one native raw variables, with proper intermediate outputs having just the one next-path use, and with arbitrary genuine controls on the other input. Let M be their total number of gates, and let t=O(n) be total original gates. We prove
+  t >= L*n + M - o(n)
+uniformly along any exact computing sequence. For M=0 this also proves the raw baseline without signed-cut block decompositions or Tutte's matching theorem.
+
+Every genuine two-input Boolean function is XOR/XNOR or, after fixed polarities, AND. As an update in its carrier-state bit it is either a signed identity or a constant depending on the control; a nonlinear update has exactly one nonconstant control setting. Call constant updates resets. Give each step a nominal toggle: actual control plus a constant for XOR/XNOR, fixed identity-branch sign for nonlinear updates, even if reset. Replace each selected starting raw x_i by z_i=x_i+sum of nominal toggles along its path (mod 2); other raws unchanged. This is a full-cube bijection. Process paths at the time of their final gate in the original topological order. No proper intermediate state or starting raw can escape its path except through its tail. Every control is either an ordinary earlier value or an earlier path tail. Given z, reconstruct each path's x_i from controls and nominal toggles, and its tail as z_i if no reset, or last reset constant plus the suffix toggles after that reset. This proves the inverse in the original order and no free computation of a physical circuit gate is asserted.
+
+Remove the M path gates in the accounting graph, replace each tail's downstream uses by its z_i port, keep even control-only gates, and remove control incidences into deleted gates. This ordinary graph has g=t-M gates and n raw ports. If t<=L*n+M-Delta*n for fixed Delta>0, it has a cut with a fixed positive linear ordinary directional surplus on BOTH sides. When C<=Delta*n/2 use the bounded-bag result:
+  n/2-c*r >= c*(Delta*n-C) >= c*Delta*n/2.
+Choose the bag error smaller. Otherwise give half of the C components to each party; there are no ordinary crossing edges and each part has at least floor(C/2) raw ports. Both cuts are fixed independently of z.
+
+Simulate surviving gates and collapsed tails chronologically; when a path completes, each party reports the index of its last owned reset control (or sentinel), and if any reset occurred each reports parity of its owned suffix toggles after the global last reset. The owner of the z_i port can now compute the true tail. The control's owner is fixed by its ordinary port/gate; control-only gates stay present, and a former tail is available before its next use. Send ordinary crossing bits at their scheduled times, and announce final output. This deterministic protocol is correct for all z.
+
+A HIGH history has >=2k reset paths. In original x coordinates, holding controls fixed, simultaneously flipping any subset of those starting raws preserves all completed tails and controls by the collapsed-order induction. Thus an accepting HIGH input would lie in an accepting affine coordinate cube of dimension >=2k, containing a forbidden large sumset. No such input exists. For LOW histories, each party's last-reset report vector has at most sum_{j<=min(2k,M)} binom(M,j) possibilities (non-sentinels are indexed gates); its suffix parities have <=2k+O(1) bits. Their logarithmic count is o(n) because M=O(n), k=o(n) (for example bound the binomial tail by the binary entropy bound, obtained from the binomial generating function). For fixed opposite raw z, the sender's ordinary directional bits, report vector, suffix parities and output bit determine the whole low transcript, since the receiver can simulate sequentially. Thus both directional transcript counts are bounded by 2^(ordinary budget+o(n)), with a positive linear saving relative to local raw count.
+
+A deterministic transcript is a product in z coordinates: each party can check its own prescribed actions using its local inputs and transcript. In a fixed accepting transcript the inverse x is A-local+B-local: each z coordinate is on its owning side and each path-start correction is the sum of owned nominal toggles, each computable from that party's word and transcript, with constants allocated once. The two local maps are injective on nonempty transcript sides by global bijectivity (hold the other side fixed). Therefore an accepting transcript must have one side of cardinality <K, or its inverse would contain a forbidden sumset. For fixed opposite word, the total number of sender words covered by such thin accepting transcripts is at most K times the directional transcript count. Summing over opposite words and both directions, the full-cube probability of LOW acceptance is 2^(-Omega(n)). The full-cube chart is a bijection, so this contradicts delta_S=2^(-o(n)), since HIGH has no acceptance. This establishes the structural inequality and all its quantifiers without any distributional approximation claim.
+
+## 3. Raw-bundle exclusions and physical accounting
+
+Normalize the exact circuit by pruning dead gates and removing constant, projection and negation-only gates via truth-table substitutions into their consumers, without increasing t. Repeat until each remaining gate depends on both distinct actual inputs, with genuine affine gates XOR/XNOR and nonlinear gates signed AND. If the output is a projection or negation of an internal signal, make its producer the output, prune unrelated gates, and complement the producer truth table if necessary. A constant or a signed projection of a raw input cannot depend on all n essential bits. Add a dummy output leaf for accounting, not a gate. All native gates reach the output, and all raws are used.
+
+Let u be the number of native degree-one raw variables; a private recipient has one such input. Consider three constant-size configurations of raws with no exterior use except the listed gate outputs:
+(i) two private raws at one gate;
+(ii) a degree-two raw x feeds two private recipients with distinct private raws y,z;
+(iii) two degree-two raws x,x' each feed one private recipient with distinct private raw, and their other consumer is the same gate on x,x'.
+In each type the raw bundles are disjoint (native degrees force uniqueness), and a bundle of r raw bits maps into <=r-1 output bits. Under the independent full cube, at least half its assignments have local output fiber size >=2, since there are <=2^(r-1) singleton fibers. If there are Omega(n) bundles of a type, the probability fewer than 2k have nontrivial fibers is exponentially small by independence and the elementary binomial bound. The corresponding nu probability is o(1). But a true accepting input with 2k nontrivial bundles has an accepting product cell: fix outside raws and the bundle labels, then vary each bundle within its local fiber; the external circuit is unchanged. Split the nontrivial bundles into two groups to get a forbidden sumset. This is impossible. Thus each type occurs o(n) times, and there are u-o(n) distinct private recipients. Select one private raw at each as a disjoint path of length one in §2. We obtain
+  t >= L*n + u - o(n).
+
+Build the physical connected graph using binary copies and the dummy leaf. Each gate with native d outgoing uses (including the output terminal) has 2d-1 edges carrying its bit. For raw d>=2, merge its raw leaf with the first fork and one child. If d>=3 choose a child fork, preserving all actual consumer arms; if d=2 choose one consumer as raw owner, leaving one genuine outgoing raw edge to the other consumer. Raw d>=2 thus has 2d-3 carrier edges; raw d=1 still has one leaf edge. Every new bag owns at most two raws, degree <=3, and all but u+1 leaves are trivalent. Rank r=t-n+1 is unchanged. A raw in a consumer bag is known there at the start, not evaluated at consumer time.
+
+At each degree-two raw with precisely one private recipient, force absorption into its other consumer, retaining its actual private-recipient arm. Both-private exceptions are o(n) by type (ii). The remaining orientations of degree-two raws can be arbitrary. Designate at most one retained final arm per nonlinear gate as follows. If there is a private input, designate that raw arm, using the later in the fixed tie order if there are two. Otherwise designate a nonraw arm whenever present. If both inputs are raw and one has native degree at least three, designate such an arm. Each of these designated arms is retained in the initial physical graph. The only omitted gate class has both inputs raw of degree two. Its two inputs are distinct. The multigraph on raw identities formed by these omitted pairs has maximum degree two, with parallel edges counted by incidence, so greedily edge-color it with three colors. In one color class the pairs are disjoint. Conditional subadditivity, using the other raws separately, implies that the sum of 2-H(U,V) over this class is at most n-H(X|sigma=mode). Signed inputs preserve the pair entropy. Also I(U;V)<=2-H(U,V). For each high-entropy mode the three classes therefore lose only o(n) total mutual-information credit. This gives full retained designation credit up to o(n), without changing either the mode distribution or the private chain contractions.
+
+## 4. Pinning and high-entropy innovations
+
+Fix a finite master list of O(n) binary variables: every true producer bit with enough copies (2d+2 for native use count d, plus any needed raw/terminal copy) and the four signed operand-pair indicators at each nonlinear gate. The list is evaluated under nu, not independent raw inputs. Select s<=sqrt(n) fixed list indices and let sigma be their true bit word, so that
+  E_sigma sum_{i,j}|Cov(W_i,W_j|sigma)|=O(n^2*n^(-1/4)).
+Proof: reveal independent uniform list indices successively, including their values. The average conditional entropy of a fresh index value starts <=1; its one-step expected drop is average conditional mutual information between two fresh list entries. Some step before sqrt(n) has drop O(n^(-1/2)). Some fixed tuple of indices achieves that average. For probability laws P,Q, relative entropy in bits dominates 2 TV(P,Q)^2/ln 2: group the points where P>=Q and their complement by log-sum (Jensen), then the second derivative of binary relative entropy in the first probability is >=4/ln 2, with value and derivative zero at equality. Apply to pair law and product of marginals; covariance is bounded by TV. Cauchy-Schwarz gives the claimed bound. This reasoning holds for every input distribution. Thus any fixed finite list of bounded linear combinations of these entries (with coefficients depending on sigma) concentrates about their mode means up to any fixed xi*n, except o(1) total nu mass, by the conditional variance formula and Chebyshev.
+
+The chain rule and H_nu(X)=n-D give, averaged over sigma,
+  n-H(X|sigma)<=D+s,
+  sum_i(1-H(X_i|sigma))<=D+s,
+  |U|-H(X_U|X_complement,sigma)<=D+s.
+The last uses H(X_complement|sigma)<=n-|U|. Likewise any R independent raw linear forms N completed to an invertible linear chart satisfy R-H(N|sigma)<=D+s. Since D+s=o(n), nonnegative mode losses with these expectations are o(n) outside o(1) total nu mode mass (choose a vanishing tolerance using Markov). All entropies below are conditional on a fixed positive mode unless otherwise stated.
+
+Let m be the genuine nonlinear gate count. Partition the original cube chronologically by an affine input query at every nonlinear gate: on each current affine cell all previous wires are affine; fixing one operand makes its signed AND affine. One final affine query fixes output. Every resulting nonempty cell has dimension >=n-m-1. An accepting cell of dimension >=2k is forbidden by splitting a basis into two groups of k directions. Hence m>=n-o(n).
+
+For each nonlinear gate g scan the true DAG symbolically, treating earlier nonlinear outputs as fresh symbols. Its two signed operands are fixed linear raw forms plus affine functions of earlier nonlinear outputs. Let j_g in {0,1,2} be the rank increment of the two raw forms beyond the span of all preceding raw forms, and R=sum j_g. Fixing this basis of R forms and the final raw output form makes all nonlinear outputs and output constant; the same affine obstruction gives R>=n-o(n).
+
+Choose j_g independent new forms N_g, and let P_g be all earlier basis values. Earlier nonlinear outputs are functions of P_g. Then
+  E_sigma sum_g (j_g-H(N_g|P_g,sigma)) = R-H(N|sigma) <= D+s.
+In each mode compare the true pair (P_g,N_g) with the same P_g marginal and independent uniform fresh N_g; the relative entropy is exactly the displayed entropy deficit for that gate. Data processing (log-sum) and the TV bound above show total expected TV change of the three-bit laws (U,V,Z=UV) at all gates is O(sqrt(m*(D+s)))=o(n). For j=0 there is no change. Finite alphabet entropies, their clipping and fixed bounded scores are uniformly continuous, so total score errors are o(n) on good mode mass 1-o(1). The ideal laws are: j=2 independent fair U,V; j=1 with one fresh operand U fair independent of old V with Pr(V=1)=q; or j=1 both fresh in the same new coset, U fair and V=U+T(P_g), q=Pr(T=0), so both marginals fair, I(U;V)=1-H_2(q), Pr(Z=1)=q/2. This comparison does not replace the actual physical inputs.
+
+## 5. Affine constraints that force the products at an accepting word
+
+A nonlinear gate has signed operands U,V and product Z=UV. Its native output is Z or its complement, so fixing either fixes both. Flag an input slot when its native predecessor is a nonlinear gate of native fanout one. Write b_g for the number of flagged operands and o_g=1 if the output goes to such a flagged slot, zero otherwise. Distinct flagged slots have distinct producers, by native fanout one, so sum_g(b_g-o_g)=0. Every flagged operand is a signed earlier nonlinear output and its formal raw row is zero.
+
+Fix x in the active accepting set. Substitute the nonlinear outputs at x for their formal symbols in every signed operand and in the final output, as in §4. The resulting expressions are affine functions of the original raw coordinates, and every flagged operand becomes a constant. With no flag, if Z(x)=0, select one operand that is zero at x and require it to stay zero. If Z(x)=1 require both operands to stay one. With one flag F, impose one equation on the other operand iff F(x)=1. With two flags both values have already been fixed by substitution. These choices impose at most L_g(x) equations per gate, where L_g=1+Z for b=0, L_g=F for b=1, and L_g=0 for b=2. Finally constrain the substituted output to equal its value one at x.
+
+The equations are consistent at x. Their common solution set has dimension at least n-1-sum_g L_g(x). On this entire affine subspace, topological induction gives every substituted nonlinear output its true value and the final output is one. An accepting affine space of dimension at least 2k contains a 2k-dimensional translate. Splitting its direction space into two complementary k-dimensional spaces and translating one summand gives two sets of size 2^k whose sum is contained in the accepting set, contrary to §A. Thus sum_g L_g(x)>=n-2k at every accepting word. Choosing the zero operand separately at each witness x only proves a pointwise dimension bound. The choice is never part of a transmitted query.
+
+For the ideal pair laws define C_g=E[L_g]-j_g. Since R=sum j_g<=n and the aggregate bounded-expectation change in §4 is o(n), sum_g C_g>=-o(n) on good modes. At rank zero C equals 1+Pr(Z=1), Pr(U=1) with flagged operand U, or zero for b=0,1,2. At rank one with b=0, both innovation shapes have Pr(Z=1)=q/2 and C=q/2. With b=1 the old signed operand is the flag, Pr(U=1)=q, and C=q-1. At rank two there are no flags, Pr(Z=1)=1/4, and C=-3/4.
+
+## 6. Query capacity, physical entropy ledger and exact tangent certificate
+
+For the good pin modes, the nonnegative conditional entropy deficit obeys H(X|sigma)>=n-o(n), by the entropy estimate and Markov argument in §4.
+
+For every signed nonlinear gate Z=UV, define
+    h_g=min{H(U), H(V), H(U+V)}
+where addition is binary. Choose a minimizing query deterministically for this gate and this mode; the choice is fixed before the actual input within the mode is known. Extend that schedule of queries to the full cube, even words outside the mode. Each nonempty query-word fiber in the full cube is affine: inductively all earlier native gate values are affine on the current fiber, and fixing U or V makes UV affine. Fixing U+V also makes UV affine, since on parity zero UV=U and on parity one UV=0. All native XOR/XNOR gates preserve affinity. Thus each step is an affine condition in the current fiber. The actual final output is affine on the resulting fiber, so intersecting with output=1 is again affine. Since the circuit is exact, this accepting fiber is contained in S. Its dimension is <2k, or else it contains a forbidden sumset. This applies even if subsequently intersecting the accepting fiber with the mode gives a nonaffine subset: its cardinality is still at most 2^(2k).
+
+Let Q be the complete deterministic query word for the chosen mode. It follows that H_nu(X|Q,sigma=mode)<=2k, and hence
+    sum_g h_g >= H(Q|sigma=mode)
+              >= H_nu(X|sigma=mode)-2k = n-o(n).
+There is no query typicality estimate and no independence assumption here. In particular, the fact that conditioning on accepting inputs destroys raw independence does not affect this constraint. This is stronger than treating the entropy bound only as a near-minimum nonlinear-count/rank phase. We use all nonlinear gates, so no rank hypothesis is imposed.
+
+Under the aggregate innovation-law replacement of §4, the sum of absolute changes in h_g is o(n) on good mode mass, by uniform continuity on the four-corner probability simplex. Therefore sum h_g>=n-o(n) also holds for the ideal laws (same notation below).
+
+For a second schedule, put chi_g=1 if b_g>0 and zero otherwise. Define alpha_p=1/b_g when the unique use of a flagged producer p is at consumer g, and alpha_p=0 when o_p=0. Thus alpha is 0,1/2,1, o=1 exactly when alpha>0, and
+
+    sum_g alpha_g=sum_{g:b_g>0} b_g/b_g=sum_g chi_g.
+
+Fix a good mode. Independently at every gate with b>0 choose a flagged operand uniformly as its query. At a gate with b=0 choose r in {U,V,U+V} minimizing H(r)+alpha*H(Z|r), resolving ties deterministically before the input is known. The random choices are external to the accepting input law. For every fixed realization all queries have the affine-fiber property already proved, so their full word Q has H(Q)>=n-o(n).
+
+Expand this entropy in topological order. A query at b=0 contributes at most H(Q_g). A flagged query at consumer g is, up to complement, its selected earlier producer's output Z_p, and contributes at most H(Z_p|Q_p). Each producer can be selected only once. Average this inequality over the independent choices. Producer p is selected with probability alpha_p, independently of its own query choice, so its conditional-entropy charge is alpha_p times the mean H(Z_p|Q_p). Grouping by producer proves sum J_g>=n-o(n), where
+
+    J=min_r[H(r)+alpha*H(Z|r)]          if b=0,
+    J=(alpha/b) sum_F H(Z|F)           if b>0,
+
+and the sum is over flagged operands. This averaging proves a deterministic entropy inequality; it makes no independence assumption about the circuit bits. Both the old identity sum(b-o)=0 and the new identity sum(chi-alpha)=0 hold exactly. The first and second schedules each bound the entropy of the same accepting input. Every displayed J is continuous on the finite probability simplex, including deterministic flags because conditional entropy is joint minus marginal entropy. The aggregate ideal-law replacement therefore preserves this inequality to o(n).
+
+Set A=57/200, eta=85971514387/250000000000, beta=7859207533/125000000000, theta=382941983/10000000000, lambda=4145754407/500000000000, kappa=7021763009/200000000000, xi=7925815227/500000000000, zeta=953064167/50000000000, and reserve m0=1/1000000. Write D'(Y)=min(A,1-H(Y)) for a bit and I'=min(A,I(U;V)). Place D'(producer) on every actual carrier and I' on each retained designated final arm. These are the capacities used by the protocol. Per-edge saving is <=2A, and on a designated arm it is <=1-H(U|V); all other edges save at most 1-H(U). Let S0 be the total before private-leaf and further compression.
+
+Use the flag counts b,o from §5. Write c_z=1-eta*o, and c_u,c_v equal eta at flags and one elsewhere. Reserve the full D' output credit when o=0. When o=1 reserve 1-eta at its shared edge and eta for the flagged consumer slot there. The two credits sum to one. A gate with d>=2 uses has 2d-1>=d+1 carrier edges, sufficient for its nonlinear output incidence and all nonlinear consumer input incidences. For d=1 an output and nonlinear input sharing the edge are exactly a flagged pair. Affine producers have no output debt. Raw d>=3 has 2d-3>=d carrier edges, d=1 has one, and d=2 misses at most one D'(raw), totaling o(n) loss in high-entropy modes by §4. By the designation rule in §3, all but o(n) total I' over nonlinear gates is carried on retained final arms. Set k_b=1 for all b, retaining the full mutual-information credit already placed on designated arms. This changes no physical capacity: per-edge savings remain at most 2A and at most 1-H(U|V) on designated arms. Private-chain incoming edges remain untagged by the same designation rule, so their later loss is still at most A each. Thus
+    S0 >= sum_g E_g - o(n),
+    E_g = c_z D'(Z)+c_u D'(U)+c_v D'(V)+k_b I'.
+These credits are attached to actual carriers before subsequent contractions.
+
+Prove uniformly for the ideal laws that
+    E >= beta*j + theta*C + lambda*h + kappa*J + xi*(b-o) + zeta*(chi-alpha) + m0.     (1)
+
+For rank zero use corner order (U,V)=(0,0),(1,0),(0,1),(1,1). If an input deficit is clipped, its term gives c_u*A or c_v*A and h<=1-A. If the output deficit is clipped, c_z*A suffices with h<=1. If I is clipped, k_b*A suffices with h<=1. In each branch C<=2-b. For b=0, choosing a query attaining h gives J<=(1-alpha)*hmax+alpha*log2(3), where hmax is the stated upper bound on h, because every (r,Z) has at most three outcomes. For b>0 use J<=alpha. These rigorous comparisons include simultaneous clipping. For an unclipped law with b<2 let (d_u,d_v)=(1/2,1/2) for b=0 and (0,1) for b=1 with U flagged. Then d_u+d_v=k_b and
+    c_z+c_u+c_v-E =
+       c_z H(Z)+(c_u-d_u) H(U)+(c_v-d_v) H(V)
+       +d_u H(U|V)+d_v H(V|U).
+This uses I=H(U)-H(U|V)=H(V)-H(V|U). All coefficients are nonnegative. For b=0 use h<=[H(U)+H(V)+H(U+V)]/3, for b=1 use h<=H(U). Give each entropy, including conditional entropies, its cross-entropy upper bound from a fixed positive rational reference pair. This follows from nonnegative relative entropy, with the conditional form obtained by applying it in each conditioning value and averaging. For b=0 bound J by the mean of (1-alpha)H(r)+alpha H(Z,r) over the three queries. Each query separates one zero-product corner a from the others, giving joint masses p_11,p_a,1-p_11-p_a. For b=1, J=alpha H(Z|U); its conditional success reference is p_11/Pr(U=1) when U=1 and its entropy is zero when U=0. For unclipped C use its exact affine cost from §5. For b<2 use these rational anchors for joint, marginal and conditional cross entropies, in order (b,alpha)=(0,0),(0,1/2),(0,1),(1,0),(1,1/2),(1,1):
+
+    (210653, 210653, 210653, 368041)/1000000
+    (218988, 218988, 218988, 343036)/1000000
+    (218848, 218848, 218848, 343456)/1000000
+    (165545, 268104, 165545, 400806)/1000000
+    (175325, 272491, 175325, 376859)/1000000
+    (172395, 276587, 172395, 378623)/1000000
+
+The resulting bound is affine in the four true corner masses. Testing its four vertices proves (1) for these unclipped laws.
+
+For b=2 retain full I'. Put u=Pr(U=1), v=Pr(V=1), z=Pr(Z=1), P=(1-u-v+z,u-z,v-z,z) and w=1-eta-lambda/2+kappa*alpha/2>0. Since h<=[H_2(u)+H_2(v)]/2 and J<=alpha[H(Z|U)+H(Z|V)]/2, the entropy identities give, in the unclipped case,
+
+    E-lambda*h-kappa*J-xi*(2-o)-zeta*(1-alpha)
+      >= c_z+2eta-xi*(2-o)-zeta*(1-alpha)
+      -c_z H_2(z)-H(P)-(kappa*alpha/2)[H(Z,U)+H(Z,V)]
+      +w[H_2(u)+H_2(v)].                                      (2)
+
+Here C=j=0. The exact check H_2(19/100)<1-A, binary entropy's monotonicity on [0,1/2] and symmetry imply u,v in [19/100,81/100] whenever both input deficits are unclipped. Start with this rational square. In each rectangle [a,b] times [c,d], lower-bound the two positive entropy terms in (2) by their endpoint chords, valid by concavity. Upper-bound all negative entropy terms by cross entropies at one positive reference P_* with marginal means u_*=(a+b)/2,v_*=(c+d)/2. The joint (Z,U) reference masses are (1-u_*,u_*-z_*,z_*), and similarly for V.
+
+Here is a fixed rational reference rule. Start lo=max(0,u_*+v_*-1), hi=min(u_*,v_*). Repeat 30 midpoint bisections, moving lo to z if the outward lower bound on
+
+    log2[(u_*-z)(v_*-z)/((1-u_*-v_*+z)z)]
+      +c_z log2[(1-z)/z]+(kappa*alpha/2)log2[(u_*-z)(v_*-z)/z^2]
+
+is positive, and moving hi otherwise; use the final midpoint for z_*. Every reference mass remains positive. No root accuracy or optimization claim is needed: every positive reference yields valid cross-entropy bounds.
+
+The resulting lower bound is affine in (u,v,z) on the polytope a<=u<=b, c<=v<=d, max(0,u+v-1)<=z<=min(u,v). Its vertices are the rectangle corners and intersections of u=v or u+v=1 with rectangle edges, each assigned both endpoint z values. Indeed, three independent boundary planes meet at a vertex. Two marginal boundaries give a corner; otherwise two corner probabilities vanish, giving one of those lines and an endpoint z. Three vanishing probabilities would force a marginal to 0 or 1, outside this square.
+
+Check all these vertices with outward rational logarithm bounds. Accept the rectangle only when every value exceeds m0; otherwise bisect both intervals, failing at unresolved depth ten. Symmetry under exchanging U,V permits retaining just rectangles above the diagonal and diagonal squares. Their reflections cover the original square. The successful finite recursion thus proves (1) uniformly for all three b=2 cases. The finite checks certify the explicit rational inequalities in this entropy argument.
+
+For rank one use the ideal laws in §4. The old operand or the parity has entropy H_2(q), the other relevant entropies are one, and Pr(Z=1)=q/2. With one old operand, I=0 and the old deficit carries weight one or eta according to its flag. With two operands in one fresh coset, both operand deficits vanish, b=0 and I=1-H_2(q) carries full k_0=1. Thus in all cases
+    E = c_z min(A,1-H_2(q/2))+w min(A,1-H_2(q)),
+with w=1 and C=q/2 when b=0, and w=eta and C=q-1 when b=1. In both cases h=H_2(q). For b=0,alpha=0 use J=h. For b=0,alpha>0 query the fair innovation U in either shape. Since Z=0 when U=0 and Pr(Z=1|U=1)=q, J<=1+alpha*H_2(q)/2. For b=1 the old flag is independent of the fair operand, so J=alpha*H(Z|F)=alpha*q. The clipped output branch uses c_z*A, h<=1, C<=1/2 or 0 respectively, and these same upper bounds on J maximized over q. Otherwise bound the second term by its own branch value, w*A or w(1-H_2(q)). In each such branch tangent H_2(q/2) and H_2(q) by cross entropies at q_ref/2 and q_ref. For (b,alpha) in the same six-case order as above, the pairs (unclipped, clipped) of q_ref numerators at denominator 1000000 are
+    (602501, 912011), (575718, 945863), (575182, 922703), (713482, 989137), (676098, 994135), (681283, 998137).
+Check the affine supports at both ends q=0,1.
+
+For rank two b=0, h=1, C=-3/4, J=1+alpha/2, and E=c_z min(A,3/4 log2(3)-1). Indeed Z partitions the three zero corners and the single one, and each H(r,Z) has masses (1/2,1/4,1/4). Check both arguments of the minimum for each alpha.
+
+The checker proves 1097 strict comparisons with reserve m0, including the marginal-box covering checks. For a positive rational p write p=2^e u with 1<=u<2 using integer powers of two, and allow u=2 to bracket ln 2 itself. For w=(u-1)/(u+1) in [0,1/3], sum the first 12 terms of ln u=2 sum w^(2j+1)/(2j+1); the positive omitted tail is at most 2 w^25/[25(1-w²)]. Dividing by the positive ln 2 enclosure and adding e gives a rational bracket for log2 p. The signed coefficients select the correct outward endpoint, and all strict comparisons use exact rational arithmetic.
+
+Apply (1) to the ideal pair laws and use uniform continuity and the aggregate errors in §4 to transfer the sum to the actual pair laws. Sections 4–6 give R>=n-o(n), sum C>=-o(n), sum h>=n-o(n), and sum J>=n-o(n). At least n-o(n) nonlinear gates contribute the reserve by §4, and both flag charges cancel by sum(b-o)=sum(chi-alpha)=0. All four lower-bound multipliers and the reserve are nonnegative. Thus
+    S0 >= s0*n-o(n),     s0=beta+lambda+kappa+m0=106274984123/1000000000000.
+
+Absorb the u private raw leaves into their unique consumers. Their total savings lost is o(n) on good modes: order private raws by first-consumer topological position (tie order used for tags), and let P_i contain all nonprivate raws and earlier private raws. For a tagged private raw its other input V is a function of P_i, since later private raws have no earlier use. The saving is <=1-H(X_i|V,sigma)<=1-H(X_i|P_i,sigma); the same bound holds untagged. Sum by chain rule, average <=D+s by §4.
+
+After these absorptions, u-o(n) private recipient bags have exactly one private raw and have not swallowed their other true input by forced raw absorption (types (i),(ii) are sparse). Such a bag has degree two: one genuine incoming arm, one outgoing stem/terminal. The incoming arm is untagged since the private raw was designated, hence costs at most A of saving if contracted. Select these incoming edges. Among marked bags they follow real downstream gate dependencies (a marked bag has no other absorbed raw), so no directed cycle. Each marked head has one selected predecessor and at most one selected successor; an unmarked root can have at most three selected branches. These selected components are rooted chains or at most three chains attached to a root. Divide into blocks of bounded mass B, grouping short initial pieces at a root; at most O(n/B) selected edges need be left uncontracted since every intervening block has mass proportional to B, with bounded initial bags. Merging selected edges keeps subcubic degree and preserves rank. At least u-o(n)-O(n/B) such contractions are made, losing at most A*u total saving. Initially the graph had u+1 leaves and all other vertices degree three, so V=2r-2+2(u+1) by handshaking. Every connected subcubic rank-r graph has at least 2r-2 vertices. Therefore after the u leaf absorptions and these chain merges, only o(n)+O(n/B) further contractions are possible (absorb constants in O); each loses at most 2A. Complete bounded-bag compression as in §2, choosing fixed B large. Result:
+  E<=3r+O(n/B), S>=S0-A*u-o(n)-O(n/B)
+on good modes. Here E counts actual remaining edges including loops; contracted arcs are internal, never confused with a transmitted signal.
+
+## 7. Causal weighted transcripts and strict contradiction
+
+Suppose liminf t/n<L+d0. Fix tau>0 and a subsequence of exact circuits with t<=(L+d0-tau)n, hence t=O(n). Equivalently d0=s0/(3+A). If u>=d0*n, the private-path bound of §3 contradicts this subsequence with fixed slack tau. Otherwise (s0-A*u/n)/3 >= (s0-A*d0)/3=d0 and the weighted argument has the same fixed slack tau before approximation errors. Use the weighted law of §1 on the final quotient with weights 1-saving(e), raw counts in their bags, and fixed good mode. Choose B and remaining tolerance errors subordinate to the strict slack; then for both directions of the same cut, with q_dir sender raw count and W_dir sum of these crossing weights,
+  W_dir <= (c/3)*(E-S)+o(n) <= c*(t-n+1-S/3)+small error,
+  q_dir-W_dir >= gamma*n
+for a fixed gamma>0. The raw counts are n/2+o(n), and n/2=c*(L-1)n. All constants are chosen before n, and each cut depends only on the mode, not on the particular input within it.
+
+We give the exact simulation and count, including omitted inputs, rather than interpreting entropy as a worst-case communication bound. For every crossed retained designated arm omit its actual send at the consumer, giving the receiver a separate private auxiliary bit as a guess; each side's auxiliary word has one bit for each such incoming arm. Keep all ordinary crossed messages in the original causal gate/copy schedule. Each supplier computes and stores its would-be bit. At the consumer the other operand is already known, since any other crossing arm was transmitted ordinarily and can be scheduled before that gate. After simulation, each party forms a vector with the would-be actual supplied values and its own received guesses in fixed arm order; exchange both shares and require exact equality. Equality implies the genuine circuit evaluation by induction at the first possible discrepancy, and each original raw pair has a unique passing auxiliary pair. Explicitly test the nominated sigma (announce at most two producer values per pinned indicator), final output=1, and the following typicality flags. The actual terminal equality communication can be linear; only its number of possibilities on passing histories is charged below.
+
+For any fixed mode smooth each ordinary bit marginal law and each omitted bit's conditional law given its other operand by mixing with rho times the fair law, for fixed small rho>0. On zero-probability conditions use any normalized fair law. For true inputs expected negative log probability for an ordinary receive is <=H(U)-log2(1-rho), and for an omitted receive <=H(U|V)-log2(1-rho), as the smoothed probability is at least (1-rho) times the true one. All individual costs are bounded by log2(2/rho). Receiver sums its ordinary and guessed incoming causal costs using its own trajectory; it passes if <=W_dir+epsilon*n, for fixed epsilon sufficiently smaller than gamma. Under the true mode law the expected sum is <=W_dir+O(-log2(1-rho))*n by the physical saving bounds. Each ordinary term is a bounded affine function of a listed producer bit, repeated according to available list copies; each conditional term is a bounded function of the four pair indicators for that gate, used at most once. The covariance lemma of §4 ensures that after choosing rho small, all but o(1) total nu mass pass both tests. Mode-dependent choices of coefficients are allowed by the variance estimate.
+
+The complete deterministic protocol (including guess equality, pins, output and tests) has Cartesian leaves on extended raw-plus-guess domains: fixing every message reduces local consistency to separate conditions on each party's own extended input. On a passing leaf, each side's projection to its original raw coordinates is injective: if two distinct guesses worked for a single local raw word, hold a fixed other extended word in the same leaf; both would give passing guesses for the same true raw pair, contradicting uniqueness. The projected leaf is an honest accepting rectangle on original raw coordinates. Thus it is thin on at least one side, by the family proof.
+
+Fix an opposite original raw word y, not its guesses. For A->B count a causal binary tree whose choice events are ordinary received bits and B's guessed omitted inputs, the latter revealed at their consumer after B's other operand is known. B can reconstruct its own trajectory and outgoing ordinary bits from y and preceding choices, even on invalid guessed histories; this is a normalized binary probability tree with the prescribed smoothed marginals and conditionals. A passing path of causal cost <=W_dir+epsilon*n has tree probability >=2^(-W_dir-epsilon*n); hence there are at most 2^(W_dir+epsilon*n) such histories. On equality-passing histories A's terminal vector share MUST equal B's calculated vector, so those terminal messages add no possibilities. Pins and output/tests add at most 2s+O(1) bits of uncertainty; the full accepted transcript count for this y is <=2^(W_dir+epsilon*n+2s+O(1)). Count the other direction separately by fixing the other original word. Thin sender projections cover <K words each. Sum over opposite raw words, directions and <=2^s possible modes; using q_dir-W_dir>=gamma*n and s,k=o(n), the full-cube mass of all such accepting leaves is 2^(-Omega(n)). Their nu mass is o(1), since D=o(n). But true accepting words have their unique passing guesses, their actual mode, output one, and both typicality flags on a set of nu mass 1-o(1). Contradiction. Hence the proposed exact unrestricted lower bound holds subject to the explicit graph input and verification gates.
+
+Put C0=128754752375347193833379/25280633597805000000000. Sections 1–7 prove liminf_{N->infinity} C_B2(f_N)/N >= c_plus=L+d0=824030415201543785536801/161796055025295000000000, since n/N->1 at every integer actual length N. Here c=(e0+c_g)/2=49252984787/400000000000, with e0=123132461967/1000000000000 and c_g=7695778873/62500000000; hence c_plus-C0=6250000000/379040079755985005051>0. The graph proof permits every fixed cap above e0: choose finite ray/shell parameters preserving both strict majority signs and split cost<c, then calibrate; Section 1 spends the remaining strict slack. All choices precede N; the family and d0 are independent of c. By the liminf definition with epsilon=(c_plus-C0)/2, there is N0 such that for every integer N>=N0, C_B2(f_N)/N>=c_plus-epsilon>C0. This proves the declared eventual lower bound with empty remainder. No numerical N0 is asserted.
+
+## Provenance
+
+The immediate source is Holindauer's Yukon submission 89ff5d59-ea97-495b-a052-021fc429c1c7, candidate commit 73721897a5a738c4464f7b02a549dd1c594a7360. Its fixed family, full circuit argument, full mutual-information credits and graph certificate are retained. The query step averages independent choices between flagged inputs, charging producers by selection probability and using sum(chi-alpha)=0, with cap A=57/200. The graph calculation uses rational probability and weight denominators with one outward-rounded prefix interface, permitting threshold -3529/10000 at depth 60. All numeric premises are recomputed; no judgment is reused. Its predecessor is 5a954ca2-0b1d-48d4-834c-cc3fb897cd10 (54f02a09674b425383aea12d494dfd0491b35b86), following xlib's 7596d878-f88a-497e-a98c-277cd59d7045 (c3ae7d9af7d80fdc1407c1a5279b3f48b8d64233).
+
+That source builds on the full weighted graph proof, one-edge deletion, and regenerated numerical certificate of jjtripodo-lgtm, Yukon 6c41f2ec-e726-4d22-b941-b9e5ffcde451 (bbbc467b3cc980629c78e53290becee59e5bc44a). The exact private-leaf balance with a fixed liminf gap follows d2d0a810-9824-4cad-bb73-6719576423e7 (14d233c4e2b2201b718aaeb7f6745eb83c9d43d5). The zero-operand dimension count, linked producer–consumer query schedule and their combined rational certificate were introduced in the xlib source.
+
+The norm-one route is credited to Arthur Ostapenko, Yukon submission 808da377-5cc9-463b-ae41-00f19a497368, and to classical norm graphs. The accepting affine-fiber, product-forcing and weighted carrier arguments are given in full; no numeric guarantee or statement acceptance is imported from another entry.
+
+The weighted circuit proof and positive convolution method build on Yukon submission d1a7e11d-24a0-4f9b-b343-80db0fd09a04, evaluated source commit 2f9e8e53b5ed61380d5e5e27b22114c127a17ee3. The earlier graph and line-energy work is credited to c1f3b46f-a519-4933-b70f-9ce5558632f7 and a3173cdc-fa39-4738-a212-2d59d15ed1a4. The energy and gain refinements are carried over from jjtripodo-lgtm’s 59bc019c-1b8f-42bc-a7b0-bb7e3c5ee88b. The current proof and all numeric premises are supplied in full.
+
+## Graph addendum. A larger finite-context C-edge repair
+
+Use graph.md's least line assignment and one-sided matching repair. For ray word w, let u(w),l(w) be its backwards recursion f(x,b)=sign(x+2b-1) from +1,-1 respectively. Monotonicity bounds every actual context between them, for every unspecified exterior. Extending a word tightens these bounds.
+
+Inspect both orientations of each C edge with raw-positive endpoints. Require: the first exterior main ray has u=-1 at depth six; the second has l>=0 at depth three; at least one perpendicular ray at the first endpoint has u=-1 at depth six; both perpendicular rays at the second have u<=0 at depth five, one negative. Delete all qualifying edges. Fixed finite tests, symmetric in perpendicular rays and main orientations, give an equivariant bounded-local rule.
+
+The actual exterior main contexts are x=-1,y in {0,1}. By the line recursion the three C bits touching the pair test the sums
+    x+f(f(y,1),1), f(x,1)+f(y,1), f(f(x,1),1)+y,
+equal to 0,1,1+y, so the bits are 0,1,1. At the first endpoint lowering M leaves its split cost unchanged. Its perpendicular incoming -1 forces one C bit zero since -1+f(z,1)<=0, so lowering M there cannot increase cost. At the second endpoint lowering M costs one; its perpendicular contexts are (-1,-1),(-1,0),or(0,-1), each giving C=00 and saving one. The matching pass chooses zero on ties, hence both matching bits become zero.
+
+Every first endpoint has M=0 and mixed C bits: deleting its unique positive C edge makes it monochromatic. Every second endpoint has M=0,C=11, so deleting either or both C bits cannot increase cost. These roles are disjoint; first endpoints touch at most one selected edge, and an edge cannot qualify in both orientations. Thus any simultaneous subcollection saves at least one split per edge, including shared second endpoints.
+
+Only second endpoints lose positive majority. Such an endpoint is raw-positive with C=11 and M lowered to zero, so its perpendicular partner has C=00: only that improvement offsets its cost increase. By graph.md §4, a raw-positive/C=00 endpoint either has both nearest neighbors negative (probability y), or exactly one negative and a positive agreement C edge set zero, forcing 0110 in one of two orientations. With neither negative it is isolated in the disagreement graph and cannot split. Line exchange and reflection bound the second-endpoint probability by y+2p_0110. Charge once per vertex:
+    q_after >= q_before-y-2p_0110.
+The replay checks this strict endpoint. The terminal relaxation still applies: only C edges are deleted and raw-negative M pins remain zero.
+
+For the energy lower bound, a row specifies exterior main words L,R and perpendicular pairs (A,B),(C,D); its main word is reverse(L),1,1,R. Admit it only when
+    u(L)=-1, l(R)>=0, min(u(A),u(B))=-1,
+    max(u(C),u(D))<=0, min(u(C),u(D))=-1,
+within the respective depths above. These imply deletion for every cylinder extension; empty prefixes impose no bits. A mask includes specified perpendicular-line reflections, preserving the Gaussian law. Expanding masks, the finite check verifies that every pair of signed-coordinate assignments disagrees on a shared coordinate, including all old cylinders. This proves disjointness. Multiply each Gaussian lower bound by its checked number of reflected copies; omitted events only weaken the bound. Opposite main orientations have equal probability and are disjoint by their first/second roles. Twice the oriented sum therefore bounds selected edges per physical vertex and their split saving.
+
+For covariance, on a marked path let w_i=t at a straight internal vertex and a at a turn, and b_i=a² or at respectively. Expanding graph.md's recurrence in independent off-path modes gives
+    Cov(R_u,R_v)=(a+t/2) product_i w_i
+                 +(1/2) sum_i b_i product_(j!=i) w_j.
+Endpoint modes supply the first term; internal off-path pairs have product sum 2a² or 2at, giving their summands after the scores' factors one half. Their disjoint half-trees prove independence. A length-d path with k turns consequently has covariance
+    a^k t^(d-1-k)[a+t/2+(d-1-k)a²/(2t)+kt/2],
+with diagonal one. Coordinate (i,x) means perpendicular signed distance x from main anchor i. Equal-anchor paths are straight of length |x-y|; otherwise length is |x|+|i-j|+|y| with [x!=0]+[y!=0] turns. This proves the entire finite covariance. Exact adjugate multiplication validates inverse/determinant; graph.md §3.2 proves the outward halfnormal bound. Rational scales/centers are witnesses, without assumed optimality.
+
+The basic repair and covariance originate in jjtripodo-lgtm's Yukon 086221d5-56f1-4068-9241-b118a66143fc (56d0efa296a3af3b8d0c478c5ef96165be237882). This refinement enlarges the finite contexts and disjoint witnesses with the y+2p_0110 majority charge.
