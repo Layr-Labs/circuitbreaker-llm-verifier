@@ -1,90 +1,45 @@
-# Published coefficient 31/10: construction and proof
+# A superlinear Boolean circuit lower bound for padded list distinctness
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+## Result and attribution
 
-## Fixed total family
+Let m_w=2w·2^w for integers w≥1. For an input x of N bits with N≥4, choose the largest w with m_w≤N. Parse the first m_w bits into 2^w consecutive records of 2w bits each. Accept exactly when these records are pairwise distinct. For N<4 always reject. Write f_N for this Boolean function and C_N for its minimum exact nonuniform B2 gate count.
 
-Set f_0(empty)=0. For n>=1, let k be the least prime strictly above 2*n^(3/5),
-r=ceil(n/k), t=ceil(sqrt(r)). Fix once a deterministic procedure from Section 3
-realizing Shoup-preprint Theorem 3.2, with deterministic choices fixed by that procedure,
-to produce a monic irreducible q_k over F_2 of degree k. Let K=F_2[Z]/(q_k), with
-polynomial basis 1,Z,...,Z^(k-1). This fixes a single language, not per-length advice.
+We prove that C_N/(N log₂ log₂ N) tends to positive infinity over all integer lengths. In particular C_N≥N log₂ log₂ N for all sufficiently large N, the requested full guarantee has leading coefficient one, and the matching lane projection is divergence of C_N/N at exponent one. The input-hardness result is OpenAI's November 24, 2026 list-distinctness theorem. Our contribution here is its explicit specialization and transfer to this benchmark. We use neither a matrix-multiplication exponent assumption nor the arithmetic-circuit conclusion of the same paper.
 
-Append r*k-n zeros to x and split it into r blocks. Interpret each block in K with
-its first bit the constant coefficient; this is an injective F_2-linear map phi.
-Let pi take the constant coefficient, so pi is linear and pi(1)=1. For 1<=i<=r put
-y_i=phi_i(x)^(2^(i+1)-1). Define f_n(x)=pi(Sym_r^t(y_1,...,y_r)), where Sym_r^t
-sums the products indexed by t-element subsets. This uses the precise ascending
-powers in BK-preprint Theorem 2.2, equation (4).
+## One polynomial-time language
 
-## Uniform P and NP membership
+An evaluator computes N, doubles the record count while tracking the next m_w, and compares every pair of records bit by bit. There are at most N records and each comparison reads at most N bits, so even a straightforward tape implementation takes polynomial time. This single deterministic algorithm handles all small lengths, malformed tails (all tail strings are ignored), repeated words and zeros. A verifier rejects every nonempty witness and returns the evaluator result on the empty witness. For x in the language that witness accepts; conversely any accepting witness is empty and the tested list has no repeated word. The witness bound is the zero polynomial. All N input bits are counted in the denominator.
 
-One deterministic algorithm computes this function at all lengths. Find k by scanning
-and primality trial division, using q^5>32*n^3 for the strict threshold. Bertrand's
-bound makes k=O(n^(3/5)), so this scan is polynomial in actual input length n.
-Shoup's unconditional fixed-prime procedure is polynomial in k. Binary powering uses
-only O(i+1) field multiplications for each exponent, whose bit length is i+1.
-Field operations in the polynomial basis have polynomial bit cost.
+## Single-list network theorem
 
-Compute the symmetric polynomial without characteristic-two division: start E_0=1
-and E_j=0 for 1<=j<=t; after reading y_i update E_j=E_j+y_i*E_(j-1) in descending
-j from min(i,t) to 1. Splitting subsets by inclusion of i proves the recurrence;
-it takes O(r*t) field operations. Output pi(E_t). Thus one polynomial-time evaluator
-A computes the total family. Use V(x,w)=1 iff w is empty and A(x)=1, with witness
-bound zero. Both directions are immediate, establishing L in P, hence NP. The
-witness is not an input to the target circuits.
+Work over F₂. Write D_w for the indicator, as an element of F₂, of pairwise distinctness of 2^w binary records of length 2w. For some fixed real σ>0 and every sufficiently large integer w, any exact trivalent bit tensor network in the formal model described below that represents D_w and has v vertices satisfies
 
-## Every integer length and the lower bound
+    m_w w^σ < v + m_w.                                         (1)
 
-BK-preprint Theorem 2.2 applies to arbitrary integer input length via the injective
-map, not a divisibility assumption or a sparse subsequence. With p=2 and the above
-k,r,t,phi,pi and powers, it is nonconstant on all affine subspaces of dimension
-strictly greater than 6*n^(4/5). Set d(n)=floor(6*n^(4/5))+1. Eventually 1<=d(n)<=n
-and d(n)/n<=6*n^(-1/5)+1/n tends to zero. Zero padding is inside the theorem's
-injection; the circuit bound remains measured against n input bits.
+We use the field-specialized formal theorem for this normalization; a constant-factor change between vertex-plus-exterior size and trivalent volume would also suffice. The underlying published result is Theorem 2.2, Volume of list distinctness, in OpenAI, The matrix multiplication exponent is nine fourths, November 24, 2026, Sections 2.1–2.2 and The cost of testing many lists, revision 3344da59991ed94f9ba711217b29c1d760badfa6. The theorem allows t copies, and (1) only needs t=1. See network-proof.md for the exact premise, the supporting arguments, its formal proof path and the verification scope.
 
-Apply LY-full Theorem 1.1 to obtain C_B2(f_n)>=(31/10)*n-o(n). The P evaluator
-establishes eligibility and places no uniformity restriction on circuits. The full
-B2 model includes all 16 binary truth tables, unbounded sharing and depth, one
-output and all input assignments; inputs/wires are not gates. The source allows
-constant nodes during substitutions and handles repeated pins and unary effects by
-normalization. Output cases must be covered; no free extra computational basis is
-assumed. Sources: LY-full Sections 1.1, 2.1, 2.4 footnotes 3–4 and Section 3.3.
+A bit tensor is a field-valued table on assignments of its incident binary indices. Each vertex here has at most three such indices. Joining wires means summing over their bit values the product of the table entries. Only the exterior bit values are supplied as inputs. All table entries in the circuit construction below are zero or one. Addition in F₂ is harmless because the number of consistent internal assignments at fixed exterior input will always be zero or one.
 
-## Conservative remainder, with source discrepancy retained
+## A linear-size simulation of every benchmark circuit
 
-LY-full Corollary 3.8 bounds potential by n/2+5*d/2, while its Theorem 3.9 displays
-n/2+d in a finite expression. The finite expressions differ. The following direct derivation uses the larger
-loss from Corollary 3.8, together with Definition 3.6 and Theorem 4.1:
+Fix N≥4, its associated w, and any deterministic acyclic one-output B2 circuit computing f_N exactly with s gates. Fix the last N−m_w input bits to zero. The resulting network is required to expose precisely the m_w record bits, in their original order. Construct tables directly from the restricted truth tables and wires as follows.
 
-    delta*(n-2*d-2) <= mu <= |C|+alpha_I*n+alpha_phi*(n/2+5*d/2).
+* Keep only gates on an input-to-output dependency of the output, including any constant subexpressions on which the output formally depends; equivalently take all gate ancestors of the output. There are at most s. For each retained gate with truth table g, use a two-input, one-output table with entry one exactly when z=g(u,v). This works for every one of the sixteen truth tables, including constant tables, both projections and their negations. Retained gates use one vertex each, irrespective of fan-out. Add one unary test accepting exactly a one at the circuit's selected output. The test also works when that output selects a raw bit or constant directly.
+* For each of the m_w free input bits, use a one-in, one-out identity table if it is read, or a one-in, zero-out table identically one if it is unused. This gives exactly one exterior wire for every named bit. A slot fed by a fixed padding bit or by a free constant source may instead receive its own one-output generator forced to the appropriate bit. There are at most 2s+1 such generators, since the retained gate inputs and the output test together have at most that many slots.
+* If one producer must supply d≥1 slots, use a binary copy tree. Each copy has one input and two outputs and enforces equality of all three incident bits. Its d−1 internal vertices supply the d slots. Summing over producers costs at most 2s+1 copy vertices because the sum of all consumer slot counts is at most 2s+1. Two pins of the same gate reading the same producer count as two slots. Arbitrary sharing and arbitrarily large fan-out are covered. No extra gate is charged to the Boolean circuit for fixing a constant, distributing an input, choosing an output or eliminating a negation.
 
-At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
+Thus the network has v≤5s+m_w+3 vertices. The network makes no independence assumption about shared values. For fixed free inputs, evaluate in a topological order to obtain the unique set of internal bit values consistent with the gate, input, constant and copy tables. Any satisfying contraction assignment agrees successively with these values. The final test admits that assignment exactly for output one. Consequently the contracted tensor is exactly D_w on every exterior bit string.
 
-    |C| >= (31/10)*n-(261/10)*d-128/5.
+This network also has a literal construction in the formal Net syntax. First take the parallel product of the vertex tables, with all internal wire ends temporarily exterior. Use free input and output rewirings to order each internal wire's output end and input end at the same coordinate in a common bundle B. The entire product can now be typed from (lists w 1,B) to (unit,B), with all original named input positions in lists w 1. Trace B, which sums over all simultaneous internal wire assignments without changing the vertex count. The free rewires are generated by neighboring swaps, reassociation and unit insertion/removal, so arbitrary finite permutations and the balanced list bracketing are allowed. This construction also covers a direct output with no gates.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+## All integer lengths and an explicit score
 
-## Exact arithmetic and the unchanged LP
+By (1), for every large enough w and the w selected at length N,
 
-The six terms bounding delta-alpha_I in LY-full Theorem 4.1 are
+    m_w w^σ < 5s + 2m_w + 3.
 
-    alpha_I/3, 2-2*phi+Q, 4-4*phi, 3+phi, 5-Q, (5-2*phi+Q)/2.
+As w tends to infinity we eventually have w^σ≥8 and m_w≥4, giving s≥m_w w^σ/10. Moreover m_{w+1}/m_w=2(w+1)/w≤4, so m_w≤N<m_{w+1}≤4m_w and w tends to infinity with N. For w≥1 we have log₂ N < w+2+log₂(w+1) ≤ 4w. Hence eventually
 
-At the published point they are 16/5,17/5,16/5,16/5,16/5,16/5. The admissibility
-conditions include 0<=Q<=alpha_I and 0<=phi<=1/2. The coefficient is
-c=delta-alpha_I-phi/2=31/10. The declared optional checker inputs verify this arithmetic using exact fractions.
+    C_N ≥ N (log₂ N)^σ / (40·4^σ).
 
-Writing u=delta-alpha_I, combine u<=3+phi, u<=5-Q and
-u<=(5-2*phi+Q)/2 with weights 7/10,1/10,1/5. They sum to
-u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
-it. Retuning this LP alone cannot advance the record; the certificate is not a
-barrier to another proof. Passing the LP checker certifies only these arithmetic
-claims, not the full circuit theorem, NP construction or exhaustive case analysis.
-
-## Sources
-
-- LY-full: ECCC TR21-023, front-page date 2021-02-20; Theorem 1.1 p.2; Sections 1.1,2.1,2.4; Definition 3.6, Corollary 3.8 pp.14–15; Theorem 4.1 pp.18–19; https://eccc.weizmann.ac.il/report/2021/023/download/; SHA256 4530cbaf38f0f9a09704e94f7d1f57109895b71b92d0752a285e07d1109a4062
-- BK-preprint: Author preprint 2010-03-12; Theorem 2.2, equation (4), printed pp.6–7 (PDF pp.7–8); https://sites.math.rutgers.edu/~sk1233/affine-disperser.pdf; SHA256 922c9a7d3ed8a5b1ceb07056d9a515043cc7e029d12a9529934d7b60a4d9cfbf
-- Shoup-preprint: Author preprint 1989-01-31; Section 3, Theorem 3.2, printed p.3 and fixed-prime consequence; https://www.shoup.net/papers/detirred.pdf; SHA256 00590fb8f0717338530b067626428781991edb840fb74c37cf846f07f50e0644
+All constants are fixed independently of N and of the circuit. For fixed σ>0, writing u=ln(log₂ N) gives (log₂ N)^σ/(log₂ log₂ N)=(ln 2)exp(σu)/u, which tends to infinity (already exp(σu)≥(σu)²/2). Dividing the last displayed lower bound by N log₂ log₂ N proves the asserted full guarantee and its lane projection. No numerical lower estimate on σ or practical cutoff length enters the score.
