@@ -1,6 +1,6 @@
 # Published coefficient 31/10: construction and proof
 
-This applies the cited LY-full, BK-preprint and Shoup-preprint results; it claims no new theorem. Source versions, locators and hashes are listed below.
+We apply the cited LY-full, BK-preprint and Shoup-preprint results to the seed family. Keeping the finite dimension loss in the gate inequality gives an explicit two-term remainder for the published leading coefficient. Source versions, locators and hashes are listed below.
 
 ## Fixed total family
 
@@ -63,8 +63,11 @@ At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
 
     |C| >= (31/10)*n-(261/10)*d-128/5.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+For every integer n >= 24^5, we have 6*n^(4/5) <= n/4, so d <= n/4+1 and n-2*d-2 >= n/2-4 > 0. Taking n sufficiently large also covers the hypotheses above. The strict dimension threshold matters at perfect fifth powers: even when 6*n^(4/5) is integral, d must exceed it. At every length d <= 6*n^(4/5)+1. Since d has a negative coefficient in the gate bound, substituting this upper bound gives
+
+    C_B2(f_n) >= (31/10)*n - (783/5)*n^(4/5) - 517/10.
+
+Indeed, (261/10)*6 = 783/5, and the unit rounding loss adds 261/10 to 128/5, giving 517/10. The same constants work for every sufficiently large integer n. Dividing by n leaves a loss of (783/5)*n^(-1/5) + 517/(10*n), tending to zero and yielding the declared finite projection. The finite inequality above, including its dependence on d, is needed for the explicit remainder; Theorem 1.1's asymptotic statement alone would only give the projection.
 
 ## Exact arithmetic and the unchanged LP
 
