@@ -63,8 +63,25 @@ At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
 
     |C| >= (31/10)*n-(261/10)*d-128/5.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+For every sufficiently large integer n, substitute
+ d(n)=floor(6*n^(4/5))+1 <= 6*n^(4/5)+1 into this finite inequality.
+Because the coefficient of d is negative, this gives
+
+    |C| >= (31/10)*n-(783/5)*n^(4/5)-517/10.
+
+Indeed, (261/10)*6=783/5 and 261/10+128/5=517/10.
+The threshold is any fixed threshold beyond which the cited finite inequality
+and the stated disperser dimension hypotheses both hold. The substitution is
+pointwise at every such integer length, not an inference from a liminf.
+Dividing the loss by n gives (783/5)*n^(-1/5)+517/(10*n), which tends to zero.
+Thus this explicit eventual bound also implies the original coefficient/exponent
+pair (31/10,1). It refines the declared remainder, not the leading coefficient.
+
+This calculation does not re-prove the paper's long case analysis or the cited
+construction results. It depends on the finite inequality and source premises
+identified above; their validation remains necessary for the whole theorem.
+In particular it retains the larger Corollary 3.8 potential bound rather than
+silently using the smaller expression displayed in Theorem 3.9.
 
 ## Exact arithmetic and the unchanged LP
 
