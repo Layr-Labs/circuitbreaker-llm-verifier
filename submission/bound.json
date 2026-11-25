@@ -1,32 +1,58 @@
 {
-  "version": "circuitbreaker-expression-v1",
+  "version": "circuitbreaker-expression-v2",
   "convention": "uniform-np-full-b2-actual-length-all-lengths-v1",
-  "family": "The single total BK/Shoup family defined in proof.md: f_0=0; for n>=1 choose the least prime k>2*n^(3/5), r=ceil(n/k), t=ceil(sqrt(r)); fix one deterministic Shoup F_2 irreducible-polynomial algorithm; pad x with zeros into r field blocks, set y_i=phi_i(x)^(2^(i+1)-1), and output the constant coefficient of Sym_r^t(y_1,...,y_r). The fixed algorithm and field basis are as specified in proof.md.",
-  "theorem": "For this one total uniform polynomial-time family, hence in NP with empty witnesses, C_B2(f_n)>=(31/10)n-o(n) at every sufficiently large integer length n=|x| in the full Li–Yang B2 model.",
+  "family": "The single total input-modulus family F_n of proof.md Part I: F_n=0 for n<1024. Otherwise k is the least prime with k^5>32*n^3, m=n-k, r=ceil(m/k), t=ceil(sqrt(r)). The first k bits encode the lower coefficients of a monic degree-k polynomial q over F_2. Output 0 unless q divides T^(2^k)-T and gcd(q,T^2-T)=1. For a valid q, use K=F_2[T]/(q), zero-pad the m data bits into r polynomial-basis field blocks z_i, and output Tr_K/F_2(Sym_r^t(z_1^(2^(r+1)-1),z_2^(2^r-1),...,z_r^3)). The exact deterministic evaluator, including all encoding and validity tests, is given in proof.md.",
+  "theorem": "For this one fixed total uniform polynomial-time family, hence in NP with empty witnesses, every full nonuniform B2 circuit at actual input length n has at least 4*n-65*n^(4/5) gates for every integer n>=16807. Consequently liminf over all integer n of C_B2(F_n)/n is at least 4.",
   "guarantee": {
-    "kind": "polynomial_log",
-    "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+    "kind": "eventual_lower_bound",
+    "leading": {
+      "kind": "polynomial_log",
+      "coefficient": {
+        "numerator": "4",
+        "denominator": "1"
+      },
+      "exponent": {
+        "numerator": "1",
+        "denominator": "1"
+      },
+      "log_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      },
+      "loglog_exponent": {
+        "numerator": "0",
+        "denominator": "1"
+      }
     },
-    "exponent": {
-      "numerator": "1",
-      "denominator": "1"
-    },
-    "log_exponent": {
-      "numerator": "0",
-      "denominator": "1"
-    },
-    "loglog_exponent": {
-      "numerator": "0",
-      "denominator": "1"
+    "remainder": {
+      "kind": "explicit",
+      "terms": [
+        {
+          "coefficient": {
+            "numerator": "65",
+            "denominator": "1"
+          },
+          "exponent": {
+            "numerator": "4",
+            "denominator": "5"
+          },
+          "log_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          },
+          "loglog_exponent": {
+            "numerator": "0",
+            "denominator": "1"
+          }
+        }
+      ]
     }
   },
   "projection": {
     "kind": "finite",
     "coefficient": {
-      "numerator": "31",
-      "denominator": "10"
+      "numerator": "4",
+      "denominator": "1"
     },
     "exponent": {
       "numerator": "1",
