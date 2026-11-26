@@ -63,8 +63,25 @@ At alpha_I=48/5, alpha_Q=9/5, alpha_phi=1/5 and delta=64/5 this gives
 
     |C| >= (31/10)*n-(261/10)*d-128/5.
 
-The loss is o(n) for the specified d. This does not re-prove the paper's long case
-analysis. The seed coefficient is exactly 31/10; no stronger remainder is asserted.
+For every sufficiently large integer n, substitute
+ d(n)=floor(6*n^(4/5))+1 <= 6*n^(4/5)+1 into this finite inequality.
+Because the coefficient of d is negative, this gives
+
+    |C| >= (31/10)*n-(783/5)*n^(4/5)-517/10.
+
+Indeed, (261/10)*6=783/5 and 261/10+128/5=517/10.
+The threshold is any fixed threshold beyond which the cited finite inequality
+and the stated disperser dimension hypotheses both hold. The substitution is
+pointwise at every such integer length, not an inference from a liminf.
+Dividing the loss by n gives (783/5)*n^(-1/5)+517/(10*n), which tends to zero.
+Thus this explicit eventual bound also implies the original coefficient/exponent
+pair (31/10,1). It refines the declared remainder, not the leading coefficient.
+
+This calculation does not re-prove the paper's long case analysis or the cited
+construction results. It depends on the finite inequality and source premises
+identified above; their validation remains necessary for the whole theorem.
+In particular it retains the larger Corollary 3.8 potential bound rather than
+silently using the smaller expression displayed in Theorem 3.9.
 
 ## Exact arithmetic and the unchanged LP
 
@@ -82,6 +99,49 @@ u<=31/10+phi/2, hence c<=31/10 for this unchanged LP. The feasible point attains
 it. Retuning this LP alone cannot advance the record; the certificate is not a
 barrier to another proof. Passing the LP checker certifies only these arithmetic
 claims, not the full circuit theorem, NP construction or exhaustive case analysis.
+
+### All coefficient-optimal points and their finite losses
+
+The same dual certificate also determines every coefficient-optimal point.
+Define the nonnegative slacks
+
+    s1 = 3+phi-u,
+    s2 = 5-Q-u,
+    s3 = (5-2*phi+Q)/2-u.
+
+Their weighted sum is exactly
+
+    (7/10)*s1+(1/10)*s2+(1/5)*s3 = 31/10-(u-phi/2).
+
+Thus attaining c=31/10 forces all three slacks to vanish, since all three
+weights are strictly positive. Solving these three equalities gives
+phi=1/5, Q=9/5 and u=16/5. The remaining inequality u<=alpha_I/3
+forces alpha_I>=48/5. Conversely every alpha_I>=48/5, with these fixed
+phi,Q,u and delta=alpha_I+16/5, satisfies all six displayed inequalities
+and the displayed admissibility conditions. This characterizes the optimal
+face of this unchanged LP, rather than just one attaining point.
+
+For the conservative finite inequality used above, expansion at arbitrary
+parameters gives
+
+    |C| >= (u-phi/2)*n-(2*delta+5*phi/2)*d-2*delta.
+
+On the optimal face write alpha_I=48/5+h with h>=0. Then delta=64/5+h,
+so the inequality is precisely
+
+    |C| >= (31/10)*n-(261/10+2*h)*d-(128/5+2*h).
+
+Consequently h=0 simultaneously minimizes both nonnegative loss coefficients.
+After the same substitution d<=6*n^(4/5)+1, the loss is
+
+    (783/5+12*h)*n^(4/5)+(517/10+4*h).
+
+Both coefficients increase with h. Thus neither loss coefficient in the
+current declaration can be improved by choosing another coefficient-optimal
+point of this LP and using this same conservative substitution. This is only
+an exact arithmetic optimality statement about the displayed proof template;
+it is not an optimality claim for circuit lower bounds, other potential
+bounds, or sharper estimates of the disperser dimension.
 
 ## Sources
 
